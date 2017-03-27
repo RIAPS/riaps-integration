@@ -4,5 +4,5 @@ In order to use the integration scripts and setup your environment correctly you
 
 Once you get the read level access you need to set up an OAUTH Token.  Read https://developer.github.com/v3/oauth/. Create a a personal access token as discussed on the page. Set the SCOPE to "repo". That will grant the token access to "Grants read/write access to code, commit statuses, invitations, collaborators, adding team memberships, and deployment statuses for public and private repositories and organizations."
 
-Once you have the token you must use it everytime you want to download the new release in your machine. A trick is to create an environment variable
+Once you have the token you must use it everytime you want to download the new release in your machine. A trick is to create an environment variable GITHUB_OAUTH_TOKEN with the token value in your bash profile.
 
