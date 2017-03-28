@@ -4,28 +4,27 @@ python:
 - '3.5'
 env:
   global:
-  - secure: dItmuutoyf9tBY7nyiK2qTb0od72AataLLuFoBqNTYmcFDg/xNuwHvwAAcu1jG4a9SSQS3jxcTRGn3J5hmRVRprpoJOeao8LRyXd3s1xBHKRjoutqKXAJSxJyJgZZED+qrYBok0s1spoQf0uGnwruJgXuZZhPmEAcfPowrgz0SPHGmNT4EbcZ1rJoZKi6wxmYNvgeaI52++zA7XRH6Vfyw3cGDyAsvD/02hLDhg0PCu0Y3eHLYCGTpBbb6MoieCNiDj43UPdxi7x95wr4hhseu4ObLFDLSyZbFjYfTQygkas4Xgg7X7myGwF3kG3YT1ZWNSgP1ZSk2MBXdRVfvRy13EMscWuCAMFSBrwS+6iRsPys9NAjj2eX9PzlBA4VVse5VBx7FblJ3eVE8LljUBZjWj4oYh078GIZ6I7DljnJk6queY0PbKOodEfZzoXa1QC+NswawpU6U85NwYjnet3FUVALJ2GAUbwkR8Vjfk+jzw6/7IyS2tyBhfQdhCuakJJw/bgu7ny05yuLBZy0m1rIrQzCQHxxzNvtIF9vXoHvqdjF5UcSwwwpzojYdUY/rkVhtGkcFl4Q3+MIbyOfK4N12CtoOlwT82T3F/GFdGeWY1JGTwJvLSqBN0HWBmJqFajhL3ceGczcmQDiB+ZO5DUrl4D7l8tXWMaJyM2Y7aOsFw=
+    secure: Uts6jwW/e34GikqLs3e1mYrfyCNQPlzJCvQ19+Kd8yoEicMSHhdIXls4KBWGtp6/JRIRDMPTNHpowvfp3+k6/Xk8RSKfhb/9YFrlXvRuadYnjXJmDCAhrvVWfemrGnRAOjyZYAaFexAow7IQFW851gP2KcJTBrKQG2I/Fz4ovO4kmc3TnXq1/A/5BpVqn3TzT5Rihum1WE1vBgTEbPCwBVk35uZcd1oPnTiuHo+dm5DcHiyIfnRyH0lG2C0OABeRHi7rSMxyGMwLspHH/NOWWOf1I8Zd/Ypdxm+Jyvn+w1rILD0GZCQEBfjaSoPlQh1n0hzmez5asjviv3deRs8sM0bEqrcV4TMrW6LKM3gERwWinp9JOnlOaltkTUScuPX8OXoIVLcvYqncf11tgHzWI5unbXS80P1b3Jjj2P6mayGDAM9CxUuBI4gB9Ij5u9bWfsxqE0m5+AtWPFNYA/bOXqA09rmlmh+qzca2+Q11fl76UlxkhvqEaoTYyn833qlIeTFefS4maY6oBfl7IK0ZPF4d+DyKnUg6vGhduqdGLqv5i5rjJ5XLkHQAvyuQnClD6cWBmV1pxyl08TkwAxYMrFBUqbmg5e21IxOppJot0CsuusK6iii/HJu7od1ZWF3M3dU3I955Xa2R1/yQZxtqYhRtfHYDN833o3EzHQB82Ms=
   matrix:
-  - arch=amd64  
   - externalsversion="3-15-2017"  coreversion="3-16-2017-master"  pycomversion="0.3.6"
 before_script:
 - wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
 - chmod +x fetch_linux_amd64
 - echo $GITHUB_OAUTH_TOKEN
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="3-15-2017" --release-asset="riaps-externals-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalversion" --release-asset="riaps-externals-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag=$externalsversion --release-asset="riaps-externals-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom.tar.gz" .
 script:
 - mkdir riaps-release
-- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps_core_amd64.deb riaps_core_armhf.deb riaps-pycom.tar.gz
+- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps_core_amd64.deb riaps_core_armhf.deb riaps-pycom.tar.gz riaps-release/.
 - echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
 - tar cvzf riaps-release.tar.gz riaps-release
 deploy:
-  provider: releases  
+  provider: releases
   overwrite: true
   api_key:
     secure: eKL5j2VunlQ74uiHzFW191CTsFFOPbcQDEdaQIVYtmakRht/0rBB1rQxpYzPhYQDRZ17vqN35N/giy6WEL8phyUbiM7k7fByQTe7isrCRMuAWQj5eH3rzhq9bvyqMQWTBFAZUSq2c7BGgfHr3c9lxHCKCMd4hmbAc3XTpiLbOmkfOYUcBrCXM2uY/MHu3Zt7d/JOPeAyBeLn1dShr3YmmQ9wSkw/3KxKEsFP8wTj8crK8NX+IkpE6N0d9gS6lIcxLrZ7qHJbNiDpeUDnaZxquM9fPEI9PIaZw9J/uZo9wkycB/2dB1a/NTVS9AwwaKsfg22YDSlwKBKjFHM0K5kFpN7Lhu17KQqfglY0Bguiyw4MdMcj7MeBaKkx69961ig2lhBT0t8jnY8KpjsHAXZaMKWN/Jyqv0+EwpLPNjmFVFqT7qtIXfgrmpJPQBaI2swHbVkRA0gypl/s9zSOIqtvz93guSmZ5anWEh6Ik9jX/ESNWHxaSnHiUYYLSNJe4HqffHmG9uXDW9ITk178DbsjvI2MudzSfLNUD72DJYgMw3M78vASV0XDenqBuWo28yJ7n2L2TbpUpeTvfxlslXIVFrwtPPe9Chf5gqoe6BsrjyfGQrXBTInwb/++jWfrG/vztuW4m2E8qUYipyBe4J5fsnJpopjgC7/QZletikXngMI=
