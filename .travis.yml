@@ -10,8 +10,7 @@ env:
 before_script:
 - wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
 - chmod +x fetch_linux_amd64
-- echo $GITHUB_OAUTH_TOKEN
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalversion" --release-asset="riaps-externals-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag=$externalsversion --release-asset="riaps-externals-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_armhf.deb" .
