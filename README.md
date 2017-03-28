@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/RIAPS/riaps-integration.svg?token=pyUEeBLkG7FqiYPhyfxp&branch=master)](https://travis-ci.com/RIAPS/riaps-integration)
+
 # riaps-integration
 
 In order to use the integration scripts and setup your environment correctly you will need to download a number of other packages from the RIAPS organization. At the time of these instructions, RIAPS is a private organization and you need to have atleast read-level access to the repositories. To get this access please contact Prof. Gabor Karsai or Prof. Abhishek Dubey.
