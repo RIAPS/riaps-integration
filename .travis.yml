@@ -6,18 +6,18 @@ env:
   global:
     secure: Uts6jwW/e34GikqLs3e1mYrfyCNQPlzJCvQ19+Kd8yoEicMSHhdIXls4KBWGtp6/JRIRDMPTNHpowvfp3+k6/Xk8RSKfhb/9YFrlXvRuadYnjXJmDCAhrvVWfemrGnRAOjyZYAaFexAow7IQFW851gP2KcJTBrKQG2I/Fz4ovO4kmc3TnXq1/A/5BpVqn3TzT5Rihum1WE1vBgTEbPCwBVk35uZcd1oPnTiuHo+dm5DcHiyIfnRyH0lG2C0OABeRHi7rSMxyGMwLspHH/NOWWOf1I8Zd/Ypdxm+Jyvn+w1rILD0GZCQEBfjaSoPlQh1n0hzmez5asjviv3deRs8sM0bEqrcV4TMrW6LKM3gERwWinp9JOnlOaltkTUScuPX8OXoIVLcvYqncf11tgHzWI5unbXS80P1b3Jjj2P6mayGDAM9CxUuBI4gB9Ij5u9bWfsxqE0m5+AtWPFNYA/bOXqA09rmlmh+qzca2+Q11fl76UlxkhvqEaoTYyn833qlIeTFefS4maY6oBfl7IK0ZPF4d+DyKnUg6vGhduqdGLqv5i5rjJ5XLkHQAvyuQnClD6cWBmV1pxyl08TkwAxYMrFBUqbmg5e21IxOppJot0CsuusK6iii/HJu7od1ZWF3M3dU3I955Xa2R1/yQZxtqYhRtfHYDN833o3EzHQB82Ms=
   matrix:
-  - externalsversion="3-15-2017"  coreversion="3-16-2017-master"  pycomversion="0.3.6"
+  - externalsversion="3-15-2017"  coreversion="3-29-17-master"  pycomversion="0.3.6"
 before_script:
 - wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
 - chmod +x fetch_linux_amd64
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag=$externalsversion --release-asset="riaps-externals-amd64.deb" .
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_amd64.deb" .
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps_core_armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riapscore-amd64.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riapscore-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom.tar.gz" .
 script:
 - mkdir riaps-release
-- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps_core_amd64.deb riaps_core_armhf.deb riaps-pycom.tar.gz riaps-release/.
+- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riapscore-amd64.deb riapscore-armhf.deb riaps-pycom.tar.gz riaps-release/.
 - echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
