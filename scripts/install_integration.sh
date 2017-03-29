@@ -78,11 +78,11 @@ install_pip_pkg()
 
 
 # uninstall section
-uninstall_deb_pkg riapscore-armhf
-uninstall_deb_pkg riaps-externals-armhf
+#uninstall_deb_pkg riapscore-armhf
+#uninstall_deb_pkg riaps-externals-armhf
 
 pycom_name="riaps-pycom"
-uninstall_pip_pkg riaps
+#uninstall_pip_pkg riaps
 if [ -e /usr/local/bin/riaps_disco_redis ];
 then
        sudo rm /usr/local/bin/riaps_disco_redis
@@ -103,6 +103,7 @@ redis_disco=/usr/local/bin/riaps_disco_redis
 cpp_disco=/opt/riaps/armhf/bin/rdiscoveryd
 if [ -e $disco_link ] && [ -e $cpp_disco ];
 then
-	sudo mv $disco_link $redis_disco
+	sudo cp $disco_link $redis_disco
+	sudo rm $disco_link
 	sudo ln -s $cpp_disco $disco_link
 fi
