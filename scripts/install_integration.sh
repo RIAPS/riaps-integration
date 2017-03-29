@@ -82,11 +82,21 @@ uninstall_deb_pkg riapscore-armhf
 uninstall_deb_pkg riaps-externals-armhf
 
 pycom_name="riaps-pycom"
+disco_link=/usr/local/bin/riaps_disco
+redis_disco=/usr/local/bin/riaps_disco_redis
 uninstall_pip_pkg riaps
-if [ -e /usr/local/bin/riaps_disco_redis ];
+if [ -e $redis_disco ];
 then
-       sudo rm /usr/local/bin/riaps_disco_redis
+	echo "removing $redis_disco"
+       	sudo rm $redis_disco
 fi
+
+if [ -L $disco_link ];
+then
+	echo "removing $disco_link"
+	sudo rm $disco_link
+fi
+
 
 #uninstall_pip_pkg riaps-ts
 
@@ -98,8 +108,6 @@ install_pip_pkg $pycom_name
 
 
 # create symbolic link for pycom disco
-disco_link=/usr/local/bin/riaps_disco
-redis_disco=/usr/local/bin/riaps_disco_redis
 cpp_disco=/opt/riaps/armhf/bin/rdiscoveryd
 if [ -e $disco_link ] && [ -e $cpp_disco ];
 then
