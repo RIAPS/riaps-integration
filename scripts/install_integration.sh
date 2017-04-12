@@ -2,6 +2,10 @@
 
 # path
 deb_location=/home/riaps/riaps-release
+pycom_name="riaps-pycom"
+core_name="riapscore-armhf"
+external_name="riaps-externals-armhf"
+
 
 # functions sections
 is_pkg_installed()
@@ -70,7 +74,7 @@ install_pip_pkg()
 		tar xzvf $pkg_name
 		cd $1/src
 		#echo `pwd`
-		echo "++++++ install_pip_pkg(): installing pip package $1"
+		echo "++++++ install_pip_pkg(): Installing pip package $1"
 		sudo pip3 install . --process-dependency-links
 	fi
 
@@ -78,10 +82,10 @@ install_pip_pkg()
 
 
 # uninstall section
-uninstall_deb_pkg riapscore-armhf
-uninstall_deb_pkg riaps-externals-armhf
+uninstall_deb_pkg $core_name
+uninstall_deb_pkg $external_name
 
-pycom_name="riaps-pycom"
+
 disco_link=/usr/local/bin/riaps_disco
 redis_disco=/usr/local/bin/riaps_disco_redis
 uninstall_pip_pkg riaps
@@ -102,8 +106,8 @@ fi
 
 
 # install section
-install_deb_pkg riaps-externals-armhf
-install_deb_pkg riaps_core_armhf
+install_deb_pkg $external_name
+install_deb_pkg $core_name
 install_pip_pkg $pycom_name
 
 
