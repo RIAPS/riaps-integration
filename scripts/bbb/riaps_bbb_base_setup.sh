@@ -6,19 +6,19 @@ sethostservice=conf/sethostname.service
 gpiorule=etc_udev/80-non-root-gpio-permissions.rules
 
 
-if [ -f "setup.conf" ]
+
+if [ -f "../setup.conf" ]
 then
   echo "Found setup.conf"
 else
   echo "Cannot find setup.conf"
   exit 1
 fi
-source setup.conf
-source .bashrc
+source ../setup.conf
 
 # Install RT Kernel
 rt_kernel_install() {
-	sudo apt-get install linux-image-4.4.12-ti-rt-r30 linux-firmware-image-4.4.12-ti-rt-r30 linux-headers-4.4.12-ti-rt-r30 -y
+	sudo ./opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_9
 }
 
 # Set hostname to bbb-xxxx, where xxxx is the last 4 digits of the MAC address
@@ -38,16 +38,23 @@ user_func() {
 	sudo usermod -aG sudo $RIAPSAPPDEVELOPER
 }
 
+# Configure the login information
+#splash_screen_update() {
+# MM TODO:  add splash screen change with RIAPS disclaimer and login info change
+#}
+
 # Install ssh keys from setup.conf
 install_riaps_keys() {
-	  sudo -H -u $1 touch /home/$1/.ssh/authorized_keys
-	  sudo -H -u $1 cat $SSH_PUBLIC_KEY >> /home/$1/.ssh/authorized_keys	
-	  sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
-	  sudo -H -u $1 touch /home/$1/.ssh/id_rsa
-	  sudo -H -u $1 cat $SSH_PRIVATE_KEY >> /home/$1/.ssh/id_rsa 
-	  sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa	 
-	  sudo -H -u $1 ssh-agent /bin/bash
-	  sudo -H -u $1 ssh-add /home/$1/.ssh/id_rsa
+	sudo -H -u $1 mkdir -p /home/$1/.ssh
+	sudo -H -u $1 touch /home/$1/.ssh/authorized_keys
+	sudo -H -u $1 cat ../$SSH_PUBLIC_KEY >> /home/$1/.ssh/authorized_keys	
+	sudo -H -u $1 cp ../$SSH_PUBLIC_KEY /home/$1/.ssh/
+	sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
+	sudo -H -u $1 touch /home/$1/.ssh/id_rsa
+	sudo -H -u $1 cp ../$SSH_PRIVATE_KEY /home/$1/.ssh
+	sudo -H -u $1 chmod 600 /home/$1/.ssh/$SSH_PRIVATE_KEY	 
+	sudo -H -u $1 ssh-agent /bin/bash
+	sudo -H -u $1 ssh-add /home/$1/.ssh/$SSH_PRIVATE_KEY
 }
 
 # Setup any system utilities
@@ -76,13 +83,17 @@ freqgov_off() {
 # Components installed:  GPIO, Modbus (UART)
 # Note:  minimalmodbus installs pyserial
 hwconfig_setup() {
+	source /home/riaps/.bashrc
+
 	if [$SLOTS eq ""]
 	then
 		sudo -H -u $1 echo "export SLOTS=/sys/devices/platform/bone_capemgr/slots" >> /home/$1/.bashrc  
+	fi
 		
 	if [$PINS eq ""]
 	then
 		sudo -H -u $1 echo "export PINS=/sys/kernel/debug/pinctrl/44e10800.pinmux/pins" >> /home/$1/.bashrc  
+	fi
 		
 	# add 'riaps' to device output groups
 	sudo groupadd gpio
@@ -109,7 +120,7 @@ middleware_install() {
 	sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
 	sudo apt-get install libcapnp-dev libssl-dev libffi-dev -y
     sudo pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
-    sudo pip3 install git+https://github.com/adubey14/rpyc#egg=rpyc-3.3.1
+    sudo pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
 }
 
 # Install RIAPS deb packages
@@ -124,6 +135,8 @@ hostname_setup
 echo "BBB hostname configured"
 user_func 
 echo "Created riaps user account"
+#splash_screen_update
+#echo "Splash screen updated"
 install_riaps_keys $RIAPSAPPDEVELOPER
 echo "Installed riaps user key"
 utilities_setup
