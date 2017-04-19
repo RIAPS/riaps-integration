@@ -12,12 +12,12 @@ before_script:
 - chmod +x fetch_linux_amd64
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag=$externalsversion --release-asset="riaps-externals-amd64.deb" .
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riapscore-amd64.deb" .
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riapscore-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-amd64.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom.tar.gz" .
 script:
 - mkdir riaps-release
-- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riapscore-amd64.deb riapscore-armhf.deb riaps-pycom.tar.gz riaps-release/.
+- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom.tar.gz riaps-release/.
 - echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
