@@ -135,8 +135,8 @@ middleware_install() {
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	echo "Stopped here to check progress"
-#	sudo ../install_integration.sh
+	sudo ../download_packages.sh
+	sudo ../install_integration.sh
 }
 
 # Cleanup after installation

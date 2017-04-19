@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # path
-deb_location=/home/riaps/riaps-release
+deb_location=./riaps-release
 pycom_name="riaps-pycom"
 core_name="riapscore-armhf"
 external_name="riaps-externals-armhf"
