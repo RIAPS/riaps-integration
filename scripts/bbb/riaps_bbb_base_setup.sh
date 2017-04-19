@@ -4,9 +4,11 @@ set -e
 RIAPSAPPDEVELOPER=riaps
 sethostname=bin/set_unique_hostname.py
 sethostservice=conf/sethostname.service
-gpiorule_dir=etc_udev/
+gpiorule_dir=etc/udev/rules.d/
 gpiorule=80-non-root-gpio-permissions.rules
 kernelupdate=/opt/scripts/tools/update_kernel.sh
+riapsdisclaimer=etc/motd
+riapshint=etc/issue.net
 
 
 if [ -f "../setup.conf" ]
@@ -43,8 +45,8 @@ user_func() {
 
 # Configure the login information
 splash_screen_update() {
-# MM TODO:  add splash screen change with RIAPS disclaimer and login info change
-	echo "Splash screen update is TBD"
+	sudo cp $riapsdisclaimer /etc
+	sudo cp $riapshint /etc
 }
 
 # Install ssh keys from setup.conf
