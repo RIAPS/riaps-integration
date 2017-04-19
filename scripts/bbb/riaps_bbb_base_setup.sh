@@ -110,7 +110,8 @@ hwconfig_setup() {
 	sudo chmod 644 /etc/udev/rules.d/$gpiorule
 	
 	# Update visudo to retain the environment variables on a su call
-	sudo sh -c "echo -e \"\n# Retain Device Environment Variables (RIAPS)\" >> /etc/sudoers"
+	sudo sh -c "echo \" \" >> /etc/sudoers"
+	sudo sh -c "echo \"# Persist device interface environment variables\" >> /etc/sudoers"
 	sudo sh -c "echo \"Defaults    env_keep += \"SLOTS\"\" >> /etc/sudoers"
 	sudo sh -c "echo \"Defaults    env_keep += \"PINS\"\"  >> /etc/sudoers"
 	
