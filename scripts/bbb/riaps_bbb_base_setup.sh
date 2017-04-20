@@ -126,12 +126,6 @@ hwconfig_setup() {
 	pip3 install Adafruit_BBIO minimalmodbus
 }
 
-# Remove unnecessary packages that may interfere
-unneeded_removal() {
-# MM TODO:  is this needed?	sudo apt-get remove connman -y
-	echo "Nothing to remove at this time"
-}
-
 # RIAPS Specified Middleware
 middleware_install() {
 	apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
@@ -151,6 +145,14 @@ riapsdeb_install() {
 remove_installartifacts() {
 	rm -r scripts
 	rm scripts.tar.gz
+}
+
+# This package is installed in the base image and controls the network interface in ways we do not desire. 
+# Once it is removed, the network interface is lost.  So, this should be the very last step taken.
+# This reboot will also allow execute the hostname and udev rules (services setup to run on bootup)
+remove_connman() {
+    apt-get remove connman -y
+	sudo reboot
 }
 
 
@@ -180,3 +182,6 @@ riapsdeb_install
 echo "RIAPS deb packages installed"
 remove_installartifacts
 echo "Cleanup after installation done"
+echo "Removing connman ... the network connection will be lost and the BBB will reboot"
+echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
+remove_connman
