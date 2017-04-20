@@ -20,8 +20,6 @@ else
   exit 1
 fi
 source ../setup.conf
-source ../../version.sh
-export GITHUB_OAUTH_TOKEN=`less ../$RIAPS_OAUTH`
 
 
 # Install RT Kernel
@@ -137,7 +135,6 @@ middleware_install() {
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	../download_packages.sh
 	../install_integration.sh
 }
 
