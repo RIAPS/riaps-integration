@@ -53,8 +53,8 @@ if [ ! -e "fetch_linux_amd64"  ]; then
 fi
 
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-integration" --branch="master" ./riaps-integration
-chmod +x $INTG_DIR/version.sh
-. $INTG_DIR/version.sh
+#chmod +x $INTG_DIR/version.sh
+#. $INTG_DIR/version.sh
 
 if [ "$PYCOM_VER" != "" ]; then
 		export pycomversion=$PYCOM_VER

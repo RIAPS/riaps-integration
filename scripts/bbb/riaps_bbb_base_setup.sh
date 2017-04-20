@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 set -e
 
 RIAPSAPPDEVELOPER=riaps
@@ -19,34 +20,41 @@ else
   exit 1
 fi
 source ../setup.conf
+source ../../version.sh
+export GITHUB_OAUTH_TOKEN=`less ../$RIAPS_OAUTH`
 
 
 # Install RT Kernel
 rt_kernel_install() {
-	sudo $kernelupdate --ti-rt-kernel --lts-4_9
+	$kernelupdate --ti-rt-kernel --lts-4_9
 }
 
 # Set hostname to bbb-xxxx, where xxxx is the last 4 digits of the MAC address
 hostname_setup() {
-	sudo mkdir -p /opt/riaps/armhf/bin
-	sudo cp $sethostname /opt/riaps/armhf/bin
-	sudo cp $sethostservice /etc/systemd/system
-	sudo systemctl enable sethostname.service	
-	sudo systemctl daemon-reload
+	mkdir -p /opt/riaps/armhf/bin
+	cp $sethostname /opt/riaps/armhf/bin
+	cp $sethostservice /etc/systemd/system
+	systemctl enable sethostname.service	
+	systemctl daemon-reload
 }
 
 # Setup user account
 user_func() {	 
-	sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
-	sudo echo -e "riapspwd\nriapspwd" | sudo passwd $RIAPSAPPDEVELOPER
-	 
-	sudo usermod -aG sudo $RIAPSAPPDEVELOPER
+	set +e
+	grep riaps /etc/passwd
+	if [ ! echo $? ]
+	then
+		useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
+		echo -e "riapspwd\nriapspwd" | sudo passwd $RIAPSAPPDEVELOPER	 
+		usermod -aG sudo $RIAPSAPPDEVELOPER
+	fi
+	set -e
 }
 
 # Configure the login information
 splash_screen_update() {
-	sudo cp $riapsdisclaimer /etc
-	sudo cp $riapshint /etc
+	cp $riapsdisclaimer /etc
+	cp $riapshint /etc
 }
 
 # Install ssh keys from setup.conf
@@ -66,24 +74,24 @@ install_riaps_keys() {
 
 # Setup any system utilities
 utilities_setup() {
-    sudo apt-get install python3 python3-pip python3-dev -y
-	sudo pip3 install --upgrade pip 
-	sudo apt-get install tmux gdbserver -y
-	sudo pip3 install influxdb pydevd
+    apt-get install python3 python3-pip python3-dev -y
+	pip3 install --upgrade pip 
+	apt-get install tmux gdbserver -y
+	pip3 install influxdb pydevd
 }
 
 # Install Random Number Generator used by RIAPS Discovery Service
 randomnum_install() {
-	sudo apt-get install rng-tools -y
-	sudo systemctl start rng-tools.service	
+	apt-get install rng-tools -y
+	systemctl start rng-tools.service	
 }
 
 # Turn off Frequency Governing
 freqgov_off() {
-	sudo touch /etc/default/cpufrequtils
-	echo "GOVERNOR=\"performance\"" | sudo tee -a /etc/default/cpufrequtils
-	sudo update-rc.d ondemand disable
-	sudo /etc/init.d/cpufrequtils restart
+	touch /etc/default/cpufrequtils
+	echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
+	update-rc.d ondemand disable
+	/etc/init.d/cpufrequtils restart
 }
 
 # HW Device Specific Configurations
@@ -103,20 +111,19 @@ hwconfig_setup() {
 	fi
 		
 	# add 'riaps' to device output groups
-	sudo groupadd gpio
-	sudo usermod -aG dialout $1
-	sudo usermod -aG gpio $1
-	sudo cp $gpiorule_dir$gpiorule /etc/udev/rules.d
-	sudo chmod 644 /etc/udev/rules.d/$gpiorule
+	groupadd gpio
+	usermod -aG dialout $1
+	usermod -aG gpio $1
+	cp $gpiorule_dir$gpiorule /etc/udev/rules.d
+	chmod 644 /etc/udev/rules.d/$gpiorule
 	
 	# Update visudo to retain the environment variables on a su call
-	sudo sh -c "echo \" \" >> /etc/sudoers"
-	sudo sh -c "echo \"# Persist device interface environment variables\" >> /etc/sudoers"
-	sudo sh -c "echo \"Defaults    env_keep += \"SLOTS\"\" >> /etc/sudoers"
-	sudo sh -c "echo \"Defaults    env_keep += \"PINS\"\"  >> /etc/sudoers"
+	sh -c "echo \"# Persist device interface environment variables\" > /etc/sudoers.d/riaps"
+	sh -c "echo \"Defaults    env_keep += \"SLOTS\"\" > /etc/sudoers.d/riaps"
+	sh -c "echo \"Defaults    env_keep += \"PINS\"\"  > /etc/sudoers/riaps"
 	
 	# Packages used by Device Components 
-	sudo pip3 install Adafruit_BBIO minimalmodbus
+	pip3 install Adafruit_BBIO minimalmodbus
 }
 
 # Remove unnecessary packages that may interfere
@@ -127,17 +134,17 @@ unneeded_removal() {
 
 # RIAPS Specified Middleware
 middleware_install() {
-	sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
-	sudo apt-get install libcapnp-dev libssl-dev libffi-dev -y
-    sudo pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
-    sudo pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
-    sudo -H pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
+	apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
+	apt-get install libcapnp-dev libssl-dev libffi-dev -y
+    pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
+    pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
+    pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
 }
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	sudo ../download_packages.sh
-	sudo ../install_integration.sh
+	../download_packages.sh
+	../install_integration.sh
 }
 
 # Cleanup after installation
@@ -147,27 +154,27 @@ remove_installartifacts() {
 }
 
 
-rt_kernel_install
+#rt_kernel_install
 echo "RT kernel installed"
-hostname_setup
+#hostname_setup
 echo "BBB hostname configured"
 user_func 
 echo "Created riaps user account"
-splash_screen_update
+#splash_screen_update
 echo "Splash screen updated"
-install_riaps_keys $RIAPSAPPDEVELOPER
+#install_riaps_keys $RIAPSAPPDEVELOPER
 echo "Installed riaps user key"
-utilities_setup
+#utilities_setup
 echo "System utilities setup"
-randomnum_install
+#randomnum_install
 echo "Random number generator installed"
-freqgov_off
+#freqgov_off
 echo "Frequency governing is turned off"
-hwconfig_setup $RIAPSAPPDEVELOPER
+#hwconfig_setup $RIAPSAPPDEVELOPER
 echo "HW device specific configurations done"
-unneeded_removal
+#unneeded_removal
 echo "Removed unneeded packages"
-middleware_install
+#middleware_install
 echo "Installed RIAPS required middleware"
 riapsdeb_install
 echo "RIAPS deb packages installed"
