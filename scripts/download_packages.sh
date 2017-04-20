@@ -1,10 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# check for oauth
-if [ "$GITHUB_OAUTH_TOKEN" = "" ] ; then
-    echo "Github OAuth token not set."
-    exit
-fi
+# Assumptions: Calling script has already sourced version.sh
 
 # command line arg parsing
 for ARGUMENT in "$@"
@@ -16,7 +12,10 @@ do
     case "$KEY" in
             pycom)              PYCOM_VER=${VALUE} ;;
             external)           EXTERNAL_VER=${VALUE} ;;
-	    core)               CORE_VER=${VALUE} ;;
+			core)               CORE_VER=${VALUE} ;;
+			arch)				ARCH=${VALUE} ;;
+			version_conf)		VERSION=${VALUE} ;;
+			setup_conf)			SETUP=${VALUE} ;;
             *)   
     esac    
 done
@@ -44,44 +43,96 @@ setup()
 	fi
 }
 
+init_env()
+{
+	if [ "$SETUP" = "" ]; then
+		echo "Need to pass in setup.conf file using setup_conf='/some_dir/setup.conf'"
+		exit
+	fi
+	
+	if [ "$VERSION" = "" ]; then
+		echo "Need to pass in version.sh file using version_conf='/some_dir/version.sh'"
+		exit
+	fi
 
+	if [ -e $SETUP ]; then
+		source $SETUP
+	fi
+	
+	if [ -e $VERSION ]; then
+	    source $VERSION
+	fi
+	
+	echo `less $GITHUB_OAUTH_TOKEN`
+	if [ -f $GITHUB_OAUTH_TOKEN ]; then
+	    export GITHUB_OAUTH_TOKEN=`less $GITHUB_OAUTH_TOKEN`	    
+	    
+	    if [ "$GITHUB_OAUTH_TOKEN" = "" ] ; then
+		echo "Problem setting Github OAuth token."
+		exit
+	    fi
+	fi
+}
+
+set_repo_versions()
+{
+	if [ "$PYCOM_VER" != "" ]; then
+			export pycomversion=$PYCOM_VER
+	fi
+
+	if [ "$CORE_VER" != "" ]; then
+			export coreversion=$CORE_VER
+	fi
+
+	if [ "$EXTERNAL_VER" != "" ]; then
+			export externalsversion=$EXTERNAL_VER
+	fi
+
+	architecture="all"
+	expected_file_count=0
+	if [ "$ARCH" != "" ]; then
+		architecture=`echo $ARCH| tr '[:upper:]' '[:lower:]'`
+	fi
+}
+
+
+# start of steps
 setup
+init_env
+set_repo_versions
+
 
 if [ ! -e "fetch_linux_amd64"  ]; then
 	wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
 	chmod +x fetch_linux_amd64
 fi
 
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-integration" --branch="master" ./riaps-integration
-#chmod +x $INTG_DIR/version.sh
-#. $INTG_DIR/version.sh
 
-if [ "$PYCOM_VER" != "" ]; then
-		export pycomversion=$PYCOM_VER
-fi
-
-if [ "$CORE_VER" != "" ]; then
-		export coreversion=$CORE_VER
-fi
-
-if [ "$EXTERNAL_VER" != "" ]; then
-		export externalsversion=$EXTERNAL_VER
-fi
-
-echo "Fetching ========> pycom = $pycomversion, external = $externalsversion, core = $coreversion <========"
+echo "Fetching ========> pycom = $pycomversion, external = $externalsversion, core = $coreversion, architecture = $architecture <========"
 
 
 # fetch repos based on version number
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" ./riaps-release
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-amd64.deb" ./riaps-release
+if [ "$architecture" = "all" ] || [ "$architecture" = "amd" ]; then
+expected_file_count=`expr $expected_file_count + 3`
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-amd64.deb" ./$RELEASE_DIR
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-amd64.deb" ./$RELEASE_DIR
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-amd64.deb" ./$RELEASE_DIR
+fi
 
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-armhf.deb" ./riaps-release
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-amd64.deb" ./riaps-release
+if [ "$architecture" = "all" ] || [ "$architecture" = "arm" ]; then
+expected_file_count=`expr $expected_file_count + 3`
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" ./$RELEASE_DIR
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-armhf.deb" ./$RELEASE_DIR
+./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-armhf.deb" ./$RELEASE_DIR
+fi
 
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-armhf.deb" ./riaps-release
 
-
-tar czvf $RELEASE_ARTIFACT ./$RELEASE_DIR
+downloaded_file_count=`find ./$RELEASE_DIR -name *.deb | wc -l`
+if [ $downloaded_file_count -eq $expected_file_count ]; then
+	tar czvf $RELEASE_ARTIFACT ./$RELEASE_DIR
+else
+	echo "Not all release deb files got downloaded! Expected $expected_file_count, got $downloaded_file_count."
+fi
 
 
 
