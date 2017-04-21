@@ -44,6 +44,7 @@ def bbb_full_install():
     bbb_installfile = 'riaps_bbb_base_setup.sh'
 
     transfer_full_installfiles()
+    run('chmod 774 ' + nodePutPath + bbb_installfile)
     run('sudo .' + nodePutPath + bbb_installfile)
 
 def bbb_install_update():
