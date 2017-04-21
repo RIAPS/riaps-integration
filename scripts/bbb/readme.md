@@ -3,7 +3,8 @@
 This folder contains beaglebone specific installation scripts.  
 
   * fabfile_bbb.py is used for installations and updates from a Linux VM to the BBBs
-  * 
+  * riaps_bbb_base_setup.sh runs on the BBB to install RIAPS specific configurations and dependencies
+  * subfolders contain information to be transferred and installed on the BBB during the RIAPS installation
 
 # How to Create a BBB from Ubuntu Pre-configured Image
 
