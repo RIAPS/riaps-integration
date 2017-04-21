@@ -137,13 +137,12 @@ middleware_install() {
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	../install_integration.sh
+	../install_integration.sh release_dir="./riaps-release"
 }
 
 # Cleanup after installation
 remove_installartifacts() {
-	rm -r scripts
-	rm scripts.tar.gz
+	rm -r /home/ubuntu/install_files
 }
 
 # This package is installed in the base image and controls the network interface in ways we do not desire. 
