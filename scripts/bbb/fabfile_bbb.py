@@ -24,9 +24,9 @@ def transfer_full_installfiles():
     put(localFilePath + security_key + '.pub', nodePutPath + security_key + '.pub')
     put(localFilePath + git_oauth, nodePutPath + git_oauth)
     put(localFilePath + pkg_installfile, nodePutPath + pkg_installfile)
-    run('chmod 774 ' + nodePutPath + pkg_installfile)
+    run('chmod 775 ' + nodePutPath + pkg_installfile)
     put(localFilePath + bbb_info, nodePutPath + 'scripts')
-    run('sudo chmod 774 ' + nodePutPath + bbb_info + bbb_installfile)
+    run('sudo chmod 775 ' + nodePutPath + bbb_info + bbb_installfile)
     transfer_debpkgs()
 
 
