@@ -35,23 +35,23 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 
 5. Download the needed files for installation
     
-    $ git clone riaps-integration
+  `git clone riaps-integration`
     
 6. Pull the latest RIAPS software to the VM
 
-	$ ./download_packages.sh arch="armhf" version_conf="../version.sh" setup_conf="setup.conf"
+	`./download_packages.sh arch="armhf" version_conf="../version.sh" setup_conf="setup.conf"`
 	
 	where version_conf and setup_conf point to the locations of the files.  
-	'version.sh' is configured in the repository with the latest releases.
-	'setup.conf' is customized to the person downloading (containing reference to locations of SSH and GITHUB OAUTH keys).  Only an example of this file will located in the riaps-integration repository.  User will need to edit this file for their setup. 
+	* 'version.sh' is configured in the repository with the latest releases.
+	* 'setup.conf' is customized to the person downloading (containing reference to locations of SSH and GITHUB OAUTH keys).  Only an example of this file will located in the riaps-integration repository.  User will need to edit this file for their setup. 
 	    
 7. Using 'fabfile_bbb.py' either do a full installation on the BBB (the first time) or an update when desired
 	
-	$ fab -f fabfile_bbb.py bbb_full_install   
+	`fab -f fabfile_bbb.py bbb_full_install`   
 	   
 	            or
 	            
-	$ fab -f fabfile_bbb.py bbb_install_update  	
+	`fab -f fabfile_bbb.py bbb_install_update`  	
 	
 	Note:  Fabric must be installed on the VM (sudo pip install fabric).  This is a python2 script.  
 	This fabric file should be configured to work with your particular VM.  This example is connection to a specific VM addressable only by the testing VM.
