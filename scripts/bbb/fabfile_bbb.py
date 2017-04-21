@@ -53,4 +53,4 @@ def bbb_install_update():
     bbb_updatefile = 'install_integration.sh'
 
     transfer_debpkgs()
-    run('sudo .' + nodePutPath + bbb_updatefile)
+    run('sudo .' + nodePutPath + bbb_updatefile + "release_dir=\"./riaps-release\"")
