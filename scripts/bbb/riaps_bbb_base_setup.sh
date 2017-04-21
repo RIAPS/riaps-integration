@@ -122,7 +122,7 @@ hwconfig_setup() {
 	# Update visudo to retain the environment variables on a su call
 	sh -c "echo \"# Persist device interface environment variables\" > /etc/sudoers.d/riaps"
 	sh -c "echo \"Defaults    env_keep += \"SLOTS\"\" > /etc/sudoers.d/riaps"
-	sh -c "echo \"Defaults    env_keep += \"PINS\"\"  > /etc/sudoers/riaps"
+	sh -c "echo \"Defaults    env_keep += \"PINS\"\"  > /etc/sudoers.d/riaps"
 	
 	# Packages used by Device Components 
 	pip3 install Adafruit_BBIO minimalmodbus
