@@ -1,85 +1,112 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # path
-deb_location=./riaps-release
+deb_location=$HOME/riaps-release
 pycom_name="riaps-pycom"
-core_name="riapscore-armhf"
+core_name="riaps-core-armhf"
 external_name="riaps-externals-armhf"
-
 
 # functions sections
 is_pkg_installed()
 {
-	pkg_status=`dpkg -s $1 | grep -c "ok installed"`
-	if [ $pkg_status -gt 0 ];
-	then
-		return 1
-	else
-		return 0
-	fi
+    pkg_status=`dpkg -s $1 | grep -c "ok installed"`
+    if [ $pkg_status -gt 0 ];
+    then
+	return 1
+    else
+	return 0
+    fi
 }
 
 uninstall_deb_pkg()
 {
-	is_pkg_installed $1
-	status=$?
-	if [ $status -eq 1 ];
-	then
-		echo "$1 is Installed. Removing package before installing new version."
-		sudo dpkg -r $1
-	else
-		echo "$1 not installed"
-	fi
+    is_pkg_installed $1
+    status=$?
+    if [ $status -eq 1 ];
+    then
+	echo "$1 is Installed. Removing package before installing new version."
+	sudo dpkg -r $1
+    else
+	echo "$1 not installed"
+    fi
 }
 
 install_deb_pkg()
 {
-	pkg_deb_path=$deb_location/$1.deb
-	echo "********** Installing $pkg_deb_path **********"
-	sudo dpkg -i $pkg_deb_path
+    pkg_deb_path=$deb_location/$1.deb
+    echo "********** Installing $pkg_deb_path **********"
+    sudo dpkg -i $pkg_deb_path
 }
 
 is_pip_pkg_installed()
 {
-	pkg_status=`pip3 list | grep -c -w "$1 "`;
+    pkg_status=`pip3 list | grep -c -w "$1 "`;
 
-	if [ $pkg_status -gt 0 ];
-	then
-		#echo "$1 is installed"
-		return 1
-	else
-		return 0
-	fi
+    if [ $pkg_status -gt 0 ];
+    then
+	#echo "$1 is installed"
+	return 1
+    else
+	return 0
+    fi
 }
 
 uninstall_pip_pkg()
 {
-	is_pip_pkg_installed $1
-	status=$?
-	if [ $status -eq 1 ];
-	then
-		echo "uninstall_pip_pkg(): $1 python package installed"
-		sudo pip3 uninstall -y $1
-	else
-		echo "uninstall_pip_pkg(): $1 python package not installed"
-	fi
+    is_pip_pkg_installed $1
+    status=$?
+    if [ $status -eq 1 ];
+    then
+	echo "uninstall_pip_pkg(): $1 python package installed"
+	sudo pip3 uninstall -y $1
+    else
+	echo "uninstall_pip_pkg(): $1 python package not installed"
+    fi
 }
 
 install_pip_pkg()
 {
-	pkg_name=$1.tar.gz
-	if [ -e $pkg_path ];
-	then
-		cd $deb_location
-		tar xzvf $pkg_name
-		cd $1/src
-		#echo `pwd`
-		echo "++++++ install_pip_pkg(): Installing pip package $1"
-		sudo pip3 install . --process-dependency-links
-	fi
-
+    pkg_name=$1.tar.gz
+    if [ -e $pkg_path ];
+    then
+	cd $deb_location
+	tar xzvf $pkg_name
+	cd $1/src
+	#echo `pwd`
+	echo "++++++ install_pip_pkg(): Installing pip package $1"
+	sudo pip3 install . --process-dependency-links
+    fi
 }
 
+
+# parse command line
+parse_args()
+{
+    for ARGUMENT in "$@"
+    do
+	KEY=$(echo $ARGUMENT | cut -f1 -d=)
+	VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+	case "$KEY" in
+	    release_dir)              RELEASE_PATH=${VALUE} ;;
+	    *)
+	esac
+    done
+
+    if [ "$RELEASE_PATH" = "" ]; then
+	echo "Must pass in path to the release directory [release_dir='/some_path/dir_name']"
+	exit
+    fi
+    
+    if [ -d $RELEASE_PATH ]; then
+	deb_location=$RELEASE_PATH
+    else
+	echo "Release directory [$release_dir] does not exist!"
+	exit
+    fi
+}
+
+
+parse_args $@
 
 # uninstall section
 uninstall_deb_pkg $core_name
@@ -91,14 +118,14 @@ redis_disco=/usr/local/bin/riaps_disco_redis
 uninstall_pip_pkg riaps
 if [ -e $redis_disco ];
 then
-	echo "removing $redis_disco"
-       	sudo rm $redis_disco
+    echo "removing $redis_disco"
+    sudo rm $redis_disco
 fi
 
 if [ -L $disco_link ];
 then
-	echo "removing $disco_link"
-	sudo rm $disco_link
+    echo "removing $disco_link"
+    sudo rm $disco_link
 fi
 
 
@@ -115,7 +142,7 @@ install_pip_pkg $pycom_name
 cpp_disco=/opt/riaps/armhf/bin/rdiscoveryd
 if [ -e $disco_link ] && [ -e $cpp_disco ];
 then
-	sudo cp $disco_link $redis_disco
-	sudo rm $disco_link
-	sudo ln -s $cpp_disco $disco_link
+    sudo cp $disco_link $redis_disco
+    sudo rm $disco_link
+    sudo ln -s $cpp_disco $disco_link
 fi
