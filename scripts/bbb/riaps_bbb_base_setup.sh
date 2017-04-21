@@ -40,7 +40,8 @@ hostname_setup() {
 user_func() {	 
 	set +e
 	grep riaps /etc/passwd
-	if [ "$?" -eq "1" ]
+	status=$?
+	if [ $status -eq "1" ]
 	then
 		useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
 		echo -e "riapspwd\nriapspwd" | sudo passwd $RIAPSAPPDEVELOPER	 
@@ -116,6 +117,7 @@ hwconfig_setup() {
 	usermod -aG gpio $1
 	cp $gpiorule_dir$gpiorule /etc/udev/rules.d
 	chmod 644 /etc/udev/rules.d/$gpiorule
+	udevadm control --reload-rules
 	
 	# Update visudo to retain the environment variables on a su call
 	sh -c "echo \"# Persist device interface environment variables\" > /etc/sudoers.d/riaps"
@@ -137,7 +139,7 @@ middleware_install() {
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	../install_integration.sh release_dir="./riaps-release"
+	../install_integration.sh arch="armhf" release_dir="./riaps-release"
 }
 
 # Cleanup after installation
