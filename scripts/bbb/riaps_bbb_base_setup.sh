@@ -40,11 +40,13 @@ hostname_setup() {
 user_func() {	 
 	set +e
 	grep riaps /etc/passwd
-	if [ echo $? ]
+	if [ "$?" -eq "1" ]
 	then
 		useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
 		echo -e "riapspwd\nriapspwd" | sudo passwd $RIAPSAPPDEVELOPER	 
 		usermod -aG sudo $RIAPSAPPDEVELOPER
+	else
+	    echo "riaps user already exists"
 	fi
 	set -e
 }

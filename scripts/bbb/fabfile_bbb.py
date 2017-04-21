@@ -26,7 +26,7 @@ def transfer_full_installfiles():
     put(localFilePath + pkg_installfile, nodePutPath + pkg_installfile)
     run('chmod 775 ' + nodePutPath + pkg_installfile)
     put(localFilePath + bbb_info, nodePutPath + 'scripts')
-    run('sudo chmod 775 ' + nodePutPath + bbb_info + bbb_installfile)
+    run('chmod 775 ' + nodePutPath + bbb_info + bbb_installfile)
     transfer_debpkgs()
 
 
