@@ -93,6 +93,7 @@ parse_args()
 	case "$KEY" in
 	    release_dir)              RELEASE_PATH=${VALUE} ;;
 	    arch)                     ARCH=${VALUE} ;;
+	    help)                     HELP="true" ;;
 	    *)
 	esac
     done
@@ -120,8 +121,20 @@ parse_args()
     external_name=`echo $external_name-$architecture`
 }
 
+print_help()
+{
+    if [ "$HELP" = "true" ]; then
+	echo "usage: install_integration [help] [=]"
+	echo "arguments:"
+	echo "help     				show this help message and exit"
+	echo "arch=amd64 or armhf		architecture version amd64 or armhf"
+	echo "release_dir=/dir_path             directory that contains deb files"
+	exit
+    fi
+}
 
 parse_args $@
+print_help
 
 # uninstall section
 uninstall_deb_pkg $core_name

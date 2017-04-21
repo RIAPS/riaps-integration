@@ -12,10 +12,11 @@ do
     case "$KEY" in
             pycom)              PYCOM_VER=${VALUE} ;;
             external)           EXTERNAL_VER=${VALUE} ;;
-			core)               CORE_VER=${VALUE} ;;
-			arch)				ARCH=${VALUE} ;;
-			version_conf)		VERSION=${VALUE} ;;
-			setup_conf)			SETUP=${VALUE} ;;
+	    core)               CORE_VER=${VALUE} ;;
+	    arch)		ARCH=${VALUE} ;;
+	    version_conf)	VERSION=${VALUE} ;;
+	    setup_conf)		SETUP=${VALUE} ;;
+	    help)               HELP="true" ;;
             *)   
     esac    
 done
@@ -95,8 +96,24 @@ set_repo_versions()
 	fi
 }
 
+print_help()
+{
+    if [ "$HELP" = "true" ]; then
+	echo "usage: download_packages [help] [=]"
+	echo "arguments:"
+	echo "help     				show this help message and exit"
+	echo "pycom=0.0.0			pycom release version, default from version.h"
+	echo "external=0.0.0			external release version, default from version.h"
+	echo "core=0.0.0			core release version, default from version.h"
+	echo "arch=amd64 or armhf		architecture version amd64 or armhf"
+	echo "version_conf=/path/version.sh"
+	echo "setup_conf=/path/setup.conf"
+	exit
+    fi
+}
 
 # start of steps
+print_help
 setup
 init_env
 set_repo_versions
