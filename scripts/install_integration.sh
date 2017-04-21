@@ -3,8 +3,8 @@
 # path
 deb_location=$HOME/riaps-release
 pycom_name="riaps-pycom"
-core_name="riaps-core-armhf"
-external_name="riaps-externals-armhf"
+core_name="riaps-core"
+external_name="riaps-externals"
 
 # functions sections
 is_pkg_installed()
@@ -34,8 +34,12 @@ uninstall_deb_pkg()
 install_deb_pkg()
 {
     pkg_deb_path=$deb_location/$1.deb
-    echo "********** Installing $pkg_deb_path **********"
-    sudo dpkg -i $pkg_deb_path
+    if [ ! -e $pkg_deb_path  ]; then
+	echo "Unable to install $pkg_deb_path: file not found"    
+    else
+	echo "********** Installing $pkg_deb_path **********"
+	sudo dpkg -i $pkg_deb_path
+    fi
 }
 
 is_pip_pkg_installed()
@@ -88,6 +92,7 @@ parse_args()
 	VALUE=$(echo $ARGUMENT | cut -f2 -d=)
 	case "$KEY" in
 	    release_dir)              RELEASE_PATH=${VALUE} ;;
+	    arch)                     ARCH=${VALUE} ;;
 	    *)
 	esac
     done
@@ -103,6 +108,16 @@ parse_args()
 	echo "Release directory [$release_dir] does not exist!"
 	exit
     fi
+
+    architecture=`echo $ARCH| tr '[:upper:]' '[:lower:]'`
+    if [ "$architecture" != "armhf" ] or [ "$architecture" != "amd64" ]; then
+	echo "Installation can not proceed: arch=amd or arch=arm"
+	exit	
+    fi
+
+    pycom_name=`echo "$pycom_name-$architecture"`
+    core_name=`echo $core_name-$architecture`
+    external_name=`echo $external_name-$architecture`
 }
 
 
@@ -111,11 +126,12 @@ parse_args $@
 # uninstall section
 uninstall_deb_pkg $core_name
 uninstall_deb_pkg $external_name
+uninstall_deb_pkg $pycom_name
 
 
 disco_link=/usr/local/bin/riaps_disco
 redis_disco=/usr/local/bin/riaps_disco_redis
-uninstall_pip_pkg riaps
+
 if [ -e $redis_disco ];
 then
     echo "removing $redis_disco"
@@ -135,7 +151,7 @@ fi
 # install section
 install_deb_pkg $external_name
 install_deb_pkg $core_name
-install_pip_pkg $pycom_name
+install_deb_pkg $pycom_name
 
 
 # create symbolic link for pycom disco

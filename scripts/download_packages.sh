@@ -112,14 +112,14 @@ echo "Fetching ========> pycom = $pycomversion, external = $externalsversion, co
 
 
 # fetch repos based on version number
-if [ "$architecture" = "all" ] || [ "$architecture" = "amd" ]; then
+if [ "$architecture" = "all" ] || [ "$architecture" = "amd64" ]; then
 expected_file_count=`expr $expected_file_count + 3`
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-amd64.deb" ./$RELEASE_DIR
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-amd64.deb" ./$RELEASE_DIR
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-amd64.deb" ./$RELEASE_DIR
 fi
 
-if [ "$architecture" = "all" ] || [ "$architecture" = "arm" ]; then
+if [ "$architecture" = "all" ] || [ "$architecture" = "armhf" ]; then
 expected_file_count=`expr $expected_file_count + 3`
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" ./$RELEASE_DIR
 ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-armhf.deb" ./$RELEASE_DIR
