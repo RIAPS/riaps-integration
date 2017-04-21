@@ -174,12 +174,10 @@ freqgov_off
 echo "Frequency governing is turned off"
 hwconfig_setup $RIAPSAPPDEVELOPER
 echo "HW device specific configurations done"
-unneeded_removal
-echo "Removed unneeded packages"
 middleware_install
 echo "Installed RIAPS required middleware"
-#riapsdeb_install
-#echo "RIAPS deb packages installed"
+riapsdeb_install
+echo "RIAPS deb packages installed"
 remove_installartifacts
 echo "Cleanup after installation done"
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"

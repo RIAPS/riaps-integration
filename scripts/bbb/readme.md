@@ -1,4 +1,9 @@
-# This folder contains beaglebone specific installation scripts
+# BBB Folder Contents
+
+This folder contains beaglebone specific installation scripts.  
+
+  * fabfile_bbb.py is used for installations and updates from a Linux VM to the BBBs
+  * 
 
 # How to Create a BBB from Ubuntu Pre-configured Image
 
@@ -47,5 +52,8 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	            
 	$ fab -f fabfile_bbb.py bbb_install_update  	
 	
-	Note:  Fabric must be installed on the VM (sudo pip install fabric).  This is a python2 script.
+	Note:  Fabric must be installed on the VM (sudo pip install fabric).  This is a python2 script.  
+	This fabric file should be configured to work with your particular VM.  This example is connection to a specific VM addressable only by the testing VM.
+	
+	  `env.hosts = ['192.168.1.102']`
 
