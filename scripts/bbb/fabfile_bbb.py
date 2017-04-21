@@ -15,6 +15,7 @@ def transfer_full_installfiles():
     security_key = 'scripts/id_rsa_riaps_global'
     git_oauth = 'scripts/github_oauth'
     pkg_installfile = 'scripts/install_integration.sh'
+    bbb_installfile = 'riaps_bbb_base_setup.sh'
 
     run('mkdir -p ' + nodePutPath + bbb_info)
     put(localFilePath + version_info, nodePutPath + version_info)
@@ -25,6 +26,7 @@ def transfer_full_installfiles():
     put(localFilePath + pkg_installfile, nodePutPath + pkg_installfile)
     run('chmod 774 ' + nodePutPath + pkg_installfile)
     put(localFilePath + bbb_info, nodePutPath + 'scripts')
+    run('sudo chmod 774 ' + nodePutPath + bbb_info + bbb_installfile)
     transfer_debpkgs()
 
 
@@ -40,15 +42,14 @@ def transfer_debpkgs():
 
 
 def bbb_full_install():
-    nodePutPath = '/home/ubuntu/install_files/'
+    nodePutPath = '/home/ubuntu/install_files/scripts/bbb/'
     bbb_installfile = 'riaps_bbb_base_setup.sh'
 
     transfer_full_installfiles()
-    run('sudo chmod 774 ' + nodePutPath + bbb_installfile)
     run('sudo .' + nodePutPath + bbb_installfile)
 
 def bbb_install_update():
-    nodePutPath = '/home/ubuntu/install_files/'
+    nodePutPath = '/home/ubuntu/install_files/scripts/'
     bbb_updatefile = 'install_integration.sh'
 
     transfer_debpkgs()
