@@ -153,30 +153,30 @@ remove_connman() {
 }
 
 
-#rt_kernel_install
+rt_kernel_install
 echo "RT kernel installed"
-#hostname_setup
+hostname_setup
 echo "BBB hostname configured"
 user_func 
 echo "Created riaps user account"
-#splash_screen_update
+splash_screen_update
 echo "Splash screen updated"
-#install_riaps_keys $RIAPSAPPDEVELOPER
+install_riaps_keys $RIAPSAPPDEVELOPER
 echo "Installed riaps user key"
-#utilities_setup
+utilities_setup
 echo "System utilities setup"
-#randomnum_install
+randomnum_install
 echo "Random number generator installed"
-#freqgov_off
+freqgov_off
 echo "Frequency governing is turned off"
-#hwconfig_setup $RIAPSAPPDEVELOPER
+hwconfig_setup $RIAPSAPPDEVELOPER
 echo "HW device specific configurations done"
-#unneeded_removal
+unneeded_removal
 echo "Removed unneeded packages"
-#middleware_install
+middleware_install
 echo "Installed RIAPS required middleware"
-riapsdeb_install
-echo "RIAPS deb packages installed"
+#riapsdeb_install
+#echo "RIAPS deb packages installed"
 remove_installartifacts
 echo "Cleanup after installation done"
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
