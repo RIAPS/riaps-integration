@@ -7,7 +7,7 @@ In a Linux VM:
     
 2) Pull the latest RIAPS software to the VM
 
-	$ ./download_packages.sh arch="arm" version_conf="../version.sh" setup_conf="setup.conf"
+	$ ./download_packages.sh arch="armhf" version_conf="../version.sh" setup_conf="setup.conf"
 	
 	where version_conf and setup_conf point to the locations of the files.  
 	'version.sh' is configured in the repository with the latest releases.
