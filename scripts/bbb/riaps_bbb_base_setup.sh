@@ -119,9 +119,17 @@ hwconfig_setup() {
 	fi
 		
 	# add 'riaps' to device output groups
-	groupadd gpio
-	usermod -aG dialout $1
-	usermod -aG gpio $1
+	grep gpio /etc/group
+	status=$?
+	if [ $status -eq "1" ]
+	then
+	    groupadd gpio
+	    usermod -aG dialout $1
+	    usermod -aG gpio $1
+	else
+	    echo "gpio group already exists"
+	fi
+
 	cp $gpiorule_dir$gpiorule /etc/udev/rules.d
 	chmod 644 /etc/udev/rules.d/$gpiorule
 	udevadm control --reload-rules
