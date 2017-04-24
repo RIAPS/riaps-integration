@@ -35,9 +35,9 @@ setup()
 		mkdir $RELEASE_DIR
 	fi
 
-	if [ -d $INTG_DIR ]; then
-		rm -rf $INTG_DIR
-	fi
+	#if [ -d $INTG_DIR ]; then
+	#	rm -rf $INTG_DIR
+	#fi
 
 	if [ -e $RELEASE_ARTIFACT ]; then
 		rm $RELEASE_ARTIFACT
