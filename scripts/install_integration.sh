@@ -111,7 +111,7 @@ parse_args()
     fi
 
     architecture=`echo $ARCH| tr '[:upper:]' '[:lower:]'`
-    if [ "$architecture" != "armhf" ] or [ "$architecture" != "amd64" ]; then
+    if [ "$architecture" != "armhf" ] || [ "$architecture" != "amd64" ]; then
 	echo "Installation can not proceed: arch=amd or arch=arm"
 	exit	
     fi
