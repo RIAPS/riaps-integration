@@ -46,9 +46,12 @@ setup()
 
 init_env()
 {
-	if [ "$SETUP" = "" ]; then
-		echo "Need to pass in setup.conf file using setup_conf='/some_dir/setup.conf'"
-		exit
+	if [ "$GITHUB_OAUTH_TOKEN" = "" ]; then
+		if [ "$SETUP" = "" ]; then
+			echo "Need to pass in setup.conf file using setup_conf='/some_dir/setup.conf'"
+			echo "Alternatively export GITHUB_OAUTH_TOKEN=blah_token before executing this script."
+			exit
+		fi
 	fi
 	
 	if [ "$VERSION" = "" ]; then
