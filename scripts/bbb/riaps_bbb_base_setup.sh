@@ -96,6 +96,11 @@ freqgov_off() {
 	/etc/init.d/cpufrequtils restart
 }
 
+# Specify Network Interface to have Ethernet enable
+interface_update() {
+	cp $netinterface /etc/network/interfaces
+}
+	
 # HW Device Specific Configurations
 # Components installed:  GPIO, Modbus (UART)
 # Note:  minimalmodbus installs pyserial
@@ -139,7 +144,7 @@ middleware_install() {
 
 # Install RIAPS deb packages
 riapsdeb_install() {
-	../install_integration.sh arch="armhf" release_dir="./riaps-release"
+	../install_integration.sh arch="armhf" release_dir="../riaps-release"
 }
 
 # Cleanup after installation
@@ -151,8 +156,6 @@ remove_installartifacts() {
 # Once it is removed, the network interface is lost.  So, this should be the very last step taken.
 # This reboot will also allow execute the hostname and udev rules (services setup to run on bootup)
 remove_connman() {
-	# Enable Ethernet first
-	cp -f $netinterface /etc/network/interfaces
     apt-get remove connman -y
 	sudo reboot
 }
@@ -174,6 +177,8 @@ randomnum_install
 echo "Random number generator installed"
 freqgov_off
 echo "Frequency governing is turned off"
+interface_update
+echo "Turn on Ethernet port"
 hwconfig_setup $RIAPSAPPDEVELOPER
 echo "HW device specific configurations done"
 middleware_install
