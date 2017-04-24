@@ -10,6 +10,7 @@ gpiorule=80-non-root-gpio-permissions.rules
 kernelupdate=/opt/scripts/tools/update_kernel.sh
 riapsdisclaimer=etc/motd
 riapshint=etc/issue.net
+netinterface=etc/network/interfaces
 
 
 if [ -f "../setup.conf" ]
@@ -101,6 +102,7 @@ freqgov_off() {
 hwconfig_setup() {
 	source /home/riaps/.bashrc
 
+    # Setup for GPIO
 	if [$SLOTS eq ""]
 	then
 		echo -en "\n# RIAPS Device Slots\nexport SLOTS=/sys/devices/platform/bone_capemgr/slots\n" | sudo tee -a /home/riaps/.bashrc
@@ -151,6 +153,8 @@ remove_installartifacts() {
 # Once it is removed, the network interface is lost.  So, this should be the very last step taken.
 # This reboot will also allow execute the hostname and udev rules (services setup to run on bootup)
 remove_connman() {
+	# Enable Ethernet first
+	cp -f $netinterface /etc/network/interfaces
     apt-get remove connman -y
 	sudo reboot
 }
