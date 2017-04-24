@@ -144,7 +144,7 @@ hwconfig_setup() {
 # RIAPS Specified Middleware
 middleware_install() {
 	apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
-	apt-get install libcapnp-dev libssl-dev libffi-dev -y
+	apt-get install libssl-dev libffi-dev -y
     pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
     pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
     pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
