@@ -51,31 +51,31 @@ init_env()
 			echo "Need to pass in setup.conf file using setup_conf='/some_dir/setup.conf'"
 			echo "Alternatively export GITHUB_OAUTH_TOKEN=blah_token before executing this script."
 			exit
+		else
+			if [ -e $SETUP ]; then
+				source $SETUP
+			fi
+			
+			if [ -f $GITHUB_OAUTH_TOKEN ]; then
+				export GITHUB_OAUTH_TOKEN=`less $GITHUB_OAUTH_TOKEN`	    
+				
+				if [ "$GITHUB_OAUTH_TOKEN" = "" ] ; then
+				echo "Problem setting Github OAuth token."
+				exit
+				fi
+			fi
 		fi
 	fi
 	
 	if [ "$VERSION" = "" ]; then
 		echo "Need to pass in version.sh file using version_conf='/some_dir/version.sh'"
 		exit
-	fi
+	else
+		if [ -e $VERSION ]; then
+			source $VERSION
+		fi	
+	fi	
 
-	if [ -e $SETUP ]; then
-		source $SETUP
-	fi
-	
-	if [ -e $VERSION ]; then
-	    source $VERSION
-	fi
-	
-	echo `less $GITHUB_OAUTH_TOKEN`
-	if [ -f $GITHUB_OAUTH_TOKEN ]; then
-	    export GITHUB_OAUTH_TOKEN=`less $GITHUB_OAUTH_TOKEN`	    
-	    
-	    if [ "$GITHUB_OAUTH_TOKEN" = "" ] ; then
-		echo "Problem setting Github OAuth token."
-		exit
-	    fi
-	fi
 }
 
 set_repo_versions()
