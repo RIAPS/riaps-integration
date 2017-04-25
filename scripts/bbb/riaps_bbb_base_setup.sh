@@ -119,6 +119,7 @@ hwconfig_setup() {
 	fi
 		
 	# add 'riaps' to device output groups
+	set +e
 	grep gpio /etc/group
 	status=$?
 	if [ $status -eq "1" ]
@@ -129,10 +130,12 @@ hwconfig_setup() {
 	else
 	    echo "gpio group already exists"
 	fi
+	set -e
 
 	cp $gpiorule_dir$gpiorule /etc/udev/rules.d
 	chmod 644 /etc/udev/rules.d/$gpiorule
-	udevadm control --reload-rules
+	udevadm trigger --subsystem-match=gpio
+	# MM TODO:  try trigger instead --> udevadm control --reload-rules
 	
 	# Update visudo to retain the environment variables on a su call
     sh -c "echo \"# Persist device interface environment variables \nDefaults    env_keep += \"SLOTS\" \nDefaults    env_keep += \"PINS\"\" > /etc/sudoers.d/riaps"
@@ -145,9 +148,10 @@ hwconfig_setup() {
 middleware_install() {
 	apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
 	apt-get install libssl-dev libffi-dev -y
-    pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
-    pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
-    pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
+    # MM TODO: Removed - let happen in integration script 
+    #pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
+    #pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
+    #pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
 }
 
 # Install RIAPS deb packages
@@ -169,32 +173,33 @@ remove_connman() {
 }
 
 
+echo "Start installation" | ts '[%Y-%m-%d %H:%M:%S]'
 rt_kernel_install
-echo "RT kernel installed"
+echo "RT kernel installed" | ts '[%Y-%m-%d %H:%M:%S]'
 hostname_setup
-echo "BBB hostname configured"
+echo "BBB hostname configured" | ts '[%Y-%m-%d %H:%M:%S]'
 user_func 
-echo "Created riaps user account"
+echo "Created riaps user account" | ts '[%Y-%m-%d %H:%M:%S]'
 splash_screen_update
-echo "Splash screen updated"
+echo "Splash screen updated" | ts '[%Y-%m-%d %H:%M:%S]'
 install_riaps_keys $RIAPSAPPDEVELOPER
-echo "Installed riaps user key"
+echo "Installed riaps user key" | ts '[%Y-%m-%d %H:%M:%S]'
 utilities_setup
-echo "System utilities setup"
+echo "System utilities setup" | ts '[%Y-%m-%d %H:%M:%S]'
 randomnum_install
-echo "Random number generator installed"
+echo "Random number generator installed" | ts '[%Y-%m-%d %H:%M:%S]'
 freqgov_off
-echo "Frequency governing is turned off"
+echo "Frequency governing is turned off" | ts '[%Y-%m-%d %H:%M:%S]'
 interface_update
-echo "Turn on Ethernet port"
+echo "Turn on Ethernet port" | ts '[%Y-%m-%d %H:%M:%S]'
 hwconfig_setup $RIAPSAPPDEVELOPER
-echo "HW device specific configurations done"
+echo "HW device specific configurations done" | ts '[%Y-%m-%d %H:%M:%S]'
 middleware_install
-echo "Installed RIAPS required middleware"
+echo "Installed RIAPS required middleware" | ts '[%Y-%m-%d %H:%M:%S]'
 riapsdeb_install
-echo "RIAPS deb packages installed"
+echo "RIAPS deb packages installed" | ts '[%Y-%m-%d %H:%M:%S]'
 remove_installartifacts
-echo "Cleanup after installation done"
+echo "Cleanup after installation done" | ts '[%Y-%m-%d %H:%M:%S]'
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 remove_connman
