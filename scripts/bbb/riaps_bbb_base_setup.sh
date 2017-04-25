@@ -173,33 +173,33 @@ remove_connman() {
 }
 
 
-echo "Start installation" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Start installation" 
 rt_kernel_install
-echo "RT kernel installed" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "RT kernel installed" 
 hostname_setup
-echo "BBB hostname configured" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "BBB hostname configured" 
 user_func 
-echo "Created riaps user account" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Created riaps user account" 
 splash_screen_update
-echo "Splash screen updated" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Splash screen updated" 
 install_riaps_keys $RIAPSAPPDEVELOPER
-echo "Installed riaps user key" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Installed riaps user key" 
 utilities_setup
-echo "System utilities setup" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "System utilities setup" 
 randomnum_install
-echo "Random number generator installed" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Random number generator installed" 
 freqgov_off
-echo "Frequency governing is turned off" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Frequency governing is turned off" 
 interface_update
-echo "Turn on Ethernet port" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Turn on Ethernet port" 
 hwconfig_setup $RIAPSAPPDEVELOPER
-echo "HW device specific configurations done" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "HW device specific configurations done" 
 middleware_install
-echo "Installed RIAPS required middleware" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Installed RIAPS required middleware" 
 riapsdeb_install
-echo "RIAPS deb packages installed" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "RIAPS deb packages installed" 
 remove_installartifacts
-echo "Cleanup after installation done" | ts '[%Y-%m-%d %H:%M:%S]'
+echo "Cleanup after installation done" 
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 remove_connman
