@@ -173,33 +173,33 @@ remove_connman() {
 }
 
 
-echo "Start installation" 
+echo "`date -u` - Start installation" 
 rt_kernel_install
-echo "RT kernel installed" 
+echo "`date -u` - RT kernel installed" 
 hostname_setup
-echo "BBB hostname configured" 
+echo "`date -u` - BBB hostname configured" 
 user_func 
-echo "Created riaps user account" 
+echo "`date -u` - Created riaps user account" 
 splash_screen_update
-echo "Splash screen updated" 
+echo "`date -u` - Splash screen updated" 
 install_riaps_keys $RIAPSAPPDEVELOPER
-echo "Installed riaps user key" 
+echo "`date -u` - Installed riaps user key" 
 utilities_setup
-echo "System utilities setup" 
+echo "`date -u` - System utilities setup" 
 randomnum_install
-echo "Random number generator installed" 
+echo "`date -u` - Random number generator installed" 
 freqgov_off
-echo "Frequency governing is turned off" 
+echo "`date -u` - Frequency governing is turned off" 
 interface_update
-echo "Turn on Ethernet port" 
+echo "`date -u` - Turn on Ethernet port" 
 hwconfig_setup $RIAPSAPPDEVELOPER
-echo "HW device specific configurations done" 
+echo "`date -u` - HW device specific configurations done" 
 middleware_install
-echo "Installed RIAPS required middleware" 
+echo "`date -u` - Installed RIAPS required middleware" 
 riapsdeb_install
-echo "RIAPS deb packages installed" 
+echo "`date -u` - RIAPS deb packages installed" 
 remove_installartifacts
-echo "Cleanup after installation done" 
+echo "`date -u` - Cleanup after installation done" 
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 remove_connman
