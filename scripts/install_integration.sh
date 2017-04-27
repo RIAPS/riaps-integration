@@ -24,7 +24,8 @@ uninstall_deb_pkg()
     status=$?
     if [ $status -eq 1 ];
     then
-	echo "`date –u` $1 is Installed. Removing package before installing new version."
+    echo "`date -u`"
+	echo "$1 is Installed. Removing package before installing new version."
 	sudo dpkg -r $1
     else
 	echo "$1 not installed"
@@ -37,7 +38,8 @@ install_deb_pkg()
     if [ ! -e $pkg_deb_path  ]; then
 	echo "Unable to install $pkg_deb_path: file not found"    
     else
-	echo "`date –u` ********** Installing $pkg_deb_path **********"
+    echo "`date -u`"
+	echo "********** Installing $pkg_deb_path **********"
 	sudo dpkg -i $pkg_deb_path
     fi
 }
@@ -61,7 +63,8 @@ uninstall_pip_pkg()
     status=$?
     if [ $status -eq 1 ];
     then
-	echo "`date –u` uninstall_pip_pkg(): $1 python package installed"
+    echo "`date -u`"
+	echo "uninstall_pip_pkg(): $1 python package installed"
 	sudo pip3 uninstall -y $1
     else
 	echo "uninstall_pip_pkg(): $1 python package not installed"
@@ -77,7 +80,8 @@ install_pip_pkg()
 	tar xzvf $pkg_name
 	cd $1/src
 	#echo `pwd`
-	echo "`date –u` ++++++ install_pip_pkg(): Installing pip package $1"
+	echo "`date -u`"
+	echo "++++++ install_pip_pkg(): Installing pip package $1"
 	sudo pip3 install . --process-dependency-links
     fi
 }
@@ -177,4 +181,5 @@ then
     sudo ln -s $cpp_disco $disco_link
 fi
 
-echo "`date –u` RIAPS Install is complete"
+echo "`date -u`"
+echo "RIAPS Install is complete"
