@@ -99,6 +99,9 @@ freqgov_off() {
 # Specify Network Interface to have Ethernet enable
 interface_update() {
 	cp $netinterface /etc/network/interfaces
+	# MM TODO:  consider adding the follow two items (at least a route gw statement, need to check with Peter on the other
+	#echo -en "\n# RIAPS Network Setup\n/sbin/route add default gw 192.168.7.1\n" | sudo tee -a /home/riaps/.bashrc
+	#echo -en "/usr/sbin/ntpdate -b -s -u ie.pool.ntp.org\n" | sudo tee -a /home/riaps/.bashrc
 }
 	
 # HW Device Specific Configurations
