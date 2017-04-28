@@ -174,7 +174,7 @@ remove_installartifacts() {
 # This reboot will also allow execute the hostname and udev rules (services setup to run on bootup)
 remove_connman() {
     apt-get remove connman -y
-	sudo reboot
+    sudo reboot
 }
 
 
@@ -208,3 +208,5 @@ echo "`date -u` - Cleanup after installation done"
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 remove_connman
+
+
