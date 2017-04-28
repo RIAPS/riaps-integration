@@ -100,8 +100,8 @@ freqgov_off() {
 
 # Specify Network Interface to have Ethernet enable
 interface_update() {
-	cp $netinterface /etc/network/interfaces
-	cp $resolv /etc/$resolv
+    cp $netinterface /etc/network/interfaces
+    cp $resolv /etc/resolv.conf
 	# MM TODO:  consider adding the follow item
 	#echo -en "\n# RIAPS Network Setup\n/sbin/route add default gw 192.168.7.1\n" | sudo tee -a /home/riaps/.bashrc
 
@@ -208,5 +208,3 @@ echo "`date -u` - Cleanup after installation done"
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 remove_connman
-
-
