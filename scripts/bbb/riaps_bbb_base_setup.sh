@@ -104,7 +104,7 @@ interface_update() {
     cp $resolv /etc/resolv.conf
 	# MM TODO:  consider adding the follow item
 	#echo -en "\n# RIAPS Network Setup\n/sbin/route add default gw 192.168.7.1\n" | sudo tee -a /home/riaps/.bashrc
-
+}
 	
 # HW Device Specific Configurations
 # Components installed:  GPIO, Modbus (UART)
