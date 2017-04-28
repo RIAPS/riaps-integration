@@ -12,6 +12,7 @@ kernelupdate=/opt/scripts/tools/update_kernel.sh
 riapsdisclaimer=etc/motd
 riapshint=etc/issue.net
 netinterface=etc/network/interfaces
+resolv=etc/resolv.conf
 
 
 if [ -f "../setup.conf" ]
@@ -100,10 +101,10 @@ freqgov_off() {
 # Specify Network Interface to have Ethernet enable
 interface_update() {
 	cp $netinterface /etc/network/interfaces
-	# MM TODO:  consider adding the follow two items (at least a route gw statement, need to check with Peter on the other
+	cp $resolv /etc/$resolv
+	# MM TODO:  consider adding the follow item
 	#echo -en "\n# RIAPS Network Setup\n/sbin/route add default gw 192.168.7.1\n" | sudo tee -a /home/riaps/.bashrc
-	#echo -en "/usr/sbin/ntpdate -b -s -u ie.pool.ntp.org\n" | sudo tee -a /home/riaps/.bashrc
-}
+
 	
 # HW Device Specific Configurations
 # Components installed:  GPIO, Modbus (UART)
