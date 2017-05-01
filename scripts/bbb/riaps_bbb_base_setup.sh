@@ -2,6 +2,7 @@
 
 set -e
 
+# Variable Declarations
 RIAPSAPPDEVELOPER=riaps
 sethostname=bin/set_unique_hostname.py
 sethostservice=conf/sethostname.service
@@ -15,6 +16,7 @@ netinterface=etc/network/interfaces
 resolv=etc/resolv.conf
 
 
+# Look for correct credentials before installing
 if [ -f "../setup.conf" ]
 then
   echo "Found setup.conf"
@@ -178,6 +180,7 @@ remove_connman() {
 }
 
 
+# Start Function Calls
 echo "`date -u` - Start installation" 
 rt_kernel_install
 echo "`date -u` - RT kernel installed" 
