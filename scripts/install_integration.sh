@@ -97,6 +97,7 @@ parse_args()
 	case "$KEY" in
 	    release_dir)              RELEASE_PATH=${VALUE} ;;
 	    arch)                     ARCH=${VALUE} ;;
+		exclude_pycom)			  EXCLUDE_PYCOM="true" ;;
 	    help)                     HELP="true" ;;
 	    *)
 	esac
@@ -138,13 +139,17 @@ print_help()
     fi
 }
 
+EXCLUDE_PYCOM="false"
 parse_args $@
 print_help
 
 # uninstall section
 uninstall_deb_pkg $core_name
 uninstall_deb_pkg $external_name
-uninstall_deb_pkg $pycom_name
+
+if [ "$EXCLUDE_PYCOM" = "false" ]; then
+	uninstall_deb_pkg $pycom_name
+fi
 
 
 disco_link=/usr/local/bin/riaps_disco
@@ -169,7 +174,10 @@ fi
 # install section
 install_deb_pkg $external_name
 install_deb_pkg $core_name
-install_deb_pkg $pycom_name
+
+if [ "$EXCLUDE_PYCOM" = "false" ]; then
+	install_deb_pkg $pycom_name
+fi
 
 
 # create symbolic link for pycom disco
