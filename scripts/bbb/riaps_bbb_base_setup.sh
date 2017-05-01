@@ -175,7 +175,7 @@ remove_installartifacts() {
 # Once it is removed, the network interface is lost.  So, this should be the very last step taken.
 # This reboot will also allow execute the hostname and udev rules (services setup to run on bootup)
 remove_connman() {
-    apt-get remove connman -y
+    sudo dpkg --remove conman -y
     sudo reboot
 }
 
