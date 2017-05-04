@@ -174,7 +174,7 @@ riapspycomdepends_install() {
 
 # Install riaps-pycom
 riapspycom_install() {
-	dpkg -i ../riaps-release/
+	dpkg -i ../riaps-release/riaps-pycom-armhf.deb
 }
 
 # Cleanup after installation
