@@ -198,7 +198,7 @@ randomnum_install
 echo "`date -u` - Random number generator installed" 
 freqgov_off
 echo "`date -u` - Frequency governing is turned off" 
-interface_update
+#interface_update
 echo "`date -u` - Turn on Ethernet port" 
 hwconfig_setup $RIAPSAPPDEVELOPER
 echo "`date -u` - HW device specific configurations done" 
@@ -210,4 +210,4 @@ remove_installartifacts
 echo "`date -u` - Cleanup after installation done" 
 echo "Removing connman ... the network connection will be lost and the BBB will reboot"
 echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
-remove_connman
+#remove_connman
