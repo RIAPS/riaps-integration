@@ -83,7 +83,7 @@ utilities_setup() {
     apt-get install python3 python3-pip python3-dev -y
 	pip3 install --upgrade pip 
 	apt-get install tmux gdbserver -y
-	pip3 install influxdb pydevd
+	pip3 install influxdb pydevd cython
 }
 
 # Install Random Number Generator used by RIAPS Discovery Service
@@ -155,15 +155,26 @@ hwconfig_setup() {
 middleware_install() {
 	apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y 
 	apt-get install libssl-dev libffi-dev -y
-    # MM TODO: Removed - let happen in integration script 
-    #pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
-    #pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
-    #pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
 }
 
 # Install RIAPS deb packages
-riapsdeb_install() {
-	../install_integration.sh arch="armhf" release_dir="../riaps-release"
+riapsexterncoredeb_install() {
+	../install_integration.sh arch="armhf" release_dir="../riaps-release" exclude_pycom
+}
+
+# Install riaps-pycom dependencies
+riapspycomdepends_install() {
+	export CFLAGS=-I/opt/riaps/armhf/include/
+	export LDFLAGS=-L/opt/riaps/armhf/lib/
+	
+    pip3 install 'redis>=2.10.5' 'hiredis >= 0.2.0'  # expect to remove soon (MM)
+    pip3 install 'pyzmq>=16' 'textX>=1.4' 'pycapnp >= 0.5.9' 'netifaces>=0.10.5' 'paramiko>=2.0.2' 'cryptography>=1.5.3'
+    pip3 install git+https://github.com/adubey14/rpyc #egg=rpyc-3.3.1
+}
+
+# Install riaps-pycom
+riapspycom_install() {
+	dpkg -i ../riaps-release/
 }
 
 # Cleanup after installation
@@ -204,10 +215,14 @@ hwconfig_setup $RIAPSAPPDEVELOPER
 echo "`date -u` - HW device specific configurations done" 
 middleware_install
 echo "`date -u` - Installed RIAPS required middleware" 
-riapsdeb_install
-echo "`date -u` - RIAPS deb packages installed" 
+riapsexterncoredeb_install
+echo "`date -u` - RIAPS external and core deb packages installed" 
+riapspycomdepends_install
+echo "`date -u` - Install riaps-pycom dependencies"
+riapspycom_install
+echo "`date -u` - Install riaps-pycom"
 remove_installartifacts
 echo "`date -u` - Cleanup after installation done" 
-echo "Removing connman ... the network connection will be lost and the BBB will reboot"
-echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
+#echo "Removing connman ... the network connection will be lost and the BBB will reboot"
+#echo "When bootup is complete, the riaps login and bbb-xxxx.local hostname will be available for ssh"
 #remove_connman
