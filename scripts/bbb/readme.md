@@ -58,3 +58,13 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	
 	  `env.hosts = ['192.168.1.102']`
 
+Work from this point is on the intended BBB
+8. SSH into the BBB and go to the install directory
+
+	`cd //install_files/scripts/bbb/`
+	
+9.  Run the installation script.  This will take about XXX to complete.  When done, the installation directory will be removed and the install-bbb.log will remain.
+
+	`sudo ./riaps_bbb_base_setup.sh  | tee ~\install-bbb.log`
+	
+10.  Reboot the BBB and log back in as 'riaps' user to begin using the BBB.

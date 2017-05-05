@@ -14,6 +14,7 @@ riapsdisclaimer=etc/motd
 riapshint=etc/issue.net
 netinterface=etc/network/interfaces
 resolv=etc/resolv.conf
+envriaps=etc/riaps/env.conf
 
 
 # Look for correct credentials before installing
@@ -178,6 +179,13 @@ riapspycom_install() {
 	dpkg -i ../riaps-release/riaps-pycom-armhf.deb
 }
 
+# Setup RIAPS Environment Variables and Base Application directory 
+riapsenv_setup() {
+	mkdir -p /etc/riaps
+    cp $envriaps /etc/riaps/env.conf
+    mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
+}
+
 # Cleanup after installation
 remove_installartifacts() {
 	rm -r /home/ubuntu/install_files
@@ -222,6 +230,8 @@ riapspycomdepends_install
 echo "`date -u` - Install riaps-pycom dependencies"
 riapspycom_install
 echo "`date -u` - Install riaps-pycom"
+riapsenv_setup
+echo "`date -u` - Setup RIAPS Environment Variables and Base Application directory"
 remove_installartifacts
 echo "`date -u` - Cleanup after installation done" 
 #echo "Removing connman ... the network connection will be lost and the BBB will reboot"
