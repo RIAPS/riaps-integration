@@ -219,7 +219,7 @@ echo "`date -u` - Random number generator installed"
 freqgov_off
 echo "`date -u` - Frequency governing is turned off" 
 #interface_update
-echo "`date -u` - Turn on Ethernet port" 
+#echo "`date -u` - Turn on Ethernet port" 
 hwconfig_setup $RIAPSAPPDEVELOPER
 echo "`date -u` - HW device specific configurations done" 
 middleware_install
@@ -227,9 +227,9 @@ echo "`date -u` - Installed RIAPS required middleware"
 riapsexterncoredeb_install
 echo "`date -u` - RIAPS external and core deb packages installed" 
 riapspycomdepends_install
-echo "`date -u` - Install riaps-pycom dependencies"
+echo "`date -u` - Installed riaps-pycom dependencies"
 riapspycom_install
-echo "`date -u` - Install riaps-pycom"
+echo "`date -u` - Installed riaps-pycom"
 riapsenv_setup
 echo "`date -u` - Setup RIAPS Environment Variables and Base Application directory"
 remove_installartifacts

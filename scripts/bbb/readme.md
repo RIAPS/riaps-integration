@@ -65,7 +65,7 @@ Work from this point is on the intended BBB
 
 	`cd //install_files/scripts/bbb/`
 	
-9.  Run the installation script.  This will take about XXX to complete.  When done, the installation directory will be removed and the install-bbb.log will remain.
+9.  Run the installation script.  This will take about 65 mins to complete.  When done, the installation directory will be removed and the install-bbb.log will remain.
 
 	`sudo ./riaps_bbb_base_setup.sh  | tee ~\install-bbb.log`
 	
