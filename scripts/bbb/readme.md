@@ -58,7 +58,9 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	
 	  `env.hosts = ['192.168.1.102']`
 
+
 Work from this point is on the intended BBB
+
 8. SSH into the BBB and go to the install directory
 
 	`cd //install_files/scripts/bbb/`
