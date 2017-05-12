@@ -5,6 +5,9 @@ deb_location=$HOME/riaps-release
 pycom_name="riaps-pycom"
 core_name="riaps-core"
 external_name="riaps-externals"
+disco_link=/usr/local/bin/riaps_disco
+redis_disco=/usr/local/bin/riaps_disco_redis
+
 
 # functions sections
 is_pkg_installed()
@@ -25,10 +28,16 @@ uninstall_deb_pkg()
     if [ $status -eq 1 ];
     then
     echo "`date -u`"
-	echo "$1 is Installed. Removing package before installing new version."
+	echo "=============== $1 is Installed. Removing package. ================"
 	sudo dpkg -r $1
-    else
-	echo "$1 not installed"
+    #else
+	#echo "============= $1 not installed =============="
+    fi
+
+    still_installed=`dpkg -l|grep $1|wc -l`
+    if [ $still_installed -gt 0 ]; then
+	echo "=============== $1 uninstall left config files. Purging package. ================"
+	sudo dpkg -P $1
     fi
 }
 
@@ -97,7 +106,9 @@ parse_args()
 	case "$KEY" in
 	    release_dir)              RELEASE_PATH=${VALUE} ;;
 	    arch)                     ARCH=${VALUE} ;;
-		exclude_pycom)			  EXCLUDE_PYCOM="true" ;;
+	    exclude_pycom)	      EXCLUDE_PYCOM="true" ;;
+	    pkg)		      PKG=${VALUE} ;;
+	    action)		      ACTION=${VALUE} ;;
 	    help)                     HELP="true" ;;
 	    *)
 	esac
@@ -107,7 +118,7 @@ parse_args()
 	echo "Must pass in path to the release directory [release_dir='/some_path/dir_name']"
 	exit
     fi
-    
+
     if [ -d $RELEASE_PATH ]; then
 	deb_location=$RELEASE_PATH
     else
@@ -119,12 +130,32 @@ parse_args()
     if [ "$architecture" != "armhf" ] && [ "$architecture" != "amd64" ]; then
 	echo "Passed in architecture: arch=$architecture."
 	echo "Installation can not proceed, architurecture must be arch=amd64 or arch=armhf"
-	exit	
+	exit
     fi
 
     pycom_name=`echo "$pycom_name-$architecture"`
     core_name=`echo $core_name-$architecture`
     external_name=`echo $external_name-$architecture`
+
+    pkg_option=`echo $PKG| tr '[:upper:]' '[:lower:]'`
+    if [ "$PKG" = "" ]; then
+	pkg_option="all"
+    fi
+    if [ "$pkg_option" != "all" ] && [ "$pkg_option" != "externals" ] && [ "$pkg_option" != "pycom" ] && [ "$pkg_option" != "core" ] ; then
+        echo "Passed in package: pkg=$pkg_option."
+        echo "Installation can not proceed, pkg must be pkg=all|externals|pycom"
+        exit
+    fi
+
+    if [ "$ACTION" = ""  ]; then
+	ACTION="install"
+    else
+	if [ "$ACTION" != "install" ] && [ "$ACTION" != "uninstall" ]; then
+		echo "Argument spelling error: action=install or action=uninstall."
+		exit
+	fi
+    fi
+
 }
 
 print_help()
@@ -139,55 +170,128 @@ print_help()
     fi
 }
 
+remove_core_symlink()
+{
+    if [ -L $disco_link ];
+    then
+    	echo "removing $disco_link"
+    	sudo rm $disco_link
+    fi
+}
+
+create_core_symlink()
+{
+    # create symbolic link for pycom disco
+    if [ -e $cpp_disco ]; then
+    	sudo ln -s $cpp_disco $disco_link
+    else
+	echo "$cpp_disco does not exist, can not create symlink for riaps-core!"
+    fi
+}
+
+uninstall_core()
+{
+    uninstall_deb_pkg $core_name
+}
+
+install_core()
+{
+    is_pkg_installed $external_name
+    status=$?
+    if [ $status -eq 1 ];
+    then
+        install_deb_pkg $core_name
+    else
+        echo "riaps-externals must be installed first before you can uninstall riaps-externals!"
+    fi
+}
+
+uninstall_pycom()
+{
+    if [ "$EXCLUDE_PYCOM" = "false" ]; then
+    	uninstall_deb_pkg $pycom_name
+	if [ -e $redis_disco ]; then
+		sudo rm $redis_disco
+	fi
+    fi
+}
+
+install_pycom()
+{
+    if [ "$EXCLUDE_PYCOM" = "false" ]; then
+	install_deb_pkg $pycom_name
+	if [ -e $disco_link ]; then
+		sudo cp $disco_link $redis_disco
+		sudo rm $disco_link
+	fi
+    fi
+}
+
+uninstall_externals()
+{
+    is_pkg_installed $core_name
+    status=$?
+    if [ $status -eq 1 ];
+    then
+	echo "riaps-core must be uninstall first before you can uninstall riaps-externals!"
+    else
+    	uninstall_deb_pkg $external_name
+    fi
+}
+
+install_externals()
+{
+    install_deb_pkg $external_name
+}
+
+install_riaps_packages()
+{
+    if [ "$pkg_option" = "all" ]; then
+	install_externals
+	install_core
+	install_pycom
+	create_core_symlink
+    elif [ "$pkg_option" = "pycom" ]; then
+        install_pycom
+    elif [ "$pkg_option" = "externals" ]; then
+	install_externals
+    elif [ "$pkg_option" = "core" ]; then
+	install_core
+    fi
+}
+
+uninstall_riaps_packages()
+{
+    if [ "$pkg_option" = "all" ]; then
+        uninstall_core
+        uninstall_externals
+        uninstall_pycom
+	remove_core_symlink
+    elif [ "$pkg_option" = "pycom" ]; then
+        uninstall_pycom
+    elif [ "$pkg_option" = "externals" ]; then
+        uninstall_externals
+    elif [ "$pkg_option" = "core" ]; then
+        uninstall_core
+    fi
+
+}
+
+
 EXCLUDE_PYCOM="false"
 parse_args $@
 print_help
+cpp_disco=/opt/riaps/$architecture/bin/rdiscoveryd
 
-# uninstall section
-uninstall_deb_pkg $core_name
-uninstall_deb_pkg $external_name
 
-if [ "$EXCLUDE_PYCOM" = "false" ]; then
-	uninstall_deb_pkg $pycom_name
+if [ "$ACTION" = "uninstall" ]; then
+	uninstall_riaps_packages
+elif [ "$ACTION" = "install" ]; then
+	uninstall_riaps_packages
+	install_riaps_packages
 fi
 
 
-disco_link=/usr/local/bin/riaps_disco
-redis_disco=/usr/local/bin/riaps_disco_redis
-
-if [ -e $redis_disco ];
-then
-    echo "removing $redis_disco"
-    sudo rm $redis_disco
-fi
-
-if [ -L $disco_link ];
-then
-    echo "removing $disco_link"
-    sudo rm $disco_link
-fi
-
-
-#uninstall_pip_pkg riaps-ts
-
-
-# install section
-install_deb_pkg $external_name
-install_deb_pkg $core_name
-
-if [ "$EXCLUDE_PYCOM" = "false" ]; then
-	install_deb_pkg $pycom_name
-fi
-
-
-# create symbolic link for pycom disco
-cpp_disco=/opt/riaps/armhf/bin/rdiscoveryd
-if [ -e $disco_link ] && [ -e $cpp_disco ];
-then
-    sudo cp $disco_link $redis_disco
-    sudo rm $disco_link
-    sudo ln -s $cpp_disco $disco_link
-fi
 
 echo "`date -u`"
 echo "RIAPS Install is complete"
