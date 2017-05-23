@@ -15,9 +15,11 @@ before_script:
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-systemd-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-systemd-amd64.deb" .
 script:
 - mkdir riaps-release
-- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-release/.
+- cp riaps-externals-armhf.deb  riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-release/.
 - echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
