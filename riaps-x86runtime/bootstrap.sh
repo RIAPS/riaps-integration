@@ -41,6 +41,7 @@ git_svn_func() {
 }
 cmake_func() {
     sudo apt-get install cmake -y
+    sudo apt-get install libssl-dev -y
     echo "installed cmake"
 }
 python_install () {
@@ -56,6 +57,8 @@ cython_install() {
     echo "installed cython3"
 
 }
+
+
 generate_localkeys () {
     
     sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
@@ -92,7 +95,7 @@ install_riaps(){
 
 eclipse_func() {
    
-    #sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
+    sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
     sudo -H -u $1 tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C //home/$1/
 
     sudo rm eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
