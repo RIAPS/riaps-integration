@@ -5,11 +5,11 @@ RIAPSAPPDEVELOPER=riaps
 
 user_func () {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
-	echo "The user does not exist; execute below commands to crate and try again:"
-	sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
-	sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
-	sudo usermod -aG sudo $RIAPSAPPDEVELOPER
-	echo "created user accounts"
+        echo "The user does not exist; execute below commands to crate and try again:"
+        sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
+        sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
+        sudo usermod -aG sudo $RIAPSAPPDEVELOPER
+        echo "created user accounts"
     fi    
 }
 cross_setup(){
@@ -90,6 +90,16 @@ install_riaps(){
     echo "installed services"
 }
 
+eclipse_func() {
+   
+    #sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
+    sudo -H -u $1 tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C //home/$1/
+
+    sudo rm eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
+    echo "installed eclipse"
+}
+
+
 user_func
 cross_setup
 vim_func
@@ -103,4 +113,5 @@ generate_localkeys $RIAPSAPPDEVELOPER
 curl_func
 install_riaps
 move_key_to_riaps_etc $RIAPSAPPDEVELOPER
+eclipse_func $RIAPSAPPDEVELOPER
 
