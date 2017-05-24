@@ -8,10 +8,12 @@ user_func () {
         echo "The user does not exist; execute below commands to crate and try again:"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
-        sudo usermod -aG sudo $RIAPSAPPDEVELOPER
+        sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
+	sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
     fi    
 }
+
 cross_setup(){
     sudo cp -f sources.list /etc/apt//.
     sudo dpkg --add-architecture armhf
@@ -29,21 +31,22 @@ java_func () {
     echo "installed java"
 }
 
-
-
 g++_func() {
     sudo apt-get install gcc g++ -y
     echo "installed g++"
 }
+
 git_svn_func() {
     sudo apt-get install git subversion -y
     echo "installed git and svn"
 }
+
 cmake_func() {
     sudo apt-get install cmake -y
     sudo apt-get install libssl-dev -y
     echo "installed cmake"
 }
+
 python_install () {
     sudo apt-get install python3 python3-pip -y
     sudo pip3 install --upgrade pip 
@@ -57,7 +60,6 @@ cython_install() {
     echo "installed cython3"
 
 }
-
 
 generate_localkeys () {
     
