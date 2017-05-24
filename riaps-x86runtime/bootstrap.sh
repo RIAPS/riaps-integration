@@ -102,6 +102,14 @@ eclipse_func() {
     echo "installed eclipse"
 }
 
+install_redis () {
+    wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
+	tar xzf redis-3.2.5.tar.gz 
+	make -C redis-3.2.5 
+	sudo make -C redis-3.2.5 install
+	rm -rf redis-3.2.5 
+	rm -rf redis-3.2.5.tar.gz 
+}
 
 user_func
 cross_setup
@@ -117,4 +125,5 @@ curl_func
 install_riaps
 move_key_to_riaps_etc $RIAPSAPPDEVELOPER
 eclipse_func $RIAPSAPPDEVELOPER
+install_redis
 
