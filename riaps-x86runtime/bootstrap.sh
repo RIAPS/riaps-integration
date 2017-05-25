@@ -5,7 +5,7 @@ RIAPSAPPDEVELOPER=riaps
 
 user_func () {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
-        echo "The user does not exist; execute below commands to crate and try again:"
+        echo "The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
