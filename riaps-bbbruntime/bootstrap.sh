@@ -124,7 +124,7 @@ splash_screen_update() {
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
-    echo "default username:password is [riaps:riapspwd]">> issue.net
+    echo "default username:password is [riaps:riaps]">> issue.net
     sudo mv issue.net /etc/issue.net
 }
 
