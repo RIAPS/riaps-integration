@@ -18,7 +18,7 @@ rt_kernel_install() {
 
 user_func () {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
-        echo "The user does not exist; execute below commands to crate and try again:"
+        echo "The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         getent group gpio || sudo groupadd gpio
@@ -56,6 +56,13 @@ timesync_requirements(){
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+}
+
+freqgov_off() {
+        touch /etc/default/cpufrequtils
+        echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
+        update-rc.d ondemand disable
+        /etc/init.d/cpufrequtils restart
 }
 
 python_install () {
@@ -136,6 +143,7 @@ g++_func
 git_svn_func
 cmake_func
 timesync_requirements
+freqgov_off
 python_install
 cython_install
 generate_localkeys $RIAPSAPPDEVELOPER
