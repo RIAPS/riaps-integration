@@ -21,7 +21,10 @@ user_func () {
         echo "The user does not exist; execute below commands to crate and try again:"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
+        getent group gpio || sudo groupadd gpio
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
+        sudo usermod -aG dialout $RIAPSAPPDEVELOPER 
+        sudo usermod -aG gpio  $RIAPSAPPDEVELOPER 
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
     fi    
