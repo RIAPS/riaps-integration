@@ -25,11 +25,13 @@ script:
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
 - echo "riapsdsmlversion=$riapsdsmlversion" >> riaps-release/manifest.txt
-
 - tar cvzf riaps-release.tar.gz riaps-release
 - cp riaps-release.tar.gz riaps-x86runtime/.
 - cp version.sh riaps-x86runtime/.
 - tar cvzf riaps-x86runtime.tar.gz riaps-x86runtime
+- cp riaps-release.tar.gz riaps-bbbruntime/.
+- cp version.sh riaps-bbbruntime/.
+- tar cvzf riaps-bbbruntime.tar.gz riaps-bbbruntime
 deploy:
   provider: releases
   overwrite: true
@@ -38,6 +40,7 @@ deploy:
   file: 
     - riaps-release.tar.gz
     - riaps-x86runtime.tar.gz
+    - riaps-bbbruntime.tar.gz
   skip_cleanup: true
   on:
     tags: true
