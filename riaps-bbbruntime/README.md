@@ -54,3 +54,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	```
 	./bootstrap.sh   
 	```	   
+5. Reboot the Beaglebone Black
+	```
+	sudo reboot   
+	```
