@@ -36,13 +36,20 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 1. Download the latest released installation package (riaps-bbbruntime.tar.gz) from https://github.com/RIAPS/riaps-integration/releases
     
     
-2. Unpack the installation package
+2. Unpack the installation and move into the package
 
 	```
 	tar xf riaps-bbbruntime.tar.gz
+	cd riaps-bbbruntime
 	```
 
-3. Run the installation script
+3. Move to 'root' user
+	
+	```
+	sudo su   
+	```	   
+	
+4. Run the installation script
 	
 	```
 	./bootstrap.sh   
