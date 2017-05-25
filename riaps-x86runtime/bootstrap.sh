@@ -26,6 +26,7 @@ vim_func() {
     echo "installed vim"
 }
 
+
 java_func () {    
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
@@ -43,8 +44,14 @@ git_svn_func() {
 
 cmake_func() {
     sudo apt-get install cmake -y
-    sudo apt-get install libssl-dev -y
     echo "installed cmake"
+}
+
+timesync_requirements(){
+    sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+    sudo apt-get install  libssl-dev libffi-dev -y
+    sudo apt-get install rng-tools -y
+    sudo systemctl start rng-tools.service
 }
 
 python_install () {
@@ -120,6 +127,7 @@ java_func
 g++_func
 git_svn_func
 cmake_func
+timesync_requirements
 python_install
 cython_install
 generate_localkeys $RIAPSAPPDEVELOPER
