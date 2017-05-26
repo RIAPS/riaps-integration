@@ -39,31 +39,31 @@ For first time setup, following these steps to configure your system to run Vagr
 
     - Determine the desired ethernet interface
     
-    ```
-    ifconfig
-    ```   
+        ```
+        ifconfig
+        ```   
     
     - Edit the riaps configuration to enable that interface
     
-    ```
-    sudo nano /etc/riaps/riaps.conf
-    ```   
+        ```
+        sudo nano /etc/riaps/riaps.conf
+        ```   
     
     - Uncomment the NIC name and match the desired ethernet interface name from 'ifconfig'
     
-    ```
-    # This is the main configuration file for RIAPS.  
-    [RIAPS]
+        ```
+        # This is the main configuration file for RIAPS.  
+        [RIAPS]
 
-    # RIAPS target user name
-    target_user = riaps
+        # RIAPS target user name
+        target_user = riaps
 
-    # Timeout for send operations
-    send_timeout = 1000
+        # Timeout for send operations
+        send_timeout = 1000
 
-    # NIC name
-    # nic_name = enp0s8
-    ```   
+        # NIC name
+        # nic_name = enp0s8
+        ```   
     
 # RIAPS Virtual Machine Update Process
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
