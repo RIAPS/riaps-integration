@@ -33,7 +33,7 @@ For first time setup, following these steps to configure your system to run Vagr
 - The VM will launch with a username of vagrant.  Select the appropriate user name:  RIAPS App Developer 
 
 
-The default password is riaps for both app developer. The password for vagrant user is vagrant.
+    **The default password is riaps for both app developer. The password for vagrant user is vagrant.**
 
 - Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
