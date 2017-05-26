@@ -19,10 +19,9 @@ For first time setup, following these steps to configure your system to run Vagr
 
 # Initial Installation of RIAPS Specific Virtual Machine
 
-- Download the RIAPS development box setup file (found at https://riaps.isis.vanderbilt.edu/redmine/attachments/download/131/riapsdevbox.zip), unzip it and change into that directory in the command line window.  
+- Download the RIAPS development box setup file (riaps-x86runtime.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.  
 
 - Then issue the command from the file folder with the vagrant information (unzipped in the previous step).
-
 
     ```
     vagrant up
@@ -69,13 +68,11 @@ For first time setup, following these steps to configure your system to run Vagr
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
-- Set the VM network settings order to be NAT, then Bridged
-- In a command line window, go back to the 'riapsdevbox' folder used to create the original VM
+- Update the contents of the 'riaps_vbox' folder
+- In a command line window, go back to the 'riaps_vbox' folder used to create the original VM
 - Bring up the VM and then provision the changes
 
     ```
     vagrant up 
     vagrant provision
     ```   
-    
-- Reverse the VM network settings order back to Bridged, then NAT.
