@@ -1,4 +1,4 @@
-# How to Create a BBB from Ubuntu Pre-configured Image
+# How to Create a BBB Base Image from Ubuntu Pre-configured Image
 
 This work should be done on a Linux machine or VM.  We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
@@ -33,28 +33,29 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
   
 # Installation of RIAPS on Pre-configured BBB 
 
-1. Download the latest released installation package (riaps-bbbruntime.tar.gz) from https://github.com/RIAPS/riaps-integration/releases
+1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
+
+2. Download the latest released installation package (riaps-bbbruntime.tar.gz) from https://github.com/RIAPS/riaps-integration/releases to the BBB
     
-    
-2. Unpack the installation and move into the package
+3. On the BBB, unpack the installation and move into the package
 
 	```
 	tar xf riaps-bbbruntime.tar.gz
 	cd riaps-bbbruntime
 	```
 
-3. Move to 'root' user
+4. Move to 'root' user
 	
 	```
 	sudo su   
 	```	   
 	
-4. Run the installation script
+5. Run the installation script
 	
 	```
 	./bootstrap.sh   
 	```	   
-5. Reboot the Beaglebone Black
+6. Reboot the Beaglebone Black
 	```
 	sudo reboot   
 	```
