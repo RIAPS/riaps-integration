@@ -21,7 +21,7 @@ For first time setup, following these steps to configure your system to run Vagr
 
 - Download the RIAPS development box setup file (riaps-x86runtime.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.  
 
-- Then issue the command from the file folder with the vagrant information (unzipped in the previous step).
+- Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.
 
     ```
     vagrant up
@@ -32,9 +32,9 @@ For first time setup, following these steps to configure your system to run Vagr
 - The VM will launch with a username of vagrant.  Select the appropriate user name:  RIAPS App Developer 
 
 
-    **The default password is riaps for both app developer. The password for vagrant user is vagrant.**
+    **The default password for app developer is riaps. The password for vagrant user is vagrant.**
 
-- Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
+- After the script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
     - Determine the desired ethernet interface
     
@@ -69,8 +69,8 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
 - Update the contents of the 'riaps_vbox' folder
-- In a command line window, go back to the 'riaps_vbox' folder used to create the original VM
-- Bring up the VM and then provision the changes
+- In a command line window, go back to the 'riaps_vbox' folder used to create the original Virtual Machine
+- Bring up the VM and then provision the changes using the following commands.
 
     ```
     vagrant up 
