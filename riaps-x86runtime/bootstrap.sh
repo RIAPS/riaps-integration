@@ -9,7 +9,7 @@ user_func () {
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
-	sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
+        sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
     fi    
 }
@@ -70,11 +70,24 @@ cython_install() {
 
 generate_localkeys () {
     
-    sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
-    echo "generated ssh keys for $1"
-    sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
-    sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
-    echo "Generated new key and added it to authorized keys for $1"
+    if [ -f "id_rsa.key" ] && [ -f "id_rsa.pub" ]
+    then
+        echo "ssh keys found. Will use them"
+        sudo cp id_rsa.key /home/$1/.ssh/id_generated_rsa
+        sudo chown $1 /home/$1/.ssh/id_generated_rsa
+        sudo -H -u $1 chmod 600 /home/$1/.ssh/id_generated_rsa
+        sudo -H -u $1 cat id_rsa.pub >>/home/$1/.ssh/authorized_keys
+        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
+        
+    else
+        echo "ssh keys not found."
+        sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
+        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
+	sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
+	echo "Generated new key and added it to authorized keys for $1"
+
+    fi
+    
 }
 
 
@@ -105,7 +118,7 @@ move_key_to_riaps_etc() {
 } 
 
 eclipse_func() {
-   
+    
     sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
     sudo -H -u $1 tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C //home/$1/
 
@@ -115,11 +128,11 @@ eclipse_func() {
 
 install_redis () {
     wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
-	tar xzf redis-3.2.5.tar.gz 
-	make -C redis-3.2.5 
-	sudo make -C redis-3.2.5 install
-	rm -rf redis-3.2.5 
-	rm -rf redis-3.2.5.tar.gz 
+    tar xzf redis-3.2.5.tar.gz 
+    make -C redis-3.2.5 
+    sudo make -C redis-3.2.5 install
+    rm -rf redis-3.2.5 
+    rm -rf redis-3.2.5.tar.gz 
 }
 
 user_func
