@@ -74,9 +74,10 @@ generate_localkeys () {
     then
         echo "ssh keys found. Will use them"
         sudo cp id_rsa.key /home/$1/.ssh/id_generated_rsa
-        sudo chown $1 /home/$1/.ssh/id_generated_rsa
+        sudo chown $1:$1 /home/$1/.ssh/id_generated_rsa
         sudo -H -u $1 chmod 600 /home/$1/.ssh/id_generated_rsa
         sudo -H -u $1 cat id_rsa.pub >>/home/$1/.ssh/authorized_keys
+	sudo chown $1:$1 /home/$1/.ssh/authorized_keys
         sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
         
     else
@@ -111,7 +112,7 @@ install_riaps(){
 
 move_key_to_riaps_etc() {
     sudo cp /home/$1/.ssh/id_generated_rsa /usr/local/riaps/keys/id_rsa.key
-    sudo chown $1 /usr/local/riaps/keys/id_rsa.key
+    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
     sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
     echo "setup keys in /usr/local/riaps for $1"
 
