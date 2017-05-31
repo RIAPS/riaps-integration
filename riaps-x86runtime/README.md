@@ -63,6 +63,9 @@ For first time setup, following these steps to configure your system to run Vagr
         # NIC name
         # nic_name = enp0s8
         ```   
+        
+# Installing Multiple Virtual Machines (if desired)
+If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change config.vm.hostname = "riapsvbox" and vb.name = "riaps_vbox" to new names.  
     
 # RIAPS Virtual Machine Update Process
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
