@@ -79,16 +79,6 @@ cython_install() {
 
 }
 
-generate_localkeys () {
-    
-    sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
-    echo "generated ssh keys for $1"
-    sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
-    sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
-    echo "Generated new key and added it to authorized keys for $1"
-}
-
-
 curl_func () {
     sudo apt install curl -y
     echo "installed curl"
@@ -106,13 +96,31 @@ install_riaps(){
     echo "installed services"
 }
 
-move_key_to_riaps_etc() {
-    sudo cp /home/$1/.ssh/id_generated_rsa /usr/local/riaps/keys/id_rsa.key
-    sudo chown $1 /usr/local/riaps/keys/id_rsa.key
-    sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
-    echo "setup keys in /usr/local/riaps for $1"
+generate_localkeys () {
+    if [ -f "/usr/local/riaps/keys/id_rsa.key" ] && [ -f "/usr/local/riaps/keys/id_rsa.pub" ]
+    then
+        echo "ssh keys found. Will use them"
+        sudo -H -u $1 cat /usr/local/riaps/keys/id_rsa.pub >> /home/$1/.ssh/authorized_keys
+        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+        echo "Added existing key to authorized keys for $1"
+    else
+        sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
+        echo "generated ssh keys for $1"
+        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/author$
+        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+        echo "Generated new key and added it to authorized keys for $1"
+}
 
-} 
+move_key_to_riaps_etc() {
+    if [ -f "/usr/local/riaps/keys/id_rsa.key" ] && [ -f "/usr/local/riaps/keys/id_rsa.pub" ]
+    then
+        echo "keys are setup already in /usr/local/riaps for $1"
+    else
+        sudo cp /home/$1/.ssh/id_generated_rsa /usr/local/riaps/keys/id_rsa.key
+        sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
+        sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
+        echo "setup keys in /usr/local/riaps for $1"
+}
 
 splash_screen_update() {
     #splash screen
@@ -146,8 +154,8 @@ timesync_requirements
 freqgov_off
 python_install
 cython_install
-generate_localkeys $RIAPSAPPDEVELOPER
 curl_func
 install_riaps
+generate_localkeys $RIAPSAPPDEVELOPER
 move_key_to_riaps_etc $RIAPSAPPDEVELOPER
 splash_screen_update
