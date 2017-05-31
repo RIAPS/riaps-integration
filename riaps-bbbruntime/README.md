@@ -19,13 +19,13 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
   Password:   temppwd
   Kernel:  v4.4.59-ti-r96 kernel (updated on 2017-04-07)
 
-3. Locate the SD Card on the Linux machine
+3. Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
 
   	```
     sudo ./setup_sdcard.sh --probe-mmc
   	```
   
-4. Install image on SD card
+4. Install image on SD card, where /dev/sdX is the location of the SD Card 
 
   	```
     sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
