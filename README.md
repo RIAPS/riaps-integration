@@ -8,3 +8,9 @@ Once you get the read level access, you need to set up an OAUTH Token.  Read htt
 
 Once you have the token you must use it everytime you want to download the new release in your machine. A trick is to create an environment variable GITHUB_OAUTH_TOKEN with the token value in your bash profile.
 
+# To Setup RIAPS Development Environment
+
+Instructions for setting up the RIAPS host development environment (Linux VM) can be found in the riaps-x86runtime folder.
+Instructions for creating a RIAPS Beaglebone Black SD Card Image can be found in the riaps-bbbruntime folder.
+
+
