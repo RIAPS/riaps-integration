@@ -43,6 +43,8 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	tar xf riaps-bbbruntime.tar.gz
 	cd riaps-bbbruntime
 	```
+   If you want to use your own private ssh keys to make things more secure, copy your rsa ssh key pair (.pub and .key) into 
+   this directory. Otherwise, a default set of keys will be utilized.  
 
 4. Move to 'root' user
 	
