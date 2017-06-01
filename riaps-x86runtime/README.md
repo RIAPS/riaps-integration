@@ -21,6 +21,8 @@ For first time setup, following these steps to configure your system to run Vagr
 
 - Download the RIAPS development box setup file (riaps-x86runtime.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.  
 
+- If you want to use your own private ssh keys to make things more secure, copy your rsa ssh key pair (.pub and .key) into this directory.  Otherwise, a default set of keys will be utilized.
+
 - Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.
 
     ```
