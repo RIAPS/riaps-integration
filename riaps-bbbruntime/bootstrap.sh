@@ -107,7 +107,6 @@ generate_localkeys () {
         chmod 600 /home/$1/.ssh/authorized_keys
         echo "Added existing key to authorized keys for $1"
     else
-        sudo -H -u $1 mkdir /home/$1/.ssh
         sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
         echo "generated ssh keys for $1"
         sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
