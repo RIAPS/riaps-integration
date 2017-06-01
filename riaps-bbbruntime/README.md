@@ -59,3 +59,26 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	```
 	sudo reboot   
 	```
+# Available RIAPS Services
+
+Current services loaded into the image on the BBB and on the host VM:
+
+1. riaps-disco.service - will start the RIAPS discovery application.  This service should be started first and stopped last.  When enabled, this service is setup to restart when it fails.
+    
+   - this service is currently disabled by default 
+
+2. riaps-deplo.service - will start the RIAPS deployment application.  This service should be started after riaps-disco.service.  If riaps-disco.service is not running, this service will fail due to dependencies.  When enabled, this service is setup to restart when it or riaps-disco.service fails.
+
+   - this service is currently disabled by default
+
+To see the status of a service or control its state, use the following commands manually on a command line, where name is the service name (like disco).  Starting a service runs the actions immediately.  Enabling the service will allow the service to start when booting up.
+
+   ```
+   sudo systemctl status riaps-<name>.service
+   sudo systemctl start riaps-<name>.service
+   sudo systemctl stop riaps-<name>.service
+   sudo systemctl enable riaps-<name>.service
+   sudo systemctl disable riaps-<name>.service
+   ```
+ NOTE: a fabfile will be provided in the near future to make things easier to turn on and off
+   
