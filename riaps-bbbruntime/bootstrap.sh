@@ -97,18 +97,24 @@ install_riaps(){
 }
 
 generate_localkeys () {
+    sudo -H -u $1 mkdir -p /home/$1/.ssh
+    
     if [ -f "/usr/local/riaps/keys/id_rsa.key" ] && [ -f "/usr/local/riaps/keys/id_rsa.pub" ]
     then
         echo "ssh keys found. Will use them"
         sudo -H -u $1 cat /usr/local/riaps/keys/id_rsa.pub >> /home/$1/.ssh/authorized_keys
-        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+        chown $1:$1 /home/$1/.ssh/authorized_keys
+        chmod 600 /home/$1/.ssh/authorized_keys
         echo "Added existing key to authorized keys for $1"
     else
+        sudo -H -u $1 mkdir /home/$1/.ssh
         sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
         echo "generated ssh keys for $1"
-        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/author$
-        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
+        chown $1:$1 /home/$1/.ssh/authorized_keys
+        chmod 600 /home/$1/.ssh/authorized_keys
         echo "Generated new key and added it to authorized keys for $1"
+    fi
 }
 
 move_key_to_riaps_etc() {
@@ -120,6 +126,7 @@ move_key_to_riaps_etc() {
         sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
         sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
         echo "setup keys in /usr/local/riaps for $1"
+    fi
 }
 
 splash_screen_update() {
