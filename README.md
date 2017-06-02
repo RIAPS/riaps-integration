@@ -10,7 +10,7 @@ Once you have the token you must use it everytime you want to download the new r
 
 # To Setup RIAPS Development Environment
 
-Instructions for setting up the RIAPS host development environment (Linux VM) can be found in the riaps-x86runtime folder.
-Instructions for creating a RIAPS Beaglebone Black SD Card Image can be found in the riaps-bbbruntime folder.
+- Setting up the RIAPS host development environment (Linux VM) can be found in the riaps-x86runtime folder.
+- Creating a RIAPS Beaglebone Black SD Card Image can be found in the riaps-bbbruntime folder.
 
 
