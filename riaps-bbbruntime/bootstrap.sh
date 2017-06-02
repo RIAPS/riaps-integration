@@ -94,6 +94,8 @@ install_riaps(){
     echo "installed pycom"
     sudo dpkg -i riaps-release/riaps-systemd-armhf.deb 
     echo "installed services"
+    sudo dpkg -i riaps-release/riaps-timesync-armhf.deb 
+    echo "installed timesync”
 }
 
 generate_localkeys () {
