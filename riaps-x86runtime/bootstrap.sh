@@ -14,7 +14,7 @@ user_func () {
     fi    
 }
 
-cross_setup(){
+cross_setup() {
     sudo cp -f sources.list /etc/apt//.
     sudo dpkg --add-architecture armhf
     sudo apt-get update
@@ -47,7 +47,7 @@ cmake_func() {
     echo "installed cmake"
 }
 
-timesync_requirements(){
+timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
@@ -68,8 +68,7 @@ cython_install() {
 
 }
 
-generate_localkeys () {
-    
+generate_localkeys () {    
     if [ -f "id_rsa.key" ] && [ -f "id_rsa.pub" ]
     then
         echo "ssh keys found. Will use them"
@@ -87,18 +86,15 @@ generate_localkeys () {
 	sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
 	echo "Generated new key and added it to authorized keys for $1"
 
-    fi
-    
+    fi   
 }
-
-
 
 curl_func () {
     sudo apt install curl -y
     echo "installed curl"
 }
 
-install_riaps(){
+install_riaps() {
     tar -xzvf riaps-release.tar.gz
     sudo dpkg -i riaps-release/riaps-externals-amd64.deb
     echo "installed externals"
@@ -108,6 +104,8 @@ install_riaps(){
     echo "installed pycom"
     sudo dpkg -i riaps-release/riaps-systemd-amd64.deb 
     echo "installed services"
+    sudo dpkg -i riaps-release/riaps-timesync-amd64.deb 
+    echo "installed timesync”
 }
 
 move_key_to_riaps_etc() {
@@ -119,7 +117,6 @@ move_key_to_riaps_etc() {
 } 
 
 eclipse_func() {
-    
     sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
     sudo -H -u $1 tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C //home/$1/
 
