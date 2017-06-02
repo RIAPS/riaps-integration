@@ -105,7 +105,7 @@ install_riaps() {
     sudo dpkg -i riaps-release/riaps-systemd-amd64.deb 
     echo "installed services"
     sudo dpkg -i riaps-release/riaps-timesync-amd64.deb 
-    echo "installed timesync”
+    echo "installed timesync"
 }
 
 move_key_to_riaps_etc() {
