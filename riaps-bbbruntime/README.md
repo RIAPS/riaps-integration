@@ -77,13 +77,13 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 
 1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB
     
-    	```
-    	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
-    	```
+```
+	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
+```
 	
 2. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
-    	```
+ ```
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -100,7 +100,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	ECDSA host key for 192.168.1.101 has changed and you have requested strict checking.
 	Host key verification failed.
 	lost connection
-        ```
+```
 	
 3.  If you want to use your own generated SSH keys (from the VM), scp over the public key to the BBB and place in '~/.ssh' directory.  Then add the public key (example name below of id_generated_rsa) to the authorized_key file.  You may need this to transfer application from the 'riaps_ctrl' on the host VM to the BBB if you get an application download fault indication.
 
