@@ -75,7 +75,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	
 # Helpful Hints 
 
-1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB:
+1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB
     
     	```
     	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
