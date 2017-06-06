@@ -18,7 +18,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
     ```
     Username:  ubuntu
     Password:   temppwd
-    Kernel:  v4.4.59-ti-r96 kernel (updated on 2017-04-07)
+    Kernel:  Kernel v4.9.xx-ti-rxx (with real-time features)
     ```
 
 3. Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
