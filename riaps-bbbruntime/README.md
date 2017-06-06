@@ -35,7 +35,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
   
 # Installation of RIAPS on Pre-configured BBB 
 
-1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
+1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being '**ubuntu**'
 
 2. Download the latest released installation package (riaps-bbbruntime.tar.gz) from https://github.com/RIAPS/riaps-integration/releases to the BBB.  See the helpful hints section below for ideas on how best to get this image to the BBB.
 
@@ -58,11 +58,14 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	
 	```
 	./bootstrap.sh   
-	```	   
+	```	
+	
 6. Reboot the Beaglebone Black
+
 	```
 	sudo reboot   
 	```
+	
 # Helpful Hints 
 
 1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following:
@@ -70,6 +73,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
     	```
     	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:   <using the IP address of your BBB>
    	```
+	
 2. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
     	```
@@ -91,6 +95,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	Host key verification failed.
 	lost connection
     	```
+	
 3.  If you want to use your own generated SSH keys (from the VM), scp over the public key to the BBB and place in '~/.ssh' directory.  Then add the public key (example name below of id_generated_rsa) to the authorized_key file.  You may need this to transfer application from the 'riaps_ctrl' on the host VM to the BBB if you get an application download fault indication.
 
 	```
