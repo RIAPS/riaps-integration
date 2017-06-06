@@ -105,8 +105,10 @@ generate_localkeys () {
     then
         echo "ssh keys found. Will use them"
         sudo -H -u $1 cat /usr/local/riaps/keys/id_rsa.pub >> /home/$1/.ssh/authorized_keys
+        sudo -H -u $1 cp /usr/local/riaps/keys/id_rsa.key /home/$1/.ssh/.
         chown $1:$1 /home/$1/.ssh/authorized_keys
         chmod 600 /home/$1/.ssh/authorized_keys
+        chmod 600 /home/$1/.ssh/id_rsa.key
         echo "Added existing key to authorized keys for $1"
     else
         sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
