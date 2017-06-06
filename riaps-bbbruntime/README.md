@@ -66,18 +66,24 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	sudo reboot   
 	```
 	
+7. When the BBB is rebooted, you can ssh using the following:
+
+	```
+	Username:  riaps
+        Password:  riaps
+	```
+	
 # Helpful Hints 
 
-1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following:
+1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB:
     
     	```
-    	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:   <using the IP address of your BBB>
+    	scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
    	```
 	
 2. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
     	```
-	riaps@riapsvboxmm:~/Downloads$ scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.101:
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
