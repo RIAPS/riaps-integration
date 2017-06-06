@@ -54,10 +54,10 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	sudo su   
 	```	   
 	
-5. Run the installation script
+5. Run the installation script.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 	
 	```
-	./bootstrap.sh   
+	./bootstrap.sh | tee install-bbb.log
 	```	
 	
 6. Reboot the Beaglebone Black
