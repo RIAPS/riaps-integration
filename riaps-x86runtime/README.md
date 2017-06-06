@@ -23,10 +23,10 @@ For first time setup, following these steps to configure your system to run Vagr
 
 - If you want to use your own private ssh keys to make things more secure, copy your rsa ssh key pair (.pub and .key) into this directory.  Otherwise, a default set of keys will be utilized.
 
-- Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.
+- Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
-    vagrant up
+    vagrant up | tee install-vm.log
     ```   
 
 - When asked which network interface to use, pick the most appropriate to your system configuration.
@@ -75,9 +75,9 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 - Make sure the VM is shutdown
 - Update the contents of the 'riaps_vbox' folder
 - In a command line window, go back to the 'riaps_vbox' folder used to create the original Virtual Machine
-- Bring up the VM and then provision the changes using the following commands.
+- Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
     vagrant up 
-    vagrant provision
+    vagrant provision | tee update-vm.log
     ```   
