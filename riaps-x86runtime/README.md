@@ -31,12 +31,13 @@ For first time setup, following these steps to configure your system to run Vagr
 
 - When asked which network interface to use, pick the most appropriate to your system configuration.
 
-- The VM will launch with a username of vagrant.  Select the appropriate user name:  RIAPS App Developer 
+- The VM will launch with a username of vagrant.  Select the **RIAPS App Developer** username
 
 
-    **The default password for app developer is riaps. The password for vagrant user is vagrant.**
+    - **The default password for RIAPS App Developer is 'riaps'**
+    - **The password for vagrant user is 'vagrant'**
 
-- After the script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
+- After the vagrant script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
     - Determine the desired ethernet interface
     
@@ -67,14 +68,16 @@ For first time setup, following these steps to configure your system to run Vagr
         ```   
         
 # Installing Multiple Virtual Machines (if desired)
-If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change config.vm.hostname = "riapsvbox" and vb.name = "riaps_vbox" to new names.  
+If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change the following to new names:
+   - config.vm.hostname = "riapsvbox"
+   - vb.name = "riaps_vbox"   
     
 # RIAPS Virtual Machine Update Process
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
-- Update the contents of the 'riaps_vbox' folder
-- In a command line window, go back to the 'riaps_vbox' folder used to create the original Virtual Machine
+- Update the contents of the 'riaps_vbox' folder used to create the original Virtual Machine
+- In a command line window, go back to that 'riaps_vbox' folder 
 - Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
