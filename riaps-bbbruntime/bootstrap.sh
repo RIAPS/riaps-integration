@@ -10,6 +10,40 @@ check_os_version () {
 
 }
 
+# User must supply ssh key pair
+parse_args()
+{
+    for ARGUMENT in "$@"
+    do
+        KEY=$(echo $ARGUMENT | cut -f1 -d=)
+        VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+        case "$KEY" in
+            public_key)               PUBLIC_KEY=${VALUE} ;;
+            private_key)              PRIVATE_KEY=${VALUE} ;;
+            help)                     HELP="true" ;;
+            *)
+        esac
+    done
+
+    if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
+    then 
+        echo "Please supply a public and private key - PUBLIC_KEY=<name>.pub PRIVATE_KEY=<name>.key"
+    else 
+        echo "Found user ssh keys.  Will use them"
+    fi 
+}
+
+print_help()
+{
+    if [ "$HELP" = "true" ]; then
+        echo "usage: test_key_move [help] [=]"
+        echo "arguments:"
+        echo "help                       show this help message and exit"
+        echo "public_key=<name>.pub      name of public key file"
+        echo "private_key=<name>.key     name of private file"
+        exit
+    fi
+}
 
 # Install RT Kernel
 rt_kernel_install() {
@@ -99,12 +133,13 @@ install_riaps(){
     echo "installed timesync"
 }
 
-generate_localkeys () {
+setup_ssh_keys () {
     sudo -H -u $1 mkdir -p /home/$1/.ssh
     
-    if [ -f "/usr/local/riaps/keys/id_rsa.key" ] && [ -f "/usr/local/riaps/keys/id_rsa.pub" ]
+    if [ -f "*.key" ] && [ -f "*.pub" ]
     then
-        echo "ssh keys found. Will use them"
+        echo "Found user ssh keys. Will use them"
+        
         sudo -H -u $1 cat /usr/local/riaps/keys/id_rsa.pub >> /home/$1/.ssh/authorized_keys
         sudo -H -u $1 cp /usr/local/riaps/keys/id_rsa.key /home/$1/.ssh/.
         chown $1:$1 /home/$1/.ssh/authorized_keys
@@ -155,6 +190,8 @@ splash_screen_update() {
 }
 
 check_os_version
+parse_args $@
+print_help
 rt_kernel_install
 user_func
 vim_func
