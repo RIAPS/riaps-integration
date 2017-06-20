@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -e 
 
+# Script Variables
 RIAPSAPPDEVELOPER=riaps
 
+# Script functions
 check_os_version () {
     # Mary we need to write code here to check OS version and architecture. 
     # The installation should fail if the OS version is not correct.
@@ -27,7 +29,7 @@ parse_args()
 
     if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
     then 
-        echo "Please supply a public and private key - PUBLIC_KEY=<name>.pub PRIVATE_KEY=<name>.key"
+        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
     else 
         echo "Found user ssh keys.  Will use them"
     fi 
@@ -59,7 +61,8 @@ user_func () {
         getent group gpio || sudo groupadd gpio
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
         sudo usermod -aG dialout $RIAPSAPPDEVELOPER 
-        sudo usermod -aG gpio  $RIAPSAPPDEVELOPER 
+        sudo usermod -aG gpio  $RIAPSAPPDEVELOPER
+        sudo usermod -aG pwm $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
     fi    
@@ -119,55 +122,6 @@ curl_func () {
     echo "installed curl"
 }
 
-install_riaps(){
-    tar -xzvf riaps-release.tar.gz
-    sudo dpkg -i riaps-release/riaps-externals-armhf.deb
-    echo "installed externals"
-    sudo dpkg -i riaps-release/riaps-core-armhf.deb
-    echo "installed core"
-    sudo dpkg -i riaps-release/riaps-pycom-armhf.deb
-    echo "installed pycom"
-    sudo dpkg -i riaps-release/riaps-systemd-armhf.deb 
-    echo "installed services"
-    sudo dpkg -i riaps-release/riaps-timesync-armhf.deb 
-    echo "installed timesync"
-}
-
-setup_ssh_keys () {
-    sudo -H -u $1 mkdir -p /home/$1/.ssh
-    
-    if [ -f "*.key" ] && [ -f "*.pub" ]
-    then
-        echo "Found user ssh keys. Will use them"
-        
-        sudo -H -u $1 cat /usr/local/riaps/keys/id_rsa.pub >> /home/$1/.ssh/authorized_keys
-        sudo -H -u $1 cp /usr/local/riaps/keys/id_rsa.key /home/$1/.ssh/.
-        chown $1:$1 /home/$1/.ssh/authorized_keys
-        chmod 600 /home/$1/.ssh/authorized_keys
-        chmod 600 /home/$1/.ssh/id_rsa.key
-        echo "Added existing key to authorized keys for $1"
-    else
-        sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
-        echo "generated ssh keys for $1"
-        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
-        chown $1:$1 /home/$1/.ssh/authorized_keys
-        chmod 600 /home/$1/.ssh/authorized_keys
-        echo "Generated new key and added it to authorized keys for $1"
-    fi
-}
-
-move_key_to_riaps_etc() {
-    if [ -f "/usr/local/riaps/keys/id_rsa.key" ] && [ -f "/usr/local/riaps/keys/id_rsa.pub" ]
-    then
-        echo "keys are setup already in /usr/local/riaps for $1"
-    else
-        sudo cp /home/$1/.ssh/id_generated_rsa /usr/local/riaps/keys/id_rsa.key
-        sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
-        sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
-        echo "setup keys in /usr/local/riaps for $1"
-    fi
-}
-
 splash_screen_update() {
     #splash screen
     echo "################################################################################" > motd
@@ -189,6 +143,41 @@ splash_screen_update() {
     sudo mv issue.net /etc/issue.net
 }
 
+install_riaps(){
+    tar -xzvf riaps-release.tar.gz
+    sudo dpkg -i riaps-release/riaps-externals-armhf.deb
+    echo "installed externals"
+    sudo dpkg -i riaps-release/riaps-core-armhf.deb
+    echo "installed core"
+    sudo dpkg -i riaps-release/riaps-pycom-armhf.deb
+    echo "installed pycom"
+    sudo dpkg -i riaps-release/riaps-systemd-armhf.deb 
+    echo "installed services"
+    sudo dpkg -i riaps-release/riaps-timesync-armhf.deb 
+    echo "installed timesync"
+}
+
+setup_ssh_keys () {
+    sudo -H -u $1 mkdir -p /home/$1/.ssh
+    sudo cp $PUBLIC_KEY /home/$1/.ssh/id_rsa.pub
+    sudo cp $PRIVATE_KEY /home/$1/.ssh/id_rsa.key
+    sudo chown $1:$1 /home/$1/.ssh/id_rsa.pub
+    sudo chown $1:$1 /home/$1/.ssh/id_rsa.key
+    sudo -H -u $1 cat /home/$1/.ssh/id_rsa.pub >> /home/$1/.ssh/authorized_keys
+    sudo chown $1:$1 /home/$1/.ssh/authorized_keys
+    sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+    sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
+    sudo cp /home/$1/.ssh/id_rsa.key /usr/local/riaps/keys/id_rsa.key
+    sudo cp /home/$1/.ssh/id_rsa.pub /usr/local/riaps/keys/id_rsa.pub
+    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
+    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.pub
+    sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
+    
+    echo "Added user key to authorized keys for $1"
+}
+
+
+# Start of script actions
 check_os_version
 parse_args $@
 print_help
@@ -203,7 +192,6 @@ freqgov_off
 python_install
 cython_install
 curl_func
-install_riaps
-generate_localkeys $RIAPSAPPDEVELOPER
-move_key_to_riaps_etc $RIAPSAPPDEVELOPER
 splash_screen_update
+install_riaps
+setup_ssh_keys $RIAPSAPPDEVELOPER
