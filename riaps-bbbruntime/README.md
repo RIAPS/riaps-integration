@@ -45,45 +45,59 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	tar xf riaps-bbbruntime.tar.gz
 	cd riaps-bbbruntime
 	```
-   If you want to use your own private ssh keys to make things more secure, copy your rsa ssh key pair (.pub and .key) into 
-   this directory. Otherwise, a default set of keys will be utilized.  
 
-4. Move to 'root' user
+4. Download your rsa ssh key pair (.pub and .key) to the BBB in the '/home/ubuntu/riaps-bbbruntime/' directory.  If you need to generate keys, use the following command.  The same key pair should be used on the BBB and the host development machine (VM).
+
+	```
+	cat id_generated_rsa >> authorized_keys
+	```
+
+5. Move to 'root' user
 	
 	```
 	sudo su   
 	```	   
-	
-5. Run the installation script.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
+		
+6. Run the installation script.  Provide the name of the ssh key pair added in step 5, your key filename can be any name desired.  The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received.  If you have any issues during installation, this is a good file to send with your questions.
 	
 	```
-	./bootstrap.sh | tee install-bbb.log
+	./bootstrap.sh public_key=id_rsa.pub private_key=id_rsa.key 2>&1 | tee install-bbb.log
 	```	
 	
-6. Reboot the Beaglebone Black
+7. Reboot the Beaglebone Black
 
 	```
 	sudo reboot   
 	```
 	
-7. When the BBB is rebooted, you can ssh using the following:
+8. When the BBB is rebooted, you can ssh using the following:
 
 	```
 	Username:  riaps
 	Password:  riaps
 	```
 	
+# Update RIAPS Packages on Existing BBBs
+
+1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install.sh) to the BBB
+
+2. Run the update script
+
+	```
+	./riaps_install.sh 2>&1 | tee install-riaps-update-bbb.log
+	```
+
 # Helpful Hints 
 
 1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB
     
-```
-        scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
-```
+	```
+    scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:
+	```
 	
 2. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
- ```
+ 	```
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -100,14 +114,8 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	ECDSA host key for 192.168.1.101 has changed and you have requested strict checking.
 	Host key verification failed.
 	lost connection
-```
+	```
 	
-3.  If you want to use your own generated SSH keys (from the VM), scp over the public key to the BBB and place in '~/.ssh' directory.  Then add the public key (example name below of id_generated_rsa) to the authorized_key file.  You may need this to transfer application from the 'riaps_ctrl' on the host VM to the BBB if you get an application download fault indication.
-
-	```
-	cd ~/.ssh
-	cat id_generated_rsa >> authorized_keys
-	```
 
 # Available RIAPS Services
 
@@ -123,7 +131,7 @@ Current services loaded into the image on the BBB and on the host VM:
 
 To see the status of a service or control its state, use the following commands manually on a command line, where name is the service name (like disco).  Starting a service runs the actions immediately.  Enabling the service will allow the service to start when booting up.
 
-   ```
+	```
    sudo systemctl status riaps-<name>.service
    sudo systemctl start riaps-<name>.service
    sudo systemctl stop riaps-<name>.service
