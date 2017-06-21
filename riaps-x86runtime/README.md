@@ -37,7 +37,7 @@ For first time setup, following these steps to configure your system to run Vagr
 
 4. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
 
-    ```
+	```
     vagrant up 2>&1 | tee install-vm.log
     ```   
 
@@ -94,5 +94,17 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
     ```
     vagrant up 
-    vagrant provision | tee update-vm.log
+    vagrant provision 2>&1 | tee update-vm.log
     ```   
+
+# RIAPS Update Process
+If you want to only update the RIAPS platform, follow these steps:
+
+1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install.sh) to the VM
+
+2. Run the update script
+
+	```
+	./riaps_install.sh 2>&1 | tee install-riaps-update-vm.log
+	```
+
