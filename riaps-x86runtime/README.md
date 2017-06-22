@@ -23,21 +23,23 @@ For first time setup, following these steps to configure your system to run Vagr
 
 2. Download your rsa ssh key pair (.pub and .key) to the same directory.  If you need to generate keys, use the following command.  The same key pair should be used on the host development machine (VM) and the BBB.
 
-	```
-	cat id_generated_rsa >> authorized_keys
-	```
+    ```
+    cat id_generated_rsa >> authorized_keys
+    ```
 
 3. Make sure the **Vagrantfile** points to your ssh keys, edit the file if necessary.  The key names are indicated at the end of the file.
 
-	```
+    ```
     from Vagrantfile:
     
+    config.vm.provision "file", source: "id_rsa.pub", destination: "id_rsa.pub"
+    config.vm.provision "file", source: "id_rsa.key", destination: "id_rsa.key"
     config.vm.provision "shell", :path => "bootstrap.sh", :args => "public_key=id_rsa.pub private_key=id_rsa.key"
-	```
+    ```
 
 4. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
 
-	```
+    ```
     vagrant up 2>&1 | tee install-vm.log
     ```   
 
@@ -100,11 +102,13 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 # RIAPS Update Process
 If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install.sh) to the VM
+1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
 
-2. Run the update script
+2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install.sh) to the VM
 
-	```
-	./riaps_install.sh 2>&1 | tee install-riaps-update-vm.log
-	```
+3. Run the update script
+
+    ```
+    ./riaps_install.sh 2>&1 | tee install-riaps-update-vm.log
+    ```
 
