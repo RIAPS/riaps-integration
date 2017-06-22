@@ -154,6 +154,8 @@ setup_ssh_keys () {
 
 
 # Start of script actions
+parse_args $@
+print_help
 user_func
 cross_setup
 vim_func
