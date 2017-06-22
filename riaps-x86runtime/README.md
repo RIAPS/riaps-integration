@@ -102,9 +102,11 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 # RIAPS Update Process
 If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install.sh) to the VM
+1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
 
-2. Run the update script
+2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install.sh) to the VM
+
+3. Run the update script
 
     ```
     ./riaps_install.sh 2>&1 | tee install-riaps-update-vm.log
