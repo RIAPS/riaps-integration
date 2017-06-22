@@ -79,9 +79,11 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	
 # Update RIAPS Packages on Existing BBBs
 
-1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install.sh) to the BBB
+1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
 
-2. Run the update script
+2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install.sh) to the BBB
+
+3. Run the update script
 
 	```
 	./riaps_install.sh 2>&1 | tee install-riaps-update-bbb.log
