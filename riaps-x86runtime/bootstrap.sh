@@ -1,8 +1,47 @@
 #!/usr/bin/env bash
 
+# Script Variables
 RIAPSAPPDEVELOPER=riaps
 
 
+# Script functions
+
+# User must supply ssh key pair
+parse_args()
+{
+    for ARGUMENT in "$@"
+    do
+        KEY=$(echo $ARGUMENT | cut -f1 -d=)
+        VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+        case "$KEY" in
+            public_key)               PUBLIC_KEY=${VALUE} ;;
+            private_key)              PRIVATE_KEY=${VALUE} ;;
+            help)                     HELP="true" ;;
+            *)
+        esac
+    done
+
+    if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
+    then 
+        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
+    else 
+        echo "Found user ssh keys.  Will use them"
+    fi 
+}
+
+print_help()
+{
+    if [ "$HELP" = "true" ]; then
+        echo "usage: test_key_move [help] [=]"
+        echo "arguments:"
+        echo "help                       show this help message and exit"
+        echo "public_key=<name>.pub      name of public key file"
+        echo "private_key=<name>.key     name of private file"
+        exit
+    fi
+}
+
+# Setup User Account
 user_func () {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
         echo "The user does not exist; setting user account up now"
@@ -14,6 +53,7 @@ user_func () {
     fi    
 }
 
+# Configure for cross functional compilation
 cross_setup() {
     sudo cp -f sources.list /etc/apt//.
     sudo dpkg --add-architecture armhf
@@ -26,7 +66,6 @@ vim_func() {
     echo "installed vim"
 }
 
-
 java_func () {    
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
@@ -37,6 +76,7 @@ g++_func() {
     echo "installed g++"
 }
 
+# Setup source management tools
 git_svn_func() {
     sudo apt-get install git subversion -y
     echo "installed git and svn"
@@ -47,6 +87,7 @@ cmake_func() {
     echo "installed cmake"
 }
 
+# Required for riaps-timesync
 timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
@@ -61,60 +102,15 @@ python_install () {
     echo "installed python3 and pydev"
 }
 
-
 cython_install() {
     sudo apt-get install cython3 -y
     echo "installed cython3"
-
-}
-
-generate_localkeys () {    
-    if [ -f "id_rsa.key" ] && [ -f "id_rsa.pub" ]
-    then
-        echo "ssh keys found. Will use them"
-        sudo cp id_rsa.key /home/$1/.ssh/id_generated_rsa
-        sudo chown $1:$1 /home/$1/.ssh/id_generated_rsa
-        sudo -H -u $1 chmod 600 /home/$1/.ssh/id_generated_rsa
-        sudo -H -u $1 cat id_rsa.pub >>/home/$1/.ssh/authorized_keys
-	sudo chown $1:$1 /home/$1/.ssh/authorized_keys
-        sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
-        
-    else
-        echo "ssh keys not found."
-        sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_generated_rsa
-        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
-	sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys  
-	echo "Generated new key and added it to authorized keys for $1"
-
-    fi   
 }
 
 curl_func () {
     sudo apt install curl -y
     echo "installed curl"
 }
-
-install_riaps() {
-    tar -xzvf riaps-release.tar.gz
-    sudo dpkg -i riaps-release/riaps-externals-amd64.deb
-    echo "installed externals"
-    sudo dpkg -i riaps-release/riaps-core-amd64.deb
-    echo "installed core"
-    sudo dpkg -i riaps-release/riaps-pycom-amd64.deb
-    echo "installed pycom"
-    sudo dpkg -i riaps-release/riaps-systemd-amd64.deb 
-    echo "installed services"
-    sudo dpkg -i riaps-release/riaps-timesync-amd64.deb 
-    echo "installed timesync"
-}
-
-move_key_to_riaps_etc() {
-    sudo cp /home/$1/.ssh/id_generated_rsa /usr/local/riaps/keys/id_rsa.key
-    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
-    sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
-    echo "setup keys in /usr/local/riaps for $1"
-
-} 
 
 eclipse_func() {
     sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
@@ -133,6 +129,31 @@ install_redis () {
     rm -rf redis-3.2.5.tar.gz 
 }
 
+install_riaps() {
+    ./riaps_install.sh
+}
+
+setup_ssh_keys () {
+    sudo -H -u $1 mkdir -p /home/$1/.ssh
+    sudo cp $PUBLIC_KEY /home/$1/.ssh/id_rsa.pub
+    sudo cp $PRIVATE_KEY /home/$1/.ssh/id_rsa.key
+    sudo chown $1:$1 /home/$1/.ssh/id_rsa.pub
+    sudo chown $1:$1 /home/$1/.ssh/id_rsa.key
+    sudo -H -u $1 cat /home/$1/.ssh/id_rsa.pub >> /home/$1/.ssh/authorized_keys
+    sudo chown $1:$1 /home/$1/.ssh/authorized_keys
+    sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
+    sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
+    sudo cp /home/$1/.ssh/id_rsa.key /usr/local/riaps/keys/id_rsa.key
+    sudo cp /home/$1/.ssh/id_rsa.pub /usr/local/riaps/keys/id_rsa.pub
+    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
+    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.pub
+    sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
+    
+    echo "Added user key to authorized keys for $1"
+}
+
+
+# Start of script actions
 user_func
 cross_setup
 vim_func
@@ -143,10 +164,11 @@ cmake_func
 timesync_requirements
 python_install
 cython_install
-generate_localkeys $RIAPSAPPDEVELOPER
-curl_func
-install_riaps
-move_key_to_riaps_etc $RIAPSAPPDEVELOPER
 eclipse_func $RIAPSAPPDEVELOPER
 install_redis
+curl_func
+install_riaps
+setup_ssh_keys $RIAPSAPPDEVELOPER
+
+
 
