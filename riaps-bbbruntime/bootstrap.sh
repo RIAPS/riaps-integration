@@ -154,7 +154,7 @@ install_riaps(){
     	sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
     fi
 
-    ./riaps_install-bbb.sh
+    ./riaps_install_bbb.sh
 }
 
 setup_ssh_keys () {
