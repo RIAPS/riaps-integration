@@ -56,13 +56,13 @@ user_func () {
 # Configure for cross functional compilation
 cross_setup() {
 	# Add armhf repositories
+	sudo apt-get install software-properties-common -y	
 	if grep -q '[arch=armhf] http://ports.ubuntu.com/ubuntu-ports/' /etc/apt/sources.list ; 
 	then
         echo "Armhf repositories are already included."
     else
-    	sudo echo " "
-        sudo echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" >> /etc/apt/sources.list
-        sudo echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse" >> /etc/apt/sources.list        
+    	sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
+    	sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
     fi
     sudo dpkg --add-architecture armhf
     sudo apt-get update
@@ -143,6 +143,14 @@ install_fabric() {
 }
 
 install_riaps() {
+    # Add RIAPS repository
+    if grep -q 'deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main' /etc/apt/sources.list ; 
+    then
+        echo "RIAPS repository is already included."
+    else
+    	sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+    fi
+
     ./riaps_install.sh
 }
 

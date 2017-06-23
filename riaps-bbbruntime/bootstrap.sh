@@ -144,7 +144,17 @@ splash_screen_update() {
 }
 
 install_riaps(){
-    ./riaps_install.sh
+	sudo apt-get install software-properties-common -y
+	
+	# Add RIAPS repository
+	if grep -q 'deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main' /etc/apt/sources.list ; 
+    then
+        echo "RIAPS repository is already included."
+    else
+    	sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+    fi
+
+    ./riaps_install-bbb.sh
 }
 
 setup_ssh_keys () {
