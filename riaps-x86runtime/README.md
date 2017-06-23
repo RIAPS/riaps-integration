@@ -24,34 +24,24 @@ For first time setup, following these steps to configure your system to run Vagr
 2. Download your rsa ssh key pair (.pub and .key) to the same directory.  If you need to generate keys, use the following command.  The same key pair should be used on the host development machine (VM) and the BBB.
 
     ```
-    cat id_generated_rsa >> authorized_keys
+    ssh-keygen -t rsa
     ```
-
-3. Make sure the **Vagrantfile** points to your ssh keys, edit the file if necessary.  The key names are indicated at the end of the file.
-
-    ```
-    from Vagrantfile:
     
-    config.vm.provision "file", source: "id_rsa.pub", destination: "id_rsa.pub"
-    config.vm.provision "file", source: "id_rsa.key", destination: "id_rsa.key"
-    config.vm.provision "shell", :path => "bootstrap.sh", :args => "public_key=id_rsa.pub private_key=id_rsa.key"
-    ```
-
-4. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
+3. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
     vagrant up 2>&1 | tee install-vm.log
     ```   
 
-5. When asked which network interface to use, pick the most appropriate to your system configuration.
+4. When asked which network interface to use, pick the most appropriate to your system configuration.
 
-6. The VM will launch with a username of vagrant.  Select the **RIAPS App Developer** username
+5. The VM will launch with a username of vagrant.  Select the **RIAPS App Developer** username
 
 
     - **The default password for RIAPS App Developer is 'riaps'**
     - **The password for vagrant user is 'vagrant'**
 
-7. After the vagrant script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
+6. After the vagrant script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
     - Determine the desired ethernet interface
     
