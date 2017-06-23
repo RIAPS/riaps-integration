@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
@@ -24,6 +25,7 @@ parse_args()
     if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
     then 
         echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
+        exit
     else 
         echo "Found user ssh keys.  Will use them"
     fi 
@@ -57,12 +59,12 @@ user_func () {
 cross_setup() {
 	# Add armhf repositories
 	sudo apt-get install software-properties-common -y	
-	if grep -q '[arch=armhf] http://ports.ubuntu.com/ubuntu-ports/' /etc/apt/sources.list ; 
+	if grep -q 'http://ports.ubuntu.com/ubuntu-ports/' /etc/apt/sources.list ; 
 	then
         echo "Armhf repositories are already included."
     else
-    	sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
-    	sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
+        sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
+        sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
     fi
     sudo dpkg --add-architecture armhf
     sudo apt-get update
@@ -148,11 +150,11 @@ install_fabric() {
 
 install_riaps() {
     # Add RIAPS repository
-    if grep -q 'deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main' /etc/apt/sources.list ; 
+    if grep -q 'https://riaps.isis.vanderbilt.edu/aptrepo/' /etc/apt/sources.list ; 
     then
         echo "RIAPS repository is already included."
     else
-    	sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+        sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
     fi
 
     wget -qO - http://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
