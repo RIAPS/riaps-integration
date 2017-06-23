@@ -1,0 +1,4 @@
+ask-passphrase
+verbose
+outdir +b/www
+logdir +b/logs
