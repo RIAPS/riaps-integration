@@ -67,6 +67,7 @@ cross_setup() {
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
+    echo "setup multi-arch capabilities"
 }
 
 vim_func() {
@@ -101,6 +102,7 @@ timesync_requirements() {
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo "installed timesync requirements"
 }
 
 python_install () {
@@ -135,11 +137,13 @@ install_redis () {
     sudo make -C redis-3.2.5 install
     rm -rf redis-3.2.5 
     rm -rf redis-3.2.5.tar.gz 
+    echo "installed redis"
 }
 
 install_fabric() {
     sudo apt-get install python-pip
     sudo pip2 install fabric
+    echo "installed fabric"
 }
 
 install_riaps() {
