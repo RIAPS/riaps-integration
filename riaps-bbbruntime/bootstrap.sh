@@ -151,16 +151,13 @@ splash_screen_update() {
 }
 
 install_riaps(){
-	sudo apt-get install software-properties-common -y
+	sudo apt-get install software-properties-common apt-transport-https -y
 	
 	# Add RIAPS repository
-	if grep -q 'https://riaps.isis.vanderbilt.edu/aptrepo/' /etc/apt/sources.list ; 
-    then
-        echo "RIAPS repository is already included."
-    else
-        sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"  	
-    fi
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
+    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
 
+    sudo apt-get update
 	wget -qO - http://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     ./riaps_install_bbb.sh
 }

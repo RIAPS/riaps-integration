@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
@@ -22,7 +21,7 @@ parse_args()
         esac
     done
 
-    if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
+    if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
     then 
         echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
         exit
@@ -150,13 +149,10 @@ install_fabric() {
 
 install_riaps() {
     # Add RIAPS repository
-    if grep -q 'https://riaps.isis.vanderbilt.edu/aptrepo/' /etc/apt/sources.list ; 
-    then
-        echo "RIAPS repository is already included."
-    else
-        sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
-    fi
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
+    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
 
+    sudo apt-get update
     wget -qO - http://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     ./riaps_install_amd64.sh
 }
