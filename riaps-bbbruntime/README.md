@@ -5,14 +5,14 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 1. Download a complete pre-configured image (Ubuntu 16.04) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
     ```
-    wget https://rcn-ee.com/rootfs/2017-04-07/elinux/ubuntu-16.04.2-console-armhf-2017-04-07.tar.xz
+    wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
     ```
 
 2. Unpack image and change into the directory
 
     ```
-    tar xf ubuntu-16.04.2-console-armhf-2017-04-07.tar.xz
-    cd ubuntu-16.04.2-console-armhf-2017-04-07
+    tar xf ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
+    cd ubuntu-16.04.2-console-armhf-2017-06-12
     ```
 
     ```

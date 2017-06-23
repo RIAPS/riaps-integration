@@ -55,7 +55,15 @@ user_func () {
 
 # Configure for cross functional compilation
 cross_setup() {
-    sudo cp -f sources.list /etc/apt//.
+	# Add armhf repositories
+	if grep -q '[arch=armhf] http://ports.ubuntu.com/ubuntu-ports/' /etc/apt/sources.list ; 
+	then
+        echo "Armhf repositories are already included."
+    else
+    	sudo echo " "
+        sudo echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" >> /etc/apt/sources.list
+        sudo echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse" >> /etc/apt/sources.list        
+    fi
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
