@@ -129,6 +129,11 @@ install_redis () {
     rm -rf redis-3.2.5.tar.gz 
 }
 
+install_fabric() {
+    sudo apt-get install python-pip
+    sudo pip2 install fabric
+}
+
 install_riaps() {
     ./riaps_install.sh
 }
