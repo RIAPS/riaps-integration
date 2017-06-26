@@ -8,13 +8,13 @@ For first time setup, following these steps to configure your system to run Vagr
 4. Install the Vagrant plugin for VirtualBox Guest Additions. This command is issued from a command line window on the host machine.  The base box used comes with the Guest Additions for 5.0.18, and the plugin will take care to install the correct Guest Additions if your version of VirtualBox differs from that. To do so simply call 
 
     ```
-    vagrant plugin install vagrant-vbguest
+    $ vagrant plugin install vagrant-vbguest
     ```  
 
 5. Install the Vagrant scp plugin.  This command is issued from a command line window on the host machine.  
 
     ```
-    vagrant plugin install vagrant-scp
+    $ vagrant plugin install vagrant-scp
     ```  
 
 # Initial Installation of RIAPS Specific Virtual Machine
@@ -24,13 +24,13 @@ For first time setup, following these steps to configure your system to run Vagr
 2. Download your rsa ssh key pair (.pub and .key) to the same directory.  If you need to generate keys, use the following command.  The key name must be **id_rsa.pub** and **id_rsa.key**.  The same key pair must be used on the host development machine (VM) and the BBB.
 
     ```
-    ssh-keygen -t rsa
+    $ ssh-keygen -t rsa
     ```
     
 3. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
-    vagrant up 2>&1 | tee install-vm.log
+    $ vagrant up 2>&1 | tee install-vm.log
     ```   
 
 4. When asked which network interface to use, pick the most appropriate to your system configuration.
@@ -46,13 +46,13 @@ For first time setup, following these steps to configure your system to run Vagr
     - Determine the desired ethernet interface
     
         ```
-        ifconfig
+        $ ifconfig
         ```   
     
     - Edit the riaps configuration to enable that interface
     
         ```
-        sudo nano /etc/riaps/riaps.conf
+        $ sudo nano /etc/riaps/riaps.conf
         ```   
     
     - Uncomment the NIC name and match the desired ethernet interface name from 'ifconfig'
@@ -85,8 +85,8 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 - Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
     ```
-    vagrant up 
-    vagrant provision 2>&1 | tee update-vm.log
+    $ vagrant up 
+    $ vagrant provision 2>&1 | tee update-vm.log
     ```   
 
 # RIAPS Update Process
@@ -99,6 +99,7 @@ If you want to only update the RIAPS platform, follow these steps:
 3. Run the update script
 
     ```
-    ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
+    $ sudo apt-get update
+    $ ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
     ```
 
