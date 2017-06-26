@@ -21,9 +21,10 @@ parse_args()
         esac
     done
 
-    if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
+    if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
     then 
         echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
+        exit
     else 
         echo "Found user ssh keys.  Will use them"
     fi 
@@ -55,10 +56,45 @@ user_func () {
 
 # Configure for cross functional compilation
 cross_setup() {
-    sudo cp -f sources.list /etc/apt//.
+	# Add armhf repositories
+	sudo apt-get install software-properties-common apt-transport-https -y	
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
+    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
+    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"    
+    
+    # Qualify the architectures for existing repositories trying to find armhf (which is not there) - this is due to issue installing later
+    # Need to figure out how not to need this (MM)
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial main restricted" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial main restricted"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial universe" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial universe"   
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates universe" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates universe"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial multiverse" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse" || true
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security main restricted" || true    
+    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security main restricted"    
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security universe" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security universe"
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security multiverse" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security multiverse"
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
+    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse" || true
+    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
+
+ 
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
+    echo "setup multi-arch capabilities"
 }
 
 vim_func() {
@@ -93,6 +129,7 @@ timesync_requirements() {
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo "installed timesync requirements"
 }
 
 python_install () {
@@ -112,12 +149,50 @@ curl_func () {
     echo "installed curl"
 }
 
-eclipse_func() {
-    sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
-    sudo -H -u $1 tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C //home/$1/
 
-    sudo rm eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
-    echo "installed eclipse"
+eclipse_shortcut() {
+   shortcut=/home/$1/Desktop/Eclipse.desktop
+   sudo -H -u $1 mkdir -p /home/$1/Desktop
+   sudo -H -u $1 cat <<EOT >$shortcut
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Eclipse
+Name[en_US]=Eclipse
+Icon=/opt/eclipse/icon.xpm
+Exec=/opt/eclipse/eclipse -data /home/$1/workspace
+EOT
+
+   sudo chmod +x /home/$1/Desktop/Eclipse.desktop
+}
+
+eclipse_func() {
+	if [ ! -f "/home/$1/eclipse/eclipse" ]
+	then
+		if [ ! -f "/opt/eclipse/eclipse" ]
+    	then
+        	echo "eclipse not found"
+            sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
+            sudo tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C /opt
+	    	#create eclipse shortcut
+			eclipse_shortcut $1
+			#install plugins
+            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://pydev.org/updates -installIU "org.python.pydev.feature.feature.group, org.python.pydev.mylyn.feature.feature.group, org.python.pydev.feature.source.feature.group"    
+            #GIT
+            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/releases/neon/ -installIU "org.eclipse.egit.feature.group, org.eclipse.jgit.feature.group"	
+            #JSON Editor
+            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://boothen.github.io/Json-Eclipse-Plugin/ -installIU "jsonedit-feature.feature.group"	
+            #Subclipse
+            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository https://dl.bintray.com/subclipse/releases/subclipse/latest/ -installIU "org.tigris.subversion.subclipse.feature.group, net.java.dev.jna.feature.group, org.tigris.subversion.subclipse.mylyn.feature.feature.group, org.tigris.subversion.subclipse.graph.feature.feature.group, org.tigris.subversion.clientadapter.svnkit.feature.feature.group, org.tmatesoft.svnkit.feature.group"
+            sudo rm eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
+            echo "installed eclipse"
+        else
+            echo "eclipse already installed at /opt/eclipse"
+        fi
+    else
+    echo "eclipse already installed at /home/riaps/eclipse"
+        
+    fi
 }
 
 install_redis () {
@@ -127,10 +202,22 @@ install_redis () {
     sudo make -C redis-3.2.5 install
     rm -rf redis-3.2.5 
     rm -rf redis-3.2.5.tar.gz 
+    echo "installed redis"
+}
+
+install_fabric() {
+    sudo apt-get install python-pip
+    sudo pip2 install fabric
+    echo "installed fabric"
 }
 
 install_riaps() {
-    ./riaps_install.sh
+    # Add RIAPS repository
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
+    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
+    sudo apt-get update
+    ./riaps_install_amd64.sh
 }
 
 setup_ssh_keys () {
@@ -154,6 +241,8 @@ setup_ssh_keys () {
 
 
 # Start of script actions
+parse_args $@
+print_help
 user_func
 cross_setup
 vim_func

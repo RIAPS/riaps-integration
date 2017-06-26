@@ -29,9 +29,16 @@ parse_args()
 
     if [ "$PUBLIC_KEY" = "" ] && [ "$PRIVATE_KEY" = "" ] 
     then 
-        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
+        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key."
+        exit
     else 
-        echo "Found user ssh keys.  Will use them"
+    	if [ -f $PUBLIC_KEY ] && [ -f $PRIVATE_KEY ]
+    	then
+    	    echo "Found user ssh keys.  Will use them."
+    	else
+            echo "Please make sure to copy the specified public and private key to the BBB."
+            exit
+        fi
     fi 
 }
 
@@ -144,7 +151,14 @@ splash_screen_update() {
 }
 
 install_riaps(){
-    ./riaps_install.sh
+	sudo apt-get install software-properties-common apt-transport-https -y
+	
+	# Add RIAPS repository
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
+    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+	wget -qO - http://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
+    sudo apt-get update
+    ./riaps_install_bbb.sh
 }
 
 setup_ssh_keys () {

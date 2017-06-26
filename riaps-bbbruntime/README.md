@@ -5,14 +5,14 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 1. Download a complete pre-configured image (Ubuntu 16.04) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
     ```
-    wget https://rcn-ee.com/rootfs/2017-04-07/elinux/ubuntu-16.04.2-console-armhf-2017-04-07.tar.xz
+    wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
     ```
 
 2. Unpack image and change into the directory
 
     ```
-    tar xf ubuntu-16.04.2-console-armhf-2017-04-07.tar.xz
-    cd ubuntu-16.04.2-console-armhf-2017-04-07
+    tar xf ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
+    cd ubuntu-16.04.2-console-armhf-2017-06-12
     ```
 
     ```
@@ -81,12 +81,12 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 
 1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
 
-2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install.sh) to the BBB
+2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB
 
 3. Run the update script
 
 	```
-	./riaps_install.sh 2>&1 | tee install-riaps-update-bbb.log
+	./riaps_install_bbb.sh 2>&1 | tee install-riaps-update-bbb.log
 	```
 
 # Helpful Hints 
