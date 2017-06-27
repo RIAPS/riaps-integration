@@ -104,10 +104,10 @@ timesync_requirements(){
 }
 
 freqgov_off() {
-        touch /etc/default/cpufrequtils
-        echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
-        update-rc.d ondemand disable
-        /etc/init.d/cpufrequtils restart
+    touch /etc/default/cpufrequtils
+    echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
+    update-rc.d ondemand disable
+    /etc/init.d/cpufrequtils restart
 }
 
 python_install () {
@@ -121,7 +121,6 @@ python_install () {
 cython_install() {
     sudo apt-get install cython3 -y
     echo "installed cython3"
-
 }
 
 curl_func () {
@@ -151,12 +150,12 @@ splash_screen_update() {
 }
 
 install_riaps(){
-	sudo apt-get install software-properties-common apt-transport-https -y
+    sudo apt-get install software-properties-common apt-transport-https -y
 	
-	# Add RIAPS repository
+    # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
     sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
-	wget -qO - http://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
+    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     ./riaps_install_bbb.sh
 }
