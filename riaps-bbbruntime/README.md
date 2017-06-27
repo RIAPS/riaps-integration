@@ -49,7 +49,7 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 4. Download your rsa ssh key pair (.pub and .key) to the BBB in the '/home/ubuntu/riaps-bbbruntime/' directory.  If you need to generate keys, use the following command.  The same key pair should be used on the BBB and the host development machine (VM).
 
 	```
-	$ cat id_generated_rsa >> authorized_keys
+	$ ssh-keygen -t rsa
 	```
 
 5. Move to 'root' user
