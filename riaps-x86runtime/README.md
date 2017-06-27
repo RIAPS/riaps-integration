@@ -102,4 +102,19 @@ If you want to only update the RIAPS platform, follow these steps:
     $ sudo apt-get update
     $ ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
     ```
-
+# Helpful Hints
+1. If you need to remove a vagrant VM, go to the command line and type 
+    ```
+    vagrant global-status
+    
+    id       name    provider   state    directory
+    -----------------------------------------------------------------------------------------
+    40d1606  default virtualbox running  /Users/xxx/VirtualBox VMs/riaps-x86runtime
+    ```
+2. Select the ID you want to delete and then type
+    ```
+    vagrant destroy 40d1606
+    ```
+3. Now you can create a VM of the same name again.
+ 
+    
