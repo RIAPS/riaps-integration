@@ -105,7 +105,7 @@ If you want to only update the RIAPS platform, follow these steps:
 # Helpful Hints
 1. If you need to remove a vagrant VM, go to the command line and type 
     ```
-    vagrant global-status
+    $ vagrant global-status
     
     id       name    provider   state    directory
     -----------------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ If you want to only update the RIAPS platform, follow these steps:
     ```
 2. Select the ID you want to delete and then type
     ```
-    vagrant destroy 40d1606
+    $ vagrant destroy 40d1606
     ```
 3. Now you can create a VM of the same name again.
  
