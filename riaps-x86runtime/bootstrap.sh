@@ -56,8 +56,8 @@ user_func () {
 
 # Configure for cross functional compilation
 cross_setup() {
-	# Add armhf repositories
-	sudo apt-get install software-properties-common apt-transport-https -y	
+    # Add armhf repositories
+    sudo apt-get install software-properties-common apt-transport-https -y	
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
@@ -167,16 +167,16 @@ EOT
 }
 
 eclipse_func() {
-	if [ ! -f "/home/$1/eclipse/eclipse" ]
-	then
-		if [ ! -f "/opt/eclipse/eclipse" ]
+    if [ ! -f "/home/$1/eclipse/eclipse" ]
+    then
+	if [ ! -f "/opt/eclipse/eclipse" ]
     	then
-        	echo "eclipse not found"
+            echo "eclipse not found"
             sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
             sudo tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C /opt
-	    	#create eclipse shortcut
-			eclipse_shortcut $1
-			#install plugins
+            #create eclipse shortcut
+            eclipse_shortcut $1
+            #install plugins
             sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://pydev.org/updates -installIU "org.python.pydev.feature.feature.group, org.python.pydev.mylyn.feature.feature.group, org.python.pydev.feature.source.feature.group"    
             #GIT
             sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/releases/neon/ -installIU "org.eclipse.egit.feature.group, org.eclipse.jgit.feature.group"	
