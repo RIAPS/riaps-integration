@@ -256,6 +256,7 @@ cython_install
 eclipse_func $RIAPSAPPDEVELOPER
 install_redis
 curl_func
+install_fabric
 install_riaps
 setup_ssh_keys $RIAPSAPPDEVELOPER
 
