@@ -46,10 +46,11 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	$ cd riaps-bbbruntime
 	```
 
-4. Download your rsa ssh key pair (.pub and .key) to the BBB in the '/home/ubuntu/riaps-bbbruntime/' directory.  If you need to generate keys, use the following command.  The same key pair should be used on the BBB and the host development machine (VM).  The private key name should end with .key (if not add the extension).
+4. Download your rsa ssh key pair (.pub and .key) to the BBB in the '/home/ubuntu/riaps-bbbruntime/' directory.  If you need to generate keys, use the following command.  The same key pair should be used on the BBB and the host development machine (VM).  This keygen command will create a private key with no extension, just add .key to the end.
 
 	```
 	$ ssh-keygen -t rsa
+	$ mv id_rsa id_rsa.key
 	```
 
 5. Move to 'root' user
@@ -77,18 +78,17 @@ This work should be done on a Linux machine or VM.  We are starting with a pre-c
 	Password:  riaps
 	```
 	
-# Update RIAPS Packages on Existing BBBs
+# Update RIAPS Platform Packages on Existing BBBs
 
-1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
+1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB
 
-2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB
-
-3. Run the update script
+2. Run the update script
 
 	```
 	$ sudo apt-get update
 	$ ./riaps_install_bbb.sh 2>&1 | tee install-riaps-update-bbb.log
 	```
+Note:  If you want to update the SSH keys after building the BBB images, remove the existing keys from ~/.ssh/ and /usr/local/riaps/keys/.  Then repeat steps 4-8 of the "Installation of RIAPS on Pre-configured BBB" instructions.
 
 # Helpful Hints 
 
