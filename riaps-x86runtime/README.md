@@ -21,10 +21,11 @@ For first time setup, following these steps to configure your system to run Vagr
 
 1. Download the RIAPS development box setup file (riaps-x86runtime.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.  
 
-2. Download your rsa ssh key pair (.pub and .key) to the same directory.  If you need to generate keys, use the following command.  The key name must be **id_rsa.pub** and **id_rsa.key**.  The same key pair must be used on the host development machine (VM) and the BBB.
+2. Download your rsa ssh key pair (.pub and .key) to the same directory.  If you need to generate keys, use the following command.  The key name must be **id_rsa.pub** and **id_rsa.key**.  The same key pair must be used on the host development machine (VM) and the BBB.  This keygen command will create a private key with no extension, just add .key to the end.
 
     ```
     $ ssh-keygen -t rsa
+    $ mv id_rsa id_rsa.key
     ```
     
 3. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors.  If you have any issues during installation, this is a good file to send with your questions.
