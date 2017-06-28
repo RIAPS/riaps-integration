@@ -94,16 +94,15 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 # RIAPS Platform Update Process
 If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the RIAPS releases (riaps-release.tar.gz found at https://github.com/RIAPS/riaps-integration/releases), unzip it and change into that directory in the command line window.
+1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install_amd64.sh) to the VM
 
-2. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install_amd64.sh) to the VM
-
-3. Run the update script
+2. Run the update script
 
     ```
     $ sudo apt-get update
     $ ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
     ```
+    
 # Helpful Hints
 1. If you need to remove a vagrant VM, go to the command line and type 
     ```
@@ -116,6 +115,7 @@ If you want to only update the RIAPS platform, follow these steps:
 2. Select the ID you want to delete and then type
     ```
     $ vagrant destroy 40d1606
+         where 40d1606 is the ID
     ```
 3. Now you can create a VM of the same name again.
  
