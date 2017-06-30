@@ -211,6 +211,10 @@ install_fabric() {
     echo "installed fabric"
 }
 
+install_firefox() {
+    sudo apt-get install firefox
+}
+
 install_riaps() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
@@ -256,6 +260,8 @@ cython_install
 eclipse_func $RIAPSAPPDEVELOPER
 install_redis
 curl_func
+install_fabric
+install_firefox
 install_riaps
 setup_ssh_keys $RIAPSAPPDEVELOPER
 
