@@ -53,7 +53,7 @@ For first time setup, following these steps to configure your system to run Vagr
     - Edit the riaps configuration to enable that interface
     
         ```
-        $ sudo nano /usr/local/riaps/riaps.conf
+        $ sudo nano /usr/local/riaps/etc/riaps.conf
         ```   
     
     - Uncomment the NIC name and match the desired ethernet interface name from 'ifconfig'
