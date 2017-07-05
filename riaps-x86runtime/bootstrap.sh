@@ -206,13 +206,14 @@ install_redis () {
 }
 
 install_fabric() {
-    sudo apt-get install python-pip
+    sudo apt-get install python-pip -y
     sudo pip2 install fabric
     echo "installed fabric"
 }
 
 install_firefox() {
-    sudo apt-get install firefox
+    sudo apt-get install firefox -y
+    echo "installed firefox"
 }
 
 install_riaps() {
