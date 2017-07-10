@@ -170,11 +170,6 @@ setup_ssh_keys () {
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
-    sudo cp /home/$1/.ssh/id_rsa.key /usr/local/riaps/keys/id_rsa.key
-    sudo cp /home/$1/.ssh/id_rsa.pub /usr/local/riaps/keys/id_rsa.pub
-    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.key
-    sudo chown $1:$1 /usr/local/riaps/keys/id_rsa.pub
-    sudo -H -u $1 chmod 600 /usr/local/riaps/keys/id_rsa.key
     
     echo "Added user key to authorized keys for $1"
 }
