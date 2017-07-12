@@ -13,6 +13,7 @@ do
             pycom)              PYCOM_VER=${VALUE} ;;
             external)           EXTERNAL_VER=${VALUE} ;;
 	    core)               CORE_VER=${VALUE} ;;
+	    timesync)           TIMESYNC_VER=${VALUE} ;;
 	    arch)		ARCH=${VALUE} ;;
 	    version_conf)	VERSION=${VALUE} ;;
 	    setup_conf)		SETUP=${VALUE} ;;
@@ -92,6 +93,10 @@ set_repo_versions()
 			export externalsversion=$EXTERNAL_VER
 	fi
 
+	if [ "$TIMESYNC_VER" != "" ]; then
+	    export timesyncversion=$TIMESYNC_VER
+	fi
+
 	architecture="all"
 	expected_file_count=0
 	if [ "$ARCH" != "" ]; then
@@ -108,10 +113,48 @@ print_help()
 	echo "pycom=0.0.0			pycom release version, default from version.h"
 	echo "external=0.0.0			external release version, default from version.h"
 	echo "core=0.0.0			core release version, default from version.h"
+	echo "timesync=0.0.0			timesync release version, default from version.h"	
 	echo "arch=amd64 or armhf		architecture version amd64 or armhf"
 	echo "version_conf=/path/version.sh"
 	echo "setup_conf=/path/setup.conf"
 	exit
+    fi
+}
+
+download_arch_release()
+{
+    if [ ! -e "fetch_linux_amd64"  ]; then
+	wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
+	chmod +x fetch_linux_amd64
+    fi
+
+    expected_file_count=`expr $expected_file_count + 5`
+    ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-$1.deb" ./$RELEASE_DIR
+    ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-$1.deb" ./$RELEASE_DIR
+    ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-$1.deb" ./$RELEASE_DIR
+    ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-systemd-$1.deb" ./$RELEASE_DIR
+    ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag="$timesyncversion" --release-asset="riaps-timesync-$1.deb" ./$RELEASE_DIR    
+}
+
+download_release()
+{
+    echo "======> Fetching pycom = $pycomversion, external = $externalsversion, core = $coreversion, timesync = $timesyncversion, architecture = $architecture <======"
+
+    # fetch repos based on version number
+    if [ "$architecture" = "all" ] || [ "$architecture" = "amd64" ]; then
+	download_arch_release amd64
+    fi
+
+    if [ "$architecture" = "all" ] || [ "$architecture" = "armhf" ]; then
+	download_arch_release armhf
+    fi
+
+    downloaded_file_count=`find ./$RELEASE_DIR -name *.deb | wc -l`
+    if [ $downloaded_file_count -eq $expected_file_count ]; then
+	tar czvf $RELEASE_ARTIFACT ./$RELEASE_DIR
+	echo "Created $RELEASE_ARTIFACT."
+    else
+	echo "Not all release deb files got downloaded! Expected $expected_file_count, got $downloaded_file_count."
     fi
 }
 
@@ -120,39 +163,11 @@ print_help
 setup
 init_env
 set_repo_versions
+download_release
 
 
-if [ ! -e "fetch_linux_amd64"  ]; then
-	wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
-	chmod +x fetch_linux_amd64
-fi
 
 
-echo "Fetching ========> pycom = $pycomversion, external = $externalsversion, core = $coreversion, architecture = $architecture <========"
-
-
-# fetch repos based on version number
-if [ "$architecture" = "all" ] || [ "$architecture" = "amd64" ]; then
-expected_file_count=`expr $expected_file_count + 3`
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-amd64.deb" ./$RELEASE_DIR
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-amd64.deb" ./$RELEASE_DIR
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-amd64.deb" ./$RELEASE_DIR
-fi
-
-if [ "$architecture" = "all" ] || [ "$architecture" = "armhf" ]; then
-expected_file_count=`expr $expected_file_count + 3`
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" ./$RELEASE_DIR
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag="$coreversion" --release-asset="riaps-core-armhf.deb" ./$RELEASE_DIR
-./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag="$pycomversion" --release-asset="riaps-pycom-armhf.deb" ./$RELEASE_DIR
-fi
-
-
-downloaded_file_count=`find ./$RELEASE_DIR -name *.deb | wc -l`
-if [ $downloaded_file_count -eq $expected_file_count ]; then
-	tar czvf $RELEASE_ARTIFACT ./$RELEASE_DIR
-else
-	echo "Not all release deb files got downloaded! Expected $expected_file_count, got $downloaded_file_count."
-fi
 
 
 
