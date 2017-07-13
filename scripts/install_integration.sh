@@ -5,6 +5,8 @@ deb_location=$HOME/riaps-release
 pycom_name="riaps-pycom"
 core_name="riaps-core"
 external_name="riaps-externals"
+systemd_name="riaps-systemd"
+timesync_name="riaps-timesync"
 disco_link=/usr/local/bin/riaps_disco
 redis_disco=/usr/local/bin/riaps_disco_redis
 
@@ -136,6 +138,8 @@ parse_args()
     pycom_name=`echo "$pycom_name-$architecture"`
     core_name=`echo $core_name-$architecture`
     external_name=`echo $external_name-$architecture`
+    systemd_name=`echo $systemd_name-$architecture`
+    timesync_name=`echo $timesync_name-$architecture`
 
     pkg_option=`echo $PKG| tr '[:upper:]' '[:lower:]'`
     if [ "$PKG" = "" ]; then
@@ -239,18 +243,15 @@ uninstall_externals()
     fi
 }
 
-install_externals()
-{
-    install_deb_pkg $external_name
-}
-
 install_riaps_packages()
 {
     if [ "$pkg_option" = "all" ]; then
-	install_externals
+	install_deb_pkg $external_name
 	install_core
 	install_pycom
 	create_core_symlink
+	install_deb_pkg $systemd_name
+	install_deb_pkg $timesync_name
     elif [ "$pkg_option" = "pycom" ]; then
         install_pycom
     elif [ "$pkg_option" = "externals" ]; then
@@ -263,10 +264,12 @@ install_riaps_packages()
 uninstall_riaps_packages()
 {
     if [ "$pkg_option" = "all" ]; then
-        uninstall_core
-        uninstall_externals
+	uninstall_deb_pkg $timesync_name
+	uninstall_deb_pkg $systemd_name
         uninstall_pycom
+        uninstall_core
 	remove_core_symlink
+	uninstall_deb_pkg $external_name
     elif [ "$pkg_option" = "pycom" ]; then
         uninstall_pycom
     elif [ "$pkg_option" = "externals" ]; then
@@ -287,11 +290,11 @@ cpp_disco=/opt/riaps/$architecture/bin/rdiscoveryd
 if [ "$ACTION" = "uninstall" ]; then
 	uninstall_riaps_packages
 elif [ "$ACTION" = "install" ]; then
-	uninstall_riaps_packages
+	#uninstall_riaps_packages
 	install_riaps_packages
 fi
 
 
 
 echo "`date -u`"
-echo "RIAPS Install is complete"
+echo "RIAPS $ACTION is complete"
