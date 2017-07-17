@@ -69,7 +69,12 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # This will call the bootstrap.sh file after the virtual machine boots.
    config.vm.provision "file", source: "riaps_install_amd64.sh", destination: "riaps_install_amd64.sh"
-   config.vm.provision "file", source: "id_rsa.pub", destination: "id_rsa.pub"
-   config.vm.provision "file", source: "id_rsa.key", destination: "id_rsa.key"
+   config.vm.provision "file", source: "bbb_initial_keys", destination: "bbb_initial_keys"
    config.vm.provision "shell", :path => "bootstrap.sh", :args => "public_key=id_rsa.pub private_key=id_rsa.key"
+   if File.exist?("id_rsa.pub")
+     if File.exist?("id_rsa.key")
+        config.vm.provision "file", source: "id_rsa.key", destination: "id_rsa.key"
+        config.vm.provision "file", source: "id_rsa.pub", destination: "id_rsa.pub"
+     end
+   end
 end

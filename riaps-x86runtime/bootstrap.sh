@@ -3,7 +3,6 @@
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
-
 # Script functions
 
 # User must supply ssh key pair
@@ -23,9 +22,10 @@ parse_args()
 
     if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
     then 
-        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
-        exit
-    else 
+        echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        ssh-keygen -N "" -q -f $PRIVATE_KEY
+        mv $PRIVATE_KEY.pub $PUBLIC_KEY
+     else 
         echo "Found user ssh keys.  Will use them"
     fi 
 }
