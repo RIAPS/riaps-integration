@@ -3,23 +3,6 @@
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
-#generate_keys
-
-generate_keys()
-
-{
-    sudo -H -u $1 mkdir -p /home/$1/.ssh
-        sudo -H -u $1 mkdir /home/$1/.ssh
-        sudo -H -u $1  ssh-keygen -N "" -q -f /home/$1/.ssh/id_rsa.key
-        echo "generated ssh keys for $1"
-        sudo -H -u $1 cat /home/$1/.ssh/id_generated_rsa.pub >>/home/$1/.ssh/authorized_keys
-        chown $1:$1 /home/$1/.ssh/authorized_keys
-        chmod 600 /home/$1/.ssh/authorized_keys
-        echo "Generated new key and added it to authorized keys for $1"
-}
-
-
-
 # Script functions
 
 # User must supply ssh key pair
