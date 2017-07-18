@@ -168,13 +168,14 @@ EOT
 
 eclipse_func() {
     if [ ! -f "/home/$1/eclipse/eclipse" ]
+    then
        wget http://riaps.isis.vanderbilt.edu/riaps_eclipse.tar.gz
        tar -xzvf riaps_eclipse.tar.gz
        sudo mv eclipse /home/$1/.
        sudo chown -R $1:$1 /home/$1/eclipse
        sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
        eclipse_shortcut $1
-       else    
+    else    
 	   echo "eclipse already installed at /home/$1/eclipse"
            
     fi

@@ -2,7 +2,7 @@
 
 1. Download the latest BBB image from the RIAPS Wiki.
 
-    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/245/bbb_base_20170717.tar.gz
+    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/249/bbb_base_20170718.tar.gz
     
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
@@ -12,7 +12,7 @@
 
 5. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 ```
-        $ ./riaps_install_bbb.sh
+        $ ./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
 ```	
 
 6. You can ssh into the BBBs using the following:

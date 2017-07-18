@@ -53,7 +53,7 @@ Note:  The initial installation will take some time to complete and will continu
         $ sudo nano /usr/local/riaps/etc/riaps.conf
         ```   
     
-    - Uncomment the NIC name and match the desired ethernet interface name from 'ifconfig'
+    - Make sure the NIC name and match the desired ethernet interface name from 'ifconfig'
     
         ```
         # This is the main configuration file for RIAPS.  
@@ -66,11 +66,13 @@ Note:  The initial installation will take some time to complete and will continu
         send_timeout = 1000
 
         # NIC name
-        # nic_name = enp0s8
+        nic_name = enp0s8
         ```   
 
 7. Save your SSH keys in a secure spot for use in the future (if needed)
    - Copy your ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa.key files to a location you can find in the future, preferably in a location outside the VM.
+
+8.  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
 
 # Securing Communication Between the VM and BBBs
 Once all the initial BBB configuration is complete, you can run the following script on the VM to secure the communication between the VM and the BBB with the ssh keys configured on your VM.  Where xxx.xxx.xxx.xxx is the IP address of the BBB on your network.  Make sure you are logged in as **riaps** user.  This will need to be repeated for all BBBs (or use a fabric script to assist)
