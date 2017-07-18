@@ -89,7 +89,6 @@ If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
 - Update the contents of the 'riaps_vbox' folder used to create the original Virtual Machine
-    Note:  if you want to install your own ssh keys after a VM is setup, place the keys here and follow the rest of the steps
 - In a command line window, go back to that 'riaps_vbox' folder 
 - Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
@@ -106,7 +105,6 @@ If you want to only update the RIAPS platform, follow these steps:
 2. Run the update script
 
     ```
-    $ sudo apt-get update
     $ ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
     ```
     
