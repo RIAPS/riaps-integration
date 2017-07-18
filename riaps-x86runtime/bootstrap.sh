@@ -222,7 +222,7 @@ setup_ssh_keys () {
     sudo -H -u $1 cat /home/$1/.ssh/id_rsa.pub >> /home/$1/.ssh/authorized_keys
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
-    sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
+    sudo -H -u $1 chmod 400 /home/$1/.ssh/id_rsa.key
     sudo cp -r bbb_initial_keys /home/$1/.
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
     sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
