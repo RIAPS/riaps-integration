@@ -192,6 +192,7 @@ install_redis () {
     echo "installed redis"
    else
      echo "redis already installed. skipping"
+   fi
 }
 
 install_fabric() {
