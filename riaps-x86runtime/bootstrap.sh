@@ -19,14 +19,14 @@ parse_args()
             *)
         esac
     done
-
-    if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
+    pwd
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ] 
     then 
-        echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
-        ssh-keygen -N "" -q -f ~/$PRIVATE_KEY
-        mv ~/$PRIVATE_KEY.pub ~/$PUBLIC_KEY
-     else 
         echo "Found user ssh keys.  Will use them"
+     else 
+        echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        ssh-keygen -N "" -q -f $PRIVATE_KEY
+        mv $PRIVATE_KEY.pub $PUBLIC_KEY
     fi 
 }
 
@@ -235,13 +235,13 @@ setup_ssh_keys () {
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
-    sudo -H -u  cp -r bbb_initial_keys /home/$1/.
+    sudo cp -r bbb_initial_keys /home/$1/.
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
-    sudo chmod 600 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
     sudo cp secure_keys.sh /home/$1/.
-    sudo chmod +x /home/$1/secure_keys.sh
     sudo chown $1:$1 /home/$1/secure_keys.sh 
-    echo "Added user key to authorized keys for $1"
+	sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
+    echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
 
