@@ -53,7 +53,7 @@ Note:  The initial installation will take some time to complete and will continu
         $ sudo nano /usr/local/riaps/etc/riaps.conf
         ```   
     
-    - Uncomment the NIC name and match the desired ethernet interface name from 'ifconfig'
+    - Make sure the NIC name and match the desired ethernet interface name from 'ifconfig'
     
         ```
         # This is the main configuration file for RIAPS.  
@@ -66,7 +66,7 @@ Note:  The initial installation will take some time to complete and will continu
         send_timeout = 1000
 
         # NIC name
-        # nic_name = enp0s8
+        nic_name = enp0s8
         ```   
 
 7. Save your SSH keys in a secure spot for use in the future (if needed)
