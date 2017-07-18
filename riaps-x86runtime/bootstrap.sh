@@ -240,7 +240,7 @@ setup_ssh_keys () {
     sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
     sudo cp secure_keys.sh /home/$1/.
     sudo chown $1:$1 /home/$1/secure_keys.sh 
-	sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
+    sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
     echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
