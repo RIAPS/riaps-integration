@@ -260,7 +260,7 @@ cmake_func
 timesync_requirements
 python_install
 cython_install
-eclipse_func $RIAPSAPPDEVELOPER
+#eclipse_func $RIAPSAPPDEVELOPER
 install_redis
 curl_func
 install_fabric
