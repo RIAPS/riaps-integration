@@ -76,7 +76,7 @@ Note:  The initial installation will take some time to complete and will continu
 Once all the initial BBB configuration is complete, you can run the following script on the VM to secure the communication between the VM and the BBB with the ssh keys configured on your VM.  Where xxx.xxx.xxx.xxx is the IP address of the BBB on your network.  This will need to be repeated for all BBBs (or use a fabric script to assist)
 
         ```
-        $ ./secure_keys.sh bbb-initial.key id_rsa.key id_rsa.pub xxx.xxx.xxx.xxx
+        $ ./secure_keys.sh bbb_initial_keys/bbb_initial.key ~/.ssh/id_rsa.key ~/.ssh/id_rsa.pub xxx.xxx.xxx.xxx
         ```
 
 # Installing Multiple Virtual Machines (if desired)
