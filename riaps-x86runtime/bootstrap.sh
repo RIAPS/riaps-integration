@@ -181,6 +181,7 @@ eclipse_func() {
 }
 
 install_redis () {
+   if [ ! -f "/usr/local/bin/redis-server" ]; then
     wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
     tar xzf redis-3.2.5.tar.gz 
     make -C redis-3.2.5 
@@ -188,6 +189,8 @@ install_redis () {
     rm -rf redis-3.2.5 
     rm -rf redis-3.2.5.tar.gz 
     echo "installed redis"
+   else
+     echo "redis already installed. skipping"
 }
 
 install_fabric() {
