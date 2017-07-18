@@ -15,12 +15,7 @@
         $ ./riaps_install_bbb.sh
 ```	
 
-6. Reboot the BBB.
-```
-        $ sudo reboot
-```
-
-7. When the BBB is rebooted, you can ssh using the following:
+6. You can ssh into the BBBs using the following:
 
 	```
 	Username:  riaps
@@ -33,7 +28,7 @@
 	            where xxxx is the hostname seen when logging into the BBBs
 	```
 	
-8. Secure communication between the Host Environment and the BBBs by following the "Securing Communication Between the VM and BBBs" instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime.  Once this process completes, the host environment will automatically login to the bones when using ssh utilizing your ssh keys.
+7. Secure communication between the Host Environment and the BBBs by following the "Securing Communication Between the VM and BBBs" instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime.  Once this process completes, the host environment will automatically login to the bones when using ssh utilizing your ssh keys.
   
 # Update RIAPS Platform Packages on Existing BBBs
 
