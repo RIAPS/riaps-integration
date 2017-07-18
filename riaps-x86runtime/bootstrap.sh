@@ -169,7 +169,7 @@ EOT
 eclipse_func() {
     if [ ! -f "/home/$1/eclipse/eclipse" ]
     then
-	if [ ! -f "/opt/eclipse/eclipse" ]
+	 if [ ! -f "/opt/eclipse/eclipse" ]
     	then
             echo "eclipse not found"
             sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
@@ -246,9 +246,11 @@ setup_ssh_keys () {
 
 
 # Start of script actions
+set -e
 parse_args $@
 print_help
 user_func
+setup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
 vim_func
 java_func
@@ -264,7 +266,7 @@ curl_func
 install_fabric
 install_firefox
 install_riaps
-setup_ssh_keys $RIAPSAPPDEVELOPER
+
 
 
 
