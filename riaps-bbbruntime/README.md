@@ -12,7 +12,7 @@
 
 5. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 ```
-        $ ./riaps_install_bbb.sh
+        $ ./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
 ```	
 
 6. You can ssh into the BBBs using the following:
