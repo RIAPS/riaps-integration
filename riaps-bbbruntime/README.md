@@ -1,98 +1,49 @@
-# How to Create a BBB Base Image from Ubuntu Pre-configured Image
+# Setting up the BBB images
 
-This work should be done on a Linux machine or VM.  We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
+1. Download the latest BBB image from the RIAPS Wiki.
 
-1. Download a complete pre-configured image (Ubuntu 16.04) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
+    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/245/bbb_base_20170717.tar.gz
+    
+2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
-    ```
-    $ wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
-    ```
+3. Put the SD Card into the BBB and boot it up.
 
-2. Unpack image and change into the directory
+4. Log into the "riaps" account on the BBB.
 
-    ```
-    $ tar xf ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
-    $ cd ubuntu-16.04.2-console-armhf-2017-06-12
-    ```
+5. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+```
+        $ ./riaps_install_bbb.sh
+```	
 
-    ```
-    Username:  ubuntu
-    Password:  temppwd
-    Kernel:    v4.9.xx-ti-rxx (with real-time features)
-    ```
-
-3. Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
-
-    ```
-    $ sudo ./setup_sdcard.sh --probe-mmc
-    ```
-  
-4. Install image on SD card, where /dev/sdX is the location of the SD Card 
-
-    ```
-    $ sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
-    ```
-  
-# Installation of RIAPS on Pre-configured BBB 
-
-1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being '**ubuntu**'
-
-2. Download the latest released installation package (riaps-bbbruntime.tar.gz) from https://github.com/RIAPS/riaps-integration/releases to the BBB.  See the helpful hints section below for ideas on how best to get this image to the BBB.
-
-3. On the BBB, unpack the installation and move into the package
-
-	```
-	$ tar xf riaps-bbbruntime.tar.gz
-	$ cd riaps-bbbruntime
-	```
-
-4. Download your rsa ssh key pair (.pub and .key) to the BBB in the '/home/ubuntu/riaps-bbbruntime/' directory.  If you need to generate keys, use the following command.  The same key pair should be used on the BBB and the host development machine (VM).  This keygen command will create a private key with no extension, just add .key to the end.
-
-	```
-	$ ssh-keygen -t rsa
-	$ mv id_rsa id_rsa.key
-	```
-
-5. Move to 'root' user
-	
-	```
-	$ sudo su   
-	```	   
-		
-6. Run the installation script.  Provide the name of the ssh key pair added in step 5, your key filename can be any name desired.  The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received.  If you have any issues during installation, this is a good file to send with your questions.
-	
-	```
-	$ ./bootstrap.sh public_key=id_rsa.pub private_key=id_rsa.key 2>&1 | tee install-bbb.log
-	```	
-	
-7. Reboot the Beaglebone Black
-
-	```
-	$ reboot   
-	```
-	
-8. When the BBB is rebooted, you can ssh using the following:
+6. You can ssh into the BBBs using the following:
 
 	```
 	Username:  riaps
 	Password:  riaps
+	
+	$ ssh riaps@xxx.xxx.xxx.xxx
+	            where xxx.xxx.xxx.xxx is the IP address of the BBB
+	      or
+	$ ssh riaps@bbb-xxxx
+	            where xxxx is the hostname seen when logging into the BBBs
 	```
 	
+7. Secure communication between the Host Environment and the BBBs by following the "Securing Communication Between the VM and BBBs" instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime.  Once this process completes, the host environment will automatically login to the bones when using ssh utilizing your ssh keys.
+  
 # Update RIAPS Platform Packages on Existing BBBs
 
-1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB
+1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB.
 
-2. Run the update script
+2. Run the update script.
 
 	```
 	$ sudo apt-get update
-	$ ./riaps_install_bbb.sh 2>&1 | tee install-riaps-update-bbb.log
+	$ sudo apt-get update 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
 	```
-Note:  If you want to update the SSH keys after building the BBB images, remove the existing keys from ~/.ssh/ and /usr/local/riaps/keys/.  Then repeat steps 4-8 of the "Installation of RIAPS on Pre-configured BBB" instructions.
 
 # Helpful Hints 
 
-1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB
+1. You can download the latest release to your VM and then 'scp' it over to the BBB using the following, substituting the 192.168.1.xxx with the IP address of your BBB.
     
 	```
         $ scp riaps-bbbruntime.tar.gz ubuntu@192.168.1.xxx:

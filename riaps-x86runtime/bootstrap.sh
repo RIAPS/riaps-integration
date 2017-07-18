@@ -19,14 +19,14 @@ parse_args()
             *)
         esac
     done
-
-    if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
+    pwd
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ] 
     then 
+        echo "Found user ssh keys.  Will use them"
+     else 
         echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
         ssh-keygen -N "" -q -f $PRIVATE_KEY
         mv $PRIVATE_KEY.pub $PUBLIC_KEY
-     else 
-        echo "Found user ssh keys.  Will use them"
     fi 
 }
 
@@ -169,7 +169,7 @@ EOT
 eclipse_func() {
     if [ ! -f "/home/$1/eclipse/eclipse" ]
     then
-	if [ ! -f "/opt/eclipse/eclipse" ]
+	 if [ ! -f "/opt/eclipse/eclipse" ]
     	then
             echo "eclipse not found"
             sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
@@ -235,15 +235,22 @@ setup_ssh_keys () {
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
-    
-    echo "Added user key to authorized keys for $1"
+    sudo cp -r bbb_initial_keys /home/$1/.
+    sudo chown $1:$1 -R /home/$1/bbb_initial_keys
+    sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo cp secure_keys.sh /home/$1/.
+    sudo chown $1:$1 /home/$1/secure_keys.sh 
+    sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
+    echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
 
 # Start of script actions
+set -e
 parse_args $@
 print_help
 user_func
+setup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
 vim_func
 java_func
@@ -253,13 +260,13 @@ cmake_func
 timesync_requirements
 python_install
 cython_install
-eclipse_func $RIAPSAPPDEVELOPER
+#eclipse_func $RIAPSAPPDEVELOPER
 install_redis
 curl_func
 install_fabric
 install_firefox
 install_riaps
-setup_ssh_keys $RIAPSAPPDEVELOPER
+
 
 
 
