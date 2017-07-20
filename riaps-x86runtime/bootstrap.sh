@@ -234,6 +234,13 @@ setup_ssh_keys () {
     echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
+add_set_tests () {
+    sudo -H -u $1 mkdir -p /home/$1/env_setup_tests/WeatherMonitor
+    sudo cp -r env_setup_tests/WeatherMonitor /home/$1/env_setup_tests/
+    sudo chown $1:$1 -R /home/$1/env_setup_tests/WeatherMonitor
+    echo "Added development environment tests"
+}
+
 
 # Start of script actions
 set -e
@@ -256,6 +263,7 @@ curl_func
 install_fabric
 install_firefox
 install_riaps
+add_set_tests $RIAPSAPPDEVELOPER
 
 
 
