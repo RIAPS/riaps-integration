@@ -212,6 +212,7 @@ install_riaps() {
     sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
+    sudo chmod +x ./riaps_install_amd64.sh
     ./riaps_install_amd64.sh
 }
 
