@@ -94,7 +94,7 @@ This folder contains a generic application to test that the development environm
    INFO:13:17:10,592:TempSensor:on_clock(): Temperature - 67, PID 2580, IP 192.168.1.101, Thu Jul 20 13:17:10 2017
    INFO:13:17:10,593:TempMonitor:on_tempupdate(): Temperature:67, PID Thu Jul 20 13:17:10 2017, from 192.168.1.101, Timestamp:Thu Jul 20    13:17:10 2017
 
-```
+   ```
        
 ## Second Test a Single BBB Talks with the VM
 1.  SSH into the BBB, where xxxx refers to the hostname that you see when you log into the BBB.  If you do not know the hostname yet, you can use the IP address instead (xxx.xxx.xxx.xxx).
@@ -120,7 +120,7 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBB.
 
-    *  ![Control GUI](https://github.com/RIAPS/riaps-integration/blob/devenv_tests/riaps x86runtime/env_setup_tests/1BBB_app_test.png.png)
+   ![Control GUI](1BBB_app_test.png.png)
       
     ```
     Starting RIAPS DISCOVERY SERVICE v0.8.0
