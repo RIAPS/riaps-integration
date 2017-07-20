@@ -1,7 +1,7 @@
 This folder contains a generic application to test that the development environment is setup and able to talk with the configured BBBs.  If you do not see the expected results, please send an email to riap@list.isis.vanderbilt.edu describing the situation and any include any output log information.
 
 ## First Test VM with application on local node (VM)
-1. Open 3 terminal windows
+1. Open 3 terminal windows and run the following command in the separate windows
 
    * ``` rpyc_registry ```
    
@@ -100,7 +100,7 @@ This folder contains a generic application to test that the development environm
     
     ```
     
-2.  On the VM, open 2 terminal windows
+2.  On the VM, open 2 terminal windows and run the following command in the separate windows
    
     * ``` rpyc_registry ```
    
@@ -116,7 +116,7 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBB.
 
-   ![GUI w/ 1 BBB](1BBB_app_test.png.png)
+    ![GUI w/ 1 BBB](1BBB_app_test.png)
       
     ```
     Starting RIAPS DISCOVERY SERVICE v0.8.0
@@ -148,7 +148,7 @@ This folder contains a generic application to test that the development environm
   
     ``` ssh riaps@bbb-xxxx.local ```
     
-2.  On the VM, open 2 terminal windows
+2.  On the VM, open 2 terminal windows and run the following command in the separate windows
    
     * ``` rpyc_registry ```
    
