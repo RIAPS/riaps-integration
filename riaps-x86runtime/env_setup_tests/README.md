@@ -3,11 +3,11 @@ This folder contains a generic application to test that the development environm
 ## First Test VM with application on local node (VM)
 1. Open 3 terminal windows
 
-   a. ``` rpyc_registry ```
+   * ``` rpyc_registry ```
    
-   b. ``` riaps_ctrl ```
+   * ``` riaps_ctrl ```
    
-   c. ``` riaps_deplo ```
+   * ``` riaps_deplo ```
 
 2. With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your VM added as a node.
     
@@ -16,8 +16,6 @@ This folder contains a generic application to test that the development environm
 3. In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_vm_only.depl** file.  Then **Load** (button on the right) and click on the loaded WeatherMonitor application to **Launch** it.
     
 4. When you launch this application, you should see the following output on the RIAPS control GUI and from the different windows.
-   
-   * Control GUI
    
    ![GUI w/ VM Only](VM_App_running.png)
    
@@ -104,9 +102,9 @@ This folder contains a generic application to test that the development environm
     
 2.  On the VM, open 2 terminal windows
    
-   a. ``` rpyc_registry ```
+    * ``` rpyc_registry ```
    
-   b. ``` riaps_ctrl ```
+    * ``` riaps_ctrl ```
    
 3.  On the BBB, run ``` riaps_deplo ```
 
@@ -152,9 +150,9 @@ This folder contains a generic application to test that the development environm
     
 2.  On the VM, open 2 terminal windows
    
-   a. ``` rpyc_registry ```
+    * ``` rpyc_registry ```
    
-   b. ``` riaps_ctrl ```
+    * ``` riaps_ctrl ```
    
 3.  On the BBB, run ``` riaps_deplo ```
 
@@ -166,8 +164,6 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBBs.
 
-    * Control GUI
-    
     ![GUI w/ several BBBs](ManyBBBs_app_test.png)
      
      * For BBB that is only a WeatherIndicator, which is at 192.168.1.104
