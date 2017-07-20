@@ -11,17 +11,15 @@ This folder contains a generic application to test that the development environm
 
 2. With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your VM added as a node.
     
-   ![What is this](something.png)
+   ![Initial GUI](Initial_Ctrl_App_VM.png)
     
 3. In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_vm_only.depl** file.  Then **Load** (button on the right) and click on the loaded WeatherMonitor application to **Launch** it.
-    
-    MM TODO:  add this copy to the bootstrap code
     
 4. When you launch this application, you should see the following output on the RIAPS control GUI and from the different windows.
    
    * Control GUI
    
-   ![What is this](something.png)
+   ![GUI w/ VM Only](VM_App_running.png)
    
    ```
    riaps@riapsvbox719:~$ rpyc_registry.py 
@@ -120,7 +118,7 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBB.
 
-   ![Control GUI](1BBB_app_test.png.png)
+   ![GUI w/ 1 BBB](1BBB_app_test.png.png)
       
     ```
     Starting RIAPS DISCOVERY SERVICE v0.8.0
@@ -170,7 +168,7 @@ This folder contains a generic application to test that the development environm
 
     * Control GUI
     
-    ![What is this](something.png)
+    ![GUI w/ several BBBs](ManyBBBs_app_test.png)
      
      * For BBB that is only a WeatherIndicator, which is at 192.168.1.104
 
