@@ -11,7 +11,7 @@ This folder contains a generic application to test that the development environm
 
 2. With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your VM added as a node.
     
-    MM TODO:  TBD - add control GUI image
+   ![What is this](something.png)
     
 3. In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_vm_only.depl** file.  Then **Load** (button on the right) and click on the loaded WeatherMonitor application to **Launch** it.
     
@@ -120,9 +120,7 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBB.
 
-    * Control GUI
-    
-    ![What is this](something.png)
+    *  ![Control GUI](1BBB_app_test.png)
       
     ```
     Starting RIAPS DISCOVERY SERVICE v0.8.0
