@@ -120,7 +120,7 @@ This folder contains a generic application to test that the development environm
 
 7.  When you launch this application, you should see the following output on the RIAPS control GUI and on the BBB.
 
-    *  ![Control GUI](1BBB_app_test.png)
+    *  ![Control GUI](https://github.com/RIAPS/riaps-integration/blob/devenv_tests/riaps x86runtime/env_setup_tests/1BBB_app_test.png.png)
       
     ```
     Starting RIAPS DISCOVERY SERVICE v0.8.0
