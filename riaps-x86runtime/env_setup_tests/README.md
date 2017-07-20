@@ -13,7 +13,7 @@ This folder contains a generic application to test that the development environm
     
     MM TODO:  TBD - add image
     
-3. In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_vm_only.depl** file.
+3. In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_vm_only.depl** file.  Then **Load** (button on the right) and click on the loaded WeatherMonitor application to **Launch** it.
     
     MM TODO:  add this copy to the bootstrap code
     
@@ -22,9 +22,14 @@ This folder contains a generic application to test that the development environm
 ```
    riaps@riapsvbox719:~$ rpyc_registry.py 
    DEBUG:REGSRV/UDP/18811:server started on 0.0.0.0:18811
-   DEBUG:REGSRV/UDP/18811:registering 10.0.2.15:8888 as RIAPSCONTROL
+   DEBUG:REGSRV/UDP/18811:registering 192.168.1.101:8888 as RIAPSCONTROL
    DEBUG:REGSRV/UDP/18811:querying for 'RIAPSCONTROL'
-   DEBUG:REGSRV/UDP/18811:replying with [('10.0.2.15', 8888)]
+   DEBUG:REGSRV/UDP/18811:replying with [('192.168.1.101', 8888)]
+   DEBUG:REGSRV/UDP/18811:querying for 'RIAPSCONTROL'
+   DEBUG:REGSRV/UDP/18811:replying with [('192.168.1.101', 8888)]
+   DEBUG:REGSRV/UDP/18811:registering 192.168.1.101:8888 as RIAPSCONTROL
+   DEBUG:REGSRV/UDP/18811:registering 192.168.1.101:8888 as RIAPSCONTROL
+   
    
    riaps@riapsvbox719:~$ riaps_ctrl 
    2436:M 20 Jul 11:01:25.336 * Increased maximum number of open files to 10032 (it was originally set to 1024).
@@ -46,19 +51,45 @@ This folder contains a generic application to test that the development environm
              `-._        _.-'                                           
                  `-.__.-'                                               
 
-   2436:M 20 Jul 11:01:25.338 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set    to the lower value of 128.
+   2436:M 20 Jul 11:01:25.338 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set
+   to the lower value of 128.
    2436:M 20 Jul 11:01:25.338 # Server started, Redis version 3.2.5
-   2436:M 20 Jul 11:01:25.338 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this    issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
-   2436:M 20 Jul 11:01:25.338 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency  and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as   root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+   2436:M 20 Jul 11:01:25.338 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this    issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this
+   to take effect.
+   2436:M 20 Jul 11:01:25.338 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency
+   and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as
+   root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
    2436:M 20 Jul 11:01:25.338 * The server is now ready to accept connections on port 6379
+   WARNING:2017-07-20 13:17:00,291:riaps.ctrl.ctrl_tab:added key /usr/local/riaps/keys/id_rsa.key
+   WARNING:2017-07-20 13:17:00,292:riaps.ctrl.ctrl_tab:added key /home/riaps/.ssh/id_rsa.key
+   WARNING:2017-07-20 13:17:00,292:riaps.ctrl.ctrl_tab:Trying user riaps ssh-agent key 7feb12cc1603be715fb8f95d43457627
+   WARNING:2017-07-20 13:17:00,339:riaps.ctrl.ctrl_tab:Trying user riaps ssh-agent key 48a8cab1f25160567dc00138863b032a
+
 
    riaps@riapsvbox719:~$ riaps_deplo
    Starting RIAPS DISCOVERY SERVICE v0.8.0
-    * 
+    * 192.168.1.101
     * 080027557bad
    Start DHT node.
    DHT node started.
    Stored ips: 10.0.2.15; 
+   INFO:13:17:00,587:TempSensor:(PID 2580, IP 192.168.1.101)-starting TempSensor, Thu Jul 20 13:17:00 2017
+   INFO:13:17:00,587:TempSensor:Initial temp:65, Thu Jul 20 13:17:00 2017
+   Register actor with PID - 2580 : /WeatherMonitor/WeatherIndicator/
+   Register service: /WeatherMonitor/TempData/pub
+   INFO:13:17:00,618:TempMonitor:(PID 2582, IP 192.168.1.101)-starting TempMonitor, Thu Jul 20 13:17:00 2017
+   Register actor with PID - 2582 : /WeatherMonitor/WeatherReceiver/
+   Get: /WeatherMonitor/TempData/pub
+   Get results sent to discovery service
+   Get results were sent to the client: /WeatherMonitor/WeatherReceiver/
+   Changes sent to discovery service: /WeatherMonitor/TempData/pub
+   Search for registered actor: /WeatherMonitor/WeatherReceiver/
+   Port update sent to the client: /WeatherMonitor/WeatherReceiver/
+   INFO:13:17:05,592:TempSensor:on_clock(): Temperature - 66, PID 2580, IP 192.168.1.101, Thu Jul 20 13:17:05 2017
+   INFO:13:17:05,592:TempMonitor:on_tempupdate(): Temperature:66, PID Thu Jul 20 13:17:05 2017, from 192.168.1.101, Timestamp:Thu Jul 20    13:17:05 2017
+   INFO:13:17:10,592:TempSensor:on_clock(): Temperature - 67, PID 2580, IP 192.168.1.101, Thu Jul 20 13:17:10 2017
+   INFO:13:17:10,593:TempMonitor:on_tempupdate(): Temperature:67, PID Thu Jul 20 13:17:10 2017, from 192.168.1.101, Timestamp:Thu Jul 20    13:17:10 2017
+
 ```
        
 ## Second Test a Single BBB Talks with the VM
