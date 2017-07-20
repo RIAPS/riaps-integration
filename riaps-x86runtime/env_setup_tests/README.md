@@ -19,17 +19,47 @@ This folder contains a generic application to test that the development environm
     
 4. When you launch this application, you should see the following output from the different windows.
    
-   a. ``` rpyc_registry ```
+```
+   riaps@riapsvbox719:~$ rpyc_registry.py 
+   DEBUG:REGSRV/UDP/18811:server started on 0.0.0.0:18811
+   DEBUG:REGSRV/UDP/18811:registering 10.0.2.15:8888 as RIAPSCONTROL
+   DEBUG:REGSRV/UDP/18811:querying for 'RIAPSCONTROL'
+   DEBUG:REGSRV/UDP/18811:replying with [('10.0.2.15', 8888)]
    
-       MM TODO:  TBD - add image or text
-       
-   b. ``` riaps_ctrl ```
-   
-       MM TODO:  TBD - add image or text
-       
-   c. ``` riaps_deplo ```
-   
-       MM TODO:  TBD - add image or text
+   riaps@riapsvbox719:~$ riaps_ctrl 
+   2436:M 20 Jul 11:01:25.336 * Increased maximum number of open files to 10032 (it was originally set to 1024).
+                   _._                                                  
+              _.-``__ ''-._                                             
+         _.-``    `.  `_.  ''-._           Redis 3.2.5 (00000000/0) 64 bit
+     .-`` .-```.  ```\/    _.,_ ''-._                                   
+    (    '      ,       .-`  | `,    )     Running in standalone mode
+    |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379 
+    |    `-._   `._    /     _.-'    |     PID: 2436
+     `-._    `-._  `-./  _.-'    _.-'                                   
+    |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+    |    `-._`-._        _.-'_.-'    |           http://redis.io        
+     `-._    `-._`-.__.-'_.-'    _.-'                                   
+    |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+    |    `-._`-._        _.-'_.-'    |                                  
+     `-._    `-._`-.__.-'_.-'    _.-'                                   
+         `-._    `-.__.-'    _.-'                                       
+             `-._        _.-'                                           
+                 `-.__.-'                                               
+
+   2436:M 20 Jul 11:01:25.338 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set    to the lower value of 128.
+   2436:M 20 Jul 11:01:25.338 # Server started, Redis version 3.2.5
+   2436:M 20 Jul 11:01:25.338 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this    issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+   2436:M 20 Jul 11:01:25.338 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency  and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as   root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+   2436:M 20 Jul 11:01:25.338 * The server is now ready to accept connections on port 6379
+
+   riaps@riapsvbox719:~$ riaps_deplo
+   Starting RIAPS DISCOVERY SERVICE v0.8.0
+    * 
+    * 080027557bad
+   Start DHT node.
+   DHT node started.
+   Stored ips: 10.0.2.15; 
+```
        
 ## Second Test a Single BBB Talks with the VM
 1.  SSH into the BBB, where xxxx refers to the hostname that you see when you log into the BBB.  If you do not know the hostname yet, you can use the IP address instead (xxx.xxx.xxx.xxx).
