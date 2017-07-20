@@ -4,7 +4,9 @@ This folder contains a generic application to test that the development environm
 1. Open 3 terminal windows
 
    a. ``` rpyc_registry ```
+   
    b. ``` riaps_ctrl ```
+   
    c. ``` riaps_deplo ```
 
 2. With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your VM added as a node.
@@ -33,8 +35,11 @@ This folder contains a generic application to test that the development environm
 1.  SSH into the BBB, where xxxx refers to the hostname that you see when you log into the BBB.  If you do not know the hostname yet, you can use the IP address instead (xxx.xxx.xxx.xxx).
     ``` ssh riaps@bbb-xxxx.local ```
 2.  On the VM, open 2 terminal windows
+   
    a. ``` rpyc_registry ```
+   
    b. ``` riaps_ctrl ```
+   
 3.  On the BBB, run ``` riaps_deplo ```
 4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your BBB added as a node.
         
@@ -51,8 +56,11 @@ This folder contains a generic application to test that the development environm
 1.  SSH into the BBBs, where xxxx refers to the hostname that you see when you log into the BBBs.
     ``` ssh riaps@bbb-xxxx.local ```
 2.  On the VM, open 2 terminal windows
+   
    a. ``` rpyc_registry ```
+   
    b. ``` riaps_ctrl ```
+   
 3.  On the BBB, run ``` riaps_deplo ```
 4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your BBB added as a node.
         
