@@ -1,0 +1,4 @@
+app WeatherMonitor {
+	on all WeatherReceiver; 
+	on all WeatherIndicator;
+}
