@@ -2,6 +2,7 @@ This folder contains a generic application to test that the development environm
 
 ## First Test VM with application on local node (VM)
 1. Open 3 terminal windows
+
    a. ``` rpyc_registry ```
    b. ``` riaps_ctrl ```
    c. ``` riaps_deplo ```
@@ -15,6 +16,7 @@ This folder contains a generic application to test that the development environm
     MM TODO:  add this copy to the bootstrap code
     
 4. When you launch this application, you should see the following output from the different windows.
+   
    a. ``` rpyc_registry ```
    
        MM TODO:  TBD - add image or text
