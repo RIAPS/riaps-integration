@@ -80,6 +80,10 @@ Once all the initial BBB configuration is complete, you can run the following sc
         ```
         $ ./secure_keys.sh bbb_initial_keys/bbb_initial.key ~/.ssh/id_rsa.key ~/.ssh/id_rsa.pub xxx.xxx.xxx.xxx
         ```
+        
+# Testing Development Environment Setup
+
+To test your environment works with your BBBs, follow the instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime/env_setup_tests.
 
 # Installing Multiple Virtual Machines (if desired)
 If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change the following to new names:
