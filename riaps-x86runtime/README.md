@@ -94,7 +94,7 @@ If you want to keep an older RIAPS Virtual Machine and install a new one, in the
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
-- Update the contents of the 'riaps-x86runtime' folder used to create the original Virtual Machine
+- Update the contents of the 'riaps-x86runtime' folder used to create the original Virtual Machine with the latest release by downloading the RIAPS development box setup file (riaps-x86runtime.tar.gz found at https://github.com/RIAPS/riaps-integration/releases)
 - In a command line window, go back to that 'riaps-x86runtime' folder 
 - Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
