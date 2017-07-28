@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 set -e 
 
-sudo apt-get install riaps-externals-armhf -y
-echo "installed externals"
-sudo apt-get install riaps-core-armhf -y
-echo "installed core"
-sudo apt-get install riaps-pycom-armhf -y
-echo "installed pycom"
-sudo apt-get install riaps-systemd-armhf -y
-echo "installed services"
-sudo apt-get install riaps-timesync-armhf -y
-echo "installed timesync"
+sudo apt-get install rdate
+sudo rdate -n -4 time-a.nist.gov
+
+sudo apt-get update
+sudo apt-get install riaps-externals-armhf riaps-core-armhf riaps-pycom-armhf riaps-systemd-armhf riaps-timesync-armhf -y
 echo "installed RIAPS platform"

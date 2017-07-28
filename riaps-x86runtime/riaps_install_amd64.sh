@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 set -e 
 
-sudo apt-get install riaps-externals-amd64 -y
-echo "installed externals"
-sudo apt-get install riaps-core-amd64 -y
-echo "installed core"
-sudo apt-get install riaps-pycom-amd64 -y
-echo "installed pycom"
-sudo apt-get install riaps-systemd-amd64 -y
-echo "installed services"
-sudo apt-get install riaps-timesync-amd64 -y
-echo "installed timesync"
+sudo apt-get install rdate
+sudo rdate -n -4 time-a.nist.gov
+
+sudo apt-get update
+sudo apt-get install riaps-externals-amd64 riaps-core-amd64 riaps-pycom-amd64 riaps-systemd-amd64 riaps-timesync-amd64 -y
 echo "installed RIAPS platform"
+ 

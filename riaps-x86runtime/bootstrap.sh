@@ -3,7 +3,6 @@
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
-
 # Script functions
 
 # User must supply ssh key pair
@@ -20,13 +19,14 @@ parse_args()
             *)
         esac
     done
-
-    if [ -z "$PUBLIC_KEY" ] || [ -z "$PRIVATE_KEY" ] 
+    pwd
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ] 
     then 
-        echo "Please supply a public and private key - public_key=<name>.pub private_key=<name>.key"
-        exit
-    else 
         echo "Found user ssh keys.  Will use them"
+    else 
+        echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        ssh-keygen -N "" -q -f $PRIVATE_KEY
+        mv $PRIVATE_KEY.pub $PUBLIC_KEY
     fi 
 }
 
@@ -57,7 +57,7 @@ user_func () {
 # Configure for cross functional compilation
 cross_setup() {
     # Add armhf repositories
-    sudo apt-get install software-properties-common apt-transport-https -y	
+    sudo apt-get install software-properties-common apt-transport-https -y      
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
@@ -90,7 +90,7 @@ cross_setup() {
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse" || true
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
 
- 
+    
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
@@ -151,51 +151,38 @@ curl_func () {
 
 
 eclipse_shortcut() {
-   shortcut=/home/$1/Desktop/Eclipse.desktop
-   sudo -H -u $1 mkdir -p /home/$1/Desktop
-   sudo -H -u $1 cat <<EOT >$shortcut
+    shortcut=/home/$1/Desktop/Eclipse.desktop
+    sudo -H -u $1 mkdir -p /home/$1/Desktop
+    sudo -H -u $1 cat <<EOT >$shortcut
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
 Name=Eclipse
 Name[en_US]=Eclipse
-Icon=/opt/eclipse/icon.xpm
-Exec=/opt/eclipse/eclipse -data /home/$1/workspace
+Icon=/home/$1/eclipse/icon.xpm
+Exec=/home/$1/eclipse/eclipse -data /home/$1/workspace
 EOT
 
-   sudo chmod +x /home/$1/Desktop/Eclipse.desktop
+    sudo chmod +x /home/$1/Desktop/Eclipse.desktop
 }
 
 eclipse_func() {
     if [ ! -f "/home/$1/eclipse/eclipse" ]
     then
-	if [ ! -f "/opt/eclipse/eclipse" ]
-    	then
-            echo "eclipse not found"
-            sudo wget http://ftp.osuosl.org/pub/eclipse/technology/epp/downloads/release/neon/2/eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
-            sudo tar xfz eclipse-java-neon-2-linux-gtk-x86_64.tar.gz -C /opt
-            #create eclipse shortcut
-            eclipse_shortcut $1
-            #install plugins
-            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://pydev.org/updates -installIU "org.python.pydev.feature.feature.group, org.python.pydev.mylyn.feature.feature.group, org.python.pydev.feature.source.feature.group"    
-            #GIT
-            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/releases/neon/ -installIU "org.eclipse.egit.feature.group, org.eclipse.jgit.feature.group"	
-            #JSON Editor
-            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository http://boothen.github.io/Json-Eclipse-Plugin/ -installIU "jsonedit-feature.feature.group"	
-            #Subclipse
-            sudo /opt/eclipse/eclipse -clean  -consolelog  -noSplash -application org.eclipse.equinox.p2.director -repository https://dl.bintray.com/subclipse/releases/subclipse/latest/ -installIU "org.tigris.subversion.subclipse.feature.group, net.java.dev.jna.feature.group, org.tigris.subversion.subclipse.mylyn.feature.feature.group, org.tigris.subversion.subclipse.graph.feature.feature.group, org.tigris.subversion.clientadapter.svnkit.feature.feature.group, org.tmatesoft.svnkit.feature.group"
-            sudo rm eclipse-java-neon-2-linux-gtk-x86_64.tar.gz
-            echo "installed eclipse"
-        else
-            echo "eclipse already installed at /opt/eclipse"
-        fi
-    else
-    echo "eclipse already installed at /home/riaps/eclipse"
-        
+       wget http://riaps.isis.vanderbilt.edu/riaps_eclipse.tar.gz
+       tar -xzvf riaps_eclipse.tar.gz
+       sudo mv eclipse /home/$1/.
+       sudo chown -R $1:$1 /home/$1/eclipse
+       sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
+       eclipse_shortcut $1
+    else    
+	   echo "eclipse already installed at /home/$1/eclipse"
+           
     fi
 }
 
 install_redis () {
+   if [ ! -f "/usr/local/bin/redis-server" ]; then
     wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
     tar xzf redis-3.2.5.tar.gz 
     make -C redis-3.2.5 
@@ -203,6 +190,9 @@ install_redis () {
     rm -rf redis-3.2.5 
     rm -rf redis-3.2.5.tar.gz 
     echo "installed redis"
+   else
+     echo "redis already installed. skipping"
+   fi
 }
 
 install_fabric() {
@@ -222,6 +212,7 @@ install_riaps() {
     sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
+    sudo chmod +x ./riaps_install_amd64.sh
     ./riaps_install_amd64.sh
 }
 
@@ -234,16 +225,30 @@ setup_ssh_keys () {
     sudo -H -u $1 cat /home/$1/.ssh/id_rsa.pub >> /home/$1/.ssh/authorized_keys
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
-    sudo -H -u $1 chmod 600 /home/$1/.ssh/id_rsa.key
-    
-    echo "Added user key to authorized keys for $1"
+    sudo -H -u $1 chmod 400 /home/$1/.ssh/id_rsa.key
+    sudo cp -r bbb_initial_keys /home/$1/.
+    sudo chown $1:$1 -R /home/$1/bbb_initial_keys
+    sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo cp secure_keys.sh /home/$1/.
+    sudo chown $1:$1 /home/$1/secure_keys.sh 
+    sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
+    echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
+}
+
+add_set_tests () {
+    sudo -H -u $1 mkdir -p /home/$1/env_setup_tests/WeatherMonitor
+    sudo cp -r env_setup_tests/WeatherMonitor /home/$1/env_setup_tests/
+    sudo chown $1:$1 -R /home/$1/env_setup_tests/WeatherMonitor
+    echo "Added development environment tests"
 }
 
 
 # Start of script actions
+set -e
 parse_args $@
 print_help
 user_func
+setup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
 vim_func
 java_func
@@ -259,7 +264,8 @@ curl_func
 install_fabric
 install_firefox
 install_riaps
-setup_ssh_keys $RIAPSAPPDEVELOPER
+add_set_tests $RIAPSAPPDEVELOPER
+
 
 
 
