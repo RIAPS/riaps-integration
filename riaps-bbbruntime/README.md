@@ -21,10 +21,10 @@
 	Username:  riaps
 	Password:  riaps
 	
-	$ ssh riaps@xxx.xxx.xxx.xxx
+	$ ssh -i /home/riaps/.ssh/id_rsa.key riaps@xxx.xxx.xxx.xxx
 	            where xxx.xxx.xxx.xxx is the IP address of the BBB
 	      or
-	$ ssh riaps@bbb-xxxx
+	$ ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
 	            where xxxx is the hostname seen when logging into the BBBs
 	```
 	
