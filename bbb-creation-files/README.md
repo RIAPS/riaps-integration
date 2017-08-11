@@ -1,6 +1,6 @@
-#Create RIAPS BBB Base Image (4GB) 
+# Create RIAPS BBB Base Image (4GB) 
 
-##Start with Ubuntu Pre-configured Image from Robert Nelson
+## Start with Ubuntu Pre-configured Image from Robert Nelson
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
@@ -32,7 +32,7 @@ $ sudo ./setup_sdcard.sh --probe-mmc
 $ sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
 ```
 
-##Installation of RIAPS Base Configuration on Pre-configured BBB
+## Installation of RIAPS Base Configuration on Pre-configured BBB
 
 1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
 
@@ -83,7 +83,7 @@ Username:  riaps
 Password:  riaps
 ```
 
-##Saving Image
+## Saving Image
 
 1. Copy the card to host:  sudo dd if=/dev/disk2 of=bbb_base_20170718.img  (check which disk with 'diskutil list')
 2. Use https://etcher.io/ tool to copy from host to SD card
