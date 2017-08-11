@@ -12,7 +12,7 @@ This work should be done on a Linux machine or VM. We are starting with a pre-co
 $ wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
 ```
 
-Note:  If this file is not available, contact VU project member.
+Note:  If this file is not available, contact VU project members.
 
 2. Unpack image and change into the directory
 
