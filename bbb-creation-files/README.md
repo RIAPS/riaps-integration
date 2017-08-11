@@ -1,5 +1,7 @@
 # Create RIAPS BBB Base Image (4GB) 
 
+These are instructions on how the BBB Base image was created.  
+
 ## Start with Ubuntu Pre-configured Image from Robert Nelson
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
