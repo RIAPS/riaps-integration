@@ -39,7 +39,15 @@ fi
 chmod 600 $1
 #change permission of new key to 600
 chmod 600 $2
+
+#setup a config file (on VM) to allow no password needed access to the BBBs
+echo "# Identity file for BBB access" >> config
+echo "IdentityFile /home/riaps/.ssh/id_rsa.key" >> config
+sudo mv /home/riaps/config /home/riaps/.ssh/config
+chmod 600 /home/riaps/.ssh/config
+
 scp -i $1 $2 riaps@$4:~/.ssh/id_rsa.key
 scp -i $1 $3 riaps@$4:~/.ssh/id_rsa.pub
 ssh -i $1 -l riaps  $4  'cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys.bak; cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
+
 echo "rekeyed beaglebone $4. use the key $2 to connect to the bone from now on"
