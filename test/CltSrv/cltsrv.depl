@@ -1,3 +1,0 @@
-app CltSrv {
-	on all ClientActor,ServerActor;
-}
