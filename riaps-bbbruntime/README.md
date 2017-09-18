@@ -38,7 +38,7 @@
 
 	```
 	$ sudo apt-get update
-	$ sudo apt-get update 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
+	$ sudo apt-get install 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
 	```
 
 # Helpful Hints 
