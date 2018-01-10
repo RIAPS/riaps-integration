@@ -13,4 +13,15 @@ Once you have the token you must use it everytime you want to download the new r
 - Setting up the RIAPS host development environment (Linux VM) can be found in the riaps-x86runtime folder.
 - Creating a RIAPS Beaglebone Black SD Card Image can be found in the riaps-bbbruntime folder.
 
+# Integration Testing
+
+The following examples are used in the integration testing to make sure the RIAPS framework functionality is working.  The deployment file (.depl) may need to be adjusted to work on different platforms.  
+
+| Examples   | Functionality      |
+| ---------- |:------------------:|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/WeatherMonitor | Pub/Sub |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Pub/Sub |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Pub/Sub/Req/Rep |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component |
+
 
