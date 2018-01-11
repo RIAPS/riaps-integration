@@ -23,5 +23,6 @@ The following examples are used in the integration testing to make sure the RIAP
 | https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Pub/Sub |
 | https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Pub/Sub/Req/Rep |
 | https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/QryAns | Query/Answer |
 
 
