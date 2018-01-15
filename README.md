@@ -17,12 +17,19 @@ Once you have the token you must use it everytime you want to download the new r
 
 The following examples are used in the integration testing to make sure the RIAPS framework functionality is working.  The deployment file (.depl) may need to be adjusted to work on different platforms.  
 
-| Examples   | Functionality      |
+| Tests   | Functionality      |
 | ---------- |:------------------:|
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/WeatherMonitor | Pub/Sub |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Pub/Sub |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Pub/Sub/Req/Rep |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/QryAns | Query/Answer |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/WeatherMonitor | Publish/Subscribe Ports|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Publish/Subscribe Ports|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Publish/Subscribe & Request/Reply Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRep | Request/Reply Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/CltSrv | Client / Server Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/QryAns | Query/Answer Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/TimerS | Timer Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component IO |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/EchoIO | Device Component / Actor Machinery |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimatorCapnp | Capnp Proto Interfacing |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/Limits | CPU / Memory Resource Limiting |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRepLib | Library Module |
 
 
