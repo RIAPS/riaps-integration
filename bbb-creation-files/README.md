@@ -6,10 +6,10 @@ These are instructions on how the BBB Base image was created.
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
-1. Download a complete pre-configured image (Ubuntu 16.04) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
+1. Download a complete pre-configured image (Ubuntu 16.04.3) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
 ```
-$ wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.2-console-armhf-2017-06-12.tar.xz
+$ wget https://rcn-ee.com/rootfs/2017-06-12/elinux/ubuntu-16.04.3-console-armhf-2018-01-05.tar.xz
 ```
 
 Note:  If this file is not available, contact VU project members.
@@ -19,7 +19,7 @@ Note:  If this file is not available, contact VU project members.
 ```
 Username:  ubuntu
 Password:  temppwd
-Kernel:    v4.9.xx-ti-rxx (with real-time features)
+Kernel:    v4.14.xx-ti-rxx
 ```
 
 3. Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
@@ -66,6 +66,12 @@ $ sudo apt-key add riapspublic.key
 $ sudo apt-get update
 ```
 
+Updated Real-time enabled Kernel will be
+
+```
+Kernel: v4.9.xx-ti-rt-rxx
+```
+
 6. Remove public key from .ssh directory
 
 7. Remove install files from /home/ubuntu
@@ -87,6 +93,6 @@ Password:  riaps
 
 ## Saving Image
 
-1. Copy the card to host:  sudo dd if=/dev/disk2 of=bbb_base_20170718.img  (check which disk with 'diskutil list')
+1. Copy the card to host:  sudo dd if=/dev/disk2 of=bbb_base_<date>.img  (check which disk with 'diskutil list')
 2. Use https://etcher.io/ tool to copy from host to SD card
 

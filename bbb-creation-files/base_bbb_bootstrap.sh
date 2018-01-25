@@ -5,7 +5,7 @@ set -e
 RIAPSAPPDEVELOPER=riaps
 
 # Script functions
-check_os_version () {
+check_os_version() {
     # Mary we need to write code here to check OS version and architecture. 
     # The installation should fail if the OS version is not correct.
     true
@@ -17,7 +17,7 @@ rt_kernel_install() {
     sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_9
 }
 
-user_func () {
+user_func() {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
         echo "The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
@@ -67,7 +67,7 @@ freqgov_off() {
     /etc/init.d/cpufrequtils restart
 }
 
-python_install () {
+python_install() {
     sudo apt-get install python3 python3-pip -y
     sudo pip3 install --upgrade pip 
     sudo pip3 install pydevd
@@ -79,9 +79,29 @@ cython_install() {
     echo "installed cython3"
 }
 
-curl_func () {
+curl_func() {
     sudo apt install curl -y
     echo "installed curl"
+}
+
+# Remove Apache from the original base image
+rm_apache() {
+    sudo apt-get remove --purge apache2*
+}
+
+# Add watchdog timers
+watchdog_timers() {
+    sudo echo " " >> sysctl.conf 
+    sudo echo "###################################################################" >> sysctl.conf 
+    sudo echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> sysctl.conf
+    sudo echo “# Added for RIAPS Platform (01/25/18, MM)” >> sysctl.conf
+    sudo echo "kernel.panic_on_oops = 1" >> sysctl.conf
+    sudo echo "kernel.panic = 5" >> sysctl.conf
+}
+
+# Needed for BBB clusters to allow apt-get update to work properly
+rdate_install(){
+    sudo apt-get install rdate
 }
 
 splash_screen_update() {
@@ -97,7 +117,7 @@ splash_screen_update() {
     # Issue.net                                
     echo "Ubuntu 16.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2017-06-12">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-01-05">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -177,6 +197,9 @@ freqgov_off
 python_install
 cython_install
 curl_func
+rm_apache
+watchdog_timers
+rdate_install
 splash_screen_update
 setup_hostname
 setup_peripherals
