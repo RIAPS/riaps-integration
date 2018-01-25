@@ -38,13 +38,13 @@ $ sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
 
 1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
 
-2. Download [baseImageInstall.tar.gz] to the BBB. 
+2. Compress the bbb-creation-files folder and transfer it to the BBB. 
 
 3. On the BBB, unpack the installation and move into the package
 
 ```
-$ tar -xzvf baseImageInstall.tar.gz
-$ cd baseImage
+$ tar -xzvf bbb-creation-files.tar.gz
+$ cd bbb-creation-files
 ```
 
 4. Move to 'root' user
@@ -59,7 +59,7 @@ $ cd baseImage
 $./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
 ```
 
-Note:  If RIAPS packages do not install, do the following outside of the script.  Then go back and only do the last function (setup_ssh_keys)
+Note:  If apt-get update does not download the RIAPS packages, do the following outside of the script.  Then go back and only do the last function (setup_ssh_keys)
 
 ```
 $ sudo apt-key add riapspublic.key 
