@@ -95,12 +95,12 @@ rm_apache() {
 
 # Add watchdog timers
 watchdog_timers() {
-    sudo echo " " >> sysctl.conf 
-    sudo echo "###################################################################" >> sysctl.conf 
-    sudo echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> sysctl.conf
-    sudo echo "# Added for RIAPS Platform (01/25/18, MM)" >> sysctl.conf
-    sudo echo "kernel.panic_on_oops = 1" >> sysctl.conf
-    sudo echo "kernel.panic = 5" >> sysctl.conf
+    echo " " >> /etc/sysctl.conf 
+    echo "###################################################################" >> /etc/sysctl.conf 
+    echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> /etc/sysctl.conf
+    echo "# Added for RIAPS Platform (01/25/18, MM)" >> /etc/sysctl.conf
+    echo "kernel.panic_on_oops = 1" >> /etc/sysctl.conf
+    echo "kernel.panic = 5" >> /etc/sysctl.conf
     echo "added watchdog timer values"
 }
 
