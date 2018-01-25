@@ -69,9 +69,10 @@
 
 Current services loaded into the image on the BBB and on the host VM:
 
-1. riaps-deplo.service - will start the RIAPS deployment application.  This service started the RIAPS discovery and device manager services.  When enabled, this service is setup to restart when it.
+1. riaps-deplo.service - will start the RIAPS deployment application.  This service starts the RIAPS discovery and device manager services.  When enabled, this service is setup to restart if it fails with a 10 s wait period to all the discovery service to timeout.
 
-   - this service is currently disabled by default
+   - this service is currently disabled on the VM by default
+   - this service is currently enabled and started on the BBB by default
 
 To see the status of a service or control its state, use the following commands manually on a command line, where name is the service name (like deplo).  Starting a service runs the actions immediately.  Enabling the service will allow the service to start when booting up.
 
@@ -82,5 +83,5 @@ To see the status of a service or control its state, use the following commands 
     $ sudo systemctl enable riaps-<name>.service
     $ sudo systemctl disable riaps-<name>.service
     ```
- NOTE: a fabfile will be provided in the near future to make things easier to turn on and off
+    
    

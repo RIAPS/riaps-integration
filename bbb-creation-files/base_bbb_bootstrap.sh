@@ -15,6 +15,7 @@ check_os_version() {
 # Install RT Kernel
 rt_kernel_install() {
     sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_9
+    echo "installed RT Kernel"
 }
 
 user_func() {
@@ -58,6 +59,7 @@ timesync_requirements(){
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo "installed timesync requirements"
 }
 
 freqgov_off() {
@@ -65,6 +67,7 @@ freqgov_off() {
     echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
     update-rc.d ondemand disable
     /etc/init.d/cpufrequtils restart
+    echo "setup frequency and governor"
 }
 
 python_install() {
@@ -86,7 +89,8 @@ curl_func() {
 
 # Remove Apache from the original base image
 rm_apache() {
-    sudo apt-get remove --purge apache2*
+    sudo apt-get remove --purge apache2* -y
+    echo "removed apache"
 }
 
 # Add watchdog timers
@@ -94,14 +98,16 @@ watchdog_timers() {
     sudo echo " " >> sysctl.conf 
     sudo echo "###################################################################" >> sysctl.conf 
     sudo echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> sysctl.conf
-    sudo echo “# Added for RIAPS Platform (01/25/18, MM)” >> sysctl.conf
+    sudo echo "# Added for RIAPS Platform (01/25/18, MM)" >> sysctl.conf
     sudo echo "kernel.panic_on_oops = 1" >> sysctl.conf
     sudo echo "kernel.panic = 5" >> sysctl.conf
+    echo "added watchdog timer values"
 }
 
 # Needed for BBB clusters to allow apt-get update to work properly
 rdate_install(){
-    sudo apt-get install rdate
+    sudo apt-get install rdate -y
+    echo "installed rdate"
 }
 
 splash_screen_update() {
@@ -123,6 +129,7 @@ splash_screen_update() {
     echo "">> issue.net
     echo "default username:password is [riaps:riaps]">> issue.net
     sudo mv issue.net /etc/issue.net
+    echo "setup splash screen"
 }
 
 setup_hostname() {
@@ -131,6 +138,7 @@ setup_hostname() {
     systemctl daemon-reload
     systemctl start sethostname.service
     systemctl enable sethostname.service 
+    echo "setup hostname"
 }
 
 setup_peripherals() {
@@ -142,6 +150,7 @@ setup_peripherals() {
     getent group pwm ||groupadd pwm
 
     udevadm trigger --subsystem-match=gpio
+    echo "setup peripherals - gpio, uart, and pwm"
 }
 
 setup_network() {
