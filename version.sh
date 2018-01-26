@@ -1,5 +1,5 @@
 export externalsversion="0.6.0" 
-export coreversion="0.6.1Test"
-export pycomversion="0.6.0"
-export timesyncversion="1.1.3"
+export coreversion="0.6.1"
+export pycomversion="0.6.1"
+export timesyncversion="1.1.5"
 export riapsdsmlversion="0.4.1"
