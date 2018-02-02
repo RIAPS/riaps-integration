@@ -177,7 +177,7 @@ setup_riaps_repo(){
     wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
     sudo apt-key add riapspublic.key 
     sudo apt-get update
-	echo "riaps aptrepo setup"
+    echo "riaps aptrepo setup"
 }
 
 # This function requires that bbb_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/bbb_initial_keys/id_rsa.pub
