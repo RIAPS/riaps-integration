@@ -13,4 +13,23 @@ Once you have the token you must use it everytime you want to download the new r
 - Setting up the RIAPS host development environment (Linux VM) can be found in the riaps-x86runtime folder.
 - Creating a RIAPS Beaglebone Black SD Card Image can be found in the riaps-bbbruntime folder.
 
+# Integration Testing
+
+The following examples are used in the integration testing to make sure the RIAPS framework functionality is working.  The deployment file (.depl) may need to be adjusted to work on different platforms.  
+
+| Tests   | Functionality      |
+| ---------- |:------------------:|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/WeatherMonitor | Publish/Subscribe Ports|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Publish/Subscribe Ports|
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Publish/Subscribe & Request/Reply Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRep | Request/Reply Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/CltSrv | Client / Server Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/QryAns | Query/Answer Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/TimerS | Timer Ports |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component IO |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/EchoIO | Device Component / Actor Machinery |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimatorCapnp | Capnp Proto Interfacing |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/Limits | CPU / Memory Resource Limiting |
+| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRepLib | Library Module |
+
 
