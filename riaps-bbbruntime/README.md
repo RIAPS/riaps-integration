@@ -2,7 +2,7 @@
 
 1. Download the latest BBB image from the RIAPS Wiki.
 
-    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/250/bbb_base_20170725.zip
+    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/271/bbb_base_20180213.zip
     
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
