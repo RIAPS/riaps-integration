@@ -59,7 +59,7 @@ $ cd bbb-creation-files
 $./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
 ```
 
-Note:  If apt-get update does not download the RIAPS packages, do the following outside of the script.  Then go back and only do the last function (setup_ssh_keys)
+Note:  If 'riaps aptrepo setup' does not complete (phrase not in log), do the following outside of the script and then go back and only do the last function (setup_ssh_keys).
 
 ```
 $ sudo apt-key add riapspublic.key 
@@ -91,8 +91,44 @@ Username:  riaps
 Password:  riaps
 ```
 
+## Resizing the Image to 4 GB
+Use gparted in a VM to move to a 4096 MiB partition for rootfs of the new SD card 
+1. Become root user
+
+```sudo su```
+
+2. Start ```gparted```
+3. Unmount the device
+3. Resize to 4096 MiB
+
 ## Saving Image
 
-1. Copy the card to host:  sudo dd if=/dev/disk2 of=bbb_base_<date>.img  (check which disk with 'diskutil list')
-2. Use https://etcher.io/ tool to copy from host to SD card
+1. Determine the end sector of the 4GB partition (in VM)
+
+```
+sudo fdisk -u -l
+
+Disk /dev/sdb: 14.4 GiB, 15489564672 bytes, 30253056 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x76bf7ebd
+
+Device     Boot Start     End Sectors Size Id Type
+/dev/sdb1  *     8192 8396799 8388608   4G 83 Linux
+```
+
+2. Copy the card to host:
+
+```  
+sudo dd if=/dev/sdb of=riaps-bbb-base-4GB.img count=8396799  
+
+ 
+8396799+0 records in
+8396799+0 records out
+4299161088 bytes (4.3 GB, 4.0 GiB) copied, 245.174 s, 17.5 MB/s
+```
+
+3. Use https://etcher.io/ tool to copy from host to SD card
 
