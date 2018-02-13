@@ -5,7 +5,7 @@ set -e
 RIAPSAPPDEVELOPER=riaps
 
 # Script functions
-check_os_version () {
+check_os_version() {
     # Mary we need to write code here to check OS version and architecture. 
     # The installation should fail if the OS version is not correct.
     true
@@ -15,9 +15,10 @@ check_os_version () {
 # Install RT Kernel
 rt_kernel_install() {
     sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_9
+    echo "installed RT Kernel"
 }
 
-user_func () {
+user_func() {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
         echo "The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
@@ -58,6 +59,7 @@ timesync_requirements(){
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo "installed timesync requirements"
 }
 
 freqgov_off() {
@@ -65,9 +67,10 @@ freqgov_off() {
     echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
     update-rc.d ondemand disable
     /etc/init.d/cpufrequtils restart
+    echo "setup frequency and governor"
 }
 
-python_install () {
+python_install() {
     sudo apt-get install python3 python3-pip -y
     sudo pip3 install --upgrade pip 
     sudo pip3 install pydevd
@@ -79,9 +82,32 @@ cython_install() {
     echo "installed cython3"
 }
 
-curl_func () {
+curl_func() {
     sudo apt install curl -y
     echo "installed curl"
+}
+
+# Remove Apache from the original base image
+rm_apache() {
+    sudo apt-get remove --purge apache2* -y
+    echo "removed apache"
+}
+
+# Add watchdog timers
+watchdog_timers() {
+    echo " " >> /etc/sysctl.conf 
+    echo "###################################################################" >> /etc/sysctl.conf 
+    echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> /etc/sysctl.conf
+    echo "# Added for RIAPS Platform (01/25/18, MM)" >> /etc/sysctl.conf
+    echo "kernel.panic_on_oops = 1" >> /etc/sysctl.conf
+    echo "kernel.panic = 5" >> /etc/sysctl.conf
+    echo "added watchdog timer values"
+}
+
+# Needed for BBB clusters to allow apt-get update to work properly
+rdate_install(){
+    sudo apt-get install rdate -y
+    echo "installed rdate"
 }
 
 splash_screen_update() {
@@ -97,12 +123,13 @@ splash_screen_update() {
     # Issue.net                                
     echo "Ubuntu 16.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2017-06-12">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-01-05">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
     echo "default username:password is [riaps:riaps]">> issue.net
     sudo mv issue.net /etc/issue.net
+    echo "setup splash screen"
 }
 
 setup_hostname() {
@@ -111,6 +138,7 @@ setup_hostname() {
     systemctl daemon-reload
     systemctl start sethostname.service
     systemctl enable sethostname.service 
+    echo "setup hostname"
 }
 
 setup_peripherals() {
@@ -122,6 +150,7 @@ setup_peripherals() {
     getent group pwm ||groupadd pwm
 
     udevadm trigger --subsystem-match=gpio
+    echo "setup peripherals - gpio, uart, and pwm"
 }
 
 setup_network() {
@@ -148,7 +177,7 @@ setup_riaps_repo(){
     wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
     sudo apt-key add riapspublic.key 
     sudo apt-get update
-	echo "riaps aptrepo setup"
+    echo "riaps aptrepo setup"
 }
 
 # This function requires that bbb_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/bbb_initial_keys/id_rsa.pub
@@ -177,6 +206,9 @@ freqgov_off
 python_install
 cython_install
 curl_func
+rm_apache
+watchdog_timers
+rdate_install
 splash_screen_update
 setup_hostname
 setup_peripherals
