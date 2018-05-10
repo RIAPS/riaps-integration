@@ -2,7 +2,7 @@
 
 1. Download the latest BBB image from the RIAPS Wiki.
 
-    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/271/bbb_base_20180213.zip
+    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/273/riaps_bbb_base_20180418.zip
     
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
@@ -29,12 +29,16 @@
 	```
 	
 7. Secure communication between the Host Environment and the BBBs by following the "Securing Communication Between the VM and BBBs" instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime.  Once this process completes, the host environment will automatically login to the bones when using ssh utilizing your ssh keys.
+
+8. Reboot the BBBs
   
 # Update RIAPS Platform Packages on Existing BBBs
 
 1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB.
 
-2. Run the update script.
+2. Stop the riaps_deplo service by running the kill script.
+
+3. Run the update script.
 
 	```
 	$ sudo apt-get update

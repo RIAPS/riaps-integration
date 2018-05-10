@@ -48,6 +48,7 @@ user_func () {
         echo "The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
+        sudo chage -d 0 $RIAPSAPPDEVELOPER
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
@@ -133,7 +134,7 @@ timesync_requirements() {
 }
 
 python_install () {
-    sudo apt-get install python3 python3-pip -y
+    sudo apt-get install python3-dev python3-pip -y
     sudo pip3 install --upgrade pip 
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -167,7 +168,7 @@ EOT
 }
 
 eclipse_func() {
-    if [ ! -f "/home/$1/eclipse/eclipse" ]
+    if [ ! -d "/home/$1/eclipse" ]
     then
        wget http://riaps.isis.vanderbilt.edu/riaps_eclipse.tar.gz
        tar -xzvf riaps_eclipse.tar.gz
@@ -181,7 +182,7 @@ eclipse_func() {
     fi
 }
 
-install_redis () {
+redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
     wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
     tar xzf redis-3.2.5.tar.gz 
@@ -195,18 +196,35 @@ install_redis () {
    fi
 }
 
-install_fabric() {
-    sudo apt-get install python-pip -y
-    sudo pip2 install fabric
-    echo "installed fabric"
-}
-
-install_firefox() {
+firefox_install() {
     sudo apt-get install firefox -y
     echo "installed firefox"
 }
 
-install_riaps() {
+graphviz_install() {
+    sudo apt-get install graphviz xdot -y
+}
+
+# Install nethogs
+nethogs_install() {
+    sudo apt-get install libncurses5-dev libpcap-dev -y
+    git clone https://github.com/raboof/nethogs.git
+    git -C nethogs/ checkout 33fab67135ff600809bd99b830d7a83a5b0745ed
+    make -C nethogs/
+    sudo make install -C nethogs/
+    make libnethogs -C nethogs/
+    sudo make install_lib -C nethogs/
+    sudo ln -s /usr/local/lib/libnethogs.so.0.8.5-41-g33fab67 /usr/local/lib/libnethogs.so.master
+    hash -r
+    echo "installed nethogs"
+}
+
+quota_install() {
+    sudo apt-get install quota -y
+    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
+}
+
+riaps_install() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
     sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
@@ -259,13 +277,11 @@ timesync_requirements
 python_install
 cython_install
 eclipse_func $RIAPSAPPDEVELOPER
-install_redis
+redis_install
 curl_func
-install_fabric
-install_firefox
-install_riaps
+firefox_install
+graphviz_install
+nethogs_install
+quota_install $RIAPSAPPDEVELOPER
 add_set_tests $RIAPSAPPDEVELOPER
-
-
-
-
+riaps_install

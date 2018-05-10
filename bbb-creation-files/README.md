@@ -6,10 +6,10 @@ These are instructions on how the BBB Base image was created.
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
-1. Download a complete pre-configured image (Ubuntu 16.04.3) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
+1. Download a complete pre-configured image (Ubuntu 16.04.4) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
 ```
-$ wget https://rcn-ee.com/rootfs/2018-02-09/elinux/ubuntu-16.04.3-console-armhf-2018-02-09.tar.xz
+$ wget https://rcn-ee.com/rootfs/2018-03-09/elinux/ubuntu-16.04.4-console-armhf-2018-03-09.tar.xz
 ```
 
 Note:  If this file is not available, contact VU project members.
@@ -59,37 +59,32 @@ $ cd bbb-creation-files
 $./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
 ```
 
-Note:  If 'riaps aptrepo setup' does not complete (phrase not in log), do the following outside of the script and then go back and only do the last function (setup_ssh_keys).
+If last message seen in output (or log) is "get riaps public key" instead of "riaps aptrepo setup", then the last two commands did not happen even though the 'riapspublic.key' was received.  So, run the following commands manually:
 
 ```
-$ sudo apt-key add riapspublic.key 
+$ sudo apt-key add riapspublic.key
 $ sudo apt-get update
 ```
 
-Updated Real-time enabled Kernel will be
-
-```
-Kernel: v4.9.xx-ti-rt-rxx
-```
-
-6. Remove public key from .ssh directory
+6. Remove public key from /home/riaps/.ssh directory
 
 7. Remove install files from /home/ubuntu
 
 8. Place https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh in /home/riaps/ to allow updating of the RIAPS platform by script
 
-9. Reboot the Beaglebone Black
-
-```
-$ reboot
-```
-
-10. When the BBB is rebooted, you can ssh using the following:
+9. Users of this image will ssh using the following:
 
 ```
 Username:  riaps
 Password:  riaps
 ```
+
+Updated Real-time enabled Kernel will be (once rebooted)
+
+```
+Kernel: v4.9.xx-ti-rt-rxx
+```
+
 
 ## Resizing the Image to 4 GB
 Use gparted in a VM to move to a 4096 MiB partition for rootfs of the new SD card 
@@ -108,26 +103,26 @@ Use gparted in a VM to move to a 4096 MiB partition for rootfs of the new SD car
 ```
 sudo fdisk -u -l
 
-Disk /dev/sdb: 14.4 GiB, 15489564672 bytes, 30253056 sectors
+Disk /dev/sdb: 3.7 GiB, 3980394496 bytes, 7774208 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 Disklabel type: dos
-Disk identifier: 0x76bf7ebd
+Disk identifier: 0xc35d5b25
 
-Device     Boot Start     End Sectors Size Id Type
-/dev/sdb1  *     8192 8396799 8388608   4G 83 Linux
+Device     Boot Start     End Sectors  Size Id Type
+/dev/sdb1  *     8192 7774207 7766016  3.7G 83 Linux
 ```
 
 2. Copy the card to host:
 
 ```  
-sudo dd if=/dev/sdb of=riaps-bbb-base-4GB.img count=8396799  
+sudo dd if=/dev/sdb of=riaps-bbb-base-4GB.img count=7774207  
 
  
-8396799+0 records in
-8396799+0 records out
-4299161088 bytes (4.3 GB, 4.0 GiB) copied, 245.174 s, 17.5 MB/s
+7766016+0 records in
+7766016+0 records out
+3976200192 bytes (4.0 GB, 3.7 GiB) copied, 171.161 s, 23.2 MB/s
 ```
 
 3. Use https://etcher.io/ tool to copy from host to SD card

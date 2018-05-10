@@ -33,11 +33,17 @@ user_func() {
     fi    
 }
 
+# Needed for BBB clusters to allow apt-get update to work properly
+rdate_install(){
+    sudo apt-get install rdate -y
+    sudo rdate -n -4 time.nist.gov
+    echo "installed rdate"
+}
+
 vim_func() {
     sudo apt-get install vim -y
     echo "installed vim"
 }
-
 
 g++_func() {
     sudo apt-get install gcc g++ -y
@@ -71,7 +77,7 @@ freqgov_off() {
 }
 
 python_install() {
-    sudo apt-get install python3 python3-pip -y
+    sudo apt-get install python3-dev python3-pip -y
     sudo pip3 install --upgrade pip 
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -104,10 +110,25 @@ watchdog_timers() {
     echo "added watchdog timer values"
 }
 
-# Needed for BBB clusters to allow apt-get update to work properly
-rdate_install(){
-    sudo apt-get install rdate -y
-    echo "installed rdate"
+# Install nethogs
+nethogs_install() {
+    sudo apt-get install libncurses5-dev libpcap-dev -y
+    git clone https://github.com/raboof/nethogs.git
+    git -C nethogs/ checkout 33fab67135ff600809bd99b830d7a83a5b0745ed
+    make -C nethogs/
+    sudo make install -C nethogs/
+    make libnethogs -C nethogs/
+    sudo make install_lib -C nethogs/
+    sudo ln -s /usr/local/lib/libnethogs.so.0.8.5-41-g33fab67 /usr/local/lib/libnethogs.so.master
+    hash -r
+    echo "installed nethogs"
+}
+
+}
+
+quota_install() {
+    sudo apt-get install quota -y
+    sed -i "/mmcblk0p1/c\/dev/mmcblk0p1 / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
 }
 
 splash_screen_update() {
@@ -123,7 +144,7 @@ splash_screen_update() {
     # Issue.net                                
     echo "Ubuntu 16.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-01-05">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-03-09">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -172,10 +193,13 @@ setup_riaps_repo(){
     sudo apt-get install software-properties-common apt-transport-https -y
 	
     # Add RIAPS repository
+    echo "add repo to sources"
     sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
     sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"    
+    echo "get riaps public key"
     wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
-    sudo apt-key add riapspublic.key 
+    echo "adding riaps public key"
+    sudo apt-key add riapspublic.key
     sudo apt-get update
     echo "riaps aptrepo setup"
 }
@@ -197,6 +221,7 @@ setup_ssh_keys () {
 check_os_version
 rt_kernel_install
 user_func
+rdate_install
 vim_func
 g++_func
 git_svn_func
@@ -208,10 +233,11 @@ cython_install
 curl_func
 rm_apache
 watchdog_timers
-rdate_install
+nethogs_install
+quota_install $RIAPSAPPDEVELOPER
 splash_screen_update
 setup_hostname
 setup_peripherals
 setup_network
-setup_riaps_repo
 setup_ssh_keys $RIAPSAPPDEVELOPER
+setup_riaps_repo
