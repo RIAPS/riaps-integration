@@ -188,10 +188,11 @@ setup_riaps_repo() {
     echo "riaps aptrepo setup"
 }
 
-# Pre-install packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
-pre_install_riaps_pkgs() {
-    CFLAGS=-I/opt/riaps/armhf/include LDFLAGS=-L/opt/riaps/armhf/lib PATH=$PATH:/opt/riaps/armhf/bin sudo pip3 install 'pycapnp==0.5.12' --verbose
+# Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
+security_pkg_install() {
+    echo "add security packages"
     sudo pip3 install 'paramiko==2.2.1' 'cryptography==1.9' --verbose
+    echo "security packages setup"
 }
 
 # This function requires that bbb_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/bbb_initial_keys/id_rsa.pub
@@ -228,6 +229,6 @@ splash_screen_update
 setup_hostname
 setup_peripherals
 setup_network
-pre_install_riaps_pkgs
+security_pkg_install
 setup_ssh_keys $RIAPSAPPDEVELOPER
 setup_riaps_repo
