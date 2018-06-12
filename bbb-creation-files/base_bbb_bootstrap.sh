@@ -189,14 +189,14 @@ setup_riaps_repo() {
 }
 
 # Pre-install packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
-pre_install_riaps_pkgs {
+pre_install_riaps_pkgs() {
     CFLAGS=-I/opt/riaps/armhf/include LDFLAGS=-L/opt/riaps/armhf/lib PATH=$PATH:/opt/riaps/armhf/bin sudo pip3 install 'pycapnp==0.5.12' --verbose
     sudo pip3 install 'paramiko==2.2.1' 'cryptography==1.9' --verbose
 }
 
 # This function requires that bbb_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/bbb_initial_keys/id_rsa.pub
 # be placed on the bbb as this script is run
-setup_ssh_keys () {
+setup_ssh_keys() {
     sudo -H -u $1 mkdir -p /home/$1/.ssh
     sudo cp bbb_initial_keys/bbb_initial.pub /home/$1/.ssh/bbb_initial.pub
     sudo chown $1:$1 /home/$1/.ssh/bbb_initial.pub
