@@ -34,7 +34,7 @@ user_func() {
 }
 
 # Needed for BBB clusters to allow apt-get update to work properly
-rdate_install(){
+rdate_install() {
     sudo apt-get install rdate -y
     sudo rdate -n -4 time.nist.gov
     echo "installed rdate"
@@ -60,7 +60,7 @@ cmake_func() {
     echo "installed cmake"
 }
 
-timesync_requirements(){
+timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
@@ -108,22 +108,6 @@ watchdog_timers() {
     echo "kernel.panic_on_oops = 1" >> /etc/sysctl.conf
     echo "kernel.panic = 5" >> /etc/sysctl.conf
     echo "added watchdog timer values"
-}
-
-# Install nethogs
-nethogs_install() {
-    sudo apt-get install libncurses5-dev libpcap-dev -y
-    git clone https://github.com/raboof/nethogs.git
-    git -C nethogs/ checkout 33fab67135ff600809bd99b830d7a83a5b0745ed
-    make -C nethogs/
-    sudo make install -C nethogs/
-    make libnethogs -C nethogs/
-    sudo make install_lib -C nethogs/
-    sudo ln -s /usr/local/lib/libnethogs.so.0.8.5-41-g33fab67 /usr/local/lib/libnethogs.so.master
-    hash -r
-    echo "installed nethogs"
-}
-
 }
 
 quota_install() {
@@ -189,7 +173,7 @@ setup_network() {
     echo "replaced resolv.conf"
 }
 
-setup_riaps_repo(){
+setup_riaps_repo() {
     sudo apt-get install software-properties-common apt-transport-https -y
 	
     # Add RIAPS repository
@@ -204,9 +188,16 @@ setup_riaps_repo(){
     echo "riaps aptrepo setup"
 }
 
+# Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
+security_pkg_install() {
+    echo "add security packages"
+    sudo pip3 install 'paramiko==2.2.1' 'cryptography==1.9' --verbose
+    echo "security packages setup"
+}
+
 # This function requires that bbb_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/bbb_initial_keys/id_rsa.pub
 # be placed on the bbb as this script is run
-setup_ssh_keys () {
+setup_ssh_keys() {
     sudo -H -u $1 mkdir -p /home/$1/.ssh
     sudo cp bbb_initial_keys/bbb_initial.pub /home/$1/.ssh/bbb_initial.pub
     sudo chown $1:$1 /home/$1/.ssh/bbb_initial.pub
@@ -233,11 +224,11 @@ cython_install
 curl_func
 rm_apache
 watchdog_timers
-nethogs_install
 quota_install $RIAPSAPPDEVELOPER
 splash_screen_update
 setup_hostname
 setup_peripherals
 setup_network
+security_pkg_install
 setup_ssh_keys $RIAPSAPPDEVELOPER
 setup_riaps_repo
