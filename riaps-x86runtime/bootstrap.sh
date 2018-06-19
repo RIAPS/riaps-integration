@@ -205,20 +205,6 @@ graphviz_install() {
     sudo apt-get install graphviz xdot -y
 }
 
-# Install nethogs
-nethogs_install() {
-    sudo apt-get install libncurses5-dev libpcap-dev -y
-    git clone https://github.com/raboof/nethogs.git
-    git -C nethogs/ checkout 33fab67135ff600809bd99b830d7a83a5b0745ed
-    make -C nethogs/
-    sudo make install -C nethogs/
-    make libnethogs -C nethogs/
-    sudo make install_lib -C nethogs/
-    sudo ln -s /usr/local/lib/libnethogs.so.0.8.5-41-g33fab67 /usr/local/lib/libnethogs.so.master
-    hash -r
-    echo "installed nethogs"
-}
-
 quota_install() {
     sudo apt-get install quota -y
     sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
@@ -281,7 +267,6 @@ redis_install
 curl_func
 firefox_install
 graphviz_install
-nethogs_install
 quota_install $RIAPSAPPDEVELOPER
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_install
