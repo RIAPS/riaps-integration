@@ -14,7 +14,7 @@ check_os_version() {
 
 # Install RT Kernel
 rt_kernel_install() {
-    sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_9
+    sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14 
     echo "installed RT Kernel"
 }
 
@@ -45,11 +45,13 @@ vim_func() {
     echo "installed vim"
 }
 
+# MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
 g++_func() {
     sudo apt-get install gcc g++ -y
     echo "installed g++"
 }
 
+# MM TODO:  git is already installed, do we need svn now?
 git_svn_func() {
     sudo apt-get install git subversion -y
     echo "installed git and svn"
@@ -60,6 +62,7 @@ cmake_func() {
     echo "installed cmake"
 }
 
+# MM TODO:  pps-tools is already there 
 timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
@@ -71,8 +74,8 @@ timesync_requirements() {
 freqgov_off() {
     touch /etc/default/cpufrequtils
     echo "GOVERNOR=\"performance\"" | tee -a /etc/default/cpufrequtils
-    update-rc.d ondemand disable
-    /etc/init.d/cpufrequtils restart
+    sudo systemctl disable ondemand
+    sudo /etc/init.d/cpufrequtils restart
     echo "setup frequency and governor"
 }
 
@@ -94,10 +97,11 @@ curl_func() {
 }
 
 # Remove Apache from the original base image
-rm_apache() {
-    sudo apt-get remove --purge apache2* -y
-    echo "removed apache"
-}
+# With 18.04, this package is no longer in the download image.  Can remove this function.
+#rm_apache() {
+#    sudo apt-get remove --purge apache2* -y
+#    echo "removed apache"
+#}
 
 # Add watchdog timers
 watchdog_timers() {
@@ -113,6 +117,7 @@ watchdog_timers() {
 quota_install() {
     sudo apt-get install quota -y
     sed -i "/mmcblk0p1/c\/dev/mmcblk0p1 / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
+    echo "setup quotas"
 }
 
 splash_screen_update() {
@@ -126,9 +131,9 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net                                
-    echo "Ubuntu 16.04 LTS" > issue.net
+    echo "Ubuntu 18.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-03-09">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-06-08">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -178,8 +183,8 @@ setup_riaps_repo() {
 	
     # Add RIAPS repository
     echo "add repo to sources"
-    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
-    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"    
+    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
+    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"    
     echo "get riaps public key"
     wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
     echo "adding riaps public key"
@@ -222,7 +227,7 @@ freqgov_off
 python_install
 cython_install
 curl_func
-rm_apache
+#rm_apache
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
 splash_screen_update

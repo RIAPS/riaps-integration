@@ -9,7 +9,7 @@ This work should be done on a Linux machine or VM. We are starting with a pre-co
 1. Download a complete pre-configured image (Ubuntu 16.04.4) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
 ```
-$ wget https://rcn-ee.com/rootfs/2018-03-09/elinux/ubuntu-16.04.4-console-armhf-2018-03-09.tar.xz
+$ wget https://rcn-ee.com/rootfs/2018-06-08/elinux/ubuntu-18.04-console-armhf-2018-06-08.tar.xz
 ```
 
 Note:  If this file is not available, contact VU project members.
