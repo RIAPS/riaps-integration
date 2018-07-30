@@ -57,7 +57,7 @@ user_func () {
 
 update_kernel () {
     sudo apt-get update
-    sudo apt-get install --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
+    sudo apt-get install -y --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
 }
 
 # Configure for cross functional compilation
