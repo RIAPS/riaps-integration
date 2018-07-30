@@ -55,6 +55,11 @@ user_func () {
     fi    
 }
 
+update_kernel () {
+    sudo apt-get update
+    sudo apt-get install --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
+}
+
 # Configure for cross functional compilation
 cross_setup() {
     # Add armhf repositories
@@ -246,16 +251,13 @@ add_set_tests () {
     echo "Added development environment tests"
 }
 
-update_kernel () {
-    sudo apt-get install --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
-}
-
 # Start of script actions
 set -e
 parse_args $@
 print_help
 user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
+update_kernel
 cross_setup
 vim_func
 java_func
@@ -273,4 +275,3 @@ graphviz_install
 quota_install $RIAPSAPPDEVELOPER
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_install
-update_kernel
