@@ -246,6 +246,9 @@ add_set_tests () {
     echo "Added development environment tests"
 }
 
+kernel_update () {
+    sudo apt-get install --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
+}
 
 # Start of script actions
 set -e
@@ -270,3 +273,4 @@ graphviz_install
 quota_install $RIAPSAPPDEVELOPER
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_install
+kernel_update
