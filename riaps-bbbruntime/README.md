@@ -2,7 +2,7 @@
 
 1. Download the latest BBB image from the RIAPS Wiki.
 
-    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/273/riaps_bbb_base_20180418.zip
+    [BBB Base Image -  June 12, 2018](https://riaps.isis.vanderbilt.edu/redmine/attachments/download/286/riaps-bbb-base-20180612.zip)
     
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
@@ -12,26 +12,26 @@
 
 5. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
-    ```bash
-    ./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
-    ```	
+```bash
+./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
+```	
 
 6. You can ssh into the BBBs using the following:
 
     Username:  riaps<br/>
     Password:  riaps
     
-    ```bash
-    ssh -i /home/riaps/.ssh/id_rsa.key riaps@xxx.xxx.xxx.xxx
-    where xxx.xxx.xxx.xxx is the IP address of the BBB
-    ```
+```bash
+ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
+```
+>  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB
+
+<p align="center">or</p>
     
-    or
-    
-    ```bash
-    ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
-    where xxxx is the hostname seen when logging into the BBBs
-    ```
+```bash
+ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
+```
+> where **xxxx** is the hostname seen when logging into the BBBs
 
 7. Secure communication between the Host Environment and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#SecureComm) instructions.  Once this process completes, the host environment will automatically login to the beaglebones when using ssh by utilizing your ssh keys.
 
