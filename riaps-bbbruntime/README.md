@@ -54,26 +54,23 @@ sudo apt-get install 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
 
 1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
-```text
+```
 \@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 \@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
 \@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-```
-
-```text
-    IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
-    Someone could be eavesdropping on you right now (man-in-the-middle attack)!
-    It is also possible that a host key has just been changed.
-    The fingerprint for the ECDSA key sent by the remote host is
-    SHA256:mX09UKLFyvo51pwSzd5IUapUlUVSxhPZZDZqGlBy4RY.
-    Please contact your system administrator.
-    Add correct host key in /home/riaps/.ssh/known_hosts to get rid of this message.
-    Offending ECDSA key in /home/riaps/.ssh/known_hosts:2
-      remove with:
-      ssh-keygen -f "/home/riaps/.ssh/known_hosts" -R 192.168.1.101
-    ECDSA host key for 192.168.1.101 has changed and you have requested strict checking.
-    Host key verification failed.
-    lost connection
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:mX09UKLFyvo51pwSzd5IUapUlUVSxhPZZDZqGlBy4RY.
+Please contact your system administrator.
+Add correct host key in /home/riaps/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /home/riaps/.ssh/known_hosts:2
+\  remove with:
+\  ssh-keygen -f "/home/riaps/.ssh/known_hosts" -R 192.168.1.101
+ECDSA host key for 192.168.1.101 has changed and you have requested strict checking.
+Host key verification failed.
+lost connection
 ```
 
 # Available RIAPS Services
