@@ -10,4 +10,4 @@ RIAPS node environment used for this project has been `TI Beaglebone Black <http
    
    Add wget downloads for scripts
    
-.. include:: ../../riaps-bbbruntime/README.md
+.. mdinclude:: ../../riaps-bbbruntime/README.md

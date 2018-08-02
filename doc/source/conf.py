@@ -15,8 +15,9 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-#from recommonmark.parser import CommonMarkParser
-
+import recommonmark
+from recommonmark.parser import CommonMarkParser
+from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
@@ -36,6 +37,18 @@ release = ''
 #
 # needs_sphinx = '1.0'
 
+# The source parser configuration
+# Adding Markdown as an option
+#source_parsers = {
+#   '.md': 'CommonMarkParser'
+#}
+
+# The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+#
+#source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -45,23 +58,11 @@ extensions = [
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
-    'm2r'
+    'm2r',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-# The source parser configuration
-# Adding Markdown as an option
-#source_parsers = {
-#   '.md': 'recommonmark.parser.CommonMarkParser'
-#}
-
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-#source_suffix = '.rst'
-source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'
@@ -193,6 +194,17 @@ epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
+
+# Addition for recommonmark extension
+# app setup hook
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'url_resolver': lambda url: github_doc_root + url,
+            'auto_toc_tree_section': 'Contents',
+            'enable_eval_rst': True,
+            'enable_auto_doc_ref': True,
+    }, True)
+    app.add_transform(AutoStructify)
 
 # -- Options for intersphinx extension ---------------------------------------
 
