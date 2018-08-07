@@ -49,7 +49,7 @@ pipeline {
         withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
           script {
             def user = 'riaps'
-            def repo = 'riaps-pycom'
+            def repo = 'riaps-integration'
             def files = ['riaps-release.tar.gz','riaps-x86runtime.tar.gz','riaps-bbbruntime.tar.gz']
             // Create release on GitHub, if it doesn't already exist
             sh "${env.WORKSPACE}/go/bin/github-release release --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${env.TAG_NAME} --pre-release || true"
