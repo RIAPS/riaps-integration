@@ -40,15 +40,31 @@ pipeline {
         '''
       }
     }
-    stage('Archive artifacts') {
+    stage('Deploy') {
+      when { buildingTag() }
       steps {
-        fileExists 'riaps-release.tar.gz'
-        archiveArtifacts(artifacts: 'riaps-release.tar.gz', onlyIfSuccessful: true, fingerprint: true)
-        fileExists 'priaps-x86runtime.tar.gz'
-        archiveArtifacts(artifacts: 'riaps-x86runtime.tar.gz', onlyIfSuccessful: true, fingerprint: true)
-        fileExists 'priaps-bbbruntime.tar.gz'
-        archiveArtifacts(artifacts: 'riaps-bbbruntime.tar.gz', onlyIfSuccessful: true, fingerprint: true)
+        // Install github-release cli tool to build directory
+        sh 'GOPATH=$WORKSPACE/go go get github.com/aktau/github-release'
+        // Use GitHub OAuth token stored in 'github-token' credentials
+        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+          script {
+            def user = 'riaps'
+            def repo = 'riaps-pycom'
+            def files = ['riaps-release.tar.gz','riaps-x86runtime.tar.gz','riaps-bbbruntime.tar.gz']
+            // Create release on GitHub, if it doesn't already exist
+            sh "${env.WORKSPACE}/go/bin/github-release release --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${env.TAG_NAME} --pre-release || true"
+            // Iterate over artifacts and upload them
+            for(int i = 0; i < files.size(); i++){
+              sh "${env.WORKSPACE}/go/bin/github-release upload -R --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${files[i]} --file ${files[i]}" 
+            } 
+          }
+        }
       }
+    }
+  }
+  post {
+    success {
+      archiveArtifacts artifacts: '*.tar.gz', fingerprint: true
     }
   }
 }
