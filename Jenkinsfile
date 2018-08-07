@@ -26,12 +26,11 @@ pipeline {
       steps {
         sh '''#!/bin/bash
           mkdir riaps-release
-          cp riapsdsmlplugin.tar.gz riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
+          cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
           echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
           echo "coreversion=$coreversion" >> riaps-release/manifest.txt
           echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
           echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
-          echo "riapsdsmlversion=$riapsdsmlversion" >> riaps-release/manifest.txt
           tar cvzf riaps-release.tar.gz riaps-release
           cp version.sh riaps-x86runtime/.
           tar cvzf riaps-x86runtime.tar.gz riaps-x86runtime
