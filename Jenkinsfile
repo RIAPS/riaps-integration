@@ -28,6 +28,7 @@ pipeline {
     stage('Package') {
       steps {
         sh '''#!/bin/bash
+          source version.sh
           mkdir riaps-release
           cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
           echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
