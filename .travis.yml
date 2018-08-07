@@ -19,29 +19,27 @@ before_script:
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-systemd-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-armhf.deb" .
-- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-dsml" --tag=$riapsdsmlversion --release-asset="riapsdsmlplugin.tar.gz" .
 script:
 - mkdir riaps-release
-- cp riapsdsmlplugin.tar.gz riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
+- cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
 - echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
 - echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
-- echo "riapsdsmlversion=$riapsdsmlversion" >> riaps-release/manifest.txt
 - tar cvzf riaps-release.tar.gz riaps-release
 - cp version.sh riaps-x86runtime/.
 - tar cvzf riaps-x86runtime.tar.gz riaps-x86runtime
 - cp version.sh riaps-bbbruntime/.
 - tar cvzf riaps-bbbruntime.tar.gz riaps-bbbruntime
-deploy:
-  provider: releases
-  overwrite: true
-  api_key:
-    secure: WYWTk4kEAiTxsmgB6dkHxvPujb0NyxKR/dfdYLyId4voFIGbBXq9Il1v2t4qIpklqlieoA+4ZjSFXvQU5BOhLeutMY5VJETQGmwLN1mYt/tSnqQ4uNFaU5Tn4lCGZclKO69cSSwrN6H78LOdTFXZCkEvoqxCkYpwUUhupGtXRFxojHmI6/wXU86+NABnkZp8wRyMezZvBtBw+O0CNAptw2f6oyGa+I9g8cWFk172dq9EczZmna5yn3Ol/qhWQOtsXkanwuGHcQPFn13AZjzQum56uV4OEQOuXxWFS/t+NSVm651vpImlEmH5UVFT/LbNgobcbgVUdXph9Bucwc3HcfGgdZdkqophg6hV/q+QNlcZRGfrEwZn9iiLfX49gviORrV8CPQ2ofO+vE9msiqjnrjuGtF+ZONfoMNAkN5mTWqzuviyTOdRlEsRZL4fZ4nnxsgUxSozJjgbkIdTi6dV6GkOQuPb2Rlx2+ZwIWttciUz8FeKdAq7rBb9hYJUhSONqPP9Pd6McH7Im5F6f1r6dh+5nQuRuMP+0UfF3MjiIu21wnnh8r/CQmX1hvsyeyPiC39Vz0RDirjX6FjfD1dTPt9n9hb9X+P/jy1rxi9/NT9mudCXEvNMU68KfmLjStxXA4Un3LwlZo+A7UcWM2onTPKlUtei7//WADSE+MWRZD4=
-  file: 
-    - riaps-release.tar.gz
-    - riaps-x86runtime.tar.gz
-    - riaps-bbbruntime.tar.gz
-  skip_cleanup: true
-  on:
-    tags: true
+#deploy:
+#  provider: releases
+#  overwrite: true
+#  api_key:
+#    secure: WYWTk4kEAiTxsmgB6dkHxvPujb0NyxKR/dfdYLyId4voFIGbBXq9Il1v2t4qIpklqlieoA+4ZjSFXvQU5BOhLeutMY5VJETQGmwLN1mYt/tSnqQ4uNFaU5Tn4lCGZclKO69cSSwrN6H78LOdTFXZCkEvoqxCkYpwUUhupGtXRFxojHmI6/wXU86+NABnkZp8wRyMezZvBtBw+O0CNAptw2f6oyGa+I9g8cWFk172dq9EczZmna5yn3Ol/qhWQOtsXkanwuGHcQPFn13AZjzQum56uV4OEQOuXxWFS/t+NSVm651vpImlEmH5UVFT/LbNgobcbgVUdXph9Bucwc3HcfGgdZdkqophg6hV/q+QNlcZRGfrEwZn9iiLfX49gviORrV8CPQ2ofO+vE9msiqjnrjuGtF+ZONfoMNAkN5mTWqzuviyTOdRlEsRZL4fZ4nnxsgUxSozJjgbkIdTi6dV6GkOQuPb2Rlx2+ZwIWttciUz8FeKdAq7rBb9hYJUhSONqPP9Pd6McH7Im5F6f1r6dh+5nQuRuMP+0UfF3MjiIu21wnnh8r/CQmX1hvsyeyPiC39Vz0RDirjX6FjfD1dTPt9n9hb9X+P/jy1rxi9/NT9mudCXEvNMU68KfmLjStxXA4Un3LwlZo+A7UcWM2onTPKlUtei7//WADSE+MWRZD4=
+#  file: 
+#    - riaps-release.tar.gz
+#    - riaps-x86runtime.tar.gz
+#    - riaps-bbbruntime.tar.gz
+#  skip_cleanup: true
+#  on:
+#    tags: true
