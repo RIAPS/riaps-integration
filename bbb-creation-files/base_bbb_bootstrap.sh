@@ -6,7 +6,7 @@ RIAPSAPPDEVELOPER=riaps
 
 # Script functions
 check_os_version() {
-    # Mary we need to write code here to check OS version and architecture. 
+    # Need to write code here to check OS version and architecture. 
     # The installation should fail if the OS version is not correct.
     true
 
@@ -29,11 +29,12 @@ user_func() {
         sudo usermod -aG gpio  $RIAPSAPPDEVELOPER
         sudo usermod -aG pwm $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
+        cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
         echo "created user accounts"
     fi    
 }
 
-# Needed for BBB clusters to allow apt-get update to work properly
+# Needed to allow apt-get update to work properly
 rdate_install() {
     sudo apt-get install rdate -y
     sudo rdate -n -4 time.nist.gov
@@ -45,24 +46,21 @@ vim_func() {
     echo "installed vim"
 }
 
-# MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
 g++_func() {
     sudo apt-get install gcc g++ -y
     echo "installed g++"
 }
 
-# MM TODO:  git is already installed, do we need svn now?
-git_svn_func() {
-    sudo apt-get install git subversion -y
-    echo "installed git and svn"
+git_func() {
+    sudo apt-get install git -y
+    echo "installed git"
 }
 
 cmake_func() {
     sudo apt-get install cmake -y
     echo "installed cmake"
 }
-
-# MM TODO:  pps-tools is already there 
+ 
 timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
@@ -96,14 +94,6 @@ curl_func() {
     echo "installed curl"
 }
 
-# Remove Apache from the original base image
-# With 18.04, this package is no longer in the download image.  Can remove this function.
-#rm_apache() {
-#    sudo apt-get remove --purge apache2* -y
-#    echo "removed apache"
-#}
-
-# Add watchdog timers
 watchdog_timers() {
     echo " " >> /etc/sysctl.conf 
     echo "###################################################################" >> /etc/sysctl.conf 
@@ -121,7 +111,6 @@ quota_install() {
 }
 
 splash_screen_update() {
-    #splash screen
     echo "################################################################################" > motd
     echo "# Acknowledgment:  The information, data or work presented herein was funded   #" >> motd
     echo "# in part by the Advanced Research Projects Agency - Energy (ARPA-E), U.S.     #" >> motd
@@ -133,7 +122,7 @@ splash_screen_update() {
     # Issue.net                                
     echo "Ubuntu 18.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-06-08">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-07-14">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -151,15 +140,12 @@ setup_hostname() {
     echo "setup hostname"
 }
 
+
 setup_peripherals() {
-    cp etc/profile.d/20-riaps-gpio.sh /etc/profile.d/20-riaps-gpio.sh
-    cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
-    
     getent group gpio ||groupadd gpio
     getent group dialout ||groupadd dialout
     getent group pwm ||groupadd pwm
 
-    udevadm trigger --subsystem-match=gpio
     echo "setup peripherals - gpio, uart, and pwm"
 }
 
@@ -176,21 +162,6 @@ setup_network() {
     cp /etc/resolv.conf /etc/resolv.conf.preriaps
     cp  etc/resolv-riaps.conf /etc/resolv.conf
     echo "replaced resolv.conf"
-}
-
-setup_riaps_repo() {
-    sudo apt-get install software-properties-common apt-transport-https -y
-	
-    # Add RIAPS repository
-    echo "add repo to sources"
-    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"    
-    echo "get riaps public key"
-    wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
-    echo "adding riaps public key"
-    sudo apt-key add riapspublic.key
-    sudo apt-get update
-    echo "riaps aptrepo setup"
 }
 
 # Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
@@ -213,6 +184,21 @@ setup_ssh_keys() {
     echo "Added unsecured public key to authorized keys for $1"
 }
 
+setup_riaps_repo() {
+    sudo apt-get install software-properties-common apt-transport-https -y
+	
+    # Add RIAPS repository
+    echo "add repo to sources"
+    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
+    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"    
+    echo "get riaps public key"
+    wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
+    echo "adding riaps public key"
+    sudo apt-key add riapspublic.key
+    sudo apt-get update
+    echo "riaps aptrepo setup"
+}
+
 # Start of script actions
 check_os_version
 rt_kernel_install
@@ -220,14 +206,13 @@ user_func
 rdate_install
 vim_func
 g++_func
-git_svn_func
+git_func
 cmake_func
 timesync_requirements
 freqgov_off
 python_install
 cython_install
 curl_func
-#rm_apache
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
 splash_screen_update

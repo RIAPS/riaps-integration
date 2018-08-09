@@ -213,6 +213,7 @@ graphviz_install() {
     sudo apt-get install graphviz xdot -y
 }
 
+# MM TODO:  update for 18.04 file naming once Vagrant Box is created
 quota_install() {
     sudo apt-get install quota -y
     sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
