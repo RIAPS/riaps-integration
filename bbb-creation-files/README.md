@@ -82,7 +82,7 @@ Password:  riaps
 Updated Real-time enabled Kernel will be (once rebooted)
 
 ```
-Kernel: v4.9.xx-ti-rt-rxx
+Kernel: v4.14.xx-ti-rt-rxx
 ```
 
 
