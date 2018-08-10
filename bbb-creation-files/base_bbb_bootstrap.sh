@@ -14,7 +14,10 @@ check_os_version() {
 
 # Install RT Kernel
 rt_kernel_install() {
-    sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14 
+    sudo apt update
+    sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
+    # To make sure the latest overlays are available 
+    sudo apt install --only-upgrade bb-cape-overlays
     echo "installed RT Kernel"
 }
 
