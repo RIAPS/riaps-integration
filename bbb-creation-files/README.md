@@ -6,10 +6,10 @@ These are instructions on how the BBB Base image was created.
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
-1. Download a complete pre-configured image (Ubuntu 18.04) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
+1. Download a complete pre-configured image (Ubuntu 18.04.1) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1)
 
 ```
-$ wget https://rcn-ee.com/rootfs/2018-06-08/elinux/ubuntu-18.04-console-armhf-2018-07-14.tar.xz
+$ wget https://rcn-ee.com/rootfs/2018-08-10/elinux/ubuntu-18.04.1-console-armhf-2018-08-10.tar.xz
 ```
 
 Note:  If this file is not available, contact VU project members.
