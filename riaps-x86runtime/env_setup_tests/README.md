@@ -20,28 +20,33 @@ This a generic application to test that the development environment is setup and
    ```
    riaps@riapsvboxmm:~/riaps_apps$ riaps_ctrl 
    5188:M 21 Aug 14:29:24.229 * Increased maximum number of open files to 10032 (it was originally set to 1024).
-                _._                                                  
-           _.-``__ ''-._                                             
-      _.-``    `.  `_.  ''-._           Redis 3.2.5 (00000000/0) 64 bit
-  .-`` .-```.  ```\/    _.,_ ''-._                                   
- (    '      ,       .-`  | `,    )     Running in standalone mode
- |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
- |    `-._   `._    /     _.-'    |     PID: 5188
-  `-._    `-._  `-./  _.-'    _.-'                                   
- |`-._`-._    `-.__.-'    _.-'_.-'|                                  
- |    `-._`-._        _.-'_.-'    |           http://redis.io        
-  `-._    `-._`-.__.-'_.-'    _.-'                                   
- |`-._`-._    `-.__.-'    _.-'_.-'|                                  
- |    `-._`-._        _.-'_.-'    |                                  
-  `-._    `-._`-.__.-'_.-'    _.-'                                   
-      `-._    `-.__.-'    _.-'                                       
-          `-._        _.-'                                           
-              `-.__.-'                                               
+                   _._                                                  
+              _.-``__ ''-._                                             
+         _.-``    `.  `_.  ''-._           Redis 3.2.5 (00000000/0) 64 bit
+     .-`` .-```.  ```\/    _.,_ ''-._                                   
+    (    '      ,       .-`  | `,    )     Running in standalone mode
+    |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
+    |    `-._   `._    /     _.-'    |     PID: 5188
+     `-._    `-._  `-./  _.-'    _.-'                                   
+    |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+    |    `-._`-._        _.-'_.-'    |           http://redis.io        
+     `-._    `-._`-.__.-'_.-'    _.-'                                   
+    |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+    |    `-._`-._        _.-'_.-'    |                                  
+     `-._    `-._`-.__.-'_.-'    _.-'                                   
+         `-._    `-.__.-'    _.-'                                       
+             `-._        _.-'                                           
+                 `-.__.-'                                               
 
-   5188:M 21 Aug 14:29:24.230 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+   5188:M 21 Aug 14:29:24.230 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set 
+   to the lower value of 128.
    5188:M 21 Aug 14:29:24.230 # Server started, Redis version 3.2.5
-   5188:M 21 Aug 14:29:24.230 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
-   5188:M 21 Aug 14:29:24.230 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+   5188:M 21 Aug 14:29:24.230 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this 
+   issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this 
+   to take effect.
+   5188:M 21 Aug 14:29:24.230 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency 
+   and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as 
+   root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
    5188:M 21 Aug 14:29:24.230 * The server is now ready to accept connections on port 6379
 
 
@@ -62,14 +67,16 @@ This a generic application to test that the development environment is setup and
    [2018-08-21 14:30:25.157] [rdiscovery] [info] Update() returns tempupdate@192.168.1.104:38881 to /WeatherMonitor/WeatherReceiver/
    [2018-08-21 14:30:25.158] [rdiscovery] [info] Get() returns tempupdate@192.168.1.104:38881 to /WeatherMonitor/WeatherReceiver/
    INFO:14:30:29,778:[5293]:TempSensor:on_clock(): Temperature - 66, PID 5293, Tue Aug 21 14:30:29 2018
-   INFO:14:30:29,784:[5299]:TempMonitor:on_tempupdate(): Temperature:66, PID Tue Aug 21 14:30:29 2018, Timestamp:Tue Aug 21 14:30:29 2018
+   INFO:14:30:29,784:[5299]:TempMonitor:on_tempupdate(): Temperature:66, PID Tue Aug 21 14:30:29 2018, Timestamp:Tue Aug 21 14:30:29 
+   2018
    INFO:14:30:34,793:[5293]:TempSensor:on_clock(): Temperature - 67, PID 5293, Tue Aug 21 14:30:34 2018
-   INFO:14:30:34,794:[5299]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 14:30:34 2018, Timestamp:Tue Aug 21 14:30:34 2018
+   INFO:14:30:34,794:[5299]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 14:30:34 2018, Timestamp:Tue Aug 21 14:30:34 
+   2018
    ```
 
-   5.  Halt the application using the RIAPS control GUI.  Select the application button (WeatherMonitor) and choose **Halt**.  The application can also be restarted by selecting **Launch** again.
+5.  Halt the application using the RIAPS control GUI.  Select the application button (WeatherMonitor) and choose **Halt**.  The application can also be restarted by selecting **Launch** again.
 
-   6.  When work with this application is complete, use the RIAPS control GUI to **Remove** the application.
+6.  When work with this application is complete, use the RIAPS control GUI to **Remove** the application.
        
 ## Second Test a Single BBB Talks with the VM
 1.  SSH into the BBB, where xxxx refers to the hostname seen when logged into the BBB.  Or use the IP address instead (xxx.xxx.xxx.xxx).
