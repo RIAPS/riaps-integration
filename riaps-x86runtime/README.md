@@ -71,7 +71,7 @@ nic_name = enp0s8
 
 8.  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
 
-# [Securing Communication Between the VM and BBBs](#SecureComm)
+# [Securing Communication Between the VM and BBBs](#securecomm "secure comm")
 Once all the initial BBB configuration is complete, you can run the following script on the VM to secure the communication between the VM and the BBB with the ssh keys configured on your VM.  Where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB on your network.  Make sure you are logged in as **riaps** user.  This will need to be repeated for all BBBs (or use a fabric script to assist)
 
 ```bash
@@ -80,7 +80,7 @@ Once all the initial BBB configuration is complete, you can run the following sc
         
 # Testing Development Environment Setup
 
-To test your environment works with your BBBs, follow the instructions on [Environment Test Page](env_setup_tests/README.md).
+To test your environment works with your BBBs, follow the instructions on [Environment Test Page](https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime/env_setup_tests/).
 
 # Installing Multiple Virtual Machines (if desired)
 If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change the following to new names:
@@ -104,7 +104,7 @@ vagrant provision 2>&1 | tee update-vm.log
 # RIAPS Platform Update Process
 If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the [RIAPS update script](riaps_install_amd64.sh) to the VM
+1. Download the [RIAPS update script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install_amd64.sh) to the VM
 
 2. Run the update script
 

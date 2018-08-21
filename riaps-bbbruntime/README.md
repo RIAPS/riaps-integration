@@ -33,13 +33,13 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
 ```
 > where **xxxx** is the hostname seen when logging into the BBBs
 
-7. Secure communication between the Host Environment and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#SecureComm) instructions.  Once this process completes, the host environment will automatically login to the beaglebones when using ssh by utilizing your ssh keys.
+7. Secure communication between the Host Environment and the BBBs by following the [Securing Communication Between the VM and BBBs](https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime/README.md#securecomm) instructions.  Once this process completes, the host environment will automatically login to the beaglebones when using ssh by utilizing your ssh keys.
 
 8. Reboot the BBBs
   
 # Update RIAPS Platform Packages on Existing BBBs
 
-1. Download the [RIAPS update script](riaps_install_bbb.sh) to the BBB.
+1. Download the [RIAPS update script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB.
 
 2. Stop the riaps_deplo service by running the kill script.
 
@@ -77,7 +77,7 @@ lost connection
 
 Current services loaded into the image on the BBB and on the host VM:
 
-1. **riaps-deplo.service** - will start the RIAPS deployment application.  This service starts the RIAPS discovery and device manager services.  When enabled, this service is setup to restart if it fails with a 10 s wait period to all the discovery service to timeout.
+1. **riaps-deplo.service** - will start the RIAPS deployment application.  This service starts the RIAPS discovery service.  When enabled, this service is setup to restart if it fails.
 
    - this service is currently disabled on the VM by default
    - this service is currently enabled and started on the BBB by default

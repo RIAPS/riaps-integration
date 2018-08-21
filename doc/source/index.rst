@@ -10,5 +10,6 @@ Welcome to the RIAPS documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   HostEnvSetup.rst
-   NodeSetup.rst
+   HostEnvSetup
+   NodeSetup
+

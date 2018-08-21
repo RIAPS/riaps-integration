@@ -15,9 +15,10 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-import recommonmark
-from recommonmark.parser import CommonMarkParser
-from recommonmark.transform import AutoStructify
+#import recommonmark
+#from recommonmark.parser import CommonMarkParser
+#from recommonmark.transform import AutoStructify
+#from m2r import M2R
 
 # -- Project information -----------------------------------------------------
 
@@ -195,16 +196,20 @@ epub_exclude_files = ['search.html']
 
 # -- Extension configuration -------------------------------------------------
 
+# M2R extension options
+no_underscore_emphasis = True
+m2r_parse_relative_links = True
+
 # Addition for recommonmark extension
 # app setup hook
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-            'url_resolver': lambda url: github_doc_root + url,
-            'auto_toc_tree_section': 'Contents',
-            'enable_eval_rst': True,
-            'enable_auto_doc_ref': True,
-    }, True)
-    app.add_transform(AutoStructify)
+#def setup(app):
+#    app.add_config_value('recommonmark_config', {
+#            'url_resolver': lambda url: github_doc_root + url,
+#            'auto_toc_tree_section': 'Contents',
+#            'enable_eval_rst': True,
+#            'enable_auto_doc_ref': True,
+#    }, True)
+#    app.add_transform(AutoStructify)
 
 # -- Options for intersphinx extension ---------------------------------------
 
