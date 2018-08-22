@@ -1,35 +1,27 @@
 [![Build Status](https://travis-ci.com/RIAPS/riaps-integration.svg?token=pyUEeBLkG7FqiYPhyfxp&branch=master)](https://travis-ci.com/RIAPS/riaps-integration)
 
-# riaps-integration
+# Welcome to the RIAPS documentation!
+
+## RIAPS Host Setup Instructions
+
+The RIAPS host environment is based on a VirtualBox setup using Ubuntu 16.04. Setting up the RIAPS host development environment (Linux VM) can be found in [riaps-x86runtime](riaps-x86runtime/README.md).
+
+## RIAPS Node Setup Instructions
+
+The RIAPS node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Instructions on how to create a RIAPS Beaglebone Black SD Card Image can be found in [riaps-bbbruntime](riaps-bbbruntime/README.md).
+
+## Testing the RIAPS Platform Environment
+
+Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in []().
+
+## Developing the Base RIAPS SD Card Image
+
+The instructions and scripts provided were used to develop the base RIAPS SD Card image that is used when setting up a RIAPS Node using a TI Beaglebone Black board.  This SD card image includes basic third party packages and configures the environment for the RIAPS platform.  The addition of the RIAPS platform is done in the RIAPS Node Setup (previous section).  The intent is to provide a base image that is only periodically updated and to reduce the time necessary for application developers to create RIAPS nodes.
+
+## riaps-integration
 
 In order to use the integration scripts and setup your environment correctly you will need to download a number of other packages from the RIAPS organization. At the time of these instructions, RIAPS is a private organization and you need to have at least read-level access to the repositories. To get this access, please contact Prof. Gabor Karsai or Prof. Abhishek Dubey.
 
 Once you get the read level access, you need to set up an OAUTH Token.  Read https://developer.github.com/v3/oauth/. Create a personal access token as discussed on the page. Set the SCOPE to "repo". That will grant the token access to "Grants read/write access to code, commit statuses, invitations, collaborators, adding team memberships, and deployment statuses for public and private repositories and organizations."
 
 Once you have the token you must use it everytime you want to download the new release in your machine. A trick is to create an environment variable GITHUB_OAUTH_TOKEN with the token value in your bash profile.
-
-# To Setup RIAPS Development Environment
-
-- Setting up the RIAPS host development environment (Linux VM) can be found in [riaps-x86runtime](riaps-x86runtime/README.md).
-- Creating a RIAPS Beaglebone Black SD Card Image can be found in [riaps-bbbruntime](riaps-bbbruntime/README.md).
-
-# Integration Testing
-
-The following examples are used in the integration testing to make sure the RIAPS framework functionality is working.  The deployment file (.depl) may need to be adjusted to work on different platforms.  
-
-| Tests   | Functionality      |
-| ---------- |:------------------:|
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/WeatherMonitor | Publish/Subscribe Ports|
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAverager | Publish/Subscribe Ports|
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimator | Publish/Subscribe & Request/Reply Ports |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRep | Request/Reply Ports |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/CltSrv | Client / Server Ports |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/QryAns | Query/Answer Ports |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/TimerS | Timer Ports |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedAveragerIO |  Device Component IO |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/EchoIO | Device Component / Actor Machinery |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/DistributedEstimatorCapnp | Capnp Proto Interfacing |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/Limits | CPU / Memory Resource Limiting |
-| https://github.com/RIAPS/riaps-pycom/tree/master/tests/ReqRepLib | Library Module |
-
-
