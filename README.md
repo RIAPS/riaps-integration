@@ -4,7 +4,7 @@
 
 ## RIAPS Host Setup Instructions
 
-The RIAPS host environment is based on a VirtualBox setup using Ubuntu 16.04. Setting up the RIAPS host development environment (Linux VM) can be found in [riaps-x86runtime](riaps-x86runtime/README.md).
+The RIAPS host environment is based on a VirtualBox setup using Ubuntu 16.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
 
 ## RIAPS Node Setup Instructions
 
@@ -17,7 +17,7 @@ Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application ca
 
 ## Developing the Base RIAPS SD Card Image
 
-The instructions and scripts provided were used to develop the base RIAPS SD Card image. This base image is used when setting up a RIAPS Node using a TI Beaglebone Black board.  The SD card image includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide a base image that is only periodically updated and to reduce the time necessary for application developers to create RIAPS nodes.  Instructions for creating this image is located in [bbb-creation-files](bbb-creation-files/README.md).
+The instructions and scripts provided were used to develop the base RIAPS SD Card image. This base image is used when setting up a RIAPS Node using a TI Beaglebone Black board.  The SD card image includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide a base image that is only periodically updated and to reduce the time necessary for application developers to create RIAPS nodes.  Instructions for creating this image is located in [Base RIAPS SD Card Image Creation Page](bbb-creation-files/README.md).
 
 ## Repository Notes
 
