@@ -8,17 +8,18 @@ The RIAPS host environment is based on a VirtualBox setup using Ubuntu 16.04. Se
 
 ## RIAPS Node Setup Instructions
 
-The RIAPS node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Instructions on how to create a RIAPS Beaglebone Black SD Card Image can be found in [riaps-bbbruntime](riaps-bbbruntime/README.md).
+The RIAPS node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Instructions on how to create a RIAPS Beaglebone Black SD Card Image can be found in [BBB Runtime Setup Page](riaps-bbbruntime/README.md).
 
 ## Testing the RIAPS Platform Environment
 
-Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in []().
+Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in [Environment Test Page](env_setup_tests/README.md).
+
 
 ## Developing the Base RIAPS SD Card Image
 
-The instructions and scripts provided were used to develop the base RIAPS SD Card image that is used when setting up a RIAPS Node using a TI Beaglebone Black board.  This SD card image includes basic third party packages and configures the environment for the RIAPS platform.  The addition of the RIAPS platform is done in the RIAPS Node Setup (previous section).  The intent is to provide a base image that is only periodically updated and to reduce the time necessary for application developers to create RIAPS nodes.
+The instructions and scripts provided were used to develop the base RIAPS SD Card image. This base image is used when setting up a RIAPS Node using a TI Beaglebone Black board.  The SD card image includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide a base image that is only periodically updated and to reduce the time necessary for application developers to create RIAPS nodes.  Instructions for creating this image is located in [bbb-creation-files](bbb-creation-files/README.md).
 
-## riaps-integration
+## Repository Notes
 
 In order to use the integration scripts and setup your environment correctly you will need to download a number of other packages from the RIAPS organization. At the time of these instructions, RIAPS is a private organization and you need to have at least read-level access to the repositories. To get this access, please contact Prof. Gabor Karsai or Prof. Abhishek Dubey.
 

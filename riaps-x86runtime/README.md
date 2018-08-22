@@ -40,23 +40,23 @@ vagrant up 2>&1 | tee install-vm.log
     - **The password for vagrant user is 'vagrant'**
 
     <br/>
-    
+
     > Note:  The initial installation will take some time to complete and will continue in a command line window.  Wait for this step to complete before continuing on to the next steps.
 
 6. After the vagrant script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
 - Determine the desired ethernet interface
-    
+
 ```bash
 ifconfig
 ```   
-    
+
 - Edit the riaps configuration to enable that interface
-    
+
 ```bash
 sudo nano /usr/local/riaps/etc/riaps.conf
 ```   
-    
+
 - Make sure the NIC name and match the desired ethernet interface name from 'ifconfig'
 
 ```python
@@ -71,49 +71,45 @@ nic_name = enp0s8
 
 8.  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
 
-# [Securing Communication Between the VM and BBBs](#securecomm "secure comm")
+# [Securing Communication Between the VM and BBBs](#securecomm)
 Once all the initial BBB configuration is complete, you can run the following script on the VM to secure the communication between the VM and the BBB with the ssh keys configured on your VM.  Where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB on your network.  Make sure you are logged in as **riaps** user.  This will need to be repeated for all BBBs (or use a fabric script to assist)
 
 ```bash
 ./secure_keys.sh bbb_initial_keys/bbb_initial.key ~/.ssh/id_rsa.key ~/.ssh/id_rsa.pub xxx.xxx.xxx.xxx
 ```
-        
-# Testing Development Environment Setup
-
-To test your environment works with your BBBs, follow the instructions on [Environment Test Page](https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime/env_setup_tests/).
 
 # Installing Multiple Virtual Machines (if desired)
 If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change the following to new names:
 
 - config.vm.hostname = "riapsvbox"
 - vb&#46;name = "riaps_vbox"   
-    
+
 # RIAPS Virtual Machine Update Process
 If you have a running RIAPS VM and want to upgrade it, follow these steps:
 
 - Make sure the VM is shutdown
 - Update the contents of the 'riaps-x86runtime' folder used to create the original Virtual Machine with the latest release by downloading the RIAPS development box setup file: [riaps-x86runtime.tar.gz](https://github.com/RIAPS/riaps-integration/releases)
-- In a command line window, go back to that 'riaps-x86runtime' folder 
+- In a command line window, go back to that 'riaps-x86runtime' folder
 - Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
 
 ```bash
-vagrant up 
+vagrant up
 vagrant provision 2>&1 | tee update-vm.log
 ```   
 
 # RIAPS Platform Update Process
 If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the [RIAPS update script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/riaps_install_amd64.sh) to the VM
+1. Download the [RIAPS update script](riaps_install_amd64.sh) to the VM
 
 2. Run the update script
 
 ```bash
 ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
 ```
-    
+
 # Helpful Hints
-1. If you need to remove a vagrant VM, go to the command line and type 
+1. If you need to remove a vagrant VM, go to the command line and type
 
 ```bash
 vagrant global-status
@@ -132,5 +128,3 @@ vagrant destroy 40d1606
 > Note: 40d1606 is the ID
 
 3. Now you can create a VM of the same name again.
- 
-    
