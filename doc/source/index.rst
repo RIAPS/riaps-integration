@@ -12,4 +12,5 @@ Welcome to the RIAPS documentation!
 
    HostEnvSetup
    NodeSetup
+   EnvironTest
 
