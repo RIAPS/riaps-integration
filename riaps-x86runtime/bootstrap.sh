@@ -95,6 +95,7 @@ cross_setup() {
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
+    # might need for 18.04:  sudo apt-get install build-essential -y
     echo "setup multi-arch capabilities"
 }
 
@@ -114,27 +115,30 @@ java_func () {
 }
 
 # MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
-g++_func() {
-    sudo apt-get install gcc g++ -y
-    echo "installed g++"
-}
+#g++_func() {
+#    sudo apt-get install gcc g++ -y
+#    echo "installed g++"
+#}
 
 # Setup source management tools
 # MM TODO:  git is already installed, do we need svn now?
-git_svn_func() {
-    sudo apt-get install git subversion -y
-    echo "installed git and svn"
-}
+#git_svn_func() {
+#    sudo apt-get install git subversion -y
+#    echo "installed git and svn"
+#}
 
 cmake_func() {
     sudo apt-get install cmake -y
+    sudo apt-get install byacc flex pkg-config libtool libtool-bin -y
+    sudo apt-get install autoconf autogen -y
     echo "installed cmake"
 }
 
 # Required for riaps-timesync
 # MM TODO:  pps-tools is already there 
 timesync_requirements() {
-    sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+#    sudo apt-get install pps-tools -y
+    sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
@@ -143,6 +147,8 @@ timesync_requirements() {
 
 python_install () {
     sudo apt-get install python3-dev python3-pip -y
+    sudo apt-get install python3-dev:armhf -y
+    sudo apt-get install python3-setuptools -y
     sudo pip3 install --upgrade pip 
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -158,6 +164,13 @@ curl_func () {
     echo "installed curl"
 }
 
+boost_install() {
+    sudo apt-get install libboost-dev -y
+}
+
+term_handling_install() {
+    sudo apt-get install libncurses5-dev libncurses5-dev:armhf -y
+}
 
 eclipse_shortcut() {
     shortcut=/home/$1/Desktop/Eclipse.desktop
@@ -266,8 +279,8 @@ cross_setup
 vim_func
 #vscode_install - not available in 18.04 yet
 java_func
-g++_func
-git_svn_func
+#g++_func
+#git_svn_func
 cmake_func
 timesync_requirements
 python_install
@@ -275,6 +288,8 @@ cython_install
 eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
+boost_install
+term_handling_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER
