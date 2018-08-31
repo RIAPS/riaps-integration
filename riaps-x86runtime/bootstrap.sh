@@ -59,10 +59,6 @@ user_func () {
 cross_setup() {
     # Add armhf repositories
     sudo apt-get install software-properties-common apt-transport-https -y      
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse"    
     
     # Qualify the architectures for existing repositories trying to find armhf (which is not there) - this is due to issue installing later
     # Need to figure out how not to need this (MM)
@@ -90,7 +86,6 @@ cross_setup() {
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse"
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse" || true
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse"
-
     
     sudo dpkg --add-architecture armhf
     sudo apt-get update
