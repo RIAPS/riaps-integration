@@ -144,7 +144,7 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 18.04 LTS" > issue.net
+    echo "Ubuntu 18.04.1 LTS" > issue.net
     echo "" >> issue.net
     echo "rcn-ee.net console Ubuntu Image 2018-08-10">> issue.net
     echo "">> issue.net
