@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-set -e 
+set -e
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
 # Script functions
 check_os_version() {
-    # Need to write code here to check OS version and architecture. 
+    # Need to write code here to check OS version and architecture.
     # The installation should fail if the OS version is not correct.
     true
 
@@ -16,7 +16,7 @@ check_os_version() {
 rt_kernel_install() {
     sudo apt update
     sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
-    # To make sure the latest overlays are available 
+    # To make sure the latest overlays are available
     sudo apt install --only-upgrade bb-cape-overlays
     echo "installed RT Kernel"
 }
@@ -27,14 +27,14 @@ user_func() {
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         getent group gpio || sudo groupadd gpio
-        sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
-        sudo usermod -aG dialout $RIAPSAPPDEVELOPER 
+        sudo usermod -aG sudo $RIAPSAPPDEVELOPER
+        sudo usermod -aG dialout $RIAPSAPPDEVELOPER
         sudo usermod -aG gpio  $RIAPSAPPDEVELOPER
         sudo usermod -aG pwm $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
         echo "created user accounts"
-    fi    
+    fi
 }
 
 # Needed to allow apt-get update to work properly
@@ -49,21 +49,26 @@ vim_func() {
     echo "installed vim"
 }
 
-g++_func() {
-    sudo apt-get install gcc g++ -y
-    echo "installed g++"
-}
+# MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
+#g++_func() {
+#    sudo apt-get install gcc g++ -y
+#    echo "installed g++"
+#}
 
-git_func() {
-    sudo apt-get install git -y
-    echo "installed git"
-}
+# MM TODO:  git is already installed, do we need svn now?
+#git_func() {
+#    sudo apt-get install git -y
+#    echo "installed git"
+#}
 
 cmake_func() {
     sudo apt-get install cmake -y
+    sudo apt-get install byacc flex pkg-config libtool libtool-bin -y
+    sudo apt-get install autoconf autogen -y
+    sudo apt-get install libreadline-dev -y
     echo "installed cmake"
 }
- 
+
 timesync_requirements() {
     sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
@@ -81,8 +86,9 @@ freqgov_off() {
 }
 
 python_install() {
+    sudo pip3 install --upgrade pip
     sudo apt-get install python3-dev python3-pip -y
-    sudo pip3 install --upgrade pip 
+    sudo apt-get install python3-setuptools -y
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
 }
@@ -97,9 +103,24 @@ curl_func() {
     echo "installed curl"
 }
 
+boost_install() {
+    sudo apt-get install libboost -y
+    echo "installed boost"
+}
+
+nethogs_prereq_install() {
+    sudo apt-get install libpcap -y
+    echo "installed nethogs prerequisites"
+}
+
+opendht_prereqs_install() {
+    sudo apt-get install nettle libgnutls28 libmsgpack -y
+    echo "installed opendht prerequisites"
+}
+
 watchdog_timers() {
-    echo " " >> /etc/sysctl.conf 
-    echo "###################################################################" >> /etc/sysctl.conf 
+    echo " " >> /etc/sysctl.conf
+    echo "###################################################################" >> /etc/sysctl.conf
     echo "# Enable Watchdog Timer on Kernel Panic and Kernel Oops" >> /etc/sysctl.conf
     echo "# Added for RIAPS Platform (01/25/18, MM)" >> /etc/sysctl.conf
     echo "kernel.panic_on_oops = 1" >> /etc/sysctl.conf
@@ -122,10 +143,10 @@ splash_screen_update() {
     echo "# those of the United States Government or any agency thereof.                 #" >> motd
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
-    # Issue.net                                
+    # Issue.net
     echo "Ubuntu 18.04 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-07-14">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-08-10">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -139,7 +160,7 @@ setup_hostname() {
     cp etc/systemd/system/sethostname.service /etc/systemd/system/.
     systemctl daemon-reload
     systemctl start sethostname.service
-    systemctl enable sethostname.service 
+    systemctl enable sethostname.service
     echo "setup hostname"
 }
 
@@ -170,7 +191,7 @@ setup_network() {
 # Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
 security_pkg_install() {
     echo "add security packages"
-    sudo pip3 install 'paramiko==2.2.1' 'cryptography==1.9' --verbose
+    sudo pip3 install 'paramiko==2.4.1' 'cryptography==2.1.4' --verbose
     echo "security packages setup"
 }
 
@@ -183,17 +204,17 @@ setup_ssh_keys() {
     sudo -H -u $1 cat /home/$1/.ssh/bbb_initial.pub >> /home/$1/.ssh/authorized_keys
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
-    
+
     echo "Added unsecured public key to authorized keys for $1"
 }
 
 setup_riaps_repo() {
     sudo apt-get install software-properties-common apt-transport-https -y
-	
+
     # Add RIAPS repository
     echo "add repo to sources"
     sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"    
+    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     echo "get riaps public key"
     wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
     echo "adding riaps public key"
@@ -216,6 +237,9 @@ freqgov_off
 python_install
 cython_install
 curl_func
+boost_install
+nethogs_prereq_install
+opendht_prereqs_install
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
 splash_screen_update

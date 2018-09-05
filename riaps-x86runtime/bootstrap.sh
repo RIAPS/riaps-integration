@@ -20,14 +20,14 @@ parse_args()
         esac
     done
     pwd
-    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ] 
-    then 
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
+    then
         echo "Found user ssh keys.  Will use them"
-    else 
+    else
         echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
         ssh-keygen -N "" -q -f $PRIVATE_KEY
         mv $PRIVATE_KEY.pub $PUBLIC_KEY
-    fi 
+    fi
 }
 
 print_help()
@@ -49,17 +49,17 @@ user_func () {
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         sudo chage -d 0 $RIAPSAPPDEVELOPER
-        sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
+        sudo usermod -aG sudo $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
-    fi    
+    fi
 }
 
 # Configure for cross functional compilation
 cross_setup() {
     # Add armhf repositories
-    sudo apt-get install software-properties-common apt-transport-https -y      
-    
+    sudo apt-get install software-properties-common apt-transport-https -y
+
     # Qualify the architectures for existing repositories trying to find armhf (which is not there) - this is due to issue installing later
     # Need to figure out how not to need this (MM)
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
@@ -67,7 +67,7 @@ cross_setup() {
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
     sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"   
+    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
     sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse" || true
@@ -76,8 +76,8 @@ cross_setup() {
     sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
     sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted" || true    
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"    
+    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
+    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe" || true
     sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
     sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
@@ -86,11 +86,11 @@ cross_setup() {
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse"
     sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse" || true
     sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse"
-    
+
     sudo dpkg --add-architecture armhf
     sudo apt-get update
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
-    # might need for 18.04:  sudo apt-get install build-essential -y
+    sudo apt-get install build-essential -y
     echo "setup multi-arch capabilities"
 }
 
@@ -99,12 +99,13 @@ vim_func() {
     echo "installed vim"
 }
 
-vscode_install() {
-    sudo apt install code -y
-    echo "installed vscode"
-}
+# MM TODO: Not available for bionic yet
+#vscode_install() {
+#    sudo apt install code -y
+#    echo "installed vscode"
+#}
 
-java_func () {    
+java_func () {
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
 }
@@ -126,11 +127,13 @@ cmake_func() {
     sudo apt-get install cmake -y
     sudo apt-get install byacc flex pkg-config libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
+    sudo apt-get install libreadline-dev -y
+    sudo apt-get install libreadline-dev:armhf -y
     echo "installed cmake"
 }
 
 # Required for riaps-timesync
-# MM TODO:  pps-tools is already there 
+# MM TODO:  pps-tools is already there
 timesync_requirements() {
 #    sudo apt-get install pps-tools -y
     sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
@@ -142,9 +145,9 @@ timesync_requirements() {
 
 python_install () {
     sudo apt-get install python3-dev python3-pip -y
-    sudo apt-get install python3-dev:armhf -y
+    sudo apt-get install python3-dev:armhf -y libpython3-dev:armhf
     sudo apt-get install python3-setuptools -y
-    sudo pip3 install --upgrade pip 
+    sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
 }
@@ -161,10 +164,21 @@ curl_func () {
 
 boost_install() {
     sudo apt-get install libboost-dev -y
+    echo "installed boost"
 }
 
-term_handling_install() {
-    sudo apt-get install libncurses5-dev libncurses5-dev:armhf -y
+nethogs_prereq_install() {
+    sudo apt-get install libpcap-dev -y
+    sudo apt-get install libpcap-dev:armhf -y
+    echo "installed nethogs prerequisites"
+}
+
+opendht_prereqs_install() {
+    sudo apt-get install libncurses5-dev -y
+    sudo apt-get install libncurses5-dev:armhf -y
+    sudo apt-get install nettle-dev libgnutls28-dev libmsgpack-dev -y
+    sudo apt-get install nettle-dev:armhf libgnutls28-dev:armhf libmsgpack-dev:armhf -y
+    echo "installed opendht prerequisites"
 }
 
 eclipse_shortcut() {
@@ -192,20 +206,20 @@ eclipse_func() {
        sudo chown -R $1:$1 /home/$1/eclipse
        sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
        eclipse_shortcut $1
-    else    
+    else
 	   echo "eclipse already installed at /home/$1/eclipse"
-           
+
     fi
 }
 
 redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
-    wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
-    tar xzf redis-3.2.5.tar.gz 
-    make -C redis-3.2.5 
-    sudo make -C redis-3.2.5 install
-    rm -rf redis-3.2.5 
-    rm -rf redis-3.2.5.tar.gz 
+    wget http://download.redis.io/releases/redis-4.0.11.tar.gz
+    tar xzf redis-4.0.11.tar.gz
+    make -C redis-4.0.11
+    sudo make -C redis-4.0.11 install
+    rm -rf redis-4.0.11
+    rm -rf redis-4.0.11.tar.gz
     echo "installed redis"
    else
      echo "redis already installed. skipping"
@@ -251,7 +265,7 @@ setup_ssh_keys () {
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
     sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
     sudo cp secure_keys.sh /home/$1/.
-    sudo chown $1:$1 /home/$1/secure_keys.sh 
+    sudo chown $1:$1 /home/$1/secure_keys.sh
     sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
     echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
@@ -284,7 +298,8 @@ eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
 boost_install
-term_handling_install
+nethogs_prereq_install
+opendht_prereqs_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER
