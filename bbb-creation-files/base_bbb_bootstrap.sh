@@ -86,9 +86,9 @@ freqgov_off() {
 }
 
 python_install() {
-    sudo pip3 install --upgrade pip
     sudo apt-get install python3-dev python3-pip -y
     sudo apt-get install python3-setuptools -y
+    sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
 }
@@ -103,18 +103,21 @@ curl_func() {
     echo "installed curl"
 }
 
+# libboost does not exist, so using -dev
 boost_install() {
-    sudo apt-get install libboost -y
+    sudo apt-get install libboost-dev -y
     echo "installed boost"
 }
 
-nethogs_prereq_install() {
-    sudo apt-get install libpcap -y
-    echo "installed nethogs prerequisites"
-}
+# MM TODO:  already part of 18.04 base image
+#nethogs_prereq_install() {
+#    sudo apt-get install libpcap -y
+#    echo "installed nethogs prerequisites"
+#}
 
+# MM TODO:  nettle6, libgnutls30 is already install
 opendht_prereqs_install() {
-    sudo apt-get install nettle libgnutls28 libmsgpack -y
+    sudo apt-get install nettle6 libgnutls30 libmsgpack-dev -y
     echo "installed opendht prerequisites"
 }
 
@@ -229,8 +232,8 @@ rt_kernel_install
 user_func
 rdate_install
 vim_func
-g++_func
-git_func
+#g++_func
+#git_func
 cmake_func
 timesync_requirements
 freqgov_off
@@ -238,7 +241,7 @@ python_install
 cython_install
 curl_func
 boost_install
-nethogs_prereq_install
+#nethogs_prereq_install
 opendht_prereqs_install
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
