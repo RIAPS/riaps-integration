@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Packages already in base 18.04 image that are utilized by RIAPS Components:
+# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
+# pps-tools, libpcap0.8, nettle6
+
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
@@ -99,33 +103,14 @@ vim_func() {
     echo "installed vim"
 }
 
-# MM TODO: Not available for bionic yet
-#vscode_install() {
-#    sudo apt install code -y
-#    echo "installed vscode"
-#}
-
 java_func () {
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
 }
 
-# MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
-#g++_func() {
-#    sudo apt-get install gcc g++ -y
-#    echo "installed g++"
-#}
-
-# Setup source management tools
-# MM TODO:  git is already installed, do we need svn now?
-#git_svn_func() {
-#    sudo apt-get install git subversion -y
-#    echo "installed git and svn"
-#}
-
 cmake_func() {
     sudo apt-get install cmake -y
-    sudo apt-get install byacc flex pkg-config libtool libtool-bin -y
+    sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
     sudo apt-get install libreadline-dev -y
     sudo apt-get install libreadline-dev:armhf -y
@@ -133,9 +118,7 @@ cmake_func() {
 }
 
 # Required for riaps-timesync
-# MM TODO:  pps-tools is already there
 timesync_requirements() {
-#    sudo apt-get install pps-tools -y
     sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
@@ -144,9 +127,8 @@ timesync_requirements() {
 }
 
 python_install () {
-    sudo apt-get install python3-dev python3-pip -y
+    sudo apt-get install python3-pip -y
     sudo apt-get install python3-dev:armhf -y libpython3-dev:armhf
-    sudo apt-get install python3-setuptools -y
     sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -162,8 +144,10 @@ curl_func () {
     echo "installed curl"
 }
 
+# MM TODO:  make sure libboost is multiarch capable
 boost_install() {
     sudo apt-get install libboost-dev -y
+    sudo apt-get install libboost-dev:armhf -y
     echo "installed boost"
 }
 
@@ -176,8 +160,8 @@ nethogs_prereq_install() {
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
     sudo apt-get install libncurses5-dev:armhf -y
-    sudo apt-get install nettle-dev libgnutls28-dev libmsgpack-dev -y
-    sudo apt-get install nettle-dev:armhf libgnutls28-dev:armhf libmsgpack-dev:armhf -y
+    sudo apt-get install nettle-dev -y
+    sudo apt-get install nettle-dev:armhf -y
     echo "installed opendht prerequisites"
 }
 
@@ -288,8 +272,6 @@ cross_setup
 vim_func
 #vscode_install - not available in 18.04 yet
 java_func
-#g++_func
-#git_svn_func
 cmake_func
 timesync_requirements
 python_install
@@ -298,8 +280,8 @@ eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
 boost_install
-nethogs_prereq_install
 opendht_prereqs_install
+libsoc_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER

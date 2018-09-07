@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Packages already in base 18.04 image that are utilized by RIAPS Components:
+# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
+# pps-tools, libpcap0.8, nettle6, libgnutls30, libncurses5
+
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
@@ -49,28 +53,16 @@ vim_func() {
     echo "installed vim"
 }
 
-# MM TODO:  may not be necessary, already have gcc/g++ 7.3.0 in image
-#g++_func() {
-#    sudo apt-get install gcc g++ -y
-#    echo "installed g++"
-#}
-
-# MM TODO:  git is already installed, do we need svn now?
-#git_func() {
-#    sudo apt-get install git -y
-#    echo "installed git"
-#}
-
 cmake_func() {
     sudo apt-get install cmake -y
-    sudo apt-get install byacc flex pkg-config libtool libtool-bin -y
+    sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
     sudo apt-get install libreadline-dev -y
     echo "installed cmake"
 }
 
 timesync_requirements() {
-    sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+    sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
@@ -86,8 +78,7 @@ freqgov_off() {
 }
 
 python_install() {
-    sudo apt-get install python3-dev python3-pip -y
-    sudo apt-get install python3-setuptools -y
+    sudo apt-get install python3-pip -y
     sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -103,23 +94,15 @@ curl_func() {
     echo "installed curl"
 }
 
-# libboost does not exist, so using -dev
 boost_install() {
-    sudo apt-get install libboost-dev -y
+    sudo apt-get install libboost-all-dev -y
     echo "installed boost"
 }
 
-# MM TODO:  already part of 18.04 base image
-#nethogs_prereq_install() {
-#    sudo apt-get install libpcap -y
-#    echo "installed nethogs prerequisites"
+# MM TODO: not sure if this will be needed, here in case it is
+#libsoc_install() {
+#    sudo apt-get install libsoc2
 #}
-
-# MM TODO:  nettle6, libgnutls30 is already install
-opendht_prereqs_install() {
-    sudo apt-get install nettle6 libgnutls30 libmsgpack-dev -y
-    echo "installed opendht prerequisites"
-}
 
 watchdog_timers() {
     echo " " >> /etc/sysctl.conf
@@ -232,8 +215,6 @@ rt_kernel_install
 user_func
 rdate_install
 vim_func
-#g++_func
-#git_func
 cmake_func
 timesync_requirements
 freqgov_off
@@ -241,8 +222,7 @@ python_install
 cython_install
 curl_func
 boost_install
-#nethogs_prereq_install
-opendht_prereqs_install
+#libsoc_install
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
 splash_screen_update
