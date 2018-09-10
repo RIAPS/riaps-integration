@@ -135,8 +135,8 @@ python_install () {
 }
 
 cython_install() {
-    sudo apt-get install cython3 -y
-    echo "installed cython3"
+  sudo pip3 install cython --verbose
+  echo "installed cython"
 }
 
 curl_func () {
