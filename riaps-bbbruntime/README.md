@@ -1,10 +1,8 @@
 # Setting up the BBB images
 
-1. Download the latest BBB image from the RIAPS Wiki.
+1. Make or Download the latest BBB image
 
-    [BBB Base Image -  June 12, 2018](https://riaps.isis.vanderbilt.edu/redmine/attachments/download/286/riaps-bbb-base-20180612.zip)
-
-    ** NOTE: REMOVE THIS LINK BEFORE THIS REPOSITORY GOES PUBLIC!!!!! **
+    BBB Base Image -  June 12, 2018
 
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
