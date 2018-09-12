@@ -37,7 +37,6 @@ sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
 1. With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
 
 2. Download and compress the [bbb-creation-files folder](https://github.com/RIAPS/riaps-integration/tree/master/bbb-creation-files) and transfer it to the BBB.
-MM TODO - UPDATE:  so that understandable from documentation repository
 
 3. On the BBB, unpack the installation and move into the package
 
@@ -69,7 +68,7 @@ sudo apt-get update
 
 7. Remove install files from /home/ubuntu
 
-8. Place https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh in /home/riaps/ to allow updating of the RIAPS platform by script
+8. Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
 
 9. Reboot BBB and sign in as 'riaps' user
 
