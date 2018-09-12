@@ -117,6 +117,11 @@ cmake_func() {
     echo "installed cmake"
 }
 
+utils_install() {
+    sudo apt-get install htop -y
+    sudo apt-get install openssh-server -y
+}
+
 # Required for riaps-timesync
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
@@ -273,6 +278,7 @@ vim_func
 #vscode_install - not available in 18.04 yet
 java_func
 cmake_func
+utils_install
 timesync_requirements
 python_install
 cython_install

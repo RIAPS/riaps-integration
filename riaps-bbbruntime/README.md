@@ -1,9 +1,9 @@
 # Setting up the BBB images
 
-1. Download the latest BBB image from the RIAPS Wiki.
+1. Make or Download the latest BBB image from the RIAPS Wiki.
 
-    https://riaps.isis.vanderbilt.edu/redmine/attachments/download/273/riaps_bbb_base_20180418.zip
-    
+  ***Note:  Latest version was made on September 10th, 2018***
+
 2. Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
 3. Put the SD Card into the BBB and boot it up.
@@ -13,25 +13,25 @@
 5. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 ```
         $ ./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
-```	
+```
 
 6. You can ssh into the BBBs using the following:
 
 	```
 	Username:  riaps
 	Password:  riaps
-	
+
 	$ ssh -i /home/riaps/.ssh/id_rsa.key riaps@xxx.xxx.xxx.xxx
 	            where xxx.xxx.xxx.xxx is the IP address of the BBB
 	      or
 	$ ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
 	            where xxxx is the hostname seen when logging into the BBBs
 	```
-	
+
 7. Secure communication between the Host Environment and the BBBs by following the "Securing Communication Between the VM and BBBs" instructions on https://github.com/RIAPS/riaps-integration/tree/master/riaps-x86runtime.  Once this process completes, the host environment will automatically login to the bones when using ssh utilizing your ssh keys.
 
 8. Reboot the BBBs
-  
+
 # Update RIAPS Platform Packages on Existing BBBs
 
 1. Download the RIAPS update script (https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) to the BBB.
@@ -45,8 +45,8 @@
 	$ sudo apt-get install 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
 	```
 
-# Helpful Hints 
-	
+# Helpful Hints
+
 1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
 
  	```
@@ -67,7 +67,7 @@
 	Host key verification failed.
 	lost connection
 	```
-	
+
 
 # Available RIAPS Services
 
@@ -87,5 +87,3 @@ To see the status of a service or control its state, use the following commands 
     $ sudo systemctl enable riaps-<name>.service
     $ sudo systemctl disable riaps-<name>.service
     ```
-    
-   

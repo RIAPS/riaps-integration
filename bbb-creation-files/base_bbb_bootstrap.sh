@@ -61,6 +61,10 @@ cmake_func() {
     echo "installed cmake"
 }
 
+htop_install() {
+    sudo apt-get install htop -y
+}
+
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
@@ -216,6 +220,7 @@ user_func
 rdate_install
 vim_func
 cmake_func
+htop_install
 timesync_requirements
 freqgov_off
 python_install
