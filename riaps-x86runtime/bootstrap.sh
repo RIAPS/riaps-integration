@@ -59,11 +59,6 @@ user_func () {
     fi
 }
 
-update_kernel () {
-    sudo apt-get update
-    sudo apt-get install -y --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
-}
-
 # Configure for cross functional compilation
 cross_setup() {
     # Add armhf repositories
@@ -129,7 +124,7 @@ utils_install() {
 
 # Required for riaps-timesync
 timesync_requirements() {
-    sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+    sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
@@ -277,7 +272,6 @@ parse_args $@
 print_help
 user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
-update_kernel
 cross_setup
 vim_func
 #vscode_install - not available in 18.04 yet

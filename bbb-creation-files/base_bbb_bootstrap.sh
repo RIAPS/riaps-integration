@@ -66,7 +66,7 @@ htop_install() {
 }
 
 timesync_requirements() {
-    sudo apt-get install linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+    sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
