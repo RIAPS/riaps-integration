@@ -12,7 +12,7 @@ The RIAPS node environment used for this project has been [TI Beaglebone Black](
 
 ## Testing the RIAPS Platform Environment
 
-Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in [Environment Test Page](env_setup_tests/README.md).
+Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in [Environment Test Page](riaps-x86runtime/env_setup_tests/README.md).
 
 ## RIAPS Platform Tutorials
 
