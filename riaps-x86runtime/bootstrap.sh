@@ -59,44 +59,58 @@ user_func () {
     fi
 }
 
-# Configure for cross functional compilation
+# Configure for cross functional compilation - this is vagrant box config dependent
 cross_setup() {
-    # Add armhf repositories
     sudo apt-get install software-properties-common apt-transport-https -y
 
-    # Qualify the architectures for existing repositories trying to find armhf (which is not there) - this is due to issue installing later
-    # Need to figure out how not to need this (MM)
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic main universe multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main universe multiverse"
+    echo "add amd64, i386"
+    # Qualify the architectures for existing repositories
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse"
+
+    echo "add armhf"
+    # Add armhf repositories
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
+
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
+    sudo add-apt-repository  -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
+
+    echo "updated sources.list for multiarch"
 
     sudo dpkg --add-architecture armhf
     sudo apt-get update
+    echo "packages update complete for multiarch"
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
     sudo apt-get install build-essential -y
-    echo "setup multi-arch capabilities"
+    echo "setup multi-arch capabilities complete"
 }
+
 
 vim_func() {
     sudo apt-get install vim -y
@@ -133,7 +147,7 @@ timesync_requirements() {
 
 python_install () {
     sudo apt-get install python3-pip -y
-    sudo apt-get install python3-dev:armhf -y libpython3-dev:armhf
+    sudo apt-get install libpython3-dev:armhf -y
     sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
@@ -233,7 +247,7 @@ quota_install() {
 riaps_install() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     sudo chmod +x ./riaps_install_amd64.sh
@@ -274,7 +288,6 @@ user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
 vim_func
-#vscode_install - not available in 18.04 yet
 java_func
 cmake_func
 utils_install
@@ -286,7 +299,7 @@ redis_install
 curl_func
 boost_install
 opendht_prereqs_install
-libsoc_install
+#MM may be added later:  libsoc_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER
