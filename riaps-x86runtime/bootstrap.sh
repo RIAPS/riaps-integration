@@ -170,10 +170,16 @@ boost_install() {
     echo "installed boost"
 }
 
+# Not currently installed since nethogs is built in riaps-externals,
+# this installed on the build machine (MM)
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libpcap-dev:armhf -y
     echo "installed nethogs prerequisites"
+}
+
+zyre_czmq_prereq_install() {
+     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
 }
 
 opendht_prereqs_install() {
@@ -298,6 +304,7 @@ eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
 boost_install
+zyre_czmq_prereq_install
 opendht_prereqs_install
 #MM may be added later:  libsoc_install
 firefox_install
