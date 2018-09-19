@@ -179,7 +179,9 @@ nethogs_prereq_install() {
 }
 
 zyre_czmq_prereq_install() {
-     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
+    sudo apt-get install libsystemd-dev -y
+    sudo apt-get install libsystemd-dev:armhf -y
+    sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
 }
 
 opendht_prereqs_install() {
