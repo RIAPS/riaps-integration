@@ -153,11 +153,6 @@ python_install () {
     echo "installed python3 and pydev"
 }
 
-cython_install() {
-  sudo pip3 install cython --verbose
-  echo "installed cython"
-}
-
 curl_func () {
     sudo apt install curl -y
     echo "installed curl"
@@ -301,7 +296,6 @@ cmake_func
 utils_install
 timesync_requirements
 python_install
-cython_install
 eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
