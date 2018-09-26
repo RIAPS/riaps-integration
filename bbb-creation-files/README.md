@@ -9,7 +9,7 @@ This work should be done on a Linux machine or VM. We are starting with a pre-co
 1. Download a complete pre-configured image (Ubuntu 18.04.1) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
 
 ```
-wget https://rcn-ee.com/rootfs/2018-08-10/elinux/ubuntu-18.04.1-console-armhf-2018-08-10.tar.xz
+wget https://rcn-ee.com/rootfs/2018-09-11/elinux/ubuntu-18.04.1-console-armhf-2018-09-11.tar.xz
 ```
 
 2. Unpack image and change into the directory (unxz file, then tar xf)

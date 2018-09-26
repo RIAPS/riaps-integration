@@ -16,8 +16,8 @@ Vagrant.configure(2) do |config|
   # boxes at https://atlas.hashicorp.com/search.
 
 
-  config.vm.box = "kurron/bionic-xubuntu"
-  config.vm.box_version = "2018.08.0400"
+  config.vm.box = "riaps/riapsdev"
+  config.vm.box_version = "v0.0.1"
 
   # The time in seconds that Vagrant will wait for the machine to boot and be accessible. By default this is 300 seconds
   config.vm.boot_timeout = 300
@@ -61,7 +61,7 @@ Vagrant.configure(2) do |config|
   #
   config.vm.provider "virtualbox" do |vb|
   	# DIsplay the name of the virtualbox
-  	vb.name = "riaps_vbox"
+  	vb.name = "riaps_devbox"
     vb.gui = true
     vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]

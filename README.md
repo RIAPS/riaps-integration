@@ -4,7 +4,7 @@
 
 ## RIAPS Host Setup Instructions
 
-The RIAPS host environment is based on a VirtualBox setup using Ubuntu 16.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
+The RIAPS host environment is based on a VirtualBox setup using Ubuntu 18.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
 
 ## RIAPS Node Setup Instructions
 

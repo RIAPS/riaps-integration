@@ -136,7 +136,7 @@ splash_screen_update() {
     # Issue.net
     echo "Ubuntu 18.04.1 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-08-10">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2018-09-11">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -204,12 +204,10 @@ setup_riaps_repo() {
     # Add RIAPS repository
     echo "add repo to sources"
     sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+    sudo add-apt-repository -n "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     echo "get riaps public key"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
-    #wget -q --no-check-certificate - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key
     echo "adding riaps public key"
-    #sudo apt-key add riapspublic.key
     sudo apt-get update
     echo "riaps aptrepo setup"
 }
