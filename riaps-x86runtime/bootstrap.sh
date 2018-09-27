@@ -174,6 +174,8 @@ nethogs_prereq_install() {
 }
 
 zyre_czmq_prereq_install() {
+    sudo apt-get install libzmq5, libzmq3-dev -y
+    sudo apt-get install libzmq3-dev:armhf -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libsystemd-dev:armhf -y
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
@@ -241,10 +243,9 @@ graphviz_install() {
     sudo apt-get install graphviz xdot -y
 }
 
-# MM TODO:  update for 18.04 file naming once Vagrant Box is created
 quota_install() {
     sudo apt-get install quota -y
-    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
+# Do by hand (MM):    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
 }
 
 riaps_install() {

@@ -103,6 +103,10 @@ boost_install() {
     echo "installed boost"
 }
 
+zyre_czmq_prereq_install() {
+    sudo apt-get install libzmq5 -y
+}
+
 # MM TODO: not sure if this will be needed, here in case it is
 #libsoc_install() {
 #    sudo apt-get install libsoc2
@@ -226,6 +230,7 @@ python_install
 cython_install
 curl_func
 boost_install
+zyre_czmq_prereq_install
 #libsoc_install
 watchdog_timers
 quota_install $RIAPSAPPDEVELOPER
