@@ -174,7 +174,7 @@ nethogs_prereq_install() {
 }
 
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq5, libzmq3-dev -y
+    sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libzmq3-dev:armhf -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libsystemd-dev:armhf -y
