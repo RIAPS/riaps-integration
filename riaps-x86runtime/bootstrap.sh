@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Packages already in base 18.04 image that are utilized by RIAPS Components:
+# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
+# pps-tools, libpcap0.8, nettle6
+
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
 
@@ -20,14 +24,14 @@ parse_args()
         esac
     done
     pwd
-    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ] 
-    then 
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
+    then
         echo "Found user ssh keys.  Will use them"
-    else 
+    else
         echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
         ssh-keygen -N "" -q -f $PRIVATE_KEY
         mv $PRIVATE_KEY.pub $PUBLIC_KEY
-    fi 
+    fi
 }
 
 print_help()
@@ -49,89 +53,92 @@ user_func () {
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         sudo chage -d 0 $RIAPSAPPDEVELOPER
-        sudo usermod -aG sudo $RIAPSAPPDEVELOPER 
+        sudo usermod -aG sudo $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
         echo "created user accounts"
-    fi    
+    fi
 }
 
-update_kernel () {
-    sudo apt-get update
-    sudo apt-get install -y --install-recommends linux-generic-hwe-16.04 xserver-xorg-hwe-16.04
-}
-
-# Configure for cross functional compilation
+# Configure for cross functional compilation - this is vagrant box config dependent
 cross_setup() {
-    # Add armhf repositories
-    sudo apt-get install software-properties-common apt-transport-https -y      
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"    
-    
-    # Qualify the architectures for existing repositories trying to find armhf (which is not there) - this is due to issue installing later
-    # Need to figure out how not to need this (MM)
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial main restricted" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial main restricted"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial universe"   
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates universe"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial multiverse"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse" || true
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security main restricted" || true    
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security main restricted"    
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security universe" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security universe"
-    sudo add-apt-repository -r "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security multiverse" || true
-    sudo add-apt-repository "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial main universe multiverse"
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse" || true
-    sudo add-apt-repository "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports/ xenial-updates main universe multiverse"
+    sudo apt-get install software-properties-common apt-transport-https -y
 
-    
+    echo "add amd64, i386"
+    # Qualify the architectures for existing repositories
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
+
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse"
+
+    echo "add armhf"
+    # Add armhf repositories
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
+
+    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
+    sudo add-apt-repository  -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
+
+    echo "updated sources.list for multiarch"
+
     sudo dpkg --add-architecture armhf
     sudo apt-get update
+    echo "packages update complete for multiarch"
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
-    echo "setup multi-arch capabilities"
+    sudo apt-get install build-essential -y
+    echo "setup multi-arch capabilities complete"
 }
+
 
 vim_func() {
     sudo apt-get install vim -y
     echo "installed vim"
 }
 
-java_func () {    
+java_func () {
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
 }
 
-g++_func() {
-    sudo apt-get install gcc g++ -y
-    echo "installed g++"
-}
-
-# Setup source management tools
-git_svn_func() {
-    sudo apt-get install git subversion -y
-    echo "installed git and svn"
-}
-
 cmake_func() {
     sudo apt-get install cmake -y
+    sudo apt-get install byacc flex libtool libtool-bin -y
+    sudo apt-get install autoconf autogen -y
+    sudo apt-get install libreadline-dev -y
+    sudo apt-get install libreadline-dev:armhf -y
     echo "installed cmake"
+}
+
+utils_install() {
+    sudo apt-get install htop -y
+    sudo apt-get install openssh-server -y
 }
 
 # Required for riaps-timesync
 timesync_requirements() {
-    sudo apt-get install pps-tools linuxptp libnss-mdns gpsd gpsd-clients chrony -y
+    sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
@@ -139,15 +146,11 @@ timesync_requirements() {
 }
 
 python_install () {
-    sudo apt-get install python3-dev python3-pip -y
-    sudo pip3 install --upgrade pip 
+    sudo apt-get install python3-pip -y
+    sudo apt-get install libpython3-dev:armhf -y
+    sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
     echo "installed python3 and pydev"
-}
-
-cython_install() {
-    sudo apt-get install cython3 -y
-    echo "installed cython3"
 }
 
 curl_func () {
@@ -155,6 +158,35 @@ curl_func () {
     echo "installed curl"
 }
 
+boost_install() {
+    sudo apt-get install libboost-dev -y
+    sudo apt-get install libboost-dev:armhf -y
+    echo "installed boost"
+}
+
+# Not currently installed since nethogs is built in riaps-externals,
+# this installed on the build machine (MM)
+nethogs_prereq_install() {
+    sudo apt-get install libpcap-dev -y
+    sudo apt-get install libpcap-dev:armhf -y
+    echo "installed nethogs prerequisites"
+}
+
+zyre_czmq_prereq_install() {
+    sudo apt-get install libzmq5 libzmq3-dev -y
+    sudo apt-get install libzmq3-dev:armhf -y
+    sudo apt-get install libsystemd-dev -y
+    sudo apt-get install libsystemd-dev:armhf -y
+    sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
+}
+
+opendht_prereqs_install() {
+    sudo apt-get install libncurses5-dev -y
+    sudo apt-get install libncurses5-dev:armhf -y
+    sudo apt-get install nettle-dev -y
+    sudo apt-get install nettle-dev:armhf -y
+    echo "installed opendht prerequisites"
+}
 
 eclipse_shortcut() {
     shortcut=/home/$1/Desktop/Eclipse.desktop
@@ -181,20 +213,20 @@ eclipse_func() {
        sudo chown -R $1:$1 /home/$1/eclipse
        sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
        eclipse_shortcut $1
-    else    
+    else
 	   echo "eclipse already installed at /home/$1/eclipse"
-           
+
     fi
 }
 
 redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
-    wget http://download.redis.io/releases/redis-3.2.5.tar.gz  
-    tar xzf redis-3.2.5.tar.gz 
-    make -C redis-3.2.5 
-    sudo make -C redis-3.2.5 install
-    rm -rf redis-3.2.5 
-    rm -rf redis-3.2.5.tar.gz 
+    wget http://download.redis.io/releases/redis-4.0.11.tar.gz
+    tar xzf redis-4.0.11.tar.gz
+    make -C redis-4.0.11
+    sudo make -C redis-4.0.11 install
+    rm -rf redis-4.0.11
+    rm -rf redis-4.0.11.tar.gz
     echo "installed redis"
    else
      echo "redis already installed. skipping"
@@ -212,13 +244,13 @@ graphviz_install() {
 
 quota_install() {
     sudo apt-get install quota -y
-    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
+# Do by hand (MM):    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
 }
 
 riaps_install() {
     # Add RIAPS repository
-    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main" || true
-    sudo add-apt-repository "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ xenial main"
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
+    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     sudo chmod +x ./riaps_install_amd64.sh
@@ -239,7 +271,7 @@ setup_ssh_keys () {
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
     sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
     sudo cp secure_keys.sh /home/$1/.
-    sudo chown $1:$1 /home/$1/secure_keys.sh 
+    sudo chown $1:$1 /home/$1/secure_keys.sh
     sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
     echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
@@ -257,19 +289,19 @@ parse_args $@
 print_help
 user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
-update_kernel
 cross_setup
 vim_func
 java_func
-g++_func
-git_svn_func
 cmake_func
+utils_install
 timesync_requirements
 python_install
-cython_install
 eclipse_func $RIAPSAPPDEVELOPER
 redis_install
 curl_func
+boost_install
+zyre_czmq_prereq_install
+opendht_prereqs_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER

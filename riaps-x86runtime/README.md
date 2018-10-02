@@ -1,130 +1,87 @@
-# Initial Setup of Vagrant on a Host Machine
+# RIAPS Host Environment Setup Instructions
 
-For first time setup, following these steps to configure your system to run Vagrant and the associated plugins:
+## Importing the RIAPS Virtual Machine
 
-1. Download and install Oracle VirtualBox from https://www.virtualbox.org/.  Use version 5.1.12 or later.
+A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64 and armhf).
 
-2. Download and install the virtual box extensions pack. Make sure that the extensions pack is the same version as your virtual box installation. Review https://www.virtualbox.org/wiki/Downloads for details.
+1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v<date>.tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Open Virtualization Format 2.0 (.ova) file that can be imported into both VirtualBox and VMware tools.
 
-3. Download and install Vagrant from https://www.vagrantup.com/
+  This virtual machine (riaps_devbox.ova) was configured with the following settings:
+  - Disk Size:  10 GB dynamically allocated
+  - Base Memory:  8192 MB
+  - Processor(s):  4
+  - Video Memory:  16 MB
+  - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
+  - USB Ports:  USB 3.0 (xHCI) Controller  
 
-4. Install the Vagrant plugin for VirtualBox Guest Additions. This command is issued from a command line window on the host machine.  The base box used comes with the Guest Additions for 5.0.18, and the plugin will take care to install the correct Guest Additions if your version of VirtualBox differs from that.   
 
-```bash
-vagrant plugin install vagrant-vbguest
+> ***Note: Guest Additions tools were not included and will need to be setup by the import user.***
+
+2) Import the appliance (riaps_devbox.ova) into a virtual machine toolset.
+
+3) Login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.
+
+4) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
+
+  * Under Devices Menu, select **Insert Guest Additions CD image...**
+  * Open the file manager to determine where the image was mounted.
+  * Open an terminal window and navigate to the image directory.
+  * Run the installation tool
+     ```
+     sudo ./autorun.sh
+     ```
+  * Eject the Guest Additions CD when complete.
+  * Shutdown the VM to configure the Guest Addition options
+  * Select the VM and open the settings.  Under General, there are Shared Clipboard and Drag'n'Drop options that are useful.
+  * Restart the VM
+
+## <a name="config-network">Configuring Environment for Local Network Setup</a>
+
+Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
+
+> ***Note:  Each time the RIAPS platform is updated (in particular, the riaps-pycom package), this configuration setup will need to be repeated.***
+
+1) Determine the desired ethernet interface
+
 ```
-
-5. Install the Vagrant scp plugin.  This command is issued from a command line window on the host machine.  
-
-```bash
-vagrant plugin install vagrant-scp
-```  
-
-# Initial Installation of RIAPS Specific Virtual Machine
-
-1. Download the RIAPS development box setup file: [riaps-x86runtime.tar.gz](https://github.com/RIAPS/riaps-integration/releases). Then, unzip it and change into that directory in the command line window.  
-
-2. If you want to have your own ssh keys installed initially, download your rsa ssh key pair (.pub and .key) to the same directory.  If you do not have any specific keys you would like to use, keys will be automatically generated for you.  The key name must be **id_rsa.pub** and **id_rsa.key**.  The same key pair will be used on the host development machine (VM) and the BBB.
-
-3. Then issue the command from the file folder with the vagrant information (unzipped in the previous step).  This command will run a script in the command line window to setup the Virtual Machine for the RIAPS platform.  The 'tee' with a filename allows you to record the installation process and any errors on a Linux system.  If you have any issues during installation, this is a good file to send with your questions.  
-
-```bash
-vagrant up 2>&1 | tee install-vm.log
-```
-
-4. When asked which network interface to use, pick the most appropriate to your system configuration which will give you internet access.
-
-5. The VM will launch with a username of vagrant.  Select the **RIAPS App Developer** username.  
-
-    - **The default password for RIAPS App Developer is 'riaps'**
-    - **The password for vagrant user is 'vagrant'**
-
-    <br/>
-
-    > Note:  The initial installation will take some time to complete and will continue in a command line window.  Wait for this step to complete before continuing on to the next steps.
-
-6. After the vagrant script completes, setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
-
-- Determine the desired ethernet interface
-
-```bash
 ifconfig
 ```   
 
-- Edit the riaps configuration to enable that interface
+2) Edit the riaps configuration to enable that interface
 
-```bash
+```
 sudo nano /usr/local/riaps/etc/riaps.conf
 ```   
 
-- Make sure the NIC name and match the desired ethernet interface name from 'ifconfig'
+3) Make sure the NIC name and match the desired ethernet interface name from 'ifconfig'
 
-```python
+```
 # NIC name
 # Typical VM interface
 #nic_name = eth0
 nic_name = enp0s8
 ```
 
-7. Save your SSH keys in a secure spot for use in the future (if needed)
-    - Copy your ~/.ssh/id_rsa.pub and ~/.ssh/id_rsa.key files to a location you can find in the future, preferably in a location outside the VM.
+## <a name="secure-comm">Securing Communication Between the VM and BBBs</a>
 
-8.  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
+The ssh keys on the preloaded virtual machine are **NOT SECURE**.  So generate new keys for this installation using ```ssh-keygen```.  These keys can then be shared with RIAPS nodes (or Beaglebone Black devices) to secure communication between the devices.  Place the keys in ```~/.ssh```.
 
-# [Securing Communication Between the VM and BBBs](#securecomm)
-Once all the initial BBB configuration is complete, you can run the following script on the VM to secure the communication between the VM and the BBB with the ssh keys configured on your VM.  Where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB on your network.  Make sure you are logged in as **riaps** user.  This will need to be repeated for all BBBs (or use a fabric script to assist)
+The ```secure_key.sh``` on the VM can be used to secure the communication between the VM and the BBB with the new generated ssh keys (id_rsa.key/id_rsa.pub below).  Where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB on your network.  Make sure you are logged in as **riaps** user.  This will need to be repeated for all BBBs (or use a fabric script to assist).
 
-```bash
+```
 ./secure_keys.sh bbb_initial_keys/bbb_initial.key ~/.ssh/id_rsa.key ~/.ssh/id_rsa.pub xxx.xxx.xxx.xxx
 ```
 
-# Installing Multiple Virtual Machines (if desired)
-If you want to keep an older RIAPS Virtual Machine and install a new one, in the Vagrant file change the following to new names:
-
-- config.vm.hostname = "riapsvbox"
-- vb&#46;name = "riaps_vbox"   
-
-# RIAPS Virtual Machine Update Process
-If you have a running RIAPS VM and want to upgrade it, follow these steps:
-
-- Make sure the VM is shutdown
-- Update the contents of the 'riaps-x86runtime' folder used to create the original Virtual Machine with the latest release by downloading the RIAPS development box setup file: [riaps-x86runtime.tar.gz](https://github.com/RIAPS/riaps-integration/releases)
-- In a command line window, go back to that 'riaps-x86runtime' folder
-- Bring up the VM and then provision the changes using the following commands.  The 'tee' with a filename allows you to record the installation process.  If you have any issues during installation, this is a good file to send with your questions.
-
-```bash
-vagrant up
-vagrant provision 2>&1 | tee update-vm.log
-```   
+> Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
 
 # RIAPS Platform Update Process
-If you want to only update the RIAPS platform, follow these steps:
 
-1. Download the [RIAPS update script](riaps_install_amd64.sh) to the VM
+If you want to only update the RIAPS platform, run the update script
 
-2. Run the update script
-
-```bash
+```
 ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
 ```
 
-# Helpful Hints
-1. If you need to remove a vagrant VM, go to the command line and type
+> ***Remember to [reconfigure the network setting](#config-network) in RIAPS after installation.***
 
-```bash
-vagrant global-status
-```
-```text
-id       name    provider   state    directory
--------------------------------------------------------------------------------
-40d1606  default virtualbox running  /Users/xxx/VirtualBox VMs/riaps-x86runtime
-```
-
-2. Select the ID you want to delete and then type
-
-```bash
-vagrant destroy 40d1606
-```
-> Note: 40d1606 is the ID
-
-3. Now you can create a VM of the same name again.
+> Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
