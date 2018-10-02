@@ -15,7 +15,7 @@ A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host en
   - USB Ports:  USB 3.0 (xHCI) Controller  
 
 
-  ***Note: Guest Additions tools were not included and will need to be setup by the import user.  Instructions to come on this.***
+> ***Note: Guest Additions tools were not included and will need to be setup by the import user.***
 
 2) Import the appliance (riaps_devbox.ova) into a virtual machine toolset.
 
@@ -39,7 +39,7 @@ A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host en
 
 Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
-***Note:  Each time the RIAPS platform is updated (in particular, the riaps-pycom package), this configuration setup will need to be repeated.***
+> ***Note:  Each time the RIAPS platform is updated (in particular, the riaps-pycom package), this configuration setup will need to be repeated.***
 
 1) Determine the desired ethernet interface
 
@@ -72,7 +72,7 @@ The ```secure_key.sh``` on the VM can be used to secure the communication betwee
 ./secure_keys.sh bbb_initial_keys/bbb_initial.key ~/.ssh/id_rsa.key ~/.ssh/id_rsa.pub xxx.xxx.xxx.xxx
 ```
 
-Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
+> Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
 
 # RIAPS Platform Update Process
 
@@ -82,10 +82,6 @@ If you want to only update the RIAPS platform, run the update script
 ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
 ```
 
-Remember to [reconfigure the network setting](#config-network) in RIAPS after installation.
+> Remember to [reconfigure the network setting](#config-network) in RIAPS after installation.
 
-Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
-
-# To Build a RIAPS Virtual Machine Environment
-
-This is information on how the preloaded RIAPS virtual machine was created.   
+> Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.

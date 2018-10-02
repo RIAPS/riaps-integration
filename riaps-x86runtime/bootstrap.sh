@@ -158,7 +158,6 @@ curl_func () {
     echo "installed curl"
 }
 
-# MM TODO:  make sure libboost is multiarch capable
 boost_install() {
     sudo apt-get install libboost-dev -y
     sudo apt-get install libboost-dev:armhf -y
@@ -303,7 +302,6 @@ curl_func
 boost_install
 zyre_czmq_prereq_install
 opendht_prereqs_install
-#MM may be added later:  libsoc_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER
