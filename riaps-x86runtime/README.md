@@ -4,7 +4,7 @@
 
 A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64 and armhf).
 
-1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v<date>.tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Open Virtualization Format 2.0 (.ova) file that can be imported into both VirtualBox and VMware tools.
+1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v[date].tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Open Virtualization Format 2.0 (.ova) file that can be imported into both VirtualBox and VMware tools.
 
   This virtual machine (riaps_devbox.ova) was configured with the following settings:
   - Disk Size:  10 GB dynamically allocated
