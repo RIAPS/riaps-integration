@@ -79,6 +79,12 @@ sudo su
 userdel -r ubuntu
 ```
 
+11. Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+
+```bash
+./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
+```
+
 
 ### Usage of BBB Image
 
