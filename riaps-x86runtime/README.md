@@ -82,6 +82,6 @@ If you want to only update the RIAPS platform, run the update script
 ./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
 ```
 
-> Remember to [reconfigure the network setting](#config-network) in RIAPS after installation.
+> ***Remember to [reconfigure the network setting](#config-network) in RIAPS after installation.***
 
 > Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.

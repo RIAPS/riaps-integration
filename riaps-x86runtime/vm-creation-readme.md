@@ -2,17 +2,19 @@
 
 This is information on how the preloaded RIAPS virtual machine was created.   
 
-1) Download the latest version of Xubuntu:  http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.1-desktop-amd64.iso
+1) Download the latest version of Xubuntu:
+``` http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.1-desktop-amd64.iso
+```
 
 2) Create a virtual machines configured with the following settings:
-* Disk Size:  10 GB dynamically allocated
-* Base Memory:  8192 MB
-* Processor(s):  4
-* Video Memory:  16 MB
-* Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-* USB Ports:  USB 3.0 (xHCI) Controller  
+  - Disk Size:  10 GB dynamically allocated
+  - Base Memory:  8192 MB
+  - Processor(s):  4
+  - Video Memory:  16 MB
+  - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
+  - USB Ports:  USB 3.0 (xHCI) Controller  
 
-  ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
+> ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
 3) Create a 'vagrant' user with password of 'vagrant'.
 
