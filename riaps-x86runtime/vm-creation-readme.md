@@ -46,7 +46,7 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 11) remove the vagrant user account
 
-12) Shutdown the virtual box and export the appliance to a Open Virtualization Format 2.0 (.ova) file.  Check the "Write Manifest file" box.
+12) Shutdown the virtual box and export the appliance to a Open Virtualization Format 1.0 (.ova) file.  Check the "Write Manifest file" box.
 
 13) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
 
