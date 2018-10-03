@@ -7,12 +7,12 @@ This is information on how the preloaded RIAPS virtual machine was created.
 ```
 
 2) Create a virtual machines configured with the following settings:
-  - Disk Size:  10 GB dynamically allocated
+  - Disk Size:  100 GB dynamically allocated
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
   - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-  - USB Ports:  USB 3.0 (xHCI) Controller  
+  - USB Ports:  USB 1.0 (xHCI) Controller  
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
@@ -44,8 +44,10 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 10) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
 
-11) Shutdown the virtual box and export the appliance to a Open Virtualization Format 2.0 (.ova) file.  Check the "Write Manifest file" box.
+11) remove the vagrant user account
 
-12) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
+12) Shutdown the virtual box and export the appliance to a Open Virtualization Format 2.0 (.ova) file.  Check the "Write Manifest file" box.
 
-13) Tar the file, create a sha256sum txt file and post in the appropriate place.
+13) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
+
+14) Tar the file, create a sha256sum txt file and post in the appropriate place.
