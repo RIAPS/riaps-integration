@@ -21,15 +21,7 @@ http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubu
 
 4) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
 
-5) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
-
-```
-sudo ./bootstrap.sh public_key=id_rsa.pub private_key=id_rsa.key 2>&1 | tee install-vm.log
-```
-
-> Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.
-
-6) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
+5) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
 
 ```
 # / was on /dev/sda1 during installation
@@ -37,20 +29,26 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 /swapfile                                 none            swap    sw              0       0
 ```
 
-7) Copy the riaps_install_amd64.sh script to /home/riaps/ for use by the user to update the RIAPS platform.
+6) Restart the VM to allow the above fstab changes to take effect.
 
-8) Clone https://github.com/RIAPS/riaps-pycom.git to get the fabfile information and copy this into /home/riaps/.
+7) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
 
-9) Remove riaps-integration and riaps-pycom repositories from /home/vagrant/.
+```
+sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 | tee install-vm.log
+```
 
-10) Add eclipse configured with p2f files (location TBD) and sample applications in the default workspace. (MM Work in progress)
+> Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-11) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
+9) Copy the riaps_install_amd64.sh script to /home/riaps/ for use by the user to update the RIAPS platform.  Set owner as riaps.
 
-12) Remove the riapsadmin user account
+10) Clone https://github.com/RIAPS/riaps-pycom.git to get the fabfile information and copy this into /home/riaps/.  Set owner as riaps.
 
-13) Shutdown the virtual box and export the appliance to a Open Virtualization Format 1.0 (.ova) file.  Check the "Write Manifest file" box.
+11) Remove riaps-integration and riaps-pycom repositories from /home/riapsadmin/.
 
-14) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
+12) Add eclipse configured with p2f files (location TBD) and sample applications in the default workspace. (MM Work in progress)
 
-15) Tar the file, create a sha256sum txt file and post in the appropriate place.
+13) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
+
+14) Remove the riapsadmin user account
+
+15) Tar the VM disk (.vmdk), create a sha256sum txt file and post in the appropriate place.
