@@ -1,6 +1,6 @@
 # Setting up the BBB images
 
-1) Make or Download the latest BBB image from https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
+1) Download the latest BBB image (riaps_bbb_base_v[date].tar.gz) from https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
 
 2) Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
