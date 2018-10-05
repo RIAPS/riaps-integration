@@ -1,21 +1,25 @@
-
 # Welcome to the RIAPS Integration Repository
 
-This repository indicates how to setup the various RIAPS environments from preloaded files and how these files were built.
+This repository indicates how a RIAPS application developer should setup a RIAPS environment from preloaded files.  For advanced programming users wanting to setup a custom environment, there is also information about how these preloaded files were created.
 
+---------------------------
 ## Application Developer Setup Instructions
 
-### RIAPS Host Setup Instructions
+Power application developers can quickly setup a distributed enviroment by utilizing preloaded RIAPS environment file as instructed in this section.
+
+### 1) RIAPS Host Setup Instructions
 
 The RIAPS host environment is based on a virtual machine setup using Ubuntu 18.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
 
-### RIAPS Node Setup Instructions
+### 2) RIAPS Node Setup Instructions
 
 The RIAPS node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Instructions on how to create a RIAPS Beaglebone Black SD Card Image can be found in [BBB Runtime Setup Page](riaps-bbbruntime/README.md).
 
-### Testing the RIAPS Platform Environment
+### 3) Testing the RIAPS Platform Environment
 
-Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in [Environment Test Page](riaps-x86runtime/env_setup_tests/README.md).
+Once a RIAPS Host and the desired RIAPS Nodes are setup, a simple application can be used to test the environment.  Instructions for these test are found in [Environment Test Page](riaps-x86runtime/env_setup_tests/README.md).  
+
+-----------------------
 
 ## Developing the Base RIAPS SD Card Image
 
@@ -23,4 +27,4 @@ The instructions and scripts provided were used to develop the base RIAPS SD Car
 
 ## Developing the Preloaded RIAPS Virtual Machine
 
-The instructions and scripts provided were used to develop the preloaded RIAPS virtual machine exported appliance (.ova). This appliance file is used when setting up a RIAPS host environment on a computing device.  The virtual machine includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide quick way for application developers to create RIAPS host environment.  Instructions for creating this virtual machine is located in [Preloaded RIAPS Virtual Machine Creation Page](riaps-x86runtime/vm-creation-readme.md).
+The instructions and scripts provided were used to develop the preloaded RIAPS virtual machine (.vmdk). This file is used when setting up a RIAPS host environment on a computing device.  The virtual machine includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide quick way for application developers to create RIAPS host environment.  Instructions for creating this virtual machine is located in [Preloaded RIAPS Virtual Machine Creation Page](riaps-x86runtime/vm-creation-readme.md).
