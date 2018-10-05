@@ -10,16 +10,16 @@ http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubu
 2) Create a virtual machines configured with the following settings:
   - Disk Size:  100 GB dynamically allocated
   - Base Memory:  8192 MB
-  - Processor(s):  4
+  - Processor(s):  2
   - Video Memory:  16 MB
   - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-  - USB Ports:  USB 1.0 (xHCI) Controller  
+  - USB Ports:  USB 2.0 (EHCI) Controller  
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
-3) Create a 'vagrant' user with password of 'vagrant'.
+3) Create a 'riapsadmin' user with password of 'riapsadmin'.
 
-4) Clone https://github.com/RIAPS/riaps-integration.git
+4) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
 
 5) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
 
@@ -43,12 +43,14 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 9) Remove riaps-integration and riaps-pycom repositories from /home/vagrant/.
 
-10) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
+10) Add eclipse configured with p2f files (location TBD) and sample applications in the default workspace. (MM Work in progress)
 
-11) Remove the vagrant user account
+11) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
 
-12) Shutdown the virtual box and export the appliance to a Open Virtualization Format 1.0 (.ova) file.  Check the "Write Manifest file" box.
+12) Remove the riapsadmin user account
 
-13) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
+13) Shutdown the virtual box and export the appliance to a Open Virtualization Format 1.0 (.ova) file.  Check the "Write Manifest file" box.
 
-14) Tar the file, create a sha256sum txt file and post in the appropriate place.
+14) Add the Version number (date of the creation) and License agreement information (see License in repository) to the Appliance settings.
+
+15) Tar the file, create a sha256sum txt file and post in the appropriate place.
