@@ -1,4 +1,4 @@
-# To Build a RIAPS Virtual Machine Environment
+# To Build a RIAPS Virtual Machine Environment from Scratch
 
 This is information on how the preloaded RIAPS virtual machine was created.   
 
