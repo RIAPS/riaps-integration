@@ -295,7 +295,7 @@ cmake_func
 utils_install
 timesync_requirements
 python_install
-eclipse_func $RIAPSAPPDEVELOPER
+#eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
 redis_install
 curl_func
 boost_install
