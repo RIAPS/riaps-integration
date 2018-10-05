@@ -44,7 +44,7 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 10) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
 
-11) remove the vagrant user account
+11) Remove the vagrant user account
 
 12) Shutdown the virtual box and export the appliance to a Open Virtualization Format 1.0 (.ova) file.  Check the "Write Manifest file" box.
 
