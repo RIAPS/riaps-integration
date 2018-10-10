@@ -45,10 +45,43 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 11) Remove riaps-integration and riaps-pycom repositories from /home/riapsadmin/.
 
-12) Add eclipse configured with p2f files (location TBD) and sample applications in the default workspace. (MM Work in progress)
+12) Remove the riapsadmin user account.
 
-13) Log out and set the intended login user to be "RIAPS App Developer", so that the application developer find the right account.
+13) Log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be 
+asked on their first login.
 
-14) Remove the riapsadmin user account
+13) Add preloaded eclipse and sample applications in the default workspace.
+
+	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/<latest date>/riaps_eclipse_v<latest date>.tar.gz.
+	
+	b) Untar into the /home/riaps directory.
+	
+	c) Create a desktop icon in /home/riaps/Desktop/Eclipse.desktop
+	
+	   ```
+	   [Desktop Entry]
+       Encoding=UTF-8
+       Type=Application
+       Name=Eclipse
+       Name[en_US]=Eclipse
+       Icon=/home/riaps/eclipse/icon.xpm
+       Exec=/home/riaps/eclipse/eclipse -data /home/riaps/workspace
+	   ```
+	   
+	d) Move riaps_projects and riaps-launch-files to /home/riaps folder.
+	
+	e) Import riaps_projects using "General" --> "Existing Projects into Workspace".
+	
+	f) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
+	
+	g) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.
+
+14) Cause reset of password on next login.
+
+    ```
+    sudo chage -d 0 riaps
+    ```
+
+
 
 15) Tar the VM disk (.vmdk), create a sha256sum txt file and post in the appropriate place.
