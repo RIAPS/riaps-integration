@@ -4,7 +4,9 @@
 
 2) Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
-3) Put the SD Card into the BBB and boot it up.
+3) Put the SD Card into the BBB and boot it up.  
+
+>Note:  newer BBBs should be set to boot to the SD card automatically, when present.
 
 4) Log into the "riaps" account on the BBB.
 
