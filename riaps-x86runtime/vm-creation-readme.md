@@ -45,12 +45,18 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 11) Remove riaps-integration and riaps-pycom repositories from /home/riapsadmin/.
 
-12) Remove the riapsadmin user account.
-
-13) Log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be 
+12) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be 
 asked on their first login.
 
-13) Add preloaded eclipse and sample applications in the default workspace.
+13) Remove the riapsadmin user account.
+
+14) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
+
+    ```
+    riaps  ALL=(ALL) NOPASSWD: ALL
+    ```
+
+15) Add preloaded eclipse and sample applications in the default workspace.
 
 	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/<latest date>/riaps_eclipse_v<latest date>.tar.gz.
 	
@@ -74,14 +80,13 @@ asked on their first login.
 	
 	f) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
 	
-	g) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.
-
-14) Cause reset of password on next login.
+	g) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.  Set these launches to display in
+	   External Tools Favorite list.  Make sure the "Build before launch" is not checked.
+	   
+16) Cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-
-
-15) Tar the VM disk (.vmdk), create a sha256sum txt file and post in the appropriate place.
+17) Tar the VM disk (.vmdk), create a sha256sum txt file and post in the appropriate place.
