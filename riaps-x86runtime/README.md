@@ -4,24 +4,25 @@
 
 A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64 and armhf).
 
-1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v[date].tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Open Virtualization Format 2.0 (.ova) file that can be imported into both VirtualBox and VMware tools.
+1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v[date].tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Virtual Machine Disk (.vmdk) that can be attached to VMs in both VirtualBox and VMware tools.
 
-  This virtual machine (riaps_devbox.ova) was configured with the following settings:
-  - Disk Size:  10 GB dynamically allocated
+  This virtual machine (riaps-devbox.vmdk) was configured with the following settings:
+  - Disk Size:  100 GB dynamically allocated
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
   - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-  - USB Ports:  USB 3.0 (xHCI) Controller  
+  - USB Ports:  USB 2.0 (EHCI) Controller
 
+> ***Note: Guest Additions tools were not included and will need to be setup by the user.***
 
-> ***Note: Guest Additions tools were not included and will need to be setup by the import user.***
+2) Setup a new Linux VM with Ubuntu (64-bit).  Either use the same setup as indicated above, or adjust to match your system's capabilities.  Minimum suggested base memory size is 6144 MB.
 
-2) Import the appliance (riaps_devbox.ova) into a virtual machine toolset.
+3) Once the VM is created, open the settings add the downloaded Virtual Machine Disk (.vmdk) as a "Storage" device (under SATA).  Delete the drive (SATA) created when setting up the new VM.  
 
-3) Login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.
+4) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.
 
-4) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
+5) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
 
   * Under Devices Menu, select **Insert Guest Additions CD image...**
   * Open the file manager to determine where the image was mounted.
