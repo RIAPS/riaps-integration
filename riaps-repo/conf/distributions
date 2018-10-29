@@ -1,0 +1,7 @@
+Architectures:  amd64 armhf
+Codename: xenial 
+Components: main
+Description: Repository for packages developed for Resilient Information Architecture for Smart Grid
+Label: Ubuntu
+Origin: MyOrigin
+SignWith: 50932D91
