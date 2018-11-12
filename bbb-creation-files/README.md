@@ -102,8 +102,33 @@ Updated Real-time enabled Kernel will be (once rebooted)
 Kernel: v4.14.xx-ti-rt-rxx
 ```
 
+## Expanding File System Partition On A microSD
 
-## Resizing the Image to 4 GB
+An easy and straightforward way to resize the partition on the sd card from the command line. The best part is it can be done while booted from the sd card that needs to be resized.
+
+The original instructions are here:
+https://elinux.org/Beagleboard:Expanding_File_System_Partition_On_A_microSD
+
+The specific inputs used were :
+
+    1) sudo -s
+    2) fdisk /dev/mmcblk0
+    3) p
+    4) d
+    5) n
+    6) < I pressed enter to use default>
+    7) < I pressed enter to use default>
+    8) 8192
+    9) < I pressed enter to use default>
+    10) p
+    11) w
+    12) reboot
+    13) sudo resize2fs /dev/mmcblk0p1
+
+Even though it says the partition is being deleted whatever was installed is left intact. 
+
+
+## Resizing the Image to 4 GB with gparted
 Use gparted in a VM to move to a 4096 MiB partition for rootfs of the new SD card
 1) Become root user
 
