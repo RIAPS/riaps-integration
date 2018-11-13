@@ -104,7 +104,7 @@ boost_install() {
 }
 
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq5 -y
+    sudo apt-get install libzmq5 libzmq3-dev -y
 }
 
 # MM TODO: not sure if this will be needed, here in case it is
