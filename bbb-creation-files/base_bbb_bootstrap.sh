@@ -89,7 +89,7 @@ python_install() {
 }
 
 cython_install() {
-    sudo pip3 install cython --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5' --verbose
     echo "installed cython"
 }
 
@@ -104,7 +104,7 @@ boost_install() {
 }
 
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq5 -y
+    sudo apt-get install libzmq5 libzmq3-dev -y
 }
 
 # MM TODO: not sure if this will be needed, here in case it is
