@@ -218,6 +218,11 @@ eclipse_func() {
     fi
 }
 
+# Dependencies for RIAPS eclipse plugin
+eclipse_plugin_dep_install() {
+    sudo apt-get install clang-format -y
+}
+
 redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
     wget http://download.redis.io/releases/redis-4.0.11.tar.gz
@@ -296,6 +301,7 @@ utils_install
 timesync_requirements
 python_install
 #eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
+eclipse_plugin_dep_install
 redis_install
 curl_func
 boost_install
