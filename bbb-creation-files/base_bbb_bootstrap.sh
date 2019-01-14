@@ -250,4 +250,5 @@ setup_peripherals
 setup_network
 security_pkg_install
 setup_ssh_keys $RIAPSAPPDEVELOPER
+add_swapfile
 setup_riaps_repo
