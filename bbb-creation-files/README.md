@@ -70,9 +70,17 @@ sudo apt-get update
 
 8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
 
-9) Reboot BBB and sign in as 'riaps' user
+9) Reboot the BBB and still sign in as 'ubuntu'
 
-10) Remove the 'ubuntu' user
+10) Run the installation process that requires a swap file (added in the base_bbb_bootstrap.sh) and at the end remove the swap file.
+
+```
+./swap-install-bbb.sh 2>&1 | tee swap-install-bbb.log
+```
+
+11) Reboot BBB and sign in as 'riaps' user
+
+12) Remove the 'ubuntu' user
 
 ```
 sudo su
@@ -125,7 +133,7 @@ The specific inputs used were :
     12) reboot
     13) sudo resize2fs /dev/mmcblk0p1
 
-Even though it says the partition is being deleted whatever was installed is left intact. 
+Even though it says the partition is being deleted whatever was installed is left intact.
 
 
 ## Resizing the Image to 4 GB with gparted
