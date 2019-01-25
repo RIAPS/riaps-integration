@@ -11,9 +11,10 @@ spdlog_python_install() {
 }
 
 remove_swap_file() {
-    sudo swapoff -v /remove_swap_file
+    sudo swapoff -v /swapfile  # MM TODO:  did not work in a script (did by hand)
     sed -i "/swapfile/c\ " /etc/fstab
     sudo rm /swapfile
+    echo "swapfile removed"
 }
 
 

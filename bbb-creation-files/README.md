@@ -70,7 +70,7 @@ sudo apt-get update
 
 8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
 
-9) Reboot the BBB and still sign in as 'ubuntu'
+9) Reboot the BBB and still sign in as 'ubuntu' and move to 'root' user
 
 10) Run the installation process that requires a swap file (added in the base_bbb_bootstrap.sh) and at the end remove the swap file.
 
