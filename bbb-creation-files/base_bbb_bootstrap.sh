@@ -151,10 +151,6 @@ splash_screen_update() {
 
 setup_hostname() {
     cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
-    cp etc/systemd/system/sethostname.service /etc/systemd/system/.
-    systemctl daemon-reload
-    systemctl start sethostname.service
-    systemctl enable sethostname.service
     echo "setup hostname"
 }
 
