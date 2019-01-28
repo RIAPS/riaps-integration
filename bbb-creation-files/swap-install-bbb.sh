@@ -3,6 +3,7 @@ set -e
 
 # Install RT Kernel
 spdlog_python_install() {
+    sudo pip3 install 'pybind11==2.2.4'
     git clone https://github.com/RIAPS/spdlog-python.git /tmp/spdlog-python
     cd /tmp/spdlog-python
     git clone -b v0.17.0 --depth 1 https://github.com/gabime/spdlog.git
