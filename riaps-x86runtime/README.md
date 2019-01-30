@@ -35,7 +35,9 @@ A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host en
      ```
   * Eject the Guest Additions CD when complete.
   * Shutdown the VM to configure the Guest Addition options
-  * Select the VM and open the settings.  Under General, there are Shared Clipboard and Drag'n'Drop options that are useful.
+  * Select the VM and open the settings.  
+    - Under General, there are Shared Clipboard and Drag'n'Drop options that are useful.
+    - Under Shared Folders, select a folder to share on the host and make it "Auto-mount" and "Make Permanent".  You will be able to reach this folder from within the VM by ```sudo cp afilename /media/sf_sharedFolder```
   * Restart the VM
 
 ## <a name="config-network">Configuring Environment for Local Network Setup</a>
