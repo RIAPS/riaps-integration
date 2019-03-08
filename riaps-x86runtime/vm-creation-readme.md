@@ -39,26 +39,21 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-9) Copy the riaps_install_amd64.sh script to /home/riaps/ for use by the user to update the RIAPS platform.  Set owner as riaps.
+8) Remove riaps-integration repository from /home/riapsadmin/.
 
-10) Clone https://github.com/RIAPS/riaps-pycom.git to get the fabfile information and copy this into /home/riaps/.  Set owner as riaps.
+9) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
-11) Remove riaps-integration and riaps-pycom repositories from /home/riapsadmin/.
+10) Remove the riapsadmin user account.
 
-12) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be
-asked on their first login.
-
-13) Remove the riapsadmin user account.
-
-14) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
+11) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
 
     ```
     riaps  ALL=(ALL) NOPASSWD: ALL
     ```
 
-15) Add preloaded eclipse and sample applications in the default workspace.
+12) Add preloaded eclipse and sample applications in the default workspace.
 
-	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of 
+	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
 	riaps_eclipse.tar.gz.
 
 	b) Untar into the /home/riaps directory.
@@ -85,10 +80,10 @@ asked on their first login.
 
   h) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
 
-16) Reset the password to the default and cause reset of password on next login.
+13) Reset the password to the default and cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-17) Tar the VM disk (.vmdk), create a sha256sum txt file and post in the appropriate place.
+14) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.

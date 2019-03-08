@@ -1,53 +1,36 @@
-#arg1 oldprivatekey
-#arg2 newprivatekey
-#arg3 newpublickey
-#arg4 bbbipaddress 
+#!/usr/bin/env bash
 set -e
 
-if [ "$#" -ne 4 ]; then
-    echo "usage :$0 oldprivatekey newprivatekey newpublickey bbbipaddress"
-    exit 1
-fi
-error=0
-if [ -f "$1" ]
-then
-    echo ""
-else
-    echo "old private key $1 not found."
-    error=1
-fi
-if [ -f "$2" ]
-then
-    echo ""
-else
-    echo "new private key $2 not found."
-    error=1
-fi
-if [ -f "$3" ]
-then
-    echo ""
-else
-    echo "new private key $3 not found."
-    error=1
-fi
+#MM TODO:  allow user to add -H hostname for fab command
 
-if [ $error -eq 1 ]; then
-    exit 1
-fi
+#save old keys and certs
+if [ -f /home/riaps/.ssh/id_rsa.pub ]; then
+    mv /home/riaps/.ssh/id_rsa.pub /home/riaps/.ssh/id_rsa.pub.old
 
-#change permission of old key to 600
-chmod 600 $1
-#change permission of new key to 600
-chmod 600 $2
+if [ -f /home/riaps/.ssh/id_rsa.key ]; then
+    mv /home/riaps/.ssh/id_rsa.key /home/riaps/.ssh/id_rsa.key.old
 
-#setup a config file (on VM) to allow no password needed access to the BBBs
-echo "# Identity file for BBB access" >> config
-echo "IdentityFile /home/riaps/.ssh/id_rsa.key" >> config
-sudo mv /home/riaps/config /home/riaps/.ssh/config
-chmod 600 /home/riaps/.ssh/config
+if [ -f /home/riaps/.ssh/riaps-sys.cert ]; then
+    mv /home/riaps/.ssh/riaps-sys.cert /home/riaps/.ssh/riaps-sys.cert.old
 
-scp -i $1 $2 riaps@$4:~/.ssh/id_rsa.key
-scp -i $1 $3 riaps@$4:~/.ssh/id_rsa.pub
-ssh -i $1 -l riaps  $4  'cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys.bak; cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
+if [ -f /home/riaps/.ssh/x509.pem ]; then
+    mv /home/riaps/.ssh/x509.pem /home/riaps/.ssh/x509.pem.old
 
-echo "rekeyed beaglebone $4. use the key $2 to connect to the bone from now on"
+#generate new keys and certs
+riaps_gen_cert -o /home/riaps/.ssh
+chmod 600 /home/riaps/.ssh/id_rsa.key
+chmod 600 /home/riaps/.ssh/riaps-sys.cert
+
+#add private key to ssh agent for immediate use
+sudo ssh-add /home/riaps/.ssh/id_rsa.key
+
+#copy keys and certs to riaps/keys location
+sudo cp /home/riaps/.ssh/id_rsa.pub /usr/local/riaps/keys/.
+sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.
+sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.
+sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.
+
+#use fabric to configure
+riaps_fab riaps.updateBBBKey
+
+echo "rekeyed beaglebones with newly generated keys and certificates."
