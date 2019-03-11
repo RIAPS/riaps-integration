@@ -274,7 +274,7 @@ setup_ssh_keys () {
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 400 /home/$1/.ssh/id_rsa.key
-    sudo -H -u $1 cat "RIAPS:  Add SSH keys to ssh agent on login" >> /home/$1/.bashrc
+    sudo -H -u $1 cat "# RIAPS:  Add SSH keys to ssh agent on login" >> /home/$1/.bashrc
     sudo -H -u $1 cat "ssh-add /home/$1/.ssh/id_rsa.key" >> /home/$1/.bashrc
 
     # Setup BBB ssh keys for use with VM
