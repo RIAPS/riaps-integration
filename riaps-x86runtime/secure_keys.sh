@@ -5,11 +5,11 @@ set -e
 
 #save old keys and certs
 if [ -f /home/riaps/.ssh/id_rsa.pub ]; then
+    ssh-add -d /home/riaps/.ssh/id_rsa.pub
     mv /home/riaps/.ssh/id_rsa.pub /home/riaps/.ssh/id_rsa.pub.old
 fi
 
 if [ -f /home/riaps/.ssh/id_rsa.key ]; then
-    ssh-add -D /home/riaps/.ssh/id_rsa.key
     mv /home/riaps/.ssh/id_rsa.key /home/riaps/.ssh/id_rsa.key.old
 fi
 
@@ -29,6 +29,7 @@ fi
 riaps_gen_cert -o /home/riaps/.ssh
 chmod 600 /home/riaps/.ssh/id_rsa.key
 chmod 600 /home/riaps/.ssh/riaps-sys.cert
+chmod 600 /home/riaps/.ssh/riaps.key
 
 #add private key to ssh agent for immediate use
 ssh-add /home/riaps/.ssh/id_rsa.key
@@ -39,7 +40,7 @@ sudo chmod 600 /usr/local/riaps/keys/id_rsa.pub
 sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.
 sudo chmod 600 /usr/local/riaps/keys/id_rsa.key
 sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.
-sudo chmod 600 /usr/local/riaps/riaps-sys.cert
+sudo chmod 600 /usr/local/riaps/keys/riaps-sys.cert
 sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.
 sudo chmod 600 /usr/local/riaps/keys/x509.pem
 
