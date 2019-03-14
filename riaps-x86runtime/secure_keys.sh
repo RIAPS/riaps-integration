@@ -13,38 +13,35 @@ if [ -f /home/riaps/.ssh/id_rsa.key ]; then
     mv /home/riaps/.ssh/id_rsa.key /home/riaps/.ssh/id_rsa.key.old
 fi
 
-if [ -f /home/riaps/.ssh/riaps-sys.cert ]; then
-    mv /home/riaps/.ssh/riaps-sys.cert /home/riaps/.ssh/riaps-sys.cert.old
-fi
-
-if [ -f /home/riaps/.ssh/x509.pem ]; then
-    mv /home/riaps/.ssh/x509.pem /home/riaps/.ssh/x509.pem.old
-fi
-
-if [ -f /home/riaps/.ssh/riaps.key ]; then
-    mv /home/riaps/.ssh/riaps.key /home/riaps/.ssh/riaps.key.old
-fi
-
 #generate new keys and certs
 riaps_gen_cert -o /home/riaps/.ssh
-chmod 600 /home/riaps/.ssh/id_rsa.key
-chmod 600 /home/riaps/.ssh/riaps-sys.cert
-chmod 600 /home/riaps/.ssh/riaps.key
+chmod 400 /home/riaps/.ssh/id_rsa.key
 
 #add private key to ssh agent for immediate use
 ssh-add /home/riaps/.ssh/id_rsa.key
 
+#generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
+#  which does not work well with ssh-add
+rm /home/riaps/.ssh/id_rsa.pub
+ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub
+
 #copy keys and certs to riaps/keys location
-sudo cp /home/riaps/.ssh/id_rsa.pub /usr/local/riaps/keys/.
-sudo chmod 600 /usr/local/riaps/keys/id_rsa.pub
 sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.
-sudo chmod 600 /usr/local/riaps/keys/id_rsa.key
+sudo chown root:riaps /usr/local/riaps/keys/id_rsa.key
+sudo chmod 440 /usr/local/riaps/keys/id_rsa.key
 sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.
-sudo chmod 600 /usr/local/riaps/keys/riaps-sys.cert
+sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert
+sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert
 sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.
-sudo chmod 600 /usr/local/riaps/keys/x509.pem
+sudo chown root:riaps /usr/local/riaps/keys/x509.pem
+sudo chmod 440 /usr/local/riaps/keys/x509.pem
 
 #use fabric to configure
 riaps_fab riaps.updateBBBKey
+
+#remove unnecessary keys from ~/.ssh
+rm /home/riaps/.ssh/riaps-sys.cert
+rm /home/riaps/.ssh/x509.pem
+rm /home/riaps/.ssh/riaps.key
 
 echo "rekeyed beaglebones with newly generated keys and certificates."
