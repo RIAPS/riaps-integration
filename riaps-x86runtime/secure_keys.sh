@@ -29,6 +29,9 @@ ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub
 sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.
 sudo chown root:riaps /usr/local/riaps/keys/id_rsa.key
 sudo chmod 440 /usr/local/riaps/keys/id_rsa.key
+sudo cp /home/riaps/.ssh/id_rsa.pub /usr/local/riaps/keys/.
+sudo chown root:riaps /usr/local/riaps/keys/id_rsa.pub
+sudo chmod 440 /usr/local/riaps/keys/id_rsa.pub
 sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.
 sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert
 sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert
