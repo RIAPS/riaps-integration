@@ -72,9 +72,9 @@ nic_name = enp0s8
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key.sh``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 
->IMPORTANT:  Before running this script make sure all the remote RIAPS hosts are reachable by using a system check command - ```riaps_fab sys.check```.
+>IMPORTANT:  Before running this script make sure all the remote RIAPS hosts are reachable by using a system check command: ```riaps_fab sys.check```.
 
-Run this scripts using ```./secure_keys.sh```, optionally add a ```-H <comma separated list of hostnames>``` or ```-f <absolute path to hostfile>.  See documentation on using the [https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile](fabfile) to learn more about hostname definitions.
+Run this scripts using ```./secure_keys.sh```, optionally add a ```-H <comma separated list of hostnames>``` or ```-f <absolute path to hostfile>```.  See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions.
 
 >Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
 

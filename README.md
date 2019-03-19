@@ -5,7 +5,7 @@ This repository describes how a RIAPS application developer should setup a RIAPS
 ---------------------------
 ## Application Developer Setup Instructions
 
-Power application developers can quickly setup a distributed enviroment by utilizing preloaded RIAPS environment disk images as instructed in this section. In a RIAPS installation there is one development hosts and one or more target nodes, connected via a LAN. 
+Power application developers can quickly setup a distributed environment by utilizing preloaded RIAPS environment disk images as instructed in this section. In a RIAPS installation there is one development hosts and one or more target nodes, connected via a LAN.
 
 ### 1) RIAPS Development Host Setup Instructions
 
