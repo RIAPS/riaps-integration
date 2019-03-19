@@ -71,6 +71,6 @@ else
 fi
 
 #use fabric to configure remote RIAPS nodes
-riaps_fab riaps.updateBBBKey " $riaps_fab_opts"
+riaps_fab riaps.updateBBBKey $riaps_fab_opts
 
 echo "rekeyed beaglebones with development machine keys and certificates."
