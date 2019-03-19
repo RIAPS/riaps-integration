@@ -70,13 +70,19 @@ nic_name = enp0s8
 
 ## <a name="secure-comm">Securing Communication Between the VM and BBBs</a>
 
-The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key.sh``` found in the RIAPS home directory will generate a new set of keys and certificates then place them on both the VM and the indicated remote RIAPS hosts.
+The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key.sh``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 
->IMPORTANT:  Before running this script make sure the remote RIAPS hosts are reachable by using a system check command - ```riaps_fab sys.check```.  The hosts can either be identified in the **/usr/local/riaps/etc/riaps-hosts.conf** file or a -H option with a comma separated host list can be utilized.
+>IMPORTANT:  Before running this script make sure all the remote RIAPS hosts are reachable by using a system check command - ```riaps_fab sys.check```.
 
-Run this scripts using ```./secure_keys.sh```, optionally a ```-H <comma separated list of hostnames>``` can be added.  See documentation on using the [https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile](fabfile) to learn more about hostname definitions.
+Run this scripts using ```./secure_keys.sh```, optionally add a ```-H <comma separated list of hostnames>``` or ```-f <absolute path to hostfile>.  See documentation on using the [https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile](fabfile) to learn more about hostname definitions.
 
-> Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
+>Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
+
+To add additional RIAPS Hosts to a system that has already been rekeyed, use ```-A <comma separated list of hostnames>``` when calling  ```secure_keys.sh```.  This will set the new hosts up with the same keys and certificates as the current development system setup.
+
+To remove RIAPS Hosts from a system, it is suggested that you remove the desired hostname from the riaps-hosts.conf file and rekey the system again.  That way the removed host will no longer have a valid set of keys and certificates for the system.
+
+>Note:  If a RIAPS host is moved to a new system that does not have access to the hosts current ssh key pair or certificates, then it is best to reflash the host image with the released download image and either rekey the new system (if it is a fresh download) or add the host to the new system using the ```-A``` option.
 
 # RIAPS Platform Update Process
 
