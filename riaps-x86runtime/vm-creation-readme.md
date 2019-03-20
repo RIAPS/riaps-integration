@@ -80,10 +80,12 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
   h) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
 
-13) Reset the password to the default and cause reset of password on next login.
+13) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
+
+14) Reset the password to the default and cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-14) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+15) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.

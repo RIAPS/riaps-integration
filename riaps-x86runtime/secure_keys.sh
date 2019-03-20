@@ -45,9 +45,11 @@ function rekey_VM {
     sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.
     sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert
     sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert
+    sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert
     sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.
     sudo chown root:riaps /usr/local/riaps/keys/x509.pem
     sudo chmod 440 /usr/local/riaps/keys/x509.pem
+    sudo chmod 400 /home/riaps/.ssh/x509.pem
 
     echo "rekeyed development machine with newly generated keys and certificates."
 }
@@ -62,15 +64,27 @@ elif [ "$1" == "-f" ]; then
     riaps_fab_opts="-f $2"
     echo "rekeying hostname(s): $2"
     rekey_VM
+#add new BBBs to existing system
 elif [ "$1" == "-A" ]; then
-    riaps_fab_opts="-H $2"
+    riaps_fab_opts="-H $2 -i bbb_initial_keys/bbb_initial.key"
     echo "rekeying hostname(s): $2"
+    #temporarily open private key and certs, so that they can be moved to new BBBs
+    sudo chmod 444 /home/riaps/.ssh/id_rsa.key
+    sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert
+    sudo chmod 444 /home/riaps/.ssh/x509.pem
 else
-    rekey_VM
     echo "rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf"
+    rekey_VM
 fi
 
 #use fabric to configure remote RIAPS nodes
 riaps_fab riaps.updateBBBKey $riaps_fab_opts
+
+#return tighter restrictions to private key and certs
+if [ "$1" == "-A" ]; then
+    sudo chmod 400 /home/riaps/.ssh/id_rsa.key
+    sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert
+    sudo chmod 400 /home/riaps/.ssh/x509.pem
+fi
 
 echo "rekeyed beaglebones with development machine keys and certificates."
