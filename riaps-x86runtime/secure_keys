@@ -24,41 +24,42 @@ import argparse
 import subprocess
 
 def bash(cmd):
-    print("=== "+cmd)
-    subprocess.run(shlex.split(cmd))
+    t = shlex.split(cmd)
+    print("=== "+str(t))
+    subprocess.run(t)
 
 def rekey_VM():
     #save old keys and certs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.pub'):
         bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub')
-        bash('mv /home/riaps/.ssh/id_rsa.pub /home/riaps/.ssh/id_rsa.pub.old')
+        os.rename('/home/riaps/.ssh/id_rsa.pub', '/home/riaps/.ssh/id_rsa.pub.old')
 
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
-        bash('mv /home/riaps/.ssh/id_rsa.key /home/riaps/.ssh/id_rsa.key.old')
+        os.rename('/home/riaps/.ssh/id_rsa.key', '/home/riaps/.ssh/id_rsa.key.old')
 
     if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        bash('mv /home/riaps/.ssh/riaps-sys.cert /home/riaps/.ssh/riaps-sys.cert.old')
+        os.rename('/home/riaps/.ssh/riaps-sys.cert', '/home/riaps/.ssh/riaps-sys.cert.old')
 
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
-        bash('mv /home/riaps/.ssh/x509.pem /home/riaps/.ssh/x509.pem.old')
+        os.rename('/home/riaps/.ssh/x509.pem', '/home/riaps/.ssh/x509.pem.old')
 
+    #generate new keys and certs
+    bash('riaps_gen_cert -o /home/riaps/.ssh')
+    bash('chmod 400 /home/riaps/.ssh/id_rsa.key')
+
+    #never used key
+    bash('rm /home/riaps/.ssh/riaps.key')
+
+    #add private key to ssh agent for immediate use
+    bash('ssh-add /home/riaps/.ssh/id_rsa.key')
+
+    #generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
+    #  which does not work well with ssh-add
+    bash('rm /home/riaps/.ssh/id_rsa.pub')
+    subprocess.run(shlex.split('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub'),shell=True)
+
+    #copy keys and certs to riaps/keys location
     c = [
-        #generate new keys and certs
-        'riaps_gen_cert -o /home/riaps/.ssh',
-        'chmod 400 /home/riaps/.ssh/id_rsa.key',
-
-        #never used key
-        'rm /home/riaps/.ssh/riaps.key',
-
-        #add private key to ssh agent for immediate use
-        'ssh-add /home/riaps/.ssh/id_rsa.key',
-
-        #generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
-        #  which does not work well with ssh-add
-        'rm /home/riaps/.ssh/id_rsa.pub',
-        'ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',
-
-        #copy keys and certs to riaps/keys location
         'sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.',
         'sudo chown root:riaps /usr/local/riaps/keys/id_rsa.key',
         'sudo chmod 440 /usr/local/riaps/keys/id_rsa.key',
@@ -76,6 +77,7 @@ def rekey_VM():
     ]
     for cmd in c:
         bash(cmd)
+
 
     print("rekeyed development machine with newly generated keys and certificates.")
 
@@ -139,7 +141,9 @@ if __name__ == '__main__':
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
             rekey_VM()
-            subprocess.run([fcmd, fflag, fpath, fIdentityFile, fUpdate])
+            cmd = str.join(" ",(fcmd,"riaps.updateBBBKey",fflag,fpath,fIdentityFile))
+            print(cmd)
+            bash(cmd)
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
 
