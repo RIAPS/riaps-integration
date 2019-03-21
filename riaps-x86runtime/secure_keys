@@ -28,6 +28,26 @@ def bash(cmd):
     print("=== "+str(t))
     subprocess.run(t)
 
+def openKeyPerms():
+    #temporarily open private key and certs, so that they can be moved to new BBBs
+    c = [
+        'sudo chmod 444 /home/riaps/.ssh/id_rsa.key',
+        'sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert',
+        'sudo chmod 444 /home/riaps/.ssh/x509.pem',
+    ]
+    for cmd in c:
+        bash(cmd)
+
+def closeKeyPerms():
+    #return tighter restrictions to private key and certs
+    c = [
+        'sudo chmod 400 /home/riaps/.ssh/id_rsa.key',
+        'sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert',
+        'sudo chmod 400 /home/riaps/.ssh/x509.pem',
+    ]
+    for cmd in c:
+        bash(cmd)
+
 def rekey_VM():
     #save old keys and certs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.pub'):
@@ -94,13 +114,14 @@ if __name__ == '__main__':
     fflag = "-f"
     fpath = "/usr/local/lib/python3.6/dist-packages/riaps/fabfile/"
     fIdentityFile = ""
+    fIdentFileFlag = "-i"
     fhost = "-H"
     fset = "--set"
     fUpdate = "riaps.updateBBBKey"
 
     if args.keyFile:
         if os.path.isfile(args.keyFile):
-            fIdentityFile = "-i "+args.keyFile
+            fIdentityFile = args.keyFile
         else:
             print("Given private key does not exist, exiting...")
             sys.exit(-1)
@@ -110,40 +131,34 @@ if __name__ == '__main__':
         if args.hosts:
             print("Rekeying hostnames: ",args.hosts)
             rekey_VM()
-            subprocess.run([fcmd, fflag, fpath, fIdentityFile, fUpdate, fhost, args.hosts])
+            s = [fcmd, fflag, fpath, fUpdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
+
         elif args.hostsFile:
             print("Rekeying hostnames from ",args.hostsFile)
             rekey_VM()
             fenvVar = "hostsFile="+args.hostsFile
-            subprocess.run([fcmd, fset, fenvVar, fflag, fpath, fIdentityFile, fUpdate])
+            s = [fcmd, fset, fenvVar, fflag, fpath, fUpdate, fIdentFileFlag, fIdentityFile]
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
+
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
+            openKeyPerms()
+            subprocess.run([fcmd, fflag, fpath, fUpdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile])
+            closeKeyPerms()
 
-            #temporarily open private key and certs, so that they can be moved to new BBBs
-            c = [
-                'sudo chmod 444 /home/riaps/.ssh/id_rsa.key',
-                'sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert',
-                'sudo chmod 444 /home/riaps/.ssh/x509.pem',
-            ]
-            for cmd in c:
-                bash(cmd)
-
-            subprocess.run([fcmd, fflag, fpath, fIdentityFile, fUpdate, fhost, args.addtlHosts])
-
-            #return tighter restrictions to private key and certs
-            c = [
-                'sudo chmod 400 /home/riaps/.ssh/id_rsa.key',
-                'sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert',
-                'sudo chmod 400 /home/riaps/.ssh/x509.pem',
-            ]
-            for cmd in c:
-                bash(cmd)
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
             rekey_VM()
-            cmd = str.join(" ",(fcmd,"riaps.updateBBBKey",fflag,fpath,fIdentityFile))
+            cmd = str.join(" ",(fcmd,"riaps.updateBBBKey",fflag,fpath, fIdentFileFlag, fIdentityFile))
             print(cmd)
+            openKeyPerms()
             bash(cmd)
+            closeKeyPerms()
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
 
