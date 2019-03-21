@@ -281,6 +281,7 @@ setup_ssh_keys () {
     sudo cp -r bbb_initial_keys /home/$1/.
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
     sudo -H -u $1 chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo -H -u $1 cat "ssh-add /home/$1/bbb_initial_keys/bbb_initial.key" >> /home/$1/.bashrc
 
     # Transfer BBB rekeying script
     sudo cp secure_keys.sh /home/$1/.
