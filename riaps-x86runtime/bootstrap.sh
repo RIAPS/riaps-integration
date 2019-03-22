@@ -139,7 +139,7 @@ utils_install() {
 # Required for riaps-timesync
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
-    sudo apt-get install  libssl-dev libffi-dev -y
+    sudo apt-get install libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
     echo "installed timesync requirements"
@@ -257,11 +257,14 @@ riaps_install() {
     sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
-    sudo chmod +x ./riaps_install_amd64.sh
+    sudo cp riaps_install_amd64.sh /home/$1/.
+    sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
+    sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
     ./riaps_install_amd64.sh
 }
 
 setup_ssh_keys () {
+    # Setup user (or generated) ssh keys for VM
     sudo -H -u $1 mkdir -p /home/$1/.ssh
     sudo cp $PUBLIC_KEY /home/$1/.ssh/id_rsa.pub
     sudo cp $PRIVATE_KEY /home/$1/.ssh/id_rsa.key
@@ -271,9 +274,16 @@ setup_ssh_keys () {
     sudo chown $1:$1 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 600 /home/$1/.ssh/authorized_keys
     sudo -H -u $1 chmod 400 /home/$1/.ssh/id_rsa.key
+    sudo -H -u $1 cat "# RIAPS:  Add SSH keys to ssh agent on login" >> /home/$1/.bashrc
+    sudo -H -u $1 cat "ssh-add /home/$1/.ssh/id_rsa.key" >> /home/$1/.bashrc
+
+    # Setup BBB ssh keys for use with VM
     sudo cp -r bbb_initial_keys /home/$1/.
     sudo chown $1:$1 -R /home/$1/bbb_initial_keys
-    sudo -H -u $1  chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo -H -u $1 chmod 400 /home/$1/bbb_initial_keys/bbb_initial.key
+    sudo -H -u $1 cat "ssh-add /home/$1/bbb_initial_keys/bbb_initial.key" >> /home/$1/.bashrc
+
+    # Transfer BBB rekeying script
     sudo cp secure_keys.sh /home/$1/.
     sudo chown $1:$1 /home/$1/secure_keys.sh
     sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh

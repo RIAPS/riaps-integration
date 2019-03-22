@@ -1,0 +1,155 @@
+#!/usr/bin/python3
+'''
+Script for managing security keys in RIAPS systems
+
+Created on March 20, 2019
+
+Arguments:
+    optional argument:
+    - ``-H | --hosts hostnames``:  list of hostnames (comma separated), VM will be rekeyed
+    - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
+    - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
+    - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
+
+If specific hostnames are not given, the command will be called for all hosts
+listed in /usr/local/riaps/etc/riaps_hosts.conf
+
+@author: timkrentz
+'''
+
+import os
+import sys
+import shlex
+import argparse
+import subprocess
+
+def bash(cmd):
+    t = shlex.split(cmd)
+    print("=== "+str(t))
+    subprocess.run(t)
+
+def openKeyPerms():
+    #temporarily open private key and certs, so that they can be moved to new BBBs
+    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
+        bash('sudo chmod 444 /home/riaps/.ssh/id_rsa.key')
+    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
+        bash('sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert')
+    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
+        bash('sudo chmod 444 /home/riaps/.ssh/x509.pem')
+
+def closeKeyPerms():
+    #return tighter restrictions to private key and certs
+    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
+        bash('sudo chmod 400 /home/riaps/.ssh/id_rsa.key')
+    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
+        bash('sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert')
+    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
+        bash('sudo chmod 400 /home/riaps/.ssh/x509.pem')
+
+def rekey_VM():
+    #save old keys and certs
+    if os.path.isfile('/home/riaps/.ssh/id_rsa.pub'):
+        bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub')
+        os.rename('/home/riaps/.ssh/id_rsa.pub', '/home/riaps/.ssh/id_rsa.pub.old')
+
+    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
+        os.rename('/home/riaps/.ssh/id_rsa.key', '/home/riaps/.ssh/id_rsa.key.old')
+
+    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
+        os.rename('/home/riaps/.ssh/riaps-sys.cert', '/home/riaps/.ssh/riaps-sys.cert.old')
+
+    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
+        os.rename('/home/riaps/.ssh/x509.pem', '/home/riaps/.ssh/x509.pem.old')
+
+    #generate new keys and certs
+    bash('riaps_gen_cert -o /home/riaps/.ssh')
+    bash('chmod 400 /home/riaps/.ssh/id_rsa.key')
+
+    #never used key
+    bash('rm /home/riaps/.ssh/riaps.key')
+
+    #add private key to ssh agent for immediate use
+    bash('ssh-add /home/riaps/.ssh/id_rsa.key')
+
+    #generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
+    #  which does not work well with ssh-add
+    bash('rm /home/riaps/.ssh/id_rsa.pub')
+    subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
+
+    #copy keys and certs to riaps/keys location
+    c = [
+        'sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.',
+        'sudo chown root:riaps /usr/local/riaps/keys/id_rsa.key',
+        'sudo chmod 440 /usr/local/riaps/keys/id_rsa.key',
+        'sudo cp /home/riaps/.ssh/id_rsa.pub /usr/local/riaps/keys/.',
+        'sudo chown root:riaps /usr/local/riaps/keys/id_rsa.pub',
+        'sudo chmod 440 /usr/local/riaps/keys/id_rsa.pub',
+        'sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.',
+        'sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert',
+        'sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert',
+        'sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert',
+        'sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.',
+        'sudo chown root:riaps /usr/local/riaps/keys/x509.pem',
+        'sudo chmod 440 /usr/local/riaps/keys/x509.pem',
+        'sudo chmod 400 /home/riaps/.ssh/x509.pem',
+    ]
+    for cmd in c:
+        bash(cmd)
+
+    print("rekeyed development machine with newly generated keys and certificates.")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-H", "--hosts", default="", help="list of hostnames, comma separated, for a complete reconfiguration")    # List of hostnames to used instead of system configured file
+    parser.add_argument("-f", dest='hostsFile', help="absolute path to riaps-hosts.conf")
+    parser.add_argument("-A", dest='addtlHosts', help="list of hostnames, comma separated, to add to a current configuration")
+    parser.add_argument("-i", dest='keyFile', help="absolute path to pre-established RIAPS private key")
+    args = parser.parse_args()
+
+    fcmd = "fab"
+    fflag = "-f"
+    fpath = "/usr/local/lib/python3.6/dist-packages/riaps/fabfile/"
+    fIdentityFile = ""
+    fIdentFileFlag = "-i"
+    fhost = "-H"
+    fset = "--set"
+    fupdate = "riaps.updateBBBKey"
+
+    if args.keyFile:
+        if os.path.isfile(args.keyFile):
+            fIdentityFile = args.keyFile
+        else:
+            print("Given private key does not exist, exiting...")
+            sys.exit(-1)
+
+    if os.path.isdir(fpath):
+        if args.hosts:
+            print("Rekeying hostnames: ",args.hosts)
+            rekey_VM()
+            s = [fcmd, fflag, fpath, fupdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
+
+        elif args.hostsFile:
+            print("Rekeying hostnames from ",args.hostsFile)
+            rekey_VM()
+            fenvVar = "hostsFile="+args.hostsFile
+            s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
+
+        elif args.addtlHosts:
+            print("Adding hostnames to system: ",args.addtlHosts)
+            s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
+
+        else:
+            print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
+            rekey_VM()
+            s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
+
+        #rekey remote hosts
+        openKeyPerms()
+        subprocess.run(s)
+        closeKeyPerms()
+
+    else:
+        print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
+
+    print("Rekeyed beaglebones with development machine keys and certificates.")
