@@ -139,6 +139,7 @@ if __name__ == '__main__':
             rekey_VM()
             fenvVar = "hostsFile="+args.hostsFile
             s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
+            #rekey remote hosts
             bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
             openKeyPerms()
             subprocess.run(s)
@@ -148,6 +149,7 @@ if __name__ == '__main__':
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
             s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
+            #rekey remote hosts
             openKeyPerms()
             subprocess.run(s)
             closeKeyPerms()
@@ -156,6 +158,7 @@ if __name__ == '__main__':
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
+            #rekey remote hosts
             bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
             openKeyPerms()
             subprocess.run(s)
