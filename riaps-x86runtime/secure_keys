@@ -73,7 +73,6 @@ def rekey_VM():
 
     #generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
     #  which does not work well with ssh-add
-    bash('rm /home/riaps/.ssh/id_rsa.pub')
     subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
 
     #copy keys and certs to riaps/keys location
@@ -128,26 +127,40 @@ if __name__ == '__main__':
             print("Rekeying hostnames: ",args.hosts)
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
+            #rekey remote hosts
+            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
+            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
 
         elif args.hostsFile:
             print("Rekeying hostnames from ",args.hostsFile)
             rekey_VM()
             fenvVar = "hostsFile="+args.hostsFile
             s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
+            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
+            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
 
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
             s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
 
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
-
-        #rekey remote hosts
-        openKeyPerms()
-        subprocess.run(s)
-        closeKeyPerms()
+            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
+            openKeyPerms()
+            subprocess.run(s)
+            closeKeyPerms()
+            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
 
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
