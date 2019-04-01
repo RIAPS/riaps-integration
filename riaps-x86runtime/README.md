@@ -67,6 +67,11 @@ nic_name = enp0s8
 
 > ***Note:  This is necessary on the first installation.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required.***
 
+4)  After changing the NIC name, restart the rpyc running in the background.
+
+```
+sudo systemctl restart riaps-rpyc-registry.service
+```
 
 ## <a name="secure-comm">Securing Communication Between the VM and BBBs</a>
 
