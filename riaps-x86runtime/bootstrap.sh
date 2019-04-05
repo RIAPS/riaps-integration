@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools, libpcap0.8, nettle6
+# GCC 7, G++ 7, GIT, python3-dev, python3-setuptools, libpcap0.8, nettle6
+
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
@@ -65,33 +65,17 @@ cross_setup() {
 
     echo "add amd64, i386"
     # Qualify the architectures for existing repositories
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
-
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
-
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse"
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse"
 
     sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
-
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
-
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse"
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse"
 
     echo "add armhf"
     # Add armhf repositories
@@ -284,9 +268,9 @@ setup_ssh_keys () {
     sudo -H -u $1 cat "ssh-add /home/$1/bbb_initial_keys/bbb_initial.key" >> /home/$1/.bashrc
 
     # Transfer BBB rekeying script
-    sudo cp secure_keys.sh /home/$1/.
-    sudo chown $1:$1 /home/$1/secure_keys.sh
-    sudo -H -u $1 chmod 700 /home/$1/secure_keys.sh
+    sudo cp secure_keys /home/$1/.
+    sudo chown $1:$1 /home/$1/secure_keys
+    sudo -H -u $1 chmod 700 /home/$1/secure_keys
     echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
