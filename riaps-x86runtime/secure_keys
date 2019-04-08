@@ -32,8 +32,6 @@ def openKeyPerms():
     #temporarily open private key and certs, so that they can be moved to new BBBs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
         bash('sudo chmod 444 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        bash('sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert')
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
         bash('sudo chmod 444 /home/riaps/.ssh/x509.pem')
 
@@ -41,8 +39,6 @@ def closeKeyPerms():
     #return tighter restrictions to private key and certs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
         bash('sudo chmod 400 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        bash('sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert')
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
         bash('sudo chmod 400 /home/riaps/.ssh/x509.pem')
 
@@ -75,6 +71,9 @@ def rekey_VM():
     #  which does not work well with ssh-add
     subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
 
+    #add public key to authorized keys (to allow deploy to work on VM)
+    subprocess.run('cat /home/riaps/.ssh/id_rsa.pub >> authorized_keys',shell=True)
+
     #copy keys and certs to riaps/keys location
     c = [
         'sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.',
@@ -85,8 +84,8 @@ def rekey_VM():
         'sudo chmod 440 /usr/local/riaps/keys/id_rsa.pub',
         'sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.',
         'sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert',
+        'sudo chmod 444 /usr/local/riaps/keys/riaps-sys.cert',
+        'sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert',
         'sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.',
         'sudo chown root:riaps /usr/local/riaps/keys/x509.pem',
         'sudo chmod 440 /usr/local/riaps/keys/x509.pem',
