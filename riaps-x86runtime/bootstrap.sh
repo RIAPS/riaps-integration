@@ -251,6 +251,10 @@ quota_install() {
 # Do by hand (MM):    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
 }
 
+apparmor_install(){
+    sudo apt-get install apparmor-utils -y
+}
+
 riaps_install() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
@@ -320,5 +324,6 @@ opendht_prereqs_install
 firefox_install
 graphviz_install
 quota_install $RIAPSAPPDEVELOPER
+apparmor_install
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_install

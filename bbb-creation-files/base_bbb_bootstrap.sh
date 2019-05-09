@@ -182,6 +182,7 @@ setup_network() {
 security_pkg_install() {
     echo "add security packages"
     sudo pip3 install 'paramiko==2.4.1' 'cryptography==2.1.4' --verbose
+    sudo apt-get install apparmor-utils -y
     echo "security packages setup"
 }
 
