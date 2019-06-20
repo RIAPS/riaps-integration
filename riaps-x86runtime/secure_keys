@@ -1,19 +1,15 @@
 #!/usr/bin/python3
 '''
 Script for managing security keys in RIAPS systems
-
 Created on March 20, 2019
-
 Arguments:
     optional argument:
     - ``-H | --hosts hostnames``:  list of hostnames (comma separated), VM will be rekeyed
     - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
     - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
     - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
-
 If specific hostnames are not given, the command will be called for all hosts
 listed in /usr/local/riaps/etc/riaps_hosts.conf
-
 @author: timkrentz
 '''
 
@@ -22,6 +18,7 @@ import sys
 import shlex
 import argparse
 import subprocess
+
 
 def bash(cmd):
     t = shlex.split(cmd)
@@ -112,6 +109,7 @@ if __name__ == '__main__':
     fIdentFileFlag = "-i"
     fhost = "-H"
     fset = "--set"
+    fsyscheck = "sys.check"
     fupdate = "riaps.updateBBBKey"
 
     if args.keyFile:
@@ -123,7 +121,14 @@ if __name__ == '__main__':
 
     if os.path.isdir(fpath):
         if args.hosts:
-            print("Rekeying hostnames: ",args.hosts)
+            print("Rekeying hostnames: {}".format(args.hosts))
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts
@@ -135,6 +140,13 @@ if __name__ == '__main__':
 
         elif args.hostsFile:
             print("Rekeying hostnames from ",args.hostsFile)
+            #make sure BBBs are available
+            s = [fcmd, fset, fenvVar, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             fenvVar = "hostsFile="+args.hostsFile
             s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
@@ -147,6 +159,13 @@ if __name__ == '__main__':
 
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts
             openKeyPerms()
@@ -155,6 +174,13 @@ if __name__ == '__main__':
 
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts
