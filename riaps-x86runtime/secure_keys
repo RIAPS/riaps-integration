@@ -69,7 +69,7 @@ def rekey_VM():
     subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
 
     #add public key to authorized keys (to allow deploy to work on VM)
-    subprocess.run('cat /home/riaps/.ssh/id_rsa.pub >> authorized_keys',shell=True)
+    subprocess.run('cat /home/riaps/.ssh/id_rsa.pub >> /home/riaps/.ssh/authorized_keys',shell=True)
 
     #copy keys and certs to riaps/keys location
     c = [
