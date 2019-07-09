@@ -17,8 +17,6 @@ pipeline {
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-armhf.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-systemd-armhf.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-systemd-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-armhf.deb" .
           '''
@@ -30,7 +28,7 @@ pipeline {
         sh '''#!/bin/bash
           source version.sh
           mkdir riaps-release
-          cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-systemd-amd64.deb riaps-systemd-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
+          cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
           echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
           echo "coreversion=$coreversion" >> riaps-release/manifest.txt
           echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
@@ -58,8 +56,8 @@ pipeline {
             sh "${env.WORKSPACE}/go/bin/github-release release --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${env.TAG_NAME} --pre-release || true"
             // Iterate over artifacts and upload them
             for(int i = 0; i < files.size(); i++){
-              sh "${env.WORKSPACE}/go/bin/github-release upload -R --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${files[i]} --file ${files[i]}" 
-            } 
+              sh "${env.WORKSPACE}/go/bin/github-release upload -R --user ${user} --repo ${repo} --tag ${env.TAG_NAME} --name ${files[i]} --file ${files[i]}"
+            }
           }
         }
       }
