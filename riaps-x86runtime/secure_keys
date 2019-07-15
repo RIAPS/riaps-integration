@@ -1,19 +1,15 @@
 #!/usr/bin/python3
 '''
 Script for managing security keys in RIAPS systems
-
 Created on March 20, 2019
-
 Arguments:
     optional argument:
     - ``-H | --hosts hostnames``:  list of hostnames (comma separated), VM will be rekeyed
     - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
     - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
     - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
-
 If specific hostnames are not given, the command will be called for all hosts
 listed in /usr/local/riaps/etc/riaps_hosts.conf
-
 @author: timkrentz
 '''
 
@@ -22,6 +18,7 @@ import sys
 import shlex
 import argparse
 import subprocess
+
 
 def bash(cmd):
     t = shlex.split(cmd)
@@ -32,8 +29,6 @@ def openKeyPerms():
     #temporarily open private key and certs, so that they can be moved to new BBBs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
         bash('sudo chmod 444 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        bash('sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert')
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
         bash('sudo chmod 444 /home/riaps/.ssh/x509.pem')
 
@@ -41,8 +36,6 @@ def closeKeyPerms():
     #return tighter restrictions to private key and certs
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
         bash('sudo chmod 400 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        bash('sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert')
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
         bash('sudo chmod 400 /home/riaps/.ssh/x509.pem')
 
@@ -75,22 +68,33 @@ def rekey_VM():
     #  which does not work well with ssh-add
     subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
 
+    #add public key to authorized keys (to allow deploy to work on VM)
+    subprocess.run('cat /home/riaps/.ssh/id_rsa.pub >> /home/riaps/.ssh/authorized_keys',shell=True)
+
     #copy keys and certs to riaps/keys location
     c = [
-        'sudo cp /home/riaps/.ssh/id_rsa.key /usr/local/riaps/keys/.',
-        'sudo chown root:riaps /usr/local/riaps/keys/id_rsa.key',
-        'sudo chmod 440 /usr/local/riaps/keys/id_rsa.key',
-        'sudo cp /home/riaps/.ssh/id_rsa.pub /usr/local/riaps/keys/.',
-        'sudo chown root:riaps /usr/local/riaps/keys/id_rsa.pub',
-        'sudo chmod 440 /usr/local/riaps/keys/id_rsa.pub',
-        'sudo cp /home/riaps/.ssh/riaps-sys.cert /usr/local/riaps/keys/.',
-        'sudo chown root:riaps /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo chmod 440 /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo chmod 400 /home/riaps/.ssh/riaps-sys.cert',
-        'sudo cp /home/riaps/.ssh/x509.pem /usr/local/riaps/keys/.',
-        'sudo chown root:riaps /usr/local/riaps/keys/x509.pem',
-        'sudo chmod 440 /usr/local/riaps/keys/x509.pem',
-        'sudo chmod 400 /home/riaps/.ssh/x509.pem',
+        'sudo cp /home/riaps/.ssh/id_rsa.key /etc/riaps/.',
+        'sudo chown root:riaps /etc/riaps/id_rsa.key',
+        'sudo chmod 440 /etc/riaps/id_rsa.key',
+        'sudo rm -f /usr/local/riaps/keys/id_rsa.key',
+        'sudo ln -s /etc/riaps/id_rsa.key /usr/local/riaps/keys/id_rsa.key',
+        'sudo cp /home/riaps/.ssh/id_rsa.pub /etc/riaps/.',
+        'sudo chown root:riaps /etc/riaps/id_rsa.pub',
+        'sudo chmod 440 /etc/riaps/id_rsa.pub',
+        'sudo rm -f /usr/local/riaps/keys/id_rsa.pub',
+        'sudo ln -s /etc/riaps/id_rsa.pub /usr/local/riaps/keys/id_rsa.pub',
+        'sudo cp /home/riaps/.ssh/riaps-sys.cert /etc/riaps/.',
+        'sudo chown root:riaps /etc/riaps/riaps-sys.cert',
+        'sudo chmod 444 /etc/riaps/riaps-sys.cert',
+        'sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert',
+        'sudo rm -f /usr/local/riaps/keys/riaps-sys.cert',
+        'sudo ln -s /etc/riaps/riaps-sys.cert /usr/local/riaps/keys/riaps-sys.cert',
+        'sudo cp /home/riaps/.ssh/x509.pem /etc/riaps/.',
+        'sudo chown root:riaps /etc/riaps/x509.pem',
+        'sudo chmod 440 /etc/riaps/x509.pem',
+        'sudo chmod 440 /home/riaps/.ssh/x509.pem',
+        'sudo rm -f /usr/local/riaps/keys/x509.pem',
+        'sudo ln -s /etc/riaps/x509.pem /usr/local/riaps/keys/x509.pem',
     ]
     for cmd in c:
         bash(cmd)
@@ -113,6 +117,7 @@ if __name__ == '__main__':
     fIdentFileFlag = "-i"
     fhost = "-H"
     fset = "--set"
+    fsyscheck = "sys.check"
     fupdate = "riaps.updateBBBKey"
 
     if args.keyFile:
@@ -124,7 +129,14 @@ if __name__ == '__main__':
 
     if os.path.isdir(fpath):
         if args.hosts:
-            print("Rekeying hostnames: ",args.hosts)
+            print("Rekeying hostnames: {}".format(args.hosts))
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts
@@ -136,6 +148,13 @@ if __name__ == '__main__':
 
         elif args.hostsFile:
             print("Rekeying hostnames from ",args.hostsFile)
+            #make sure BBBs are available
+            s = [fcmd, fset, fenvVar, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             fenvVar = "hostsFile="+args.hostsFile
             s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
@@ -148,6 +167,13 @@ if __name__ == '__main__':
 
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts
             openKeyPerms()
@@ -156,6 +182,13 @@ if __name__ == '__main__':
 
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
+            #make sure BBBs are available
+            s = [fcmd, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
+            p = subprocess.run(s)
+            if p.returncode != 0:
+                print("Unable to find hosts, aborting update process now ...")
+                sys.exit(-1)
+            #hosts available, proceed
             rekey_VM()
             s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
             #rekey remote hosts

@@ -181,7 +181,8 @@ setup_network() {
 # Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
 security_pkg_install() {
     echo "add security packages"
-    sudo pip3 install 'paramiko==2.4.1' 'cryptography==2.1.4' --verbose
+    sudo pip3 install 'paramiko==2.6.0' 'cryptography==2.7' --verbose
+    sudo apt-get install apparmor-utils -y
     echo "security packages setup"
 }
 
