@@ -21,6 +21,8 @@ sudo dpkg --purge riaps-pycom-amd64 || true
 sudo dpkg --purge riaps-timesync-amd64 || true
 sudo rm -f /etc/profile.d/10-riaps-external-amd64.sh || true
 sudo rm -f /etc/apparmor.d/cache/usr.local.bin.riaps_actor || true
+sudo rm -rf /usr/local/riaps/etc/ || true
+sudo rm -rf /usr/local/riaps/ || true
 
 # install RIAPS packages
 sudo apt-get update

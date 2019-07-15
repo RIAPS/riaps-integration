@@ -8,8 +8,8 @@ sudo rdate -n -4 time.nist.gov
 sudo pip3 install --upgrade pip
 
 # uninstall deprecated package - riaps-systemd-<arch>
-sudo dpkg -r riaps-systemd-amd64 || true
-sudo dpkg --purge riaps-systemd-amd64 || true
+sudo dpkg -r riaps-systemd-armhf || true
+sudo dpkg --purge riaps-systemd-armhf || true
 
 # For v1.1.16, riaps-pycom and riaps-timesync uninstall package was modified
 # fully remove packages and then remove extra files that no longer exist.
@@ -20,6 +20,9 @@ sudo dpkg --purge riaps-pycom-armhf || true
 sudo dpkg --purge riaps-timesync-armhf || true
 sudo rm -f /etc/profile.d/10-riaps-external-armhf.sh || true
 sudo rm -f /etc/apparmor.d/cache/usr.local.bin.riaps_actor || true
+sudo rm -f /etc/timesync.role || true
+sudo rm -r /usr/local/share/timesync/config/__pycache__ || true
+sudo rm -rf /usr/local/share/timesync || true
 
 # install RIAPS packages
 sudo apt-get update
