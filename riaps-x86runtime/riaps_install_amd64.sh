@@ -15,7 +15,7 @@ sudo apt-get purge riaps-systemd-amd64 || true
 # fully remove packages and then remove extra files that no longer exist.
 # This future releases, this will not be necessary.
 sudo apt-get purge riaps-pycom-amd64 || true
-sudo apt-get spurge riaps-timesync-amd64 || true
+sudo apt-get purge riaps-timesync-amd64 || true
 sudo rm -f /etc/profile.d/10-riaps-external-amd64.sh || true
 sudo rm -f /etc/apparmor.d/cache/usr.local.bin.riaps_actor || true
 sudo rm -f /etc/timesync.role || true
