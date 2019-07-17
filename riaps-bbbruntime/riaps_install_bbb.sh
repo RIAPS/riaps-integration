@@ -18,6 +18,7 @@ sudo apt-get purge riaps-timesync-armhf || true
 sudo rm -f /etc/profile.d/10-riaps-external-armhf.sh || true
 sudo rm -f /etc/apparmor.d/cache/usr.local.bin.riaps_actor || true
 sudo rm -f /etc/timesync.role || true
+sudo rm -f /etc/tsman.role || true
 sudo rm -rf /usr/local/share/timesync || true
 
 # install RIAPS packages
