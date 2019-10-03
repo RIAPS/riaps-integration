@@ -120,6 +120,7 @@ utils_install() {
     sudo apt-get install openssh-server -y
     # make sure date is correct
     sudo rdate -n -4 time.nist.gov
+    echo "installed utils"
 }
 
 # Required for riaps-timesync
@@ -166,6 +167,7 @@ other_pip3_installs(){
 	pip3 install 'Adafruit_BBIO == 1.1.1' 'pydevd==1.4.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.6.0' 'cryptography==2.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.4.2' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
 	pip3 install --ignore-installed 'PyYAML==5.1.1'
 	pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
+        echo "installed pip3 packages"
 }
 
 #install apparmor_monkeys
@@ -176,6 +178,7 @@ apparmor_monkeys_install(){
 	python3 setup.py install
 	sudo apt-get install apparmor-utils -y
 	rm -rf /tmp/3rdparty/apparmor_monkeys
+	echo "installed apparmor_monkeys"
 }
 
 #install spdlog python logger
@@ -185,6 +188,7 @@ spdlog_python_install(){
 	git clone -b v0.17.0 --depth 1 https://github.com/gabime/spdlog.git
 	python3 setup.py install
         rm -rf /tmp/3rdparty/spdlog-python
+	echo "installed spdlog python"
 }
 
 
@@ -192,6 +196,7 @@ spdlog_python_install(){
 # Assumes that Cython3 is not on the base release (18.04.2 LTS does not have it)
 cython_install() {
     sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5'
+    echo "installed cython"
 }
 
 #install libraries for czmq and zyre
@@ -202,6 +207,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev:armhf -y
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
     sudo apt-get install pkg-config -y
+    echo "installed CZMQ prerequisites"
 }
 
 pyzmq_install(){
@@ -219,6 +225,7 @@ czmq_pybindings_install(){
 
 	cd /tmp/3rdparty/czmq-amd64/bindings/python
         sudo pip3 install . --verbose
+	echo "installed CZMQ pybindings"
 }
 
 #install bindings for zyre. Must be run after zyre, pyzmq install.
@@ -226,6 +233,7 @@ zyre_pybindings_install(){
 
 	cd /tmp/3rdparty/zyre-amd64/bindings/python
         sudo pip3 install . --verbose
+	echo "installed Zyre pybindings"
 
 }
 
@@ -233,20 +241,23 @@ zyre_pybindings_install(){
 capnproto_install() {
 
     CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
+    echo "linked pycapnp with capnproto"
 }
 
 # install gnutls
 gnutls_install(){
-sudo apt-get install libgnutls30 -y
-sudo apt-get install libgnutls30:armhf -y
-sudo apt-get install libgnutls28-dev -y
+	sudo apt-get install libgnutls30 -y
+	sudo apt-get install libgnutls30:armhf -y
+	sudo apt-get install libgnutls28-dev -y
+	echo "instaled gnutls"
 }
 
 #install msgpack
 msgpack_install(){
-sudo apt-get install libmsgpackc2:amd64 -y
-sudo apt-get install libmsgpackc2:armhf -y
-sudo apt-get install libmsgpack-dev:amd64 -y
+	sudo apt-get install libmsgpackc2:amd64 -y
+	sudo apt-get install libmsgpackc2:armhf -y
+	sudo apt-get install libmsgpack-dev:amd64 -y
+	echo "instaled msgpack"
 }
 
 #install opendht prerequisites
@@ -263,6 +274,7 @@ opendht_prereqs_install() {
 #install libsoc prerequisites
 libsoc_prereq_install(){
 	sudo apt-get install pkg-config -y
+	echo "installed libsoc prerequisites"
 }
 
 # install external packages using cmake
@@ -279,6 +291,7 @@ externals_cmake_install(){
         make
         cd /home/riapsadmin/riaps-integration/riaps-x86runtime
 	rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
+	echo "cmake install complete"
 
 }
 
@@ -341,10 +354,12 @@ firefox_install() {
 
 graphviz_install() {
     sudo apt-get install graphviz xdot -y
+    echo "installed graphviz"
 }
 
 quota_install() {
     sudo apt-get install quota -y
+    echo "installed quota"
 # Do by hand (MM):    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
 }
 
@@ -352,6 +367,7 @@ quota_install() {
 security_prereq_install(){
     sudo apt-get install apparmor-utils -y
     sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    echo "installed security prerequisites"
 }
 
 riaps_install() {
@@ -421,7 +437,6 @@ curl_func
 boost_install
 #eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
 eclipse_plugin_dep_install
-capnproto_install
 nethogs_prereq_install
 zyre_czmq_prereq_install
 gnutls_install
@@ -430,6 +445,7 @@ opendht_prereqs_install
 libsoc_prereq_install
 cython_install
 externals_cmake_install
+capnproto_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
