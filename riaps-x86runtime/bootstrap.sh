@@ -88,7 +88,7 @@ cross_setup() {
     echo "updated sources.list for multiarch"
 
     sudo dpkg --add-architecture armhf
-    sudo apt-get update
+    #sudo apt-get update
     echo "packages update complete for multiarch"
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
     sudo apt-get install build-essential -y
@@ -119,6 +119,7 @@ utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssh-server -y
     # make sure date is correct
+    sudo apt-get install rdate -y
     sudo rdate -n -4 time.nist.gov
     echo "installed utils"
 }
@@ -267,7 +268,9 @@ opendht_prereqs_install() {
     sudo apt-get install nettle-dev -y
     sudo apt-get install nettle-dev:armhf -y
     # run liblinks script to link gnutls and msgppack
-    /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    chmod +x /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    cd /usr/lib/arm-linux-gnueabihf
+    sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     echo "installed opendht prerequisites"
 }
 
@@ -279,12 +282,12 @@ libsoc_prereq_install(){
 
 # install external packages using cmake
 externals_cmake_install(){
-	mkdir /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
-	cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
-        cmake -Darch=amd64 ..
-	make
-	cd /home/riapsadmin/riaps-integration/riaps-x86runtime
-	rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+	#mkdir /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+	#cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+        #make -Darch=amd64 ..
+	#make
+	#cd /home/riapsadmin/riaps-integration/riaps-x86runtime
+	#rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
 	mkdir /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
 	cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
 	cmake -Darch=armhf ..
@@ -375,11 +378,11 @@ riaps_install() {
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
     sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
-    sudo apt-get update
+    #sudo apt-get update
     sudo cp riaps_install_amd64.sh /home/$1/.
     sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
     sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
-    ./riaps_install_amd64.sh
+    #./riaps_install_amd64.sh
 }
 
 setup_ssh_keys () {
@@ -414,20 +417,20 @@ setup_ssh_keys () {
 
 add_set_tests () {
     sudo -H -u $1 mkdir -p /home/$1/env_setup_tests/WeatherMonitor
-    sudo cp -r env_setup_tests/WeatherMonitor /home/$1/env_setup_tests/
+    sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/env_setup_tests/WeatherMonitor /home/$1/env_setup_tests/
     sudo chown $1:$1 -R /home/$1/env_setup_tests/WeatherMonitor
     echo "Added development environment tests"
 }
 
 # Start of script actions
 set -e
-mkdir /tmp/3rdparty
+mkdir -p /tmp/3rdparty
 parse_args $@
 print_help
 user_func
-setup_ssh_keys $RIAPSAPPDEVELOPER
+etup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
-vim_func
+im_func
 java_func
 cmake_func
 utils_install
@@ -449,13 +452,13 @@ capnproto_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
-spdlog_python_install
 apparmor_monkeys_install
 redis_install
 quota_install $RIAPSAPPDEVELOPER
 other_pip3_installs
+spdlog_python_install
 firefox_install
 graphviz_install
 security_prereq_install
 add_set_tests $RIAPSAPPDEVELOPER
-riaps_install
+riaps_install $RIAPSAPPDEVELOPER
