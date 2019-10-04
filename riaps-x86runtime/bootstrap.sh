@@ -282,13 +282,13 @@ libsoc_prereq_install(){
 
 # install external packages using cmake
 externals_cmake_install(){
-	#mkdir /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
-	#cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
-        #make -Darch=amd64 ..
-	#make
-	#cd /home/riapsadmin/riaps-integration/riaps-x86runtime
-	#rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
-	mkdir /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
+	mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+	cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+        cmake -Darch=amd64 ..
+	make
+	cd /home/riapsadmin/riaps-integration/riaps-x86runtime
+	rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
+	mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
 	cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
 	cmake -Darch=armhf ..
         make
@@ -379,7 +379,7 @@ riaps_install() {
     sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     #sudo apt-get update
-    sudo cp riaps_install_amd64.sh /home/$1/.
+    sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_amd64.sh /home/$1/.
     sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
     sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
     #./riaps_install_amd64.sh
@@ -438,7 +438,7 @@ timesync_requirements
 python_install
 curl_func
 boost_install
-#eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
+eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
 eclipse_plugin_dep_install
 nethogs_prereq_install
 zyre_czmq_prereq_install
@@ -460,5 +460,6 @@ spdlog_python_install
 firefox_install
 graphviz_install
 security_prereq_install
+rm -rf /tmp/3rdparty
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_install $RIAPSAPPDEVELOPER

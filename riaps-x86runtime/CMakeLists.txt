@@ -95,7 +95,6 @@ elseif(${arch} STREQUAL "armhf")
                       --target=arm-linux-gnueabihf
                       --enable-shared
                       --with-external-capnp
-                      ${armhost}
                       BUILD_COMMAND
                       make
                       ${MAKE_JOB_FLAGS}
@@ -213,7 +212,7 @@ elseif(${arch} STREQUAL "armhf")
                       CONFIGURE_COMMAND
                       ""
                       SOURCE_DIR
-                      "${CMAKE_SOURCE_DIR}/3rdparty/libnethogs-${arch}"
+                      "/tmp/3rdparty/libnethogs-${arch}"
                       BUILD_COMMAND
                       make
                       ${MAKE_JOB_FLAGS}
