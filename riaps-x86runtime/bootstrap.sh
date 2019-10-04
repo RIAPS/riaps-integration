@@ -428,9 +428,9 @@ mkdir -p /tmp/3rdparty
 parse_args $@
 print_help
 user_func
-etup_ssh_keys $RIAPSAPPDEVELOPER
+setup_ssh_keys $RIAPSAPPDEVELOPER
 cross_setup
-im_func
+vim_func
 java_func
 cmake_func
 utils_install
