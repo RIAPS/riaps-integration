@@ -324,6 +324,7 @@ endif()
 if(${arch} STREQUAL "amd64")
  externalproject_add(zyre-${arch}
                      DEPENDS
+                     czmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
@@ -346,6 +347,7 @@ if(${arch} STREQUAL "amd64")
 elseif(${arch} STREQUAL "armhf")
  externalproject_add(zyre-${arch}
                      DEPENDS
+                     czmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
