@@ -88,7 +88,7 @@ cross_setup() {
     echo "updated sources.list for multiarch"
 
     sudo dpkg --add-architecture armhf
-    #sudo apt-get update
+    sudo apt-get update
     echo "packages update complete for multiarch"
     sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
     sudo apt-get install build-essential -y
@@ -239,7 +239,7 @@ zyre_pybindings_install(){
 }
 
 #link pycapnp with installed library. Must be run after capnproto install.
-capnproto_install() {
+pycapnp_install() {
 
     CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
     echo "linked pycapnp with capnproto"
@@ -250,7 +250,7 @@ gnutls_install(){
 	sudo apt-get install libgnutls30 -y
 	sudo apt-get install libgnutls30:armhf -y
 	sudo apt-get install libgnutls28-dev -y
-	echo "instaled gnutls"
+	echo "installed gnutls"
 }
 
 #install msgpack
@@ -258,7 +258,7 @@ msgpack_install(){
 	sudo apt-get install libmsgpackc2:amd64 -y
 	sudo apt-get install libmsgpackc2:armhf -y
 	sudo apt-get install libmsgpack-dev:amd64 -y
-	echo "instaled msgpack"
+	echo "installed msgpack"
 }
 
 #install opendht prerequisites
@@ -281,6 +281,7 @@ libsoc_prereq_install(){
 }
 
 # install external packages using cmake
+# libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
 externals_cmake_install(){
 	mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
 	cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
@@ -378,7 +379,7 @@ riaps_install() {
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
     sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
-    #sudo apt-get update
+    sudo apt-get update
     sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_amd64.sh /home/$1/.
     sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
     sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
