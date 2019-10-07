@@ -437,7 +437,6 @@ elseif(${arch} STREQUAL "armhf")
                      install)
 endif()
 
-#libsoc
 
 #libsoc
 
@@ -484,7 +483,7 @@ elseif(${arch} STREQUAL "armhf")
                       --enable-board=beaglebone_black
                       BUILD_COMMAND
                       make
-                      ${MAKE_JOB_FLAGS} 
+                      ${MAKE_JOB_FLAGS}
                       INSTALL_COMMAND
                       sudo make
                       install)
