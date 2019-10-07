@@ -374,7 +374,7 @@ security_prereq_install(){
     echo "installed security prerequisites"
 }
 
-riaps_install() {
+riaps_prereq() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
     sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
@@ -449,7 +449,7 @@ opendht_prereqs_install
 libsoc_prereq_install
 cython_install
 externals_cmake_install
-capnproto_install
+pycapnp_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
@@ -463,4 +463,4 @@ graphviz_install
 security_prereq_install
 rm -rf /tmp/3rdparty
 add_set_tests $RIAPSAPPDEVELOPER
-riaps_install $RIAPSAPPDEVELOPER
+riaps_prereq $RIAPSAPPDEVELOPER
