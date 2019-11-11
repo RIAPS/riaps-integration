@@ -4,11 +4,12 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.1-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.3-desktop-amd64.iso
 ```
 
 2) Create a virtual machines configured with the following settings:
   - Disk Size:  100 GB dynamically allocated
+  - Hard Disk File Type:  VMDK (Virtual Machine Disk)
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
@@ -17,11 +18,17 @@ http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubu
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
-3) Create a 'riapsadmin' user with password of 'riapsadmin'.
+3) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-18.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
-4) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
+4) Install Git - ```sudo apt install git```
 
-5) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
+5) Create a 'riapsadmin' user with password of 'riapsadmin'.
+
+6) Configure Software & Updates to turn off automatic check for updates and new version notification.
+
+7) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
+
+8) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
 
 ```
 # / was on /dev/sda1 during installation
@@ -29,9 +36,9 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 /swapfile                                 none            swap    sw              0       0
 ```
 
-6) Restart the VM to allow the above fstab changes to take effect.
+9) Restart the VM to allow the above fstab changes to take effect.
 
-7) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
+10) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
 
 ```
 sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 | tee install-vm.log
@@ -39,19 +46,19 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-8) Remove riaps-integration repository from /home/riapsadmin/.
+11) Remove riaps-integration repository from /home/riapsadmin/.
 
-9) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
+12) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
-10) Remove the riapsadmin user account.
+13) Remove the riapsadmin user account.
 
-11) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
+14) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
 
     ```
     riaps  ALL=(ALL) NOPASSWD: ALL
     ```
 
-12) Add preloaded eclipse and sample applications in the default workspace.
+15) Add preloaded eclipse and sample applications in the default workspace.
 
 	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
 	riaps_eclipse.tar.gz.
@@ -80,12 +87,12 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
   h) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
 
-13) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
+16) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
 
-14) Reset the password to the default and cause reset of password on next login.
+17) Reset the password to the default and cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-15) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+18) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
