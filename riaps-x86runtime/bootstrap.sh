@@ -452,7 +452,7 @@ timesync_requirements
 python_install
 curl_func
 boost_install
-eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
+#eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
 eclipse_plugin_dep_install
 nethogs_prereq_install
 zyre_czmq_prereq_install
