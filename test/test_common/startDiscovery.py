@@ -1,2 +1,2 @@
 import os
-os.system("/opt/riaps/armhf/bin/rdiscoveryd")
+os.system("/usr/local/bin/rdiscoveryd")
