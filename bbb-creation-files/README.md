@@ -38,44 +38,50 @@ sudo ./setup_sdcard.sh --mmc /dev/sdX --dtb beaglebone
 
 2) Download and compress the [bbb-creation-files folder](https://github.com/RIAPS/riaps-integration/tree/master/bbb-creation-files) and transfer it to the BBB.
 
-3) On the BBB, unpack the installation and move into the package
+3) On the BBB, unpack the creation files and move into the folder
 
 ```
 tar -xzvf bbb-creation-files.tar.gz
 cd bbb-creation-files
 ```
 
-4) Move to 'root' user
+4) Create a swapfile on the BBB to allow larger packages to run (such as spdlog)
+
+```
+sudo fallocate -l 1G /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+```
+
+5) Reboot the BBB and still sign in as 'ubuntu'
+
+6) Move to 'root' user
 
 ```
 sudo su
 ```
 
-5) Run the installation script. Provide the name of the ssh key pair added in step 5, your key filename can be any name desired. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
+7) Run the installation script. Provide the name of the ssh key pair added in step 5, your key filename can be any name desired. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
 
 ```
 ./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
 ```
 
-If last message seen in output (or log) is "get riaps public key" instead of "riaps aptrepo setup", then the last two commands did not happen even though the 'riapspublic.key' was received.  So, run the following commands manually:
+> Note:  This script has been updated to match the changing platform setup, due to time constraints it has not been run from scratch and may contain some syntax errors.  The intended contents is represented and accounted for in the file.
+
+8) Remove install files from /home/ubuntu
+
+9) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
+
+10) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 
 ```
-sudo apt-key add riapspublic.key
-sudo apt-get update
-```
-
-6) Remove public key from /home/riaps/.ssh directory
-
-7) Remove install files from /home/ubuntu
-
-8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-bbbruntime/riaps_install_bbb.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
-
-9) Reboot the BBB and still sign in as 'ubuntu' and move to 'root' user
-
-10) Run the installation process that requires a swap file (added in the base_bbb_bootstrap.sh) and at the end remove the swap file.
-
-```
-./swap-install-bbb.sh 2>&1 | tee swap-install-bbb.log
+sudo swapoff -v /swapfile
+sed -i "/swapfile/c\ " /etc/fstab
+sudo rm /swapfile
 ```
 
 11) Reboot BBB and sign in as 'riaps' user
@@ -86,9 +92,10 @@ sudo apt-get update
 sudo su
 userdel -r ubuntu
 ```
-11) Change owner of /opt/scripts from 1000 to root
 
-12) Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+13) Change owner of /opt/scripts from 1000 to root
+
+14) Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```bash
 ./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log

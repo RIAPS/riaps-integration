@@ -98,3 +98,7 @@ If you want to only update the RIAPS platform, run the update script
 ```
 
 > Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
+
+> Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
+  breaking builds,  in step 3 use the ```riaps_update_amd64_v1_1_16.sh``` script to
+  make sure deprecated packages and old configuration files are removed.

@@ -1,8 +1,10 @@
 # Setting up the BBB images
 
-1) Download the latest BBB image (riaps_bbb_base_v[date].tar.gz) from https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
+1) Download the latest BBB image (riaps_bbb_4GB_v[date].tar.gz) from
+   https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
 
-2) Copy the image to the BBB SD Card using a host machine and an SD Card reader.  A good open source tool for transferring the image to a SD Card is https://etcher.io/.
+2) Copy the image to the BBB SD Card using a host machine and an SD Card reader.  
+   A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
 3) Put the SD Card into the BBB and boot it up.  
 
@@ -20,16 +22,21 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
 ```
 >  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB
 
-<p align="center">or</p>
+5) Starting with v1.1.17, the BBB image does not have RIAPS pre-installed.  So,
+   install the RIAPS platform using
 
-```
-ssh -i /home/riaps/.ssh/id_rsa.key riaps@bbb-xxxx
-```
-> where **xxxx** is the hostname seen when logging into the BBBs
+```./riaps_install_bbb 2>&1 | tee install-riaps-bbb.log```
 
-5) Secure communication between the Host Environment and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#secure-comm) instructions.  Once this process completes, the host environment will automatically login to the beagle bones when using ssh by utilizing your ssh keys.
+6) Optional Step:  If desired, secure communication between the Host Environment
+   and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#secure-comm)
+   instructions.  Once this process completes, the host environment will automatically
+   login to the beaglebones when using ssh by utilizing your ssh keys.  Note that
+   password access to the BBBs will be disabled after running this process.  
 
-6) Reboot the BBBs
+> Note:  First time users should skip this step on first setup of their system.  
+  The RIAPS example programs will work with the initial security configuration.
+
+7) Reboot the BBBs
 
 # Update RIAPS Platform Packages on Existing BBBs
 
@@ -44,16 +51,23 @@ sudo systemctl stop riaps-deplo.service
 3) Run the update script.
 
 ```
-sudo apt-get update
-sudo apt-get install 'riaps-*' 2>&1 | tee install-riaps-update-bbb.log
+./riaps_install_bbb.sh 2>&1 | tee install-riaps-update-bbb.log
 ```
 
-> Note:  The user configuration files (riaps.conf and riaps-log.conf) are preserved when a new version of riaps-pycom is installed.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required.
+> Note:  The user configuration files (riaps.conf and riaps-log.conf) are preserved
+  when a new version of riaps-pycom is installed.  If you want to reset to the
+  basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and
+  reinstall riaps-pycom.  Also, all files are linked such that pycom can still load
+  these files from /usr/local/riaps/etc/, so no change in code is required.
 
+> Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
+  breaking builds,  in step 3 use the ```riaps_update_bbb_v1_1_16.sh``` script to
+  make sure deprecated packages and old configuration files are removed.
 
 # Helpful Hints
 
-1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host' file and try again.
+1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host'
+   file and try again.
 
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -78,16 +92,25 @@ lost connection
 
 Current services loaded into the image on the BBB and on the host VM:
 
-1) **riaps-deplo.service** - will start the RIAPS deployment application.  This service starts the RIAPS discovery service.  When enabled, this service is setup to restart if it fails.
+1) **riaps-deplo.service** - will start the RIAPS deployment application.  This
+   service starts the RIAPS discovery service.  When enabled, this service is setup
+   to restart if it fails.
 
    - this service is currently disabled on the VM by default
    - this service is currently enabled and started on the BBB by default
 
-2) **riaps-rm-cgroups.service** - this service runs when the BBB is booted to configure the RIAPS cgroups tools
+2) **riaps-rm-cgroups.service** - this service runs when the BBB is booted to
+   configure the RIAPS cgroups tools
 
-3) **riaps-rm-quota.service** - this service runs when the BBB is booted to configure the quota tools
+3) **riaps-rm-quota.service** - this service runs when the BBB is booted to
+   configure the quota tools
 
-To see the status of a service or control its state, use the following commands manually on a command line, where name is the service name (like deplo).  Starting a service runs the actions immediately.  Enabling the service will allow the service to start when booting up.  Disabling a service will completely turn the service off (even when rebooted).  Stopping a service will just stop the service for the current boot of the BBB, it will be back on after the next reboot, unless it is disabled.
+To see the status of a service or control its state, use the following commands
+manually on a command line, where name is the service name (like deplo).  Starting
+a service runs the actions immediately.  Enabling the service will allow the service
+to start when booting up.  Disabling a service will completely turn the service
+off (even when rebooted).  Stopping a service will just stop the service for the
+current boot of the BBB, it will be back on after the next reboot, unless it is disabled.
 
 ```
 sudo systemctl status riaps-<name>.service
