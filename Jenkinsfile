@@ -11,8 +11,6 @@ pipeline {
             wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
             chmod +x fetch_linux_amd64
             source version.sh
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag="$externalsversion" --release-asset="riaps-externals-armhf.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-externals/" --tag=$externalsversion --release-asset="riaps-externals-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
@@ -28,8 +26,7 @@ pipeline {
         sh '''#!/bin/bash
           source version.sh
           mkdir riaps-release
-          cp riaps-externals-armhf.deb riaps-externals-amd64.deb riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
-          echo "externalsversion=$externalsversion" >> riaps-release/manifest.txt
+          cp riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
           echo "coreversion=$coreversion" >> riaps-release/manifest.txt
           echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
           echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt

@@ -169,9 +169,6 @@ boost_install() {
     echo "installed boost"
 }
 
-# Not currently installed since nethogs is built in riaps-externals,
-# this installed on the build machine (MM)
-
 # install nethogs pre-requisites
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
@@ -225,7 +222,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev:armhf -y
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
     sudo apt-get install pkg-config -y
-    echo "installed CZMQ prerequisites"
+    echo "installed CZMQ and Zyre prerequisites"
 }
 
 pyzmq_install(){
@@ -287,11 +284,6 @@ opendht_prereqs_install() {
     echo "installed opendht prerequisites"
 }
 
-#install libsoc prerequisites
-libsoc_prereq_install(){
-    sudo apt-get install pkg-config -y
-    echo "installed libsoc prerequisites"
-}
 
 # install external packages using cmake
 # libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
@@ -458,7 +450,6 @@ zyre_czmq_prereq_install
 gnutls_install
 msgpack_install
 opendht_prereqs_install
-libsoc_prereq_install
 cython_install
 externals_cmake_install
 pycapnp_install
