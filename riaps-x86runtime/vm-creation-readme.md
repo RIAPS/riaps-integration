@@ -34,9 +34,12 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 7) Restart the VM to allow the above fstab changes to take effect.
 
-8) To setup the usrquota and grpquota files, run
+8) To setup the usrquota and grpquota files, run the following.  
+   The last line provides feedback that the quota is setup.
 ```
 sudo quotacheck -ugm /
+sudo quotaon -a
+sudo quotaon -pa
 ```
 
 9) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
