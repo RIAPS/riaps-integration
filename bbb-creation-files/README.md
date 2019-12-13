@@ -184,4 +184,4 @@ sudo dd if=/dev/sdb of=riaps-bbb-base-4GB.img count=7774207
 3976200192 bytes (4.0 GB, 3.7 GiB) copied, 171.161 s, 23.2 MB/s
 ```
 
-3) Use https://etcher.io/ tool to copy from host to SD card
+3) Use https://www.balena.io/etcher/ tool to copy from host to SD card
