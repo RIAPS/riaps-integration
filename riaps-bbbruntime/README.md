@@ -25,7 +25,7 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
 5) Starting with v1.1.17, the BBB image does not have RIAPS pre-installed.  So,
    install the RIAPS platform using
 
-```./riaps_install_bbb 2>&1 | tee install-riaps-bbb.log```
+```./riaps_install_bbb.sh 2>&1 | tee install-riaps-bbb.log```
 
 6) Optional Step:  If desired, secure communication between the Host Environment
    and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#secure-comm)
