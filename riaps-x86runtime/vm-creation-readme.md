@@ -85,7 +85,7 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 	d) Move riaps_projects to the /home/riaps folder.  The projects placed here are from https://github.com/RIAPS/riaps-apps to provide starting projects for new developers (DistributedEstimator, DistributedEstimatorGPIO and WeatherMonitor).  
 
-	e) Move the riaps-launch-files to the /home/riaps folder.  The launch files are located in https://github.com/RIAPS/riaps-pycom/tree/dev-rm-externals/bin (riaps_ctrl.launch and riaps_deplo.launch).
+	e) Move the riaps-launch-files to the /home/riaps folder.  The launch files are located in https://github.com/RIAPS/riaps-pycom/tree/master/bin (riaps_ctrl.launch and riaps_deplo.launch).
 
 	f) Import riaps_projects using "General" --> "Existing Projects into Workspace".
 
