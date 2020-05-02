@@ -323,6 +323,15 @@ other_pip3_installs(){
     echo "installed pip3 packages"
 }
 
+# install prctl package
+prctl_install() {
+    sudo apt-get install libcap-dev -y
+    git clone http://github.com/seveas/python-prctl
+    cd python-prctl/
+    python3 setup.py build
+    sudo python3 setup.py install
+}
+
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
@@ -381,5 +390,6 @@ czmq_pybindings_install
 zyre_pybindings_install
 pycapnp_install
 other_pip3_installs
+prctl_install
 remove_pkgs_used_to_build
 setup_riaps_repo

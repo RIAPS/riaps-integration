@@ -378,6 +378,15 @@ security_prereq_install(){
     echo "installed security prerequisites"
 }
 
+# install prctl package
+prctl_install() {
+    sudo apt-get install libcap-dev -y
+    git clone http://github.com/seveas/python-prctl
+    cd python-prctl/
+    python3 setup.py build
+    sudo python3 setup.py install
+}
+
 riaps_prereq() {
     # Add RIAPS repository
     sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
@@ -464,6 +473,7 @@ spdlog_python_install
 firefox_install
 graphviz_install
 security_prereq_install
+prctl_install
 rm -rf /tmp/3rdparty
 add_set_tests $RIAPSAPPDEVELOPER
 riaps_prereq $RIAPSAPPDEVELOPER
