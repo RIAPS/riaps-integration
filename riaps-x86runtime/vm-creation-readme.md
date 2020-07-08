@@ -4,7 +4,7 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.3-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/xubuntu-20.04-desktop-amd64.iso
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -37,6 +37,7 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 8) To setup the usrquota and grpquota files, run the following.  
    The last line provides feedback that the quota is setup.
 ```
+sudo apt-get install quota -y
 sudo quotacheck -ugm /
 sudo quotaon -a
 sudo quotaon -pa
@@ -99,7 +100,7 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 	   - CDT Optional Features --> C/C++ CMake Build Support - Preview Developer Resources
 	   - Git integration for Eclipse - Task focused interface
 	   - From Eclipse Marketplace:  Eclipse Xtend, Xtext, JSON Editor, PyDev
-	   - Install the RIAPS DSML tool from https://riaps.isis.vanderbilt.edu/dsml 
+	   - Install the RIAPS DSML tool from https://riaps.isis.vanderbilt.edu/dsml
 
 16) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
 

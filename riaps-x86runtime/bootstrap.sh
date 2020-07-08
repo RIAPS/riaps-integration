@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-# Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, python3-dev, python3-setuptools, libpcap0.8, nettle6
+# Packages already in base 20.04 image that are utilized by RIAPS Components:
+# GCC 10, GCC 9, libpcap0.8, software-properties-common (0.98.9), vim, libnss-mdns (0.14.1),
+# Python 3.8, libcurl4, libcurl3-gnutls, libncurses6, libzmq5, pkg-config, libgnutls30, firefox,
+# libnettle7, libhogweed5, libgmp10, openssl 1.1.1f-1ubuntu2
+#
+# Installed prior to this script: GIT, quota
+# Need to make sure python3-crypto and python3-keyrings.alt are not installed due to pycryptodomex install (not in 20.04 image)
 
 
 # Script Variables
@@ -59,64 +64,65 @@ user_func () {
     fi
 }
 
+# Remove the software deployment and package management system called "Snap"
+rm_snap_pkg() {
+    sudo apt-get remove snapd -y
+    sudo apt-get purge snapd -y
+}
+
 # Configure for cross functional compilation - this is vagrant box config dependent
 cross_setup() {
-    sudo apt-get install software-properties-common apt-transport-https -y
+    sudo apt-get install apt-transport-https -y
 
     echo "add amd64, i386"
     # Qualify the architectures for existing repositories
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic main restricted"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal main restricted"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic universe"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal universe"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates universe"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic  multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal  multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal multiverse"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates multiverse"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted"
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security main restricted" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security main restricted"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security universe" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security universe"
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security universe" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security universe"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
-    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security multiverse"
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security multiverse" || true
+    sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security multiverse"
 
-    echo "add armhf"
+    echo "add armhf, arm64"
     # Add armhf repositories
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
-    sudo add-apt-repository -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
+    #sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse"
 
-    sudo add-apt-repository -r "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
-    sudo add-apt-repository  -n "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
+    #sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse" || true
+    sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse"
 
     echo "updated sources.list for multiarch"
 
     sudo dpkg --add-architecture armhf
+    sudo dpkg --add-architecture arm64
     sudo apt-get update
     echo "packages update complete for multiarch"
-    sudo apt-get install crossbuild-essential-armhf gdb-multiarch -y
+    sudo apt-get install crossbuild-essential-armhf crossbuild-essential-arm64 gdb-multiarch -y
     sudo apt-get install build-essential -y
     echo "setup multi-arch capabilities complete"
-}
-
-
-vim_func() {
-    sudo apt-get install vim -y
-    echo "installed vim"
 }
 
 java_func () {
@@ -133,9 +139,26 @@ cmake_func() {
     echo "installed cmake"
 }
 
+# RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
+# Setup update-alternative to have this VM use GCC/G++ 7.
+config_gcc() {
+    sudo apt -y install gcc-7 g++-7
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/gcc-7
+    sudo update-alternatives --set g++ /usr/bin/g++-7
+    # Print version to show it worked as desired
+    gcc --version
+    g++ --version
+    echo "configured gcc/g++"
+}
+
 utils_install() {
     sudo apt-get install htop -y
-    sudo apt-get install openssh-server -y
+    sudo apt-get install openssl openssh-server -y
+    sudo apt-get net-tools -y
     # make sure date is correct
     sudo apt-get install rdate -y
     sudo rdate -n -4 time.nist.gov
@@ -143,8 +166,9 @@ utils_install() {
 }
 
 # Required for riaps-timesync
+# Assumes libnss-mdns is already installed
 timesync_requirements() {
-    sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
+    sudo apt-get install linuxptp gpsd chrony -y
     sudo apt-get install libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
@@ -152,6 +176,7 @@ timesync_requirements() {
 }
 
 python_install () {
+    sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip -y
     sudo apt-get install libpython3-dev:armhf -y
     sudo pip3 install --upgrade pip
@@ -170,16 +195,17 @@ boost_install() {
 }
 
 # install nethogs pre-requisites
+# Assumes libncurses6  is already installed
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
-    sudo apt-get install libpcap-dev:armhf -y
+    sudo apt-get install libpcap-dev:armhf libpcap-dev:arm64 -y
     sudo apt-get install libncurses5-dev -y
     echo "installed nethogs prerequisites"
 }
 
 #install other required packages
 other_pip3_installs(){
-    pip3 install 'Adafruit_BBIO == 1.1.1' 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.6.0' 'cryptography==2.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.7.0' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    pip3 install 'Adafruit_BBIO == 1.1.1' 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.7.0' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
     pip3 install --ignore-installed 'PyYAML==5.1.1'
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
     echo "installed pip3 packages"
@@ -187,7 +213,6 @@ other_pip3_installs(){
 
 #install apparmor_monkeys
 apparmor_monkeys_install(){
-
     git clone https://github.com/RIAPS/apparmor_monkeys.git /tmp/3rdparty/apparmor_monkeys
     cd /tmp/3rdparty/apparmor_monkeys
     python3 setup.py install
@@ -206,22 +231,21 @@ spdlog_python_install(){
 	echo "installed spdlog python"
 }
 
-
-
-# Assumes that Cython3 is not on the base release (18.04.2 LTS does not have it)
+# Assumes that Cython3 is not on the base release (20.04 does not have it)
 cython_install() {
     sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5'
     echo "installed cython"
 }
 
 #install libraries for czmq and zyre
+# Assumes libzmq5 and pkg-config are already installed
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq5 libzmq3-dev -y
-    sudo apt-get install libzmq3-dev:armhf -y
+    sudo apt-get install libzmq3-dev -y
+    sudo apt-get install libzmq3-dev:armhf libzmq3-dev:arm64 -y
     sudo apt-get install libsystemd-dev -y
-    sudo apt-get install libsystemd-dev:armhf -y
+    sudo apt-get install libsystemd-dev:armhf libsystemd-dev:arm64 -y
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
-    sudo apt-get install pkg-config -y
+    sudo apt-get install libuuid1:arm64 liblz4-1:arm64 -y
     echo "installed CZMQ and Zyre prerequisites"
 }
 
@@ -256,9 +280,9 @@ pycapnp_install() {
 }
 
 # install gnutls
+# Assumes libgnutls30 is already installed
 gnutls_install(){
-    sudo apt-get install libgnutls30 -y
-    sudo apt-get install libgnutls30:armhf -y
+    sudo apt-get install libgnutls30:armhf libgnutls30:arm64 -y
     sudo apt-get install libgnutls28-dev -y
     echo "installed gnutls"
 }
@@ -266,24 +290,25 @@ gnutls_install(){
 #install msgpack
 msgpack_install(){
     sudo apt-get install libmsgpackc2:amd64 -y
-    sudo apt-get install libmsgpackc2:armhf -y
+    sudo apt-get install libmsgpackc2:armhf libmsgpackc2:arm64 -y
     sudo apt-get install libmsgpack-dev:amd64 -y
     echo "installed msgpack"
 }
 
 #install opendht prerequisites
+# Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
-    sudo apt-get install libncurses5-dev -y
-    sudo apt-get install libncurses5-dev:armhf -y
+    sudo apt-get install libncurses5-dev:armhf libncurses5-dev:arm64 -y
     sudo apt-get install nettle-dev -y
-    sudo apt-get install nettle-dev:armhf -y
+    sudo apt-get install nettle-dev:armhf nettle-dev:arm64 -y
     # run liblinks script to link gnutls and msgppack
     chmod +x /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     cd /usr/lib/arm-linux-gnueabihf
     sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    cd /usr/lib/aarch64-linux-gnu
+    sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     echo "installed opendht prerequisites"
 }
-
 
 # install external packages using cmake
 # libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
@@ -300,11 +325,16 @@ externals_cmake_install(){
     make
     cd /home/riapsadmin/riaps-integration/riaps-x86runtime
     rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-armhf
+    mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
+    cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
+    cmake -Darch=arm64 ..
+    make
+    cd /home/riapsadmin/riaps-integration/riaps-x86runtime
+    rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
     echo "cmake install complete"
 }
 
 #eclipse install
-
 eclipse_shortcut() {
     shortcut=/home/$1/Desktop/Eclipse.desktop
     sudo -H -u $1 mkdir -p /home/$1/Desktop
@@ -355,42 +385,21 @@ redis_install () {
    fi
 }
 
-firefox_install() {
-    sudo apt-get install firefox -y
-    echo "installed firefox"
-}
-
 graphviz_install() {
     sudo apt-get install graphviz xdot -y
     echo "installed graphviz"
 }
 
-quota_install() {
-    sudo apt-get install quota -y
-    echo "installed quota"
-# Do by hand (MM):    sed -i "/vbox--vg-root/c\/dev/mapper/vbox--vg-root / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
-}
-
-# Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex install
-security_prereq_install(){
-    sudo apt-get install apparmor-utils -y
-    sudo apt-get remove python3-crypto python3-keyrings.alt -y
-    echo "installed security prerequisites"
-}
-
 # install prctl package
 prctl_install() {
     sudo apt-get install libcap-dev -y
-    git clone http://github.com/seveas/python-prctl
-    cd python-prctl/
-    python3 setup.py build
-    sudo python3 setup.py install
+    pip3 install 'python-prctl == 1.7'
 }
 
 riaps_prereq() {
     # Add RIAPS repository
-    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main" || true
+    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_amd64.sh /home/$1/.
@@ -443,13 +452,15 @@ parse_args $@
 print_help
 user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
+rm_snap_pkg
 cross_setup
-vim_func
 java_func
 cmake_func
+config_gcc
 utils_install
 timesync_requirements
 python_install
+cython_install
 curl_func
 boost_install
 #eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
@@ -459,7 +470,6 @@ zyre_czmq_prereq_install
 gnutls_install
 msgpack_install
 opendht_prereqs_install
-cython_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install
@@ -467,12 +477,9 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
-quota_install $RIAPSAPPDEVELOPER
 other_pip3_installs
 spdlog_python_install
-firefox_install
 graphviz_install
-security_prereq_install
 prctl_install
 rm -rf /tmp/3rdparty
 add_set_tests $RIAPSAPPDEVELOPER
