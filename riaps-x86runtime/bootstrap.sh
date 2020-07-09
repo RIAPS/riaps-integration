@@ -14,7 +14,7 @@ RIAPSAPPDEVELOPER=riaps
 
 # Script functions
 
-# User must supply ssh key pair
+# User can supply ssh key pair, but must supply an intended name pair
 parse_args()
 {
     for ARGUMENT in "$@"
@@ -108,10 +108,10 @@ cross_setup() {
 
     echo "add armhf, arm64"
     # Add armhf repositories
-    #sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse" || true
+    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse" || true
     sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse"
 
-    #sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse" || true
+    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse" || true
     sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse"
 
     echo "updated sources.list for multiarch"
@@ -130,37 +130,61 @@ java_func () {
     echo "installed java"
 }
 
-cmake_func() {
-    sudo apt-get install cmake -y
-    sudo apt-get install byacc flex libtool libtool-bin -y
-    sudo apt-get install autoconf autogen -y
-    sudo apt-get install libreadline-dev -y
-    sudo apt-get install libreadline-dev:armhf -y
-    echo "installed cmake"
-}
-
 # RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
 # Setup update-alternative to have this VM use GCC/G++ 7.
 config_gcc() {
     sudo apt -y install gcc-7 g++-7
+    sudo apt -y install gcc-7:armhf g++-7:armhf
+    sudo apt -y install gcc-7:arm64 g++-7:arm64
+    # Setup GCC-7 as default in all architectures
+    # amd64
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
     sudo update-alternatives --set gcc /usr/bin/gcc-7
     sudo update-alternatives --set g++ /usr/bin/g++-7
+    # armhf
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-7 7
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-9 9
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-7 7
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/arm-linux-gnueabihf-gcc-7
+    sudo update-alternatives --set g++ /usr/bin/arm-linux-gnueabihf-g++-7
+    # arm64
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-7 7
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-9 9
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-7 7
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/aarch64-linux-gnu-gcc-7
+    sudo update-alternatives --set g++ /usr/bin/aarch64-linux-gnu-g++-7
+
     # Print version to show it worked as desired
     gcc --version
     g++ --version
+    arm-linux-gnueabihf-gcc --version
+    arm-linux-gnueabihf-g++ --version
+    aarch64-linux-gnu-gcc --version
+    aarch64-linux-gnu-g++ --version
     echo "configured gcc/g++"
+}
+
+cmake_func() {
+    sudo apt-get install cmake -y
+    sudo apt-get install byacc flex libtool libtool-bin -y
+    sudo apt-get install autoconf autogen -y
+    sudo apt-get install libreadline-dev -y
+    sudo apt-get install libreadline-dev:armhf libreadline-dev:arm64 -y
+    echo "installed cmake"
 }
 
 utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssl openssh-server -y
-    sudo apt-get net-tools -y
+    sudo apt-get install net-tools -y
     # make sure date is correct
     sudo apt-get install rdate -y
+    # rdate command can timeout, restart script from here if this happens
     sudo rdate -n -4 time.nist.gov
     echo "installed utils"
 }
@@ -178,9 +202,15 @@ timesync_requirements() {
 python_install () {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip -y
-    sudo apt-get install libpython3-dev:armhf -y
+    sudo apt-get install libpython3-dev:armhf libpython3-dev:arm64 -y
     sudo pip3 install --upgrade pip
     echo "installed python3"
+}
+
+# Assumes that Cython3 is not on the base release (20.04 does not have it)
+cython_install() {
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5'
+    echo "installed cython"
 }
 
 curl_func () {
@@ -190,8 +220,44 @@ curl_func () {
 
 boost_install() {
     sudo apt-get install libboost-dev -y
-    sudo apt-get install libboost-dev:armhf -y
+    sudo apt-get install libboost-dev:armhf libboost-dev:arm64 -y
     echo "installed boost"
+}
+
+#eclipse install
+eclipse_shortcut() {
+    shortcut=/home/$1/Desktop/Eclipse.desktop
+    sudo -H -u $1 mkdir -p /home/$1/Desktop
+    sudo -H -u $1 cat <<EOT >$shortcut
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Eclipse
+Name[en_US]=Eclipse
+Icon=/home/$1/eclipse/icon.xpm
+Exec=/home/$1/eclipse/eclipse -data /home/$1/workspace
+EOT
+
+    sudo chmod +x /home/$1/Desktop/Eclipse.desktop
+}
+
+eclipse_func() {
+    if [ ! -d "/home/$1/eclipse" ]
+    then
+       wget http://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R2/eclipse-inst-linux64.tar.gz
+       tar -xzvf eclipse-inst-linux64.tar.gz
+       sudo mv eclipse /home/$1/.
+       sudo chown -R $1:$1 /home/$1/eclipse
+       sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
+       eclipse_shortcut $1
+    else
+       echo "eclipse already installed at /home/$1/eclipse"
+    fi
+}
+
+# Dependencies for RIAPS eclipse plugin
+eclipse_plugin_dep_install() {
+    sudo apt-get install clang-format -y
 }
 
 # install nethogs pre-requisites
@@ -203,10 +269,23 @@ nethogs_prereq_install() {
     echo "installed nethogs prerequisites"
 }
 
+butter_install() {
+    cd /tmp/3rdparty
+    git clone https://github.com/RIAPS/butter.git
+    cd /tmp/3rdparty/butter
+    sudo python3 setup.py install
+    rm -rf /tmp/3rdparty/butter
+    echo "installed butter"
+}
+
 #install other required packages
 other_pip3_installs(){
-    pip3 install 'Adafruit_BBIO == 1.1.1' 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.7.0' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    # There is an issue installing this in Python 3.8 right now (7/2020)
+    #pip3 install 'Adafruit_BBIO==1.1.1'
+    # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
+    pip3 install --ignore-installed 'psutil==5.7.0'
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
     echo "installed pip3 packages"
 }
@@ -229,12 +308,6 @@ spdlog_python_install(){
     python3 setup.py install
     rm -rf /tmp/3rdparty/spdlog-python
 	echo "installed spdlog python"
-}
-
-# Assumes that Cython3 is not on the base release (20.04 does not have it)
-cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5'
-    echo "installed cython"
 }
 
 #install libraries for czmq and zyre
@@ -334,42 +407,6 @@ externals_cmake_install(){
     echo "cmake install complete"
 }
 
-#eclipse install
-eclipse_shortcut() {
-    shortcut=/home/$1/Desktop/Eclipse.desktop
-    sudo -H -u $1 mkdir -p /home/$1/Desktop
-    sudo -H -u $1 cat <<EOT >$shortcut
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Eclipse
-Name[en_US]=Eclipse
-Icon=/home/$1/eclipse/icon.xpm
-Exec=/home/$1/eclipse/eclipse -data /home/$1/workspace
-EOT
-
-    sudo chmod +x /home/$1/Desktop/Eclipse.desktop
-}
-
-eclipse_func() {
-    if [ ! -d "/home/$1/eclipse" ]
-    then
-       wget http://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R2/eclipse-inst-linux64.tar.gz
-       tar -xzvf eclipse-inst-linux64.tar.gz
-       sudo mv eclipse /home/$1/.
-       sudo chown -R $1:$1 /home/$1/eclipse
-       sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
-       eclipse_shortcut $1
-    else
-       echo "eclipse already installed at /home/$1/eclipse"
-    fi
-}
-
-# Dependencies for RIAPS eclipse plugin
-eclipse_plugin_dep_install() {
-    sudo apt-get install clang-format -y
-}
-
 # install redis
 redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
@@ -455,8 +492,8 @@ setup_ssh_keys $RIAPSAPPDEVELOPER
 rm_snap_pkg
 cross_setup
 java_func
-cmake_func
 config_gcc
+cmake_func
 utils_install
 timesync_requirements
 python_install
@@ -477,6 +514,7 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
+butter_install
 other_pip3_installs
 spdlog_python_install
 graphviz_install
