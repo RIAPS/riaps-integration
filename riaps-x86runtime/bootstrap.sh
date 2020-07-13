@@ -432,7 +432,7 @@ graphviz_install() {
 # install prctl package
 prctl_install() {
     sudo apt-get install libcap-dev -y
-    pip3 install 'python-prctl == 1.7'
+    pip3 install 'python-prctl==1.7'
 }
 
 riaps_prereq() {

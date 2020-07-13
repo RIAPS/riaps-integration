@@ -682,28 +682,29 @@ elseif(${arch} STREQUAL "armhf")
                       INSTALL_COMMAND
                       sudo make
                       install)
-elseif(${arch} STREQUAL "arm64")
- externalproject_add(libsoc-${arch}
-                      GIT_REPOSITORY
-                      "https://github.com/jackmitch/libsoc.git"
-                      GIT_TAG
-                      "379f909690ea776cb6592bf246cce819b9da0ebd"
-                      SOURCE_DIR
-                      "/tmp/3rdparty/libsoc-${arch}"
-                      BUILD_IN_SOURCE
-                      1
-                      UPDATE_COMMAND
-                      autoreconf
-                      -i
-                      CONFIGURE_COMMAND
-                      ./configure
-                      --prefix=${prefix}
-                      --host=aarch64-linux-gnu
-                      --enable-board=beaglebone_black
-                      BUILD_COMMAND
-                      make
-                      ${MAKE_JOB_FLAGS}
-                      INSTALL_COMMAND
-                      sudo make
-                      install)
+# MM TODO: no RaspberryPi 4 board yet in libsoc
+#elseif(${arch} STREQUAL "arm64")
+# externalproject_add(libsoc-${arch}
+#                      GIT_REPOSITORY
+#                      "https://github.com/jackmitch/libsoc.git"
+#                      GIT_TAG
+#                      "379f909690ea776cb6592bf246cce819b9da0ebd"
+#                      SOURCE_DIR
+#                      "/tmp/3rdparty/libsoc-${arch}"
+#                      BUILD_IN_SOURCE
+#                      1
+#                      UPDATE_COMMAND
+#                      autoreconf
+#                      -i
+#                      CONFIGURE_COMMAND
+#                      ./configure
+#                      --prefix=${prefix}
+#                      --host=aarch64-linux-gnu
+#MM TODO              --enable-board=????
+#                      BUILD_COMMAND
+#                      make
+#                      ${MAKE_JOB_FLAGS}
+#                      INSTALL_COMMAND
+#                      sudo make
+#                      install)
 endif()
