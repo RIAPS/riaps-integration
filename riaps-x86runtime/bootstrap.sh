@@ -132,8 +132,10 @@ java_func () {
 
 # RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
 # Setup update-alternative to have this VM use GCC/G++ 7.
+#MM TODO: this part is still in development.  Most likely it will stay with gcc-9 if all builds well and this section will not be needed
 config_gcc() {
     sudo apt -y install gcc-7 g++-7
+
     sudo apt -y install gcc-7:armhf g++-7:armhf
     sudo apt -y install gcc-7:arm64 g++-7:arm64
     # Setup GCC-7 as default in all architectures
