@@ -3,13 +3,15 @@ set -e
 
 
 # MM TODO: update this list
-# Packages already in base 18.04.4 image that are utilized by RIAPS Components:
-# git, libpcap0.8, nettle6, libncurses5, curl, libuuid1, liblz4-1, libgnutls30
-# vim, htop, software-properties-common
+# Packages already in base 20.04.4 image that are utilized by RIAPS Components:
+# git, libpcap0.8, nettle7, libncurses6, curl, libuuid1, liblz4-1, libgnutls30,
+# libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
+# vim, htop, software-properties-common, python3-setuptools
 
-# MM TODO: Packages to add
-# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools,  libgnutls30,
+# MM TODO: Packages to add?
+# cmake installs GCC-9, previously used GCC 7, G++ 7
+# Not sure where this is needed: python3-dev
+# Might be needed for riaps-timesync, but did not yet install or test that: pps-tools (why needed?)
 
 
 # Script Variables
@@ -55,6 +57,18 @@ rdate_install() {
     sudo apt-get install rdate -y
     sudo rdate -n -4 time.nist.gov
     echo "installed rdate"
+}
+
+# Remove the software deployment and package management system called "Snap"
+rm_snap_pkg() {
+    sudo apt-get remove snapd -y
+    sudo apt-get purge snapd -y
+    echo "snap package manager removed"
+}
+
+utils_install() {
+    sudo apt-get install net-tools -y
+    echo "installed utils"
 }
 
 cmake_func() {
@@ -106,6 +120,17 @@ nethogs_prereq_install() {
     echo "installed nethogs prerequisites"
 }
 
+butter_install() {
+    PREVIOUS_PWD=$PWD
+    cd /tmp/3rdparty
+    git clone https://github.com/RIAPS/butter.git
+    cd /tmp/3rdparty/butter
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/butter
+    echo "installed butter"
+}
+
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
@@ -126,6 +151,9 @@ watchdog_timers() {
 quota_install() {
     sudo apt-get install quota -y
     sed -i "/LABEL=writable/c\LABEL=writable / ext4 defaults,usrquota,grpquota 0 0" /etc/fstab
+# MM TODO: add cgroups enabling in /boot/firmware/cmdline.txt - not tested yet
+# what to add: “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1”
+# after image is ready, test by: grep mem /proc/cgroups
     echo "setup quotas"
 }
 
@@ -179,10 +207,10 @@ setup_network() {
     echo "replaced resolv.conf"
 }
 
-# Install security packages that take a long time compiling on the BBBs to minimize user RIAPS installation time
+# Install security packages that take a long time compiling on the RPi to minimize user RIAPS installation time
 security_pkg_install() {
     echo "add security packages"
-    sudo pip3 install 'paramiko==2.6.0' 'cryptography==2.7' --verbose
+    sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
     sudo apt-get install apparmor-utils -y
 # does not exist in RPi default setup
 #    sudo apt-get remove python3-crypto python3-keyrings.alt -y
@@ -306,18 +334,25 @@ pycapnp_install() {
 
 #install other required packages
 other_pip3_installs(){
-    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.6.0' 'cryptography==2.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.7.0' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    # no version for RPi - pip3 install 'Adafruit_BBIO==1.1.1'
+    # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
+    pip3 install --ignore-installed 'psutil==5.7.0'
     echo "installed pip3 packages"
 }
 
 # install prctl package
 prctl_install() {
     sudo apt-get install libcap-dev -y
+    # not able to do pip3 install 'python-prctl==1.7' on RPi
+    PREVIOUS_PWD=$PWD
     git clone http://github.com/seveas/python-prctl
     cd python-prctl/
     python3 setup.py build
     sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    echo "installed prctl"
 }
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
@@ -325,6 +360,7 @@ remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
     sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
+    echo "removed packages used in building process, no longer needed"
 }
 
 setup_riaps_repo() {
@@ -334,18 +370,20 @@ setup_riaps_repo() {
     echo "get riaps public key"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     echo "add repo to sources"
-    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository -n "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+    sudo add-apt-repository -r "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main" || true
+    sudo add-apt-repository -n "deb [arch=armhf] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main"
     sudo apt-get update
     echo "riaps aptrepo setup"
 }
 
 # Start of script actions
 check_os_version
-#rt_kernel_install  -- MM TODO: in work
+rt_kernel_install
 setup_peripherals
 user_func
 rdate_install
+rm_snap_pkg
+utils_install
 cmake_func
 timesync_requirements
 freqgov_off
@@ -361,6 +399,7 @@ setup_hostname
 setup_network
 security_pkg_install
 setup_ssh_keys $RIAPSAPPDEVELOPER
+butter_install
 other_pip3_installs
 spdlog_install
 apparmor_monkeys_install
@@ -372,6 +411,6 @@ pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 pycapnp_install
-#prctl_install
+prctl_install
 remove_pkgs_used_to_build
 setup_riaps_repo

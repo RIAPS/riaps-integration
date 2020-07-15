@@ -63,6 +63,7 @@ cmake_func() {
 
 htop_install() {
     sudo apt-get install htop -y
+    echo " installed htop"
 }
 
 timesync_requirements() {
@@ -210,6 +211,7 @@ add_swapfile() {
     sudo mkswap /swapfile
     sudo swapon /swapfile
     echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+    echo "setup a swapfile"
 }
 
 spdlog_install() {
@@ -252,9 +254,11 @@ opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
     sudo apt-get install nettle-dev -y
     # run liblinks script to link gnutls and msgppack
+    PREVIOUS_PWD=$PWD
     chmod +x /home/ubuntu/bbb-creation-files/liblinks.sh
     cd /usr/lib/arm-linux-gnueabihf
     sudo /home/ubuntu/bbb-creation-files/liblinks.sh
+    cd $PREVIOUS_PWD
     echo "installed opendht prerequisites"
 }
 
@@ -326,10 +330,13 @@ other_pip3_installs(){
 # install prctl package
 prctl_install() {
     sudo apt-get install libcap-dev -y
+    PREVIOUS_PWD=$PWD
     git clone http://github.com/seveas/python-prctl
     cd python-prctl/
     python3 setup.py build
     sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    echo "installed prctl"
 }
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
@@ -337,6 +344,7 @@ remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
     sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
+    echo "removed packages used in building process, no longer needed"
 }
 
 setup_riaps_repo() {

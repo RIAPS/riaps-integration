@@ -3,7 +3,7 @@
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
 # GCC 10, GCC 9, libpcap0.8, software-properties-common (0.98.9), vim, libnss-mdns (0.14.1),
 # Python 3.8, libcurl4, libcurl3-gnutls, libncurses6, libzmq5, pkg-config, libgnutls30, firefox,
-# libnettle7, libhogweed5, libgmp10, openssl 1.1.1f-1ubuntu2
+# libnettle7, libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 #
 # Installed prior to this script: GIT, quota
 # Need to make sure python3-crypto and python3-keyrings.alt are not installed due to pycryptodomex install (not in 20.04 image)
@@ -68,6 +68,7 @@ user_func () {
 rm_snap_pkg() {
     sudo apt-get remove snapd -y
     sudo apt-get purge snapd -y
+    echo "snap package manager removed"
 }
 
 # Configure for cross functional compilation - this is vagrant box config dependent
@@ -260,6 +261,7 @@ eclipse_func() {
 # Dependencies for RIAPS eclipse plugin
 eclipse_plugin_dep_install() {
     sudo apt-get install clang-format -y
+    echo "installed eclipse dependencies"
 }
 
 # install nethogs pre-requisites
@@ -272,10 +274,12 @@ nethogs_prereq_install() {
 }
 
 butter_install() {
+    PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty
     git clone https://github.com/RIAPS/butter.git
     cd /tmp/3rdparty/butter
     sudo python3 setup.py install
+    cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/butter
     echo "installed butter"
 }
@@ -294,9 +298,11 @@ other_pip3_installs(){
 
 #install apparmor_monkeys
 apparmor_monkeys_install(){
+    PREVIOUS_PWD=$PWD
     git clone https://github.com/RIAPS/apparmor_monkeys.git /tmp/3rdparty/apparmor_monkeys
     cd /tmp/3rdparty/apparmor_monkeys
     python3 setup.py install
+    cd $PREVIOUS_PWD
     sudo apt-get install apparmor-utils -y
     rm -rf /tmp/3rdparty/apparmor_monkeys
     echo "installed apparmor_monkeys"
@@ -304,10 +310,12 @@ apparmor_monkeys_install(){
 
 #install spdlog python logger
 spdlog_python_install(){
+    PREVIOUS_PWD=$PWD
     git clone https://github.com/RIAPS/spdlog-python.git /tmp/3rdparty/spdlog-python
     cd /tmp/3rdparty/spdlog-python
     git clone -b v0.17.0 --depth 1 https://github.com/gabime/spdlog.git
     python3 setup.py install
+    cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/spdlog-python
 	echo "installed spdlog python"
 }
@@ -325,26 +333,33 @@ zyre_czmq_prereq_install() {
 }
 
 pyzmq_install(){
+    PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
     git checkout v17.1.2
     sudo python3 setup.py install
-    echo "installed pyzmq"
+    cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
+    echo "installed pyzmq"
 }
 
 #install bindings for czmq. Must be run after pyzmq, czmq install.
 czmq_pybindings_install(){
+    PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty/czmq-amd64/bindings/python
     sudo pip3 install . --verbose
+    cd $PREVIOUS_PWD
+    echo "installed pyzmq"
     echo "installed CZMQ pybindings"
 }
 
 #install bindings for zyre. Must be run after zyre, pyzmq install.
 zyre_pybindings_install(){
+    PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty/zyre-amd64/bindings/python
     sudo pip3 install . --verbose
+    cd $PREVIOUS_PWD
     echo "installed Zyre pybindings"
 }
 
@@ -377,17 +392,20 @@ opendht_prereqs_install() {
     sudo apt-get install nettle-dev -y
     sudo apt-get install nettle-dev:armhf nettle-dev:arm64 -y
     # run liblinks script to link gnutls and msgppack
+    PREVIOUS_PWD=$PWD
     chmod +x /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     cd /usr/lib/arm-linux-gnueabihf
     sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     cd /usr/lib/aarch64-linux-gnu
     sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    cd $PREVIOUS_PWD
     echo "installed opendht prerequisites"
 }
 
 # install external packages using cmake
 # libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
 externals_cmake_install(){
+    PREVIOUS_PWD=$PWD
     mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
     cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-amd64
     cmake -Darch=amd64 ..
@@ -406,6 +424,7 @@ externals_cmake_install(){
     make
     cd /home/riapsadmin/riaps-integration/riaps-x86runtime
     rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
+    cd $PREVIOUS_PWD
     echo "cmake install complete"
 }
 
@@ -433,6 +452,7 @@ graphviz_install() {
 prctl_install() {
     sudo apt-get install libcap-dev -y
     pip3 install 'python-prctl==1.7'
+    echo "installed prctl"
 }
 
 riaps_prereq() {
@@ -445,6 +465,7 @@ riaps_prereq() {
     sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
     sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
     #./riaps_install_amd64.sh
+    echo "riaps prerequisites installed"
 }
 
 setup_ssh_keys () {
