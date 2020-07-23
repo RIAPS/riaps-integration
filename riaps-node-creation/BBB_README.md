@@ -38,13 +38,13 @@ Kernel:    v4.19.xx-ti-rxx
 
 1) With the SD Card installed in the BBB, log into the BBB using ssh with user account being 'ubuntu'
 
-2) Download and compress the [bbb-creation-files folder](https://github.com/RIAPS/riaps-integration/tree/master/bbb-creation-files) and transfer it to the BBB.
+2) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the BBB.
 
 3) On the BBB, unpack the creation files and move into the folder
 
 ```
-tar -xzvf bbb-creation-files.tar.gz
-cd bbb-creation-files
+tar -xzvf riaps-node-creation.tar.gz
+cd riaps-node-creation
 ```
 
 4) Create a swapfile on the BBB to allow larger packages to run (such as spdlog)
@@ -55,7 +55,9 @@ sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
 sudo swapon /swapfile
+sudo su
 echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+exit
 ```
 
 5) Reboot the BBB and still sign in as 'ubuntu'
@@ -66,7 +68,7 @@ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 sudo su
 ```
 
-7) Run the installation script. Provide the name of the ssh key pair added in step 5, your key filename can be any name desired. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
+8) Move back into the riaps-node-creation folder and run the installation script. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
 
 ```
 ./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
