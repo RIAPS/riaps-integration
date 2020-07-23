@@ -3,7 +3,9 @@ set -e
 
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools, libpcap0.8, nettle6, libgnutls30, libncurses5
+# pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
+#
+# python3-crypto python3-keyrings.alt does not exist, a desired state
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps

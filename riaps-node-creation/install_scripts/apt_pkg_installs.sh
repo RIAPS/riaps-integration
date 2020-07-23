@@ -14,6 +14,7 @@ nethogs_prereq_install() {
 }
 
 # MM TODO: libuuid1 & liblz4-1 is already install on RPi - make sure this does not cause issues in the script for RPis
+# MM TODO: libuuid1 is already installed on BBB
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
@@ -23,7 +24,7 @@ zyre_czmq_prereq_install() {
 }
 
 # Install security packages that take a long time compiling
-#MM TODO: python3-crypto python3-keyrings.alt does not exist in RPi default setup - check that this does not cause issues
+#MM TODO: python3-crypto python3-keyrings.alt does not exist in RPi & BBB default setup - check that this does not cause issues
 security_pkg_install() {
     echo "add security packages"
     sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
@@ -32,7 +33,7 @@ security_pkg_install() {
     echo "security packages setup"
 }
 
-#MM TODO: libgnutls30 exists in RPi default setup - check that this does not cause issues
+#MM TODO: libgnutls30 exists in RPi and BBB default setup - check that this does not cause issues
 # install gnutls
 gnutls_install(){
     sudo apt-get install libgnutls30 libgnutls28-dev -y
