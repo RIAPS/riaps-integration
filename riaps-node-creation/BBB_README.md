@@ -74,6 +74,8 @@ sudo su
 ./base_bbb_bootstrap.sh 2>&1 | tee install-bbb.log
 ```
 
+> Note: this step takes about 5 hours to run
+
 > Note:  This script has been updated to match the changing platform setup, due to time constraints it has not been run from scratch and may contain some syntax errors.  The intended contents is represented and accounted for in the file.
 
 8) Remove install files from /home/ubuntu
@@ -118,8 +120,9 @@ Password:  riaps
 Updated Real-time enabled Kernel will be (once rebooted)
 
 ```
-Kernel: v4.14.xx-ti-rt-rxx
+Kernel: v4.19.xx-ti-rt-rxx
 ```
+>MM TODO: been using v4.14, not sure if 4.19 is a good way to go
 
 ## Expanding File System Partition On A microSD
 

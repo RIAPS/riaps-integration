@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-# Packages already in base 20.04 image that are utilized by RIAPS Components:
-# GCC 10, GCC 9, libpcap0.8, software-properties-common (0.98.9), vim, libnss-mdns (0.14.1),
-# Python 3.8, libcurl4, libcurl3-gnutls, libncurses6, libzmq5, pkg-config, libgnutls30, firefox,
-# libnettle7, libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
+# Packages already in base 18.04 image that are utilized by RIAPS Components:
+# GCC 7, G++ 7, libpcap0.8, libnettle6, software-properties-common, libnss-mdns
+# Python 3.6, libcurl4, libcurl3-gnutls, libncurses5, libzmq5, libgnutls30, firefox,
+# libhogweed4, libgmp10, openssl (1.1.0g-2ubuntu4), snapd, net-tools
 #
 # Installed prior to this script: GIT, quota
-# Need to make sure python3-crypto and python3-keyrings.alt are not installed due to pycryptodomex install (not in 20.04 image)
-
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
@@ -77,43 +75,43 @@ cross_setup() {
 
     echo "add amd64, i386"
     # Qualify the architectures for existing repositories
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal main restricted" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal main restricted"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates main restricted"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal universe" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic universe" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal universe"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates universe" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates universe"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal  multiverse" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic  multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal multiverse"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-updates multiverse" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-updates multiverse"
 
-    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse" || true
+    sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal-backports main restricted universe multiverse"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security main restricted" || true
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security main restricted" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security main restricted"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security universe" || true
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security universe" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security universe"
 
-    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu focal-security multiverse" || true
+    sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security multiverse"
 
     echo "add armhf, arm64"
     # Add armhf repositories
-    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse" || true
-    sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal main universe multiverse"
+    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
 
-    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse" || true
-    sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports focal-updates main universe multiverse"
+    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
+    sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
 
     echo "updated sources.list for multiarch"
 
@@ -126,50 +124,14 @@ cross_setup() {
     echo "setup multi-arch capabilities complete"
 }
 
+vim_func() {
+    sudo apt-get install vim -y
+    echo "installed vim"
+}
+
 java_func () {
     sudo apt-get install openjdk-8-jre-headless -y
     echo "installed java"
-}
-
-# RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
-# Setup update-alternative to have this VM use GCC/G++ 7.
-#MM TODO: this part is still in development.  Most likely it will stay with gcc-9 if all builds well and this section will not be needed
-config_gcc() {
-    sudo apt -y install gcc-7 g++-7
-
-    sudo apt -y install gcc-7:armhf g++-7:armhf
-    sudo apt -y install gcc-7:arm64 g++-7:arm64
-    # Setup GCC-7 as default in all architectures
-    # amd64
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
-    sudo update-alternatives --set gcc /usr/bin/gcc-7
-    sudo update-alternatives --set g++ /usr/bin/g++-7
-    # armhf
-    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-7 7
-    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-9 9
-    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-7 7
-    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-9 9
-    sudo update-alternatives --set gcc /usr/bin/arm-linux-gnueabihf-gcc-7
-    sudo update-alternatives --set g++ /usr/bin/arm-linux-gnueabihf-g++-7
-    # arm64
-    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-7 7
-    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-9 9
-    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-7 7
-    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-9 9
-    sudo update-alternatives --set gcc /usr/bin/aarch64-linux-gnu-gcc-7
-    sudo update-alternatives --set g++ /usr/bin/aarch64-linux-gnu-g++-7
-
-    # Print version to show it worked as desired
-    gcc --version
-    g++ --version
-    arm-linux-gnueabihf-gcc --version
-    arm-linux-gnueabihf-g++ --version
-    aarch64-linux-gnu-gcc --version
-    aarch64-linux-gnu-g++ --version
-    echo "configured gcc/g++"
 }
 
 cmake_func() {
@@ -184,7 +146,6 @@ cmake_func() {
 utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssl openssh-server -y
-    sudo apt-get install net-tools -y
     # make sure date is correct
     sudo apt-get install rdate -y
     # rdate command can timeout, restart script from here if this happens
@@ -273,25 +234,13 @@ nethogs_prereq_install() {
     echo "installed nethogs prerequisites"
 }
 
-butter_install() {
-    PREVIOUS_PWD=$PWD
-    cd /tmp/3rdparty
-    git clone https://github.com/RIAPS/butter.git
-    cd /tmp/3rdparty/butter
-    sudo python3 setup.py install
-    cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/butter
-    echo "installed butter"
-}
-
 #install other required packages
 other_pip3_installs(){
-    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    pip3 install 'Adafruit_BBIO==1.1.1' 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.4.2' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
     # There is an issue installing this in Python 3.8 right now (7/2020)
     #pip3 install 'Adafruit_BBIO==1.1.1'
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
-    pip3 install --ignore-installed 'psutil==5.7.0'
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
     echo "installed pip3 packages"
 }
@@ -329,6 +278,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev:armhf libsystemd-dev:arm64 -y
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
     sudo apt-get install libuuid1:arm64 liblz4-1:arm64 -y
+    sudo apt-get install pkg-config -y
     echo "installed CZMQ and Zyre prerequisites"
 }
 
@@ -388,6 +338,7 @@ msgpack_install(){
 #install opendht prerequisites
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
+    sudo apt-get install libncurses5-dev -y
     sudo apt-get install libncurses5-dev:armhf libncurses5-dev:arm64 -y
     sudo apt-get install nettle-dev -y
     sudo apt-get install nettle-dev:armhf nettle-dev:arm64 -y
@@ -455,10 +406,17 @@ prctl_install() {
     echo "installed prctl"
 }
 
+# Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex install
+security_prereq_install(){
+    sudo apt-get install apparmor-utils -y
+    sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    echo "installed security prerequisites"
+}
+
 riaps_prereq() {
     # Add RIAPS repository
-    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main" || true
-    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ focal main"
+    sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
+    sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_amd64.sh /home/$1/.
@@ -514,8 +472,8 @@ user_func
 setup_ssh_keys $RIAPSAPPDEVELOPER
 rm_snap_pkg
 cross_setup
+vim_func
 java_func
-config_gcc
 cmake_func
 utils_install
 timesync_requirements
@@ -529,6 +487,7 @@ nethogs_prereq_install
 zyre_czmq_prereq_install
 gnutls_install
 msgpack_install
+security_prereq_install
 opendht_prereqs_install
 externals_cmake_install
 pycapnp_install
@@ -537,7 +496,6 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
-butter_install
 other_pip3_installs
 spdlog_python_install
 graphviz_install

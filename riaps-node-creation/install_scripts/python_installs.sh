@@ -75,6 +75,7 @@ prctl_install() {
     PREVIOUS_PWD=$PWD
     git clone http://github.com/seveas/python-prctl
     cd python-prctl/
+    git checkout v1.7
     python3 setup.py build
     sudo python3 setup.py install
     cd $PREVIOUS_PWD

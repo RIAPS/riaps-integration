@@ -101,6 +101,7 @@ setup_peripherals
 user_func
 rdate_install
 vim_func
+nano_install
 htop_install
 cmake_func
 timesync_requirements
@@ -121,6 +122,7 @@ setup_ssh_keys $RIAPSAPPDEVELOPER
 # Swapfile needs to be done before running this script or
 # installs like spdlog will not run
 #add_swapfile
+other_pip3_installs
 spdlog_install
 apparmor_monkeys_install
 gnutls_install
@@ -131,7 +133,6 @@ pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 pycapnp_install
-other_pip3_installs
 armhf_pyinstall
 prctl_install
 remove_pkgs_used_to_build

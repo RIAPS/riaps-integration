@@ -24,3 +24,8 @@ rm_snap_pkg() {
     sudo apt-get purge snapd -y
     echo "snap package manager removed"
 }
+
+nano_install() {
+    sudo apt-get install nano -y
+    echo " installed nano"
+}

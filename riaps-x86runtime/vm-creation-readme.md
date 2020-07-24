@@ -4,7 +4,7 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/xubuntu-20.04-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xubuntu-18.04-desktop-amd64.iso
 ```
 
 2) Create a virtual machines configured with the following settings:
