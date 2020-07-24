@@ -130,7 +130,7 @@ vim_func() {
 }
 
 java_func () {
-    sudo apt-get install openjdk-8-jre-headless -y
+    sudo apt-get install openjdk-11-jre-headless -y
     echo "installed java"
 }
 
