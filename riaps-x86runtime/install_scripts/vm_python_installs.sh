@@ -10,11 +10,11 @@ spdlog_python_install(){
     python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/spdlog-python
-	echo ">>>>> installed spdlog python"
+    echo ">>>>> installed spdlog python"
 }
 
 #install apparmor_monkeys
-apparmor_monkeys_install() {
+apparmor_monkeys_install(){
     PREVIOUS_PWD=$PWD
     git clone https://github.com/RIAPS/apparmor_monkeys.git /tmp/3rdparty/apparmor_monkeys
     cd /tmp/3rdparty/apparmor_monkeys
@@ -34,7 +34,8 @@ pyzmq_install(){
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
-    echo ">>>>> installed pyzmq"}
+    echo ">>>>> installed pyzmq"
+}
 
 #install bindings for czmq. Must be run after pyzmq, czmq install.
 #code was pulled for external cmake build and is the correct branch prior to this call
@@ -57,13 +58,13 @@ zyre_pybindings_install(){
 }
 
 #link pycapnp with installed library. Must be run after capnproto install.
-pycapnp_install() {
+pycapnp_install(){
     CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
     echo ">>>>> linked pycapnp with capnproto"
 }
 
 # install prctl package
-prctl_install() {
+prctl_install(){
     sudo apt-get install libcap-dev -y
     pip3 install 'python-prctl==1.7'
     echo ">>>>> installed prctl"
