@@ -10,7 +10,7 @@ spdlog_install() {
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
-    echo "installed spdlog"
+    echo ">>>>> installed spdlog"
 }
 
 apparmor_monkeys_install() {
@@ -21,7 +21,7 @@ apparmor_monkeys_install() {
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
-    echo "installed apparmor_monkeys"
+    echo ">>>>> installed apparmor_monkeys"
 }
 
 pyzmq_install(){
@@ -33,7 +33,7 @@ pyzmq_install(){
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
-    echo "installed pyzmq"
+    echo ">>>>> installed pyzmq"
 }
 
 #install bindings for czmq. Must be run after pyzmq, czmq install.
@@ -46,7 +46,7 @@ czmq_pybindings_install(){
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
-    echo "installed CZMQ pybindings"
+    echo ">>>>> installed CZMQ pybindings"
 }
 
 #install bindings for zyre. Must be run after zyre, pyzmq install.
@@ -59,13 +59,13 @@ zyre_pybindings_install(){
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
-    echo "installed Zyre pybindings"
+    echo ">>>>> installed Zyre pybindings"
 }
 
 #link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install() {
     CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
-    echo "linked pycapnp with capnproto"
+    echo ">>>>> linked pycapnp with capnproto"
 }
 
 # install prctl package
@@ -79,7 +79,7 @@ prctl_install() {
     python3 setup.py build
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
-    echo "installed prctl"
+    echo ">>>>> installed prctl"
 }
 
 
@@ -89,5 +89,5 @@ other_pip3_installs(){
     # no version for RPi - pip3 install 'Adafruit_BBIO==1.1.1'
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
-    echo "installed pip3 packages"
+    echo ">>>>> installed pip3 packages"
 }

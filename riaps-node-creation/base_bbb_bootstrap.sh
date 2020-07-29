@@ -35,7 +35,7 @@ source_scripts() {
     source "$PWD/$SCRIPTS/network_setup.sh"
     source "$PWD/$SCRIPTS/apt_pkg_installs.sh"
     source "$PWD/$SCRIPTS/python_installs.sh"
-    echo "sourced install scripts"
+    echo ">>>>> sourced install scripts"
 }
 
 # Install RT Kernel
@@ -44,13 +44,13 @@ rt_kernel_install() {
     sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
     # To make sure the latest overlays are available
     sudo apt install --only-upgrade bb-cape-overlays
-    echo "installed RT Kernel"
+    echo ">>>>> installed RT Kernel"
 }
 
 quota_install() {
     sudo apt-get install quota -y
     sed -i "/mmcblk0p1/c\/dev/mmcblk0p1 / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
-    echo "setup quotas"
+    echo ">>>>> setup quotas"
 }
 
 #MM TODO: update version/date
@@ -72,7 +72,7 @@ splash_screen_update() {
     echo "">> issue.net
     echo "default username:password is [riaps:riaps]">> issue.net
     sudo mv issue.net /etc/issue.net
-    echo "setup splash screen"
+    echo ">>>>> setup splash screen"
 }
 
 # Create a swap file to allow spdlog-python to compile using swap
@@ -83,13 +83,13 @@ add_swapfile() {
     sudo mkswap /swapfile
     sudo swapon /swapfile
     echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
-    echo "setup a swapfile"
+    echo ">>>>> setup a swapfile"
 }
 
 #install other required packages
 armhf_pyinstall(){
     pip3 install 'Adafruit_BBIO == 1.1.1'
-    echo "installed armhf specific python packages"
+    echo ">>>>> installed armhf specific python packages"
 }
 
 

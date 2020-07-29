@@ -4,7 +4,7 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xubuntu-18.04-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xubuntu-18.04.4-desktop-amd64.iso
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -20,7 +20,7 @@ http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xu
 
 3) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-18.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
-4) Create a 'riapsadmin' user with password of 'riapsadmin'.
+4) Create a 'riapsadmin' user with password of 'riapsadmin' and set hostname to `riaps-VirtualBox`.
 
 5) Configure Software & Updates to turn off automatic check for updates and new version notification.
 
@@ -52,6 +52,8 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 ```
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
+
+> Note: This script takes about 25 mins to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
 
 11) Remove riaps-integration repository from /home/riapsadmin/.
 

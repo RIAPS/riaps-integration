@@ -29,9 +29,9 @@ parse_args()
     pwd
     if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
     then
-        echo "Found user ssh keys.  Will use them"
+        echo ">>>>> Found user ssh keys.  Will use them"
     else
-        echo "Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        echo ">>>>> Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
         mkdir -p /home/riapsadmin/.ssh
         ssh-keygen -N "" -q -f $PRIVATE_KEY
     fi
@@ -52,13 +52,13 @@ print_help()
 # Setup User Account
 user_func () {
     if ! id -u $RIAPSAPPDEVELOPER > /dev/null 2>&1; then
-        echo "The user does not exist; setting user account up now"
+        echo ">>>>> The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSAPPDEVELOPER -s /bin/bash -d /home/$RIAPSAPPDEVELOPER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSAPPDEVELOPER
         sudo chage -d 0 $RIAPSAPPDEVELOPER
         sudo usermod -aG sudo $RIAPSAPPDEVELOPER
         sudo -H -u $RIAPSAPPDEVELOPER mkdir -p /home/$RIAPSAPPDEVELOPER/riaps_apps
-        echo "created user accounts"
+        echo ">>>>> created user accounts"
     fi
 }
 
@@ -66,14 +66,14 @@ user_func () {
 rm_snap_pkg() {
     sudo apt-get remove snapd -y
     sudo apt-get purge snapd -y
-    echo "snap package manager removed"
+    echo ">>>>> snap package manager removed"
 }
 
 # Configure for cross functional compilation - this is vagrant box config dependent
 cross_setup() {
     sudo apt-get install apt-transport-https -y
 
-    echo "add amd64, i386"
+    echo ">>>>> add amd64, i386"
     # Qualify the architectures for existing repositories
     sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://us.archive.ubuntu.com/ubuntu/ focal main restricted"
@@ -105,7 +105,7 @@ cross_setup() {
     sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu bionic-security multiverse" || true
     sudo add-apt-repository -n "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu focal-security multiverse"
 
-    echo "add armhf, arm64"
+    echo ">>>>> add armhf, arm64"
     # Add armhf repositories
     sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
     sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
@@ -113,25 +113,25 @@ cross_setup() {
     sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
     sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
 
-    echo "updated sources.list for multiarch"
+    echo ">>>>> updated sources.list for multiarch"
 
     sudo dpkg --add-architecture armhf
     sudo dpkg --add-architecture arm64
     sudo apt-get update
-    echo "packages update complete for multiarch"
+    echo ">>>>> packages update complete for multiarch"
     sudo apt-get install crossbuild-essential-armhf crossbuild-essential-arm64 gdb-multiarch -y
     sudo apt-get install build-essential -y
-    echo "setup multi-arch capabilities complete"
+    echo ">>>>> setup multi-arch capabilities complete"
 }
 
 vim_func() {
     sudo apt-get install vim -y
-    echo "installed vim"
+    echo ">>>>> installed vim"
 }
 
 java_func () {
     sudo apt-get install openjdk-11-jre-headless -y
-    echo "installed java"
+    echo ">>>>> installed java"
 }
 
 cmake_func() {
@@ -140,7 +140,7 @@ cmake_func() {
     sudo apt-get install autoconf autogen -y
     sudo apt-get install libreadline-dev -y
     sudo apt-get install libreadline-dev:armhf libreadline-dev:arm64 -y
-    echo "installed cmake"
+    echo ">>>>> installed cmake"
 }
 
 utils_install() {
@@ -150,7 +150,7 @@ utils_install() {
     sudo apt-get install rdate -y
     # rdate command can timeout, restart script from here if this happens
     sudo rdate -n -4 time.nist.gov
-    echo "installed utils"
+    echo ">>>>> installed utils"
 }
 
 # Required for riaps-timesync
@@ -160,7 +160,7 @@ timesync_requirements() {
     sudo apt-get install libssl-dev libffi-dev -y
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
-    echo "installed timesync requirements"
+    echo ">>>>> installed timesync requirements"
 }
 
 python_install () {
@@ -168,24 +168,24 @@ python_install () {
     sudo apt-get install python3-pip -y
     sudo apt-get install libpython3-dev:armhf libpython3-dev:arm64 -y
     sudo pip3 install --upgrade pip
-    echo "installed python3"
+    echo ">>>>> installed python3"
 }
 
 # Assumes that Cython3 is not on the base release (20.04 does not have it)
 cython_install() {
     sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5'
-    echo "installed cython"
+    echo ">>>>> installed cython"
 }
 
 curl_func () {
     sudo apt install curl -y
-    echo "installed curl"
+    echo ">>>>> installed curl"
 }
 
 boost_install() {
     sudo apt-get install libboost-dev -y
     sudo apt-get install libboost-dev:armhf libboost-dev:arm64 -y
-    echo "installed boost"
+    echo ">>>>> installed boost"
 }
 
 #eclipse install
@@ -215,14 +215,14 @@ eclipse_func() {
        sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
        eclipse_shortcut $1
     else
-       echo "eclipse already installed at /home/$1/eclipse"
+       echo ">>>>> eclipse already installed at /home/$1/eclipse"
     fi
 }
 
 # Dependencies for RIAPS eclipse plugin
 eclipse_plugin_dep_install() {
     sudo apt-get install clang-format -y
-    echo "installed eclipse dependencies"
+    echo ">>>>> installed eclipse dependencies"
 }
 
 # install nethogs pre-requisites
@@ -231,7 +231,7 @@ nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libpcap-dev:armhf libpcap-dev:arm64 -y
     sudo apt-get install libncurses5-dev -y
-    echo "installed nethogs prerequisites"
+    echo ">>>>> installed nethogs prerequisites"
 }
 
 #install other required packages
@@ -242,7 +242,7 @@ other_pip3_installs(){
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
-    echo "installed pip3 packages"
+    echo ">>>>> installed pip3 packages"
 }
 
 #install apparmor_monkeys
@@ -254,7 +254,7 @@ apparmor_monkeys_install(){
     cd $PREVIOUS_PWD
     sudo apt-get install apparmor-utils -y
     rm -rf /tmp/3rdparty/apparmor_monkeys
-    echo "installed apparmor_monkeys"
+    echo ">>>>> installed apparmor_monkeys"
 }
 
 #install spdlog python logger
@@ -266,7 +266,7 @@ spdlog_python_install(){
     python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/spdlog-python
-	echo "installed spdlog python"
+	echo ">>>>> installed spdlog python"
 }
 
 #install libraries for czmq and zyre
@@ -279,7 +279,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
     sudo apt-get install libuuid1:arm64 liblz4-1:arm64 -y
     sudo apt-get install pkg-config -y
-    echo "installed CZMQ and Zyre prerequisites"
+    echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
 pyzmq_install(){
@@ -291,7 +291,7 @@ pyzmq_install(){
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
-    echo "installed pyzmq"
+    echo ">>>>> installed pyzmq"
 }
 
 #install bindings for czmq. Must be run after pyzmq, czmq install.
@@ -300,8 +300,7 @@ czmq_pybindings_install(){
     cd /tmp/3rdparty/czmq-amd64/bindings/python
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
-    echo "installed pyzmq"
-    echo "installed CZMQ pybindings"
+    echo ">>>>> installed CZMQ pybindings"
 }
 
 #install bindings for zyre. Must be run after zyre, pyzmq install.
@@ -310,13 +309,13 @@ zyre_pybindings_install(){
     cd /tmp/3rdparty/zyre-amd64/bindings/python
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
-    echo "installed Zyre pybindings"
+    echo ">>>>> installed Zyre pybindings"
 }
 
 #link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install() {
     CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
-    echo "linked pycapnp with capnproto"
+    echo ">>>>> linked pycapnp with capnproto"
 }
 
 # install gnutls
@@ -324,7 +323,7 @@ pycapnp_install() {
 gnutls_install(){
     sudo apt-get install libgnutls30:armhf libgnutls30:arm64 -y
     sudo apt-get install libgnutls28-dev -y
-    echo "installed gnutls"
+    echo ">>>>> installed gnutls"
 }
 
 #install msgpack
@@ -332,7 +331,7 @@ msgpack_install(){
     sudo apt-get install libmsgpackc2:amd64 -y
     sudo apt-get install libmsgpackc2:armhf libmsgpackc2:arm64 -y
     sudo apt-get install libmsgpack-dev:amd64 -y
-    echo "installed msgpack"
+    echo ">>>>> installed msgpack"
 }
 
 #install opendht prerequisites
@@ -350,7 +349,7 @@ opendht_prereqs_install() {
     cd /usr/lib/aarch64-linux-gnu
     sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
     cd $PREVIOUS_PWD
-    echo "installed opendht prerequisites"
+    echo ">>>>> installed opendht prerequisites"
 }
 
 # install external packages using cmake
@@ -376,7 +375,7 @@ externals_cmake_install(){
     cd /home/riapsadmin/riaps-integration/riaps-x86runtime
     rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
     cd $PREVIOUS_PWD
-    echo "cmake install complete"
+    echo ">>>>> cmake install complete"
 }
 
 # install redis
@@ -388,29 +387,29 @@ redis_install () {
     sudo make -C redis-4.0.11 install
     rm -rf redis-4.0.11
     rm -rf redis-4.0.11.tar.gz
-    echo "installed redis"
+    echo ">>>>> installed redis"
    else
-     echo "redis already installed. skipping"
+     echo ">>>>> redis already installed. skipping"
    fi
 }
 
 graphviz_install() {
     sudo apt-get install graphviz xdot -y
-    echo "installed graphviz"
+    echo ">>>>> installed graphviz"
 }
 
 # install prctl package
 prctl_install() {
     sudo apt-get install libcap-dev -y
     pip3 install 'python-prctl==1.7'
-    echo "installed prctl"
+    echo ">>>>> installed prctl"
 }
 
 # Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex install
 security_prereq_install(){
     sudo apt-get install apparmor-utils -y
     sudo apt-get remove python3-crypto python3-keyrings.alt -y
-    echo "installed security prerequisites"
+    echo ">>>>> installed security prerequisites"
 }
 
 riaps_prereq() {
@@ -423,7 +422,7 @@ riaps_prereq() {
     sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
     sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
     #./riaps_install_amd64.sh
-    echo "riaps prerequisites installed"
+    echo ">>>>> riaps prerequisites installed"
 }
 
 setup_ssh_keys () {
@@ -453,14 +452,14 @@ setup_ssh_keys () {
     sudo cp secure_keys /home/$1/.
     sudo chown $1:$1 /home/$1/secure_keys
     sudo -H -u $1 chmod 700 /home/$1/secure_keys
-    echo "Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
+    echo ">>>>> Added user key to authorized keys for $1. Use bbb_initial keys for initial communication with the beaglebones"
 }
 
 add_set_tests () {
     sudo -H -u $1 mkdir -p /home/$1/env_setup_tests/WeatherMonitor
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/env_setup_tests/WeatherMonitor /home/$1/env_setup_tests/
     sudo chown $1:$1 -R /home/$1/env_setup_tests/WeatherMonitor
-    echo "Added development environment tests"
+    echo ">>>>> Added development environment tests"
 }
 
 # Start of script actions
