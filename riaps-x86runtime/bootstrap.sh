@@ -6,6 +6,8 @@
 # libhogweed4, libgmp10, openssl (1.1.0g-2ubuntu4), snapd, net-tools
 #
 # Installed prior to this script: GIT, quota
+#
+# Need to remove: python3-crypto python3-keyrings.alt -y
 
 # Script Variables
 RIAPSAPPDEVELOPER=riaps
@@ -238,8 +240,8 @@ nethogs_prereq_install() {
 #install other required packages
 other_pip3_installs(){
     pip3 install 'Adafruit_BBIO==1.1.1' 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'psutil==5.4.2' 'butter==0.12.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
-    # There is an issue installing this in Python 3.8 right now (7/2020)
-    #pip3 install 'Adafruit_BBIO==1.1.1'
+    # Note when chose to update to 20.04, there is an issue installing this in Python 3.8 right now (7/2020)
+    pip3 install 'Adafruit_BBIO==1.1.1'
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
