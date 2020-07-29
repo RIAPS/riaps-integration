@@ -16,7 +16,11 @@ sudo apt-get purge riaps-pycom-amd64 || true
 sudo apt-get update
 sudo apt-get install riaps-core-amd64 riaps-pycom-amd64 riaps-timesync-amd64 -y
 
-# new package installed
+# new packages installed/removed
+
+sudo apt-get remove snapd -y
+sudo apt-get purge snapd -y
+
 sudo apt-get install libcap-dev -y
 git clone http://github.com/seveas/python-prctl
 cd python-prctl/

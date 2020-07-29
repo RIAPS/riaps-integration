@@ -24,7 +24,7 @@ Kernel:  5.4.0-42-generic (after SW update)
 
 4) Create a 'riapsadmin' user with password of 'riapsadmin' and set computer name to `riaps-VirtualBox`.
 
-5) Configure Software & Updates to turn off automatic check for updates and new version notification.
+5) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
 
 6) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
 
@@ -36,7 +36,9 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 7) Restart the VM to allow the above fstab changes to take effect.
 
-8) To setup the usrquota and grpquota files, run the following.  
+8) When VM is shutdown, setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the BBBs.
+
+9) To setup the usrquota and grpquota files, run the following.  
    The last line provides feedback that the quota is setup.
 ```
 sudo apt-get install quota -y
@@ -45,9 +47,9 @@ sudo quotaon -a
 sudo quotaon -pa
 ```
 
-9) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
+10) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
 
-10) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
+11) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
 
 ```
 sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 | tee install-vm.log
@@ -55,21 +57,21 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-> Note: This script takes about 25 mins to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
+> Note: This script takes about 45 mins to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
 
-11) Remove riaps-integration repository from /home/riapsadmin/.
+12) Remove riaps-integration repository from /home/riapsadmin/.
 
-12) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
+13) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
-13) Remove the riapsadmin user account.
+14) Remove the riapsadmin user account.
 
-14) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
+15) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
 
     ```
     riaps  ALL=(ALL) NOPASSWD: ALL
     ```
 
-15) Add preloaded eclipse and sample applications in the default workspace.
+16) Add preloaded eclipse and sample applications in the default workspace.
 
 	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
 	riaps_eclipse.tar.gz.
@@ -106,12 +108,12 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 	   - From Eclipse Marketplace:  Eclipse Xtend, Xtext, JSON Editor, PyDev
 	   - Install the RIAPS DSML tool from https://riaps.isis.vanderbilt.edu/dsml
 
-16) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
+17) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
 
-17) Reset the password to the default and cause reset of password on next login.
+18) Reset the password to the default and cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-18) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+19) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
