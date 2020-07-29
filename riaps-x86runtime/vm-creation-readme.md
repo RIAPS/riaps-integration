@@ -4,7 +4,9 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xubuntu-18.04.4-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04.3-desktop-amd64.iso
+
+Kernel:  5.4.0-42-generic (after SW update)
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -20,7 +22,7 @@ http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04.4/release/xu
 
 3) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-18.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
-4) Create a 'riapsadmin' user with password of 'riapsadmin' and set hostname to `riaps-VirtualBox`.
+4) Create a 'riapsadmin' user with password of 'riapsadmin' and set computer name to `riaps-VirtualBox`.
 
 5) Configure Software & Updates to turn off automatic check for updates and new version notification.
 
