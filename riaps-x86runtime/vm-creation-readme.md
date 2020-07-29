@@ -57,7 +57,7 @@ sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-> Note: This script takes about 45 mins to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
+> Note: This script takes about an hour to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
 
 12) Remove riaps-integration repository from /home/riapsadmin/.
 

@@ -25,16 +25,10 @@ source_scripts() {
     PWD=$(pwd)
     SCRIPTS="install_scripts"
 
-#MM TODO: try a for loop on directory
-# for i in `ls $PWD/$SCRIPTS`;do source "$PWD/$SCRIPTS/$i" ;done
-
-    source "$PWD/$SCRIPTS/user_functions.sh"
-    source "$PWD/$SCRIPTS/utils_install.sh"
-    source "$PWD/$SCRIPTS/build_setup.sh"
-    source "$PWD/$SCRIPTS/hw_setup.sh"
-    source "$PWD/$SCRIPTS/network_setup.sh"
-    source "$PWD/$SCRIPTS/apt_pkg_installs.sh"
-    source "$PWD/$SCRIPTS/python_installs.sh"
+    for i in `ls $PWD/$SCRIPTS`
+    do
+        source "$PWD/$SCRIPTS/$i"
+    done
     echo ">>>>> sourced install scripts"
 }
 
@@ -53,7 +47,6 @@ quota_install() {
     echo ">>>>> setup quotas"
 }
 
-#MM TODO: update version/date
 splash_screen_update() {
     echo "################################################################################" > motd
     echo "# Acknowledgment:  The information, data or work presented herein was funded   #" >> motd
@@ -64,9 +57,9 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 18.04.1 LTS" > issue.net
+    echo "Ubuntu 18.04.4 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2018-09-11">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2020-07-24">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net

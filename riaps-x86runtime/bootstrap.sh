@@ -18,15 +18,10 @@ source_scripts() {
     PWD=$(pwd)
     SCRIPTS="install_scripts"
 
-#MM TODO: try a for loop on directory
-    for i in `ls $PWD/$SCRIPTS`;do source "$PWD/$SCRIPTS/$i" ;done
-
-#    source "$PWD/$SCRIPTS/vm_user_functions.sh"
-#    source "$PWD/$SCRIPTS/vm_utils_install.sh"
-#    source "$PWD/$SCRIPTS/vm_build_setup.sh"
-#    source "$PWD/$SCRIPTS/vm_hw_setup.sh"
-#    source "$PWD/$SCRIPTS/vm_apt_pkg_installs.sh"
-#    source "$PWD/$SCRIPTS/vm_python_installs.sh"
+    for i in `ls $PWD/$SCRIPTS`
+    do
+        source "$PWD/$SCRIPTS/$i"
+    done
     echo ">>>>> sourced install scripts"
 }
 

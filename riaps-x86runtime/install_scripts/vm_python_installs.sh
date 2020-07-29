@@ -77,6 +77,6 @@ other_pip3_installs(){
     pip3 install 'Adafruit_BBIO==1.1.1'
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
-    pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==2.1.11' 'pymultigen==0.2.0' 'Jinja2==2.10' 'GitPython==3.1.7' --verbose
+    pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==3.1.7' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
     echo ">>>>> installed pip3 packages"
 }
