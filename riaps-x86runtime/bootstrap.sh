@@ -146,6 +146,7 @@ cmake_func() {
 utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssl openssh-server -y
+    sudo apt-get mininet
     # make sure date is correct
     sudo apt-get install rdate -y
     # rdate command can timeout, restart script from here if this happens
