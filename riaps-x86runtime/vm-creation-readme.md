@@ -38,8 +38,8 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 8) When VM is shutdown, setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the BBBs.
 
-9) To setup the usrquota and grpquota files, run the following.  
-   The last line provides feedback that the quota is setup.
+9) To setup the usrquota and grpquota files, run the following. Restart the VM login as riapsadmin.
+
 ```
 sudo apt-get install quota -y
 sudo quotacheck -ugm /
@@ -47,73 +47,61 @@ sudo quotaon -a
 sudo quotaon -pa
 ```
 
+The last line provides feedback that the quota is setup.
+
 10) Install 'git' and clone https://github.com/RIAPS/riaps-integration.git
 
-11) Navigate to the riaps-integration/riaps-x86runtime directory and run the bootstrap script.
+11) Navigate to the riaps-integration/riaps-x86runtime directory and edit the 'vm_creation.conf' file to reflect the setup desired.  This file allows configuration of Ubuntu version, the cross compile architectures (for RIAPS nodes), version number of RIAPS to install and ssh key pair.
+
+12) Run the bootstrap script and send information provided to an installation log file.
 
 ```
-sudo ./bootstrap.sh public_key=~/.ssh/id_rsa.pub private_key=~/.ssh/id_rsa 2>&1 | tee install-vm.log
+sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 ```
 
 > Note:  If keys do not exist (which they do not in a fresh download), they will be created as part of the script.  
 
-> Note: This script takes about an hour to run. For some reason, the redis_install function does not do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e) and start with this function.
+> Note: This script takes about an hour to run. For some reason, the redis_install function does not always do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e and 'source_scripts' lines) and start with this function.
 
-12) Remove riaps-integration repository from /home/riapsadmin/.
+13) If everything installed correctly, remove riaps-integration repository from /home/riapsadmin/. Keep in mind that you will loss the install logs when removing this information.
 
-13) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
+14) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
-14) Remove the riapsadmin user account.
-
-15) Setup riaps user with nopasswd using adding a /etc/sudoer.d/riaps file.  Then "chmod 0440 /etc/sudoer.d/riaps".
-
-    ```
-    riaps  ALL=(ALL) NOPASSWD: ALL
-    ```
+15) Remove the riapsadmin user account (deluser command).
 
 16) Add preloaded eclipse and sample applications in the default workspace.
 
-	a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
-	riaps_eclipse.tar.gz.
+  a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
+     riaps_eclipse.tar.gz.
 
-	b) Untar into the /home/riaps directory.
+  b) Untar into the /home/riaps directory.
 
-	c) Create a desktop icon in /home/riaps/Desktop/Eclipse.desktop
+  c) Create a desktop icon in /home/riaps/Desktop/Eclipse.desktop
 
-	   ```
-	   [Desktop Entry]
+    ```
+     [Desktop Entry]
        Encoding=UTF-8
        Type=Application
        Name=Eclipse
        Name[en_US]=Eclipse
        Icon=/home/riaps/eclipse/icon.xpm
        Exec=/home/riaps/eclipse/eclipse -data /home/riaps/workspace
-	   ```
+     ```
 
-	d) Move riaps_projects to the /home/riaps folder.  The projects placed here are from https://github.com/RIAPS/riaps-apps to provide starting projects for new developers (DistributedEstimator, DistributedEstimatorGPIO and WeatherMonitor).  
+  d) Import riaps_projects using "General" --> "Existing Projects into Workspace".
 
-	e) Move the riaps-launch-files to the /home/riaps folder.  The launch files are located in https://github.com/RIAPS/riaps-pycom/tree/master/bin (riaps_ctrl.launch and riaps_deplo.launch).
+  e) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
 
-	f) Import riaps_projects using "General" --> "Existing Projects into Workspace".
+  f) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.  Set these launches to display in External Tools Favorite list.  Make sure the "Build before launch" is not checked.
 
-	g) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
+  g) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
 
-	h) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.  Set these launches to display in External Tools Favorite list.  Make sure the "Build before launch" is not checked.
+> Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
 
-	i) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
-
-	j) Plugins already installed are:  
-	   - CDT Optional Features --> C/C++ CMake Build Support - Preview Developer Resources
-	   - Git integration for Eclipse - Task focused interface
-	   - From Eclipse Marketplace:  Eclipse Xtend, Xtext, JSON Editor, PyDev
-	   - Install the RIAPS DSML tool from https://riaps.isis.vanderbilt.edu/dsml
-
-17) Create ~/.riaps/riapsversion.txt file with permissions of 600 for future use in know the version installed on the VM image
-
-18) Reset the password to the default and cause reset of password on next login.
+17) Reset the password to the default and cause reset of password on next login.
 
     ```
     sudo chage -d 0 riaps
     ```
 
-19) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+18) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.

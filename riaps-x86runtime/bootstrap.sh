@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, libpcap0.8, libnettle6, software-properties-common, libnss-mdns
@@ -9,24 +10,12 @@
 #
 # Need to remove: python3-crypto python3-keyrings.alt -y
 
-# Script Variables
-RIAPSAPPDEVELOPER=riaps
-
-
-# Source scripts needed for this bootstrap build
-source_scripts() {
-    PWD=$(pwd)
-    SCRIPTS="install_scripts"
-
-    for i in `ls $PWD/$SCRIPTS`
-    do
-        source "$PWD/$SCRIPTS/$i"
-    done
-    echo ">>>>> sourced install scripts"
-}
+# Source configurable values for the VM creation
+source "vm_creation.conf"
 
 # Script functions
 
+#MM TODO: Bypassing this and moving to a conf file
 # User can supply ssh key pair, but must supply an intended name pair
 parse_args()
 {
@@ -52,6 +41,7 @@ parse_args()
     fi
 }
 
+#MM TODO: no longer used, moved to conf file
 print_help()
 {
     if [ "$HELP" = "true" ]; then
@@ -64,15 +54,29 @@ print_help()
     fi
 }
 
+# Source scripts and configuration needed for this bootstrap build
+source_scripts() {
+    PWD=$(pwd)
+    SCRIPTS="install_scripts"
+
+    for i in `ls $PWD/$SCRIPTS`
+    do
+        source "$PWD/$SCRIPTS/$i"
+    done
+
+    source "$PWD/vm_creation.conf"
+    echo ">>>>> sourced install scripts"
+}
 
 # Start of script actions
-set -e
+check_os_version
 mkdir -p /tmp/3rdparty
 source_scripts
-parse_args $@
-print_help
+#parse_args $@
+#print_help
 user_func
-setup_ssh_keys $RIAPSAPPDEVELOPER
+set_riaps_sudoer
+setup_ssh_keys
 rm_snap_pkg
 cross_setup
 vim_func
@@ -84,8 +88,9 @@ python_install
 cython_install
 curl_func
 boost_install
-#eclipse_func $RIAPSAPPDEVELOPER - MM removed, done manually at this time
+#eclipse_func - MM removed, done manually at this time
 eclipse_plugin_dep_install
+add_eclipse_projects
 nethogs_prereq_install
 zyre_czmq_prereq_install
 gnutls_install
@@ -104,5 +109,6 @@ spdlog_python_install
 graphviz_install
 prctl_install
 rm -rf /tmp/3rdparty
-add_set_tests $RIAPSAPPDEVELOPER
-riaps_prereq $RIAPSAPPDEVELOPER
+add_set_tests
+riaps_prereq
+create_riaps_version_file

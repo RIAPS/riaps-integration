@@ -1,4 +1,4 @@
-This a generic application to test that the development environment is setup and able to talk with the configured BBBs.  
+This a generic application to test that the development environment is setup and able to talk with the configured RIAPS Nodes.  
 
 ## First Test VM with application on local node (VM)
 1. Open 2 terminal windows and run the following command in the separate windows
@@ -84,11 +84,11 @@ Timestamp:Tue Aug 21 14:30:34 2018
 
 6.  When work with this application is complete, use the RIAPS control GUI to **Remove** the application.
 
-## Second Test a Single BBB Talks with the VM
-1.  SSH into the BBB, where xxxx refers to the hostname seen when logged into the BBB.  Or use the IP address instead (xxx.xxx.xxx.xxx).
+## Second Test that a Single RIAPS Node Talks with the VM
+1.  SSH into the RIAPS Node, where xxxx refers to the hostname seen when logged into the RIAPS Node.  Or use the IP address instead (xxx.xxx.xxx.xxx).
 
     ```       
-    ssh riaps@bbb-xxxx.local
+    ssh riaps@riaps-xxxx.local
 
     ```
 
@@ -96,39 +96,39 @@ Timestamp:Tue Aug 21 14:30:34 2018
 
     ``` riaps_ctrl ```
 
-3.  The BBB will automatically run ``` riaps_deplo ``` as a service.
+3.  The RIAPS Node will automatically run ``` riaps_deplo ``` as a service.
 
-4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  The IP address of the BBB is added as a node.
+4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  The IP address of the RIAPS Node is added as a node.
 
-5.  Edit the **~/env_setup_tests/WeatherMonitor/wmonitor_1_bbb.depl** file to point to the BBB using either the hostname or the IP address.
+5.  Edit the **~/env_setup_tests/WeatherMonitor/wmonitor_1_node.depl** file to point to the RIAPS Node using either the hostname or the IP address.
 
-6.  In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_1_bbb.depl** file.
+6.  In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_1_node.depl** file.
 
 7.  When the application is launched, the same output as indicate in the VM only test will be available.
 
 
-## Third Test that Multiple BBBs can Talk with the VM
-1.  SSH into the BBBs, where xxxx refers to the hostname seen when logging into the BBBs.
+## Third Test that Multiple RIAPS Nodes can Talk with the VM
+1.  SSH into the RIAPS Nodes, where xxxx refers to the hostname seen when logging into the RIAPS Nodes.
 
-    ``` ssh riaps@bbb-xxxx.local ```
+    ``` ssh riaps@riaps-xxxx.local ```
 
 2.  On the VM, open a terminal windows and run the following command
 
     ``` riaps_ctrl ```
 
-3.  The BBB will automatically run ``` riaps_deplo ``` as a service.
+3.  The RIAPS Node will automatically run ``` riaps_deplo ``` as a service.
 
-4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your BBBs added as different nodes.
+4.  With the 'riaps_ctrl' command, the RIAPS control GUI will come up.  You should see the IP address of your RIAPS Nodes added as different nodes.
 
-5.  The **~/env_setup_tests/WeatherMonitor/wmonitor_manny_bbb.depl** file is setup to have a single BBB be the WeatherReceiver and then all BBBs will report a temperature number (WeatherIndicator).  Edit this file to point the WeatherReceiver to one of the BBBs using either the hostname or the IP address.
+5.  The **~/env_setup_tests/WeatherMonitor/wmonitor_many_nodes.depl** file is setup to have a single RIAPS Node be the WeatherReceiver and then all RIAPS Nodes will report a temperature number (WeatherIndicator).  Edit this file to point the WeatherReceiver to one of the RIAPS Nodes using either the hostname or the IP address.
 
-6.  In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_many_bbb.depl** file.
+6.  In the control GUI, select the **WeatherMonitor** located under **~/env_setup_tests** folder using the **wmonitor_many_nodes.depl** file.
 
-7.  When launching this application, the following outputs on the RIAPS control GUI and BBBs application information.
+7.  When launching this application, the following outputs on the RIAPS control GUI and RIAPS Nodes application information.
 
-    ![GUI w/ several BBBs](ManyBBBs_app_test.png)
+    ![GUI w/ several RIAPS Nodes](ManyBBBs_app_test.png)
 
-     * For BBB that is only a WeatherIndicator, which is at 192.168.1.104
+     * For RIAPS Node that is only a WeatherIndicator, which is at 192.168.1.104
 
     ```text
     INFO:16:23:54,200:[7114]:TempSensor:(PID 7114)-starting TempSensor, Tue Aug 21 16:23:54 2018
@@ -139,24 +139,24 @@ Timestamp:Tue Aug 21 14:30:34 2018
     INFO:16:24:15,913:[7114]:TempSensor:on_clock(): Temperature - 69, PID 7114, Tue Aug 21 16:24:15 2018
     ```
 
-    * For BBB that is both WeatherReceiver and WeatherIndicator, which is at 192.168.1.103
+    * For RIAPS Node that is both WeatherReceiver and WeatherIndicator, which is at 192.168.1.103
 
     ```text
-    Aug 21 21:24:00 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:00,507:[1828]:TempSensor:(PID 1828)-starting TempSensor, Tue Aug 21 21:24:00 2018
-    Aug 21 21:24:00 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:00,518:[1828]:TempSensor:Initial temp:65, Tue Aug 21 21:24:00 2018
-    Aug 21 21:24:03 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:03,175:[1830]:TempMonitor:(PID 1830)-starting TempMonitor, Tue Aug 21 21:24:03 2018
-    Aug 21 21:24:05 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:05,888:[1830]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 21:24:05 2018, Timestamp:Tue Aug 21 16:24:05 2018
-    Aug 21 21:24:06 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:06,482:[1828]:TempSensor:on_clock(): Temperature - 66, PID 1828, Tue Aug 21 21:24:06 2018
-    Aug 21 21:24:06 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:06,489:[1830]:TempMonitor:on_tempupdate(): Temperature:66, PID Tue Aug 21 21:24:06 2018, Timestamp:Tue Aug 21 21:24:06 2018
-    Aug 21 21:24:10 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:10,897:[1830]:TempMonitor:on_tempupdate(): Temperature:68, PID Tue Aug 21 21:24:10 2018, Timestamp:Tue Aug 21 16:24:10 2018
-    Aug 21 21:24:11 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:11,483:[1828]:TempSensor:on_clock(): Temperature - 67, PID 1828, Tue Aug 21 21:24:11 2018
-    Aug 21 21:24:11 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:11,490:[1830]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 21:24:11 2018, Timestamp:Tue Aug 21 21:24:11 2018
-    Aug 21 21:24:15 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:15,915:[1830]:TempMonitor:on_tempupdate(): Temperature:69, PID Tue Aug 21 21:24:15 2018, Timestamp:Tue Aug 21 16:24:15 2018
-    Aug 21 21:24:16 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:16,484:[1828]:TempSensor:on_clock(): Temperature - 68, PID 1828, Tue Aug 21 21:24:16 2018
-    Aug 21 21:24:16 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:16,490:[1830]:TempMonitor:on_tempupdate(): Temperature:68, PID Tue Aug 21 21:24:16 2018, Timestamp:Tue Aug 21 21:24:16 2018
-    Aug 21 21:24:20 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:20,918:[1830]:TempMonitor:on_tempupdate(): Temperature:70, PID Tue Aug 21 21:24:20 2018, Timestamp:Tue Aug 21 16:24:20 2018
-    Aug 21 21:24:21 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:21,485:[1828]:TempSensor:on_clock(): Temperature - 69, PID 1828, Tue Aug 21 21:24:21 2018
-    Aug 21 21:24:21 bbb-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:21,491:[1830]:TempMonitor:on_tempupdate(): Temperature:69, PID Tue Aug 21 21:24:21 2018, Timestamp:Tue Aug 21 21:24:21 2018
+    Aug 21 21:24:00 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:00,507:[1828]:TempSensor:(PID 1828)-starting TempSensor, Tue Aug 21 21:24:00 2018
+    Aug 21 21:24:00 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:00,518:[1828]:TempSensor:Initial temp:65, Tue Aug 21 21:24:00 2018
+    Aug 21 21:24:03 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:03,175:[1830]:TempMonitor:(PID 1830)-starting TempMonitor, Tue Aug 21 21:24:03 2018
+    Aug 21 21:24:05 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:05,888:[1830]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 21:24:05 2018, Timestamp:Tue Aug 21 16:24:05 2018
+    Aug 21 21:24:06 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:06,482:[1828]:TempSensor:on_clock(): Temperature - 66, PID 1828, Tue Aug 21 21:24:06 2018
+    Aug 21 21:24:06 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:06,489:[1830]:TempMonitor:on_tempupdate(): Temperature:66, PID Tue Aug 21 21:24:06 2018, Timestamp:Tue Aug 21 21:24:06 2018
+    Aug 21 21:24:10 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:10,897:[1830]:TempMonitor:on_tempupdate(): Temperature:68, PID Tue Aug 21 21:24:10 2018, Timestamp:Tue Aug 21 16:24:10 2018
+    Aug 21 21:24:11 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:11,483:[1828]:TempSensor:on_clock(): Temperature - 67, PID 1828, Tue Aug 21 21:24:11 2018
+    Aug 21 21:24:11 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:11,490:[1830]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 21:24:11 2018, Timestamp:Tue Aug 21 21:24:11 2018
+    Aug 21 21:24:15 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:15,915:[1830]:TempMonitor:on_tempupdate(): Temperature:69, PID Tue Aug 21 21:24:15 2018, Timestamp:Tue Aug 21 16:24:15 2018
+    Aug 21 21:24:16 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:16,484:[1828]:TempSensor:on_clock(): Temperature - 68, PID 1828, Tue Aug 21 21:24:16 2018
+    Aug 21 21:24:16 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:16,490:[1830]:TempMonitor:on_tempupdate(): Temperature:68, PID Tue Aug 21 21:24:16 2018, Timestamp:Tue Aug 21 21:24:16 2018
+    Aug 21 21:24:20 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:20,918:[1830]:TempMonitor:on_tempupdate(): Temperature:70, PID Tue Aug 21 21:24:20 2018, Timestamp:Tue Aug 21 16:24:20 2018
+    Aug 21 21:24:21 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:21,485:[1828]:TempSensor:on_clock(): Temperature - 69, PID 1828, Tue Aug 21 21:24:21 2018
+    Aug 21 21:24:21 riaps-d5b5 RIAPS-DEPLO[1759]: INFO:21:24:21,491:[1830]:TempMonitor:on_tempupdate(): Temperature:69, PID Tue Aug 21 21:24:21 2018, Timestamp:Tue Aug 21 21:24:21 2018
     ```
 
    ## Viewing the Application Model

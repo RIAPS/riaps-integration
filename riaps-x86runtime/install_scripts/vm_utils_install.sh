@@ -31,32 +31,32 @@ java_func () {
 
 #eclipse install
 eclipse_shortcut() {
-    shortcut=/home/$1/Desktop/Eclipse.desktop
-    sudo -H -u $1 mkdir -p /home/$1/Desktop
-    sudo -H -u $1 cat <<EOT >$shortcut
+    shortcut=/home/$RIAPSUSER/Desktop/Eclipse.desktop
+    sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/Desktop
+    sudo -H -u $RIAPSUSER cat <<EOT >$shortcut
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
 Name=Eclipse
 Name[en_US]=Eclipse
-Icon=/home/$1/eclipse/icon.xpm
-Exec=/home/$1/eclipse/eclipse -data /home/$1/workspace
+Icon=/home/$RIAPSUSER/eclipse/icon.xpm
+Exec=/home/$RIAPSUSER/eclipse/eclipse -data /home/$RIAPSUSER/workspace
 EOT
 
-    sudo chmod +x /home/$1/Desktop/Eclipse.desktop
+    sudo chmod +x /home/$RIAPSUSER/Desktop/Eclipse.desktop
 }
 
 eclipse_func() {
-    if [ ! -d "/home/$1/eclipse" ]
+    if [ ! -d "/home/$RIAPSUSER/eclipse" ]
     then
        wget http://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R2/eclipse-inst-linux64.tar.gz
        tar -xzvf eclipse-inst-linux64.tar.gz
-       sudo mv eclipse /home/$1/.
-       sudo chown -R $1:$1 /home/$1/eclipse
-       sudo -H -u $1 chmod +x /home/$1/eclipse/eclipse
-       eclipse_shortcut $1
+       sudo mv eclipse /home/$RIAPSUSER/.
+       sudo chown -R $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/eclipse
+       sudo -H -u $RIAPSUSER chmod +x /home/$RIAPSUSER/eclipse/eclipse
+       eclipse_shortcut $RIAPSUSER
     else
-       echo ">>>>> eclipse already installed at /home/$1/eclipse"
+       echo ">>>>> eclipse already installed at /home/$RIAPSUSER/eclipse"
     fi
 }
 

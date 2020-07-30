@@ -26,7 +26,7 @@ def bash(cmd):
     subprocess.run(t)
 
 def openKeyPerms():
-    #temporarily open private key and certs, so that they can be moved to new BBBs
+    #temporarily open private key and certs, so that they can be moved to new RIAPS nodes
     if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
         bash('sudo chmod 444 /home/riaps/.ssh/id_rsa.key')
     if os.path.isfile('/home/riaps/.ssh/x509.pem'):
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     fhost = "-H"
     fset = "--set"
     fsyscheck = "sys.check"
-    fupdate = "riaps.updateBBBKey"
+    fupdate = "riaps.updateRemoteNodeKey"
 
     if args.keyFile:
         if os.path.isfile(args.keyFile):
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     if os.path.isdir(fpath):
         if args.hosts:
             print("Rekeying hostnames: {}".format(args.hosts))
-            #make sure BBBs are available
+            #make sure RIAPS nodes are available
             s = [fcmd, fflag, fpath, fsyscheck, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
             p = subprocess.run(s)
             if p.returncode != 0:
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
         elif args.hostsFile:
             print("Rekeying hostnames from ",args.hostsFile)
-            #make sure BBBs are available
+            #make sure RIAPS nodes are available
             s = [fcmd, fset, fenvVar, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
             p = subprocess.run(s)
             if p.returncode != 0:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
 
         elif args.addtlHosts:
             print("Adding hostnames to system: ",args.addtlHosts)
-            #make sure BBBs are available
+            #make sure RIAPS nodes are available
             s = [fcmd, fflag, fpath, fsyscheck, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
             p = subprocess.run(s)
             if p.returncode != 0:
@@ -182,7 +182,7 @@ if __name__ == '__main__':
 
         else:
             print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
-            #make sure BBBs are available
+            #make sure RIAPS nodes are available
             s = [fcmd, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
             p = subprocess.run(s)
             if p.returncode != 0:
@@ -201,4 +201,4 @@ if __name__ == '__main__':
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
 
-    print("Rekeyed beaglebones with development machine keys and certificates.")
+    print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")

@@ -3,7 +3,9 @@ set -e
 
 boost_install() {
     sudo apt-get install libboost-dev -y
-    sudo apt-get install libboost-dev:armhf libboost-dev:arm64 -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libboost-dev:$c_arch -y
+    done
     echo ">>>>> installed boost"
 }
 
@@ -11,8 +13,10 @@ boost_install() {
 # Assumes libncurses6  is already installed
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
-    sudo apt-get install libpcap-dev:armhf libpcap-dev:arm64 -y
     sudo apt-get install libncurses5-dev -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libpcap-dev:$c_arch -y
+    done
     echo ">>>>> installed nethogs prerequisites"
 }
 
@@ -20,12 +24,13 @@ nethogs_prereq_install() {
 # Assumes libzmq5 and pkg-config are already installed
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq3-dev -y
-    sudo apt-get install libzmq3-dev:armhf libzmq3-dev:arm64 -y
     sudo apt-get install libsystemd-dev -y
-    sudo apt-get install libsystemd-dev:armhf libsystemd-dev:arm64 -y
-    sudo apt-get install libuuid1:armhf liblz4-1:armhf -y
-    sudo apt-get install libuuid1:arm64 liblz4-1:arm64 -y
     sudo apt-get install pkg-config -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libzmq3-dev:$c_arch -y
+        sudo apt-get install libsystemd-dev:$c_arch -y
+        sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
+    done
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
@@ -39,17 +44,19 @@ security_prereq_install() {
 # install gnutls
 # Assumes libgnutls30 is already installed
 gnutls_install(){
-    sudo apt-get install libgnutls30:armhf libgnutls30:arm64 -y
     sudo apt-get install libgnutls28-dev -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libgnutls30:$c_arch -y
+    done
     echo ">>>>> installed gnutls"
 }
 
 #install msgpack
 msgpack_install(){
-    sudo apt-get install libmsgpackc2:amd64 -y
-    sudo apt-get install libmsgpackc2:armhf libmsgpackc2:arm64 -y
-    sudo apt-get install libmsgpack-dev:amd64 -y
     sudo apt-get install libmsgpackc2 libmsgpack-dev -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libmsgpackc2:$c_arch -y
+    done
     echo ">>>>> installed msgpack"
 }
 
@@ -57,30 +64,33 @@ msgpack_install(){
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
-    sudo apt-get install libncurses5-dev:armhf libncurses5-dev:arm64 -y
     sudo apt-get install nettle-dev -y
-    sudo apt-get install nettle-dev:armhf nettle-dev:arm64 -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libncurses5-dev:$c_arch -y
+        sudo apt-get install nettle-dev:$c_arch -y
+    done
+
     # run liblinks script to link gnutls and msgppack
     PREVIOUS_PWD=$PWD
     chmod +x /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
-    cd /usr/lib/arm-linux-gnueabihf
-    sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
-    cd /usr/lib/aarch64-linux-gnu
-    sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    for arch_tool in ${CROSS_TOOLCHAIN_LOC[@]}; do
+        cd /usr/lib/$arch_tool
+        sudo /home/riapsadmin/riaps-integration/riaps-x86runtime/liblinks.sh
+    done
     cd $PREVIOUS_PWD
     echo ">>>>> installed opendht prerequisites"
 }
 
 riaps_prereq() {
    # Add RIAPS repository
-   sudo add-apt-repository -r "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-   sudo add-apt-repository -n "deb [arch=amd64] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+   sudo add-apt-repository -r "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
+   sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
    sudo apt-get update
-   sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_amd64.sh /home/$1/.
-   sudo chown $1:$1 /home/$1/riaps_install_amd64.sh
-   sudo -H -u $1 chmod 711 /home/$1/riaps_install_amd64.sh
-   #./riaps_install_amd64.sh
+   sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_$HOST_ARCH.sh /home/$RIAPSUSER/.
+   sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
+   sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
+   #./riaps_install_$HOST_ARCH.sh
    echo ">>>>> riaps prerequisites installed"
 }
 
