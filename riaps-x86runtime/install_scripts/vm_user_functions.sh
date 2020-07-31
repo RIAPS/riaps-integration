@@ -17,6 +17,15 @@ user_func () {
 
 setup_ssh_keys () {
     # Setup user (or generated) ssh keys for VM
+    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
+    then
+        echo ">>>>> Found user ssh keys.  Will use them"
+    else
+        echo ">>>>> Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        mkdir -p /home/riapsadmin/.ssh
+        ssh-keygen -N "" -q -f $PRIVATE_KEY
+    fi
+
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.ssh
     sudo cp $PUBLIC_KEY /home/$RIAPSUSER/.ssh/id_rsa.pub
     sudo cp $PRIVATE_KEY /home/$RIAPSUSER/.ssh/id_rsa.key
