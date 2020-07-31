@@ -69,9 +69,9 @@ source_scripts() {
 }
 
 # Start of script actions
-check_os_version
 mkdir -p /tmp/3rdparty
 source_scripts
+check_os_version
 #parse_args $@
 #print_help
 user_func

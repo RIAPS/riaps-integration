@@ -20,13 +20,15 @@ Kernel:  5.4.0-42-generic (after SW update)
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
-3) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-18.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
+3) Setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the remote RIAPS nodes.
 
-4) Create a 'riapsadmin' user with password of 'riapsadmin' and set computer name to `riaps-VirtualBox`.
+4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-18.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
-5) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
+5) Create a 'riapsadmin' user with password of 'riapsadmin' and set computer name to `riaps-VirtualBox`.
 
-6) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
+6) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
+
+7) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the "usrquota,grpquota" to '/', as shown here:
 
 ```
 # / was on /dev/sda1 during installation
@@ -34,9 +36,8 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 /swapfile                                 none            swap    sw              0       0
 ```
 
-7) Restart the VM to allow the above fstab changes to take effect.
+8) Restart the VM to allow the above 'fstab' changes to take effect.
 
-8) When VM is shutdown, setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the BBBs.
 
 9) To setup the usrquota and grpquota files, run the following. Restart the VM login as riapsadmin.
 
