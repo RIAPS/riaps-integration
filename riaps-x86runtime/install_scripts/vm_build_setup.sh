@@ -39,15 +39,27 @@ cross_setup() {
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse"
 
     echo ">>>>> add cross compile architectures"
-    for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo add-apt-repository -r "deb [arch=$c_arch] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO main universe multiverse" || true
-        sudo add-apt-repository -n "deb [arch=$c_arch] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO main universe multiverse"
 
-        sudo add-apt-repository -r "deb [arch=$c_arch] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse" || true
-        sudo add-apt-repository  -n "deb [arch=$c_arch] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse"
+    i=0
+    DELIM=","
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        if [ $i = 0 ]; then
+            all_carchs="$c_arch"
+        else
+            all_carchs="$all_carchs$DELIM$c_arch"
+        fi
+        i=$((i+1))
 
         sudo dpkg --add-architecture $c_arch
     done
+
+    sudo add-apt-repository -r "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO main universe multiverse" || true
+    sudo add-apt-repository -n "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO main universe multiverse"
+
+    sudo add-apt-repository -r "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse" || true
+    sudo add-apt-repository  -n "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse"
+
+    sudo cat /etc/apt/sources.list
     echo ">>>>> updated sources.list for multiarch"
 
     sudo apt-get update
