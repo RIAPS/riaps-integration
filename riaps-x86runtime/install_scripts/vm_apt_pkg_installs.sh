@@ -9,7 +9,7 @@ boost_install() {
     echo ">>>>> installed boost"
 }
 
-# install nethogs pre-requisites
+# Install nethogs pre-requisites
 # Assumes libncurses6  is already installed
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
@@ -20,9 +20,9 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
-#MM TODO: for 20.04, pkg-config is already installed
-#install libraries for czmq and zyre
-# Assumes libzmq5 and pkg-config are already installed
+# Install libraries for czmq and zyre
+# Assumes libzmq5 is already installed
+# For 20.04, pkg-config is already installed
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
@@ -35,15 +35,18 @@ zyre_czmq_prereq_install() {
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
-#MM TODO: python3-cryto and python3-keyrings.alt are not installed in 20.04
-# Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex install
+# Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex
+#     install in Ubuntu 18.04
+# For Ubuntu 20.04, python3-cryto and python3-keyrings.alt are not installed
 security_prereq_install() {
     sudo apt-get install apparmor-utils -y
-    sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    fi
     echo ">>>>> installed security prerequisites"
 }
 
-# install gnutls
+# Install gnutls
 # Assumes libgnutls30 is already installed
 gnutls_install(){
     sudo apt-get install libgnutls28-dev -y
@@ -53,7 +56,7 @@ gnutls_install(){
     echo ">>>>> installed gnutls"
 }
 
-#install msgpack
+# Install msgpack
 msgpack_install(){
     sudo apt-get install libmsgpackc2 libmsgpack-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
@@ -62,7 +65,7 @@ msgpack_install(){
     echo ">>>>> installed msgpack"
 }
 
-#install opendht prerequisites
+# Install opendht prerequisites
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
@@ -83,17 +86,18 @@ opendht_prereqs_install() {
     echo ">>>>> installed opendht prerequisites"
 }
 
+# Setup RIAPS repository and install script
 riaps_prereq() {
-   # Add RIAPS repository
-   sudo add-apt-repository -r "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
-   sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
-   wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
-   sudo apt-get update
-   sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_$HOST_ARCH.sh /home/$RIAPSUSER/.
-   sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
-   sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
-   #./riaps_install_$HOST_ARCH.sh
-   echo ">>>>> riaps prerequisites installed"
+    # Add RIAPS repository
+    sudo add-apt-repository -r "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
+    sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
+    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
+    sudo apt-get update
+    sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_$HOST_ARCH.sh /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
+    sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
+    #./riaps_install_$HOST_ARCH.sh
+    echo ">>>>> riaps prerequisites installed"
 }
 
 # Remove the software deployment and package management system called "Snap"
@@ -103,7 +107,7 @@ rm_snap_pkg() {
     echo ">>>>> snap package manager removed"
 }
 
-# install redis
+# Install redis
 redis_install () {
    if [ ! -f "/usr/local/bin/redis-server" ]; then
     wget http://download.redis.io/releases/redis-4.0.11.tar.gz
@@ -118,6 +122,7 @@ redis_install () {
    fi
 }
 
+# Install graphical elements used by the riaps_ctrl command
 graphviz_install() {
     sudo apt-get install graphviz xdot -y
     echo ">>>>> installed graphviz"

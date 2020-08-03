@@ -13,46 +13,6 @@ set -e
 # Source configurable values for the VM creation
 source "vm_creation.conf"
 
-# Script functions
-
-#MM TODO: Bypassing this and moving to a conf file
-# User can supply ssh key pair, but must supply an intended name pair
-parse_args()
-{
-    for ARGUMENT in "$@"
-    do
-        KEY=$(echo $ARGUMENT | cut -f1 -d=)
-        VALUE=$(echo $ARGUMENT | cut -f2 -d=)
-        case "$KEY" in
-            public_key)               PUBLIC_KEY=${VALUE} ;;
-            private_key)              PRIVATE_KEY=${VALUE} ;;
-            help)                     HELP="true" ;;
-            *)
-        esac
-    done
-    pwd
-    if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
-    then
-        echo ">>>>> Found user ssh keys.  Will use them"
-    else
-        echo ">>>>> Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
-        mkdir -p /home/riapsadmin/.ssh
-        ssh-keygen -N "" -q -f $PRIVATE_KEY
-    fi
-}
-
-#MM TODO: no longer used, moved to conf file
-print_help()
-{
-    if [ "$HELP" = "true" ]; then
-        echo "usage: test_key_move [help] [=]"
-        echo "arguments:"
-        echo "help                       show this help message and exit"
-        echo "public_key=<name>.pub      name of public key file"
-        echo "private_key=<name>.key     name of private file"
-        exit
-    fi
-}
 
 # Source scripts and configuration needed for this bootstrap build
 source_scripts() {
@@ -68,8 +28,9 @@ source_scripts() {
     echo ">>>>> sourced install scripts"
 }
 
-# Start of script actions
 source_scripts
+
+# Start of install script actions
 check_os_version
 mkdir -p /tmp/3rdparty
 user_func
@@ -77,7 +38,6 @@ set_riaps_sudoer
 setup_ssh_keys
 rm_snap_pkg
 cross_setup
-vim_func
 java_func
 cmake_func
 utils_install
@@ -102,6 +62,7 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
+butter_install
 other_pip3_installs
 spdlog_python_install
 graphviz_install

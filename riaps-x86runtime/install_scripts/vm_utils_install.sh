@@ -1,22 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
-#MM TODO: add apt install for net-tools for 20.04s
+# Install utilities used by developers
+# net-tools exists in 18.04, but is no longer in 20.04
 utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssl openssh-server -y
     sudo apt-get install mininet -y
+    sudo apt-get install net-tools -y
     # make sure date is correct
     sudo apt-get install rdate -y
     # rdate command can timeout, restart script from here if this happens
     sudo rdate -n -4 time.nist.gov
     echo ">>>>> installed utils"
-}
-
-#MM TODO: already in 20.04 release
-vim_func() {
-    sudo apt-get install vim -y
-    echo ">>>>> installed vim"
 }
 
 # Remove the software deployment and package management system called "Snap"
@@ -26,12 +22,13 @@ rm_snap_pkg() {
     echo ">>>>> snap package manager removed"
 }
 
+# Package needed for eclipse
 java_func () {
     sudo apt-get install openjdk-11-jre-headless -y
     echo ">>>>> installed java"
 }
 
-#eclipse install
+# Create Eclipse shortcut
 eclipse_shortcut() {
     shortcut=/home/$RIAPSUSER/Desktop/Eclipse.desktop
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/Desktop
@@ -48,6 +45,7 @@ EOT
     sudo chmod +x /home/$RIAPSUSER/Desktop/Eclipse.desktop
 }
 
+# Eclipse install
 eclipse_func() {
     if [ ! -d "/home/$RIAPSUSER/eclipse" ]
     then

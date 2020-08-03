@@ -15,6 +15,7 @@ user_func () {
     fi
 }
 
+# Setup SSH keys on the VM and install scripts to allow setup later with remote RIAPS nodes
 setup_ssh_keys () {
     # Setup user (or generated) ssh keys for VM
     if [ -e "$PUBLIC_KEY" ] && [ -e "$PRIVATE_KEY" ]
@@ -52,6 +53,7 @@ setup_ssh_keys () {
     echo ">>>>> Added user key to authorized keys for $RIAPSUSER. Use riaps_initial keys for initial communication with the remote RIAPS nodes"
 }
 
+# Simple example project setup to allow users to quickly test the VM setup
 add_set_tests () {
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/env_setup_tests/WeatherMonitor
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/env_setup_tests/WeatherMonitor /home/$RIAPSUSER/env_setup_tests/
@@ -59,24 +61,27 @@ add_set_tests () {
     echo ">>>>> Added development environment tests"
 }
 
+# Create a file that tracks the version installed on the VM, will help in debugging efforts
 create_riaps_version_file () {
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.riaps
     sudo echo "RIAPS Version: $RIAPS_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
-    sudo echo "Ubuntu Version: $CURRENT_UBUNTU_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "Ubuntu Version: $UBUNTU_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo echo "Application Developer Username: $RIAPSUSER" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.riaps/riapsversion.txt
     echo ">>>>> Created RIAPS version log file"
 }
 
+# Add RIAPS User to the sudoer list
 set_riaps_sudoer () {
-    echo "riaps  ALL=(ALL) NOPASSWD: ALL" >> riaps
+    echo "$RIAPSUSER  ALL=(ALL) NOPASSWD: ALL" >> riaps
     sudo mv riaps /etc/sudoers.d/.
     sudo chown root:root /etc/sudoers.d/riaps
     sudo chmod 0440 /etc/sudoers.d/riaps
     echo ">>>>> Added RIAPS to sudoer list"
 }
 
+# Setup example project files from https://github.com/RIAPS/riaps-apps and appropriate eclipse launch files from https://github.com/RIAPS/riaps-pycom
 add_eclipse_projects() {
     # Setup example projects file for use with eclipse to give developers a good starting projects
     git clone https://github.com/RIAPS/riaps-apps.git
