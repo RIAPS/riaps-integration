@@ -93,10 +93,10 @@ riaps_prereq() {
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
-    sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_$HOST_ARCH.sh /home/$RIAPSUSER/.
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
-    sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_$HOST_ARCH.sh
-    #./riaps_install_$HOST_ARCH.sh
+    sudo cp /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps_install_vm.sh /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_vm.sh
+    sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_vm.sh
+    #./riaps_install_vm.sh
     echo ">>>>> riaps prerequisites installed"
 }
 

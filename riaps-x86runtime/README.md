@@ -73,7 +73,7 @@ nic_name = enp0s8
 sudo systemctl restart riaps-rpyc-registry.service
 ```
 
-## <a name="secure-comm">Securing Communication Between the VM and BBBs</a>
+## <a name="secure-comm">Securing Communication Between the VM and Remote RIAPS Nodes</a>
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 

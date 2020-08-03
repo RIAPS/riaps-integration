@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -e
+
+# Identify the host architecture
+HOST_ARCH="$(dpkg --print-architecture)"
+
 
 source_scripts() {
     PWD=$(pwd)
@@ -12,8 +17,6 @@ source_scripts() {
 }
 
 
-set -e
-
 # make sure date is correct
 sudo rdate -n -4 time.nist.gov
 
@@ -23,18 +26,18 @@ sudo pip3 install --upgrade pip
 # For v1.1.18, riaps-pycom riaps.conf and riaps-log.conf files have been update
 # it is best to remove the riaps-pycom-amd64 package completely and then reinstall
 # Remember to update the nic name for /etc/riaps.conf after installation
-sudo apt-get purge riaps-pycom-amd64 || true
+sudo apt-get purge riaps-pycom-$HOST_ARCH || true
 
 # install RIAPS packages
 sudo apt-get update
-sudo apt-get install riaps-core-amd64 riaps-pycom-amd64 riaps-timesync-amd64 -y
+sudo apt-get install riaps-core-$HOST_ARCH riaps-pycom-HOST_ARCH riaps-timesync-$HOST_ARCH -y
 
 # new packages installed/removed
 source_scripts
 
 rm_snap_pkg
 
-#Updates needed - but need to program with new script calls
+#MM TODO:  Updates needed - use new script calls
 #cross_setup
    sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
    sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
