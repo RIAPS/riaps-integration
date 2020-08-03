@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+#MM TODO: add apt install for net-tools for 20.04s
 utils_install() {
     sudo apt-get install htop -y
     sudo apt-get install openssl openssh-server -y
@@ -12,6 +13,7 @@ utils_install() {
     echo ">>>>> installed utils"
 }
 
+#MM TODO: already in 20.04 release
 vim_func() {
     sudo apt-get install vim -y
     echo ">>>>> installed vim"

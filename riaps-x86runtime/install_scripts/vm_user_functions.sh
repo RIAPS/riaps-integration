@@ -84,7 +84,7 @@ add_eclipse_projects() {
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-apps/apps-vu/DistributedEstimator /home/$RIAPSUSER/riaps_projects/.
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-apps/apps-vu/DistributedEstimatorGPIO /home/$RIAPSUSER/riaps_projects/.
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-apps/apps-vu/WeatherMonitor /home/$RIAPSUSER/riaps_projects/.
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_projects
+    sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_projects
 
     # Add eclipse launch files to user files
     git clone https://github.com/RIAPS/riaps-pycom.git
@@ -92,6 +92,6 @@ add_eclipse_projects() {
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-pycom/bin/riaps_ctrl.launch /home/$RIAPSUSER/riaps_launch_files/.
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-pycom/bin/riaps_deplo.launch /home/$RIAPSUSER/riaps_launch_files/.
     sudo cp -r /home/riapsadmin/riaps-integration/riaps-x86runtime/riaps-pycom/bin/rpyc_registry.launch /home/$RIAPSUSER/riaps_launch_files/.
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_launch_files
+    sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_launch_files
     echo ">>>>> Added example RIAPS projects for eclipse use"
 }

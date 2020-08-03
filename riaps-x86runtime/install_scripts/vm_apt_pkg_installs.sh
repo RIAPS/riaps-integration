@@ -20,6 +20,7 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
+#MM TODO: for 20.04, pkg-config is already installed
 #install libraries for czmq and zyre
 # Assumes libzmq5 and pkg-config are already installed
 zyre_czmq_prereq_install() {
@@ -34,6 +35,7 @@ zyre_czmq_prereq_install() {
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
+#MM TODO: python3-cryto and python3-keyrings.alt are not installed in 20.04
 # Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex install
 security_prereq_install() {
     sudo apt-get install apparmor-utils -y

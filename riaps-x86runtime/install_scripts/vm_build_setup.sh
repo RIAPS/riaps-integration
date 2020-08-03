@@ -129,3 +129,45 @@ externals_cmake_install(){
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
 }
+
+#MM TODO: call from bootstrap and adjust to be variable driven
+# RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
+# Setup update-alternative to have this VM use GCC/G++ 7.
+#MM TODO: this part is still in development.  Most likely it will stay with gcc-9 if all builds well and this section will not be needed
+config_gcc() {
+    sudo apt -y install gcc-7 g++-7
+
+    sudo apt -y install gcc-7:armhf g++-7:armhf
+    sudo apt -y install gcc-7:arm64 g++-7:arm64
+    # Setup GCC-7 as default in all architectures
+    # amd64
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/gcc-7
+    sudo update-alternatives --set g++ /usr/bin/g++-7
+    # armhf
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-7 7
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc gcc /usr/bin/arm-linux-gnueabihf-gcc-9 9
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-7 7
+    sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-g++ g++ /usr/bin/arm-linux-gnueabihf-g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/arm-linux-gnueabihf-gcc-7
+    sudo update-alternatives --set g++ /usr/bin/arm-linux-gnueabihf-g++-7
+    # arm64
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-7 7
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc gcc /usr/bin/aarch64-linux-gnu-gcc-9 9
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-7 7
+    sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-g++ g++ /usr/bin/aarch64-linux-gnu-g++-9 9
+    sudo update-alternatives --set gcc /usr/bin/aarch64-linux-gnu-gcc-7
+    sudo update-alternatives --set g++ /usr/bin/aarch64-linux-gnu-g++-7
+
+    # Print version to show it worked as desired
+    gcc --version
+    g++ --version
+    arm-linux-gnueabihf-gcc --version
+    arm-linux-gnueabihf-g++ --version
+    aarch64-linux-gnu-gcc --version
+    aarch64-linux-gnu-g++ --version
+    echo "configured gcc/g++"
+}
