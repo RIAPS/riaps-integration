@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-# Instructions for use:
+# Instructions for use, user should do the following:
 # 1) git clone https://github.com/RIAPS/riaps-integration.git
 # 2) cd riaps-integration/riaps-x86runtime
-# 3) sudo ./riaps_update_vm_v1_1_18.sh 2>&1 | tee install_updated_vm.log
-# 4) rm -rf riaps-integration
+# 3) chmod +x riaps_update_vm_v1_1_18.sh
+# 4) sudo ./riaps_update_vm_v1_1_18.sh 2>&1 | tee install_updated_vm.log
+# 5) rm -rf riaps-integration
+# 6) Reset the 'nic_name' in the /etc/riaps/riaps.conf file to be the same as the VM network
+#    interface that is attached to the router servicing the remote RIAPS nodes
 
 set -e
 
@@ -73,13 +76,13 @@ mv /home/riaps/riaps_initial_keys/bbb_initial.key /home/riaps/riaps_initial_keys
 mv /home/riaps/riaps_initial_keys/bbb_initial.pub /home/riaps/riaps_initial_keys/riaps_initial.pub
 rm /home/riaps/secure_keys
 rm /home/riaps/riaps_install_amd64.sh
-git clone https://github.com/RIAPS/riaps-integration.git /tmp/3rdparty/riaps-integration
-cp /tmp/3rdparty/riaps-integration/riaps-x86runtime/secure_keys /home/riaps/.
-cp /tmp/3rdparty/riaps-integration/riaps-x86runtime/riaps_install_vm.sh /home/riaps/.
+cp /home/riaps/riaps-integration/riaps-x86runtime/secure_keys /home/riaps/.
+cp /home/riaps/riaps-integration/riaps-x86runtime/riaps_install_vm.sh /home/riaps/.
 chmod 700 /home/riaps/secure_keys
+sudo chown riaps:riaps /home/riaps/secure_keys
 chmod 711 /home/riaps/riaps_install_vm.sh
-rm -rf /tmp/3rdparty/riaps-integration
-echo ">>>>> Moved from bbb reference to generic (riaps) for additional remote computing node types"
+sudo chown riaps:riaps /home/riaps/riaps_install_vm.sh
+echo ">>>>> Moved bbb reference to generic (riaps) for additional remote computing node types"
 
 # For v1.1.18, riaps-pycom riaps.conf and riaps-log.conf files have been update
 # it is best to remove the riaps-pycom-amd64 package completely and then reinstall
@@ -88,6 +91,6 @@ sudo apt-get purge riaps-pycom-$HOST_ARCH || true
 
 # install RIAPS packages
 sudo apt-get update
-sudo apt-get install riaps-core-$HOST_ARCH riaps-pycom-HOST_ARCH riaps-timesync-$HOST_ARCH -y
+sudo apt-get install riaps-core-$HOST_ARCH riaps-pycom-$HOST_ARCH riaps-timesync-$HOST_ARCH -y
 
 echo "updated RIAPS platform to v1_1_18"
