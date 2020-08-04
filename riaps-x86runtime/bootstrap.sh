@@ -63,7 +63,7 @@ zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
 butter_install
-other_pip3_installs
+pip3_3rd_party_installs
 spdlog_python_install
 graphviz_install
 prctl_install

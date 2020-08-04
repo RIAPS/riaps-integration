@@ -39,7 +39,20 @@ cross_setup() {
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse"
 
     echo ">>>>> add cross compile architectures"
+    add_cross_compile_archs
 
+    sudo cat /etc/apt/sources.list
+    echo ">>>>> updated sources.list for multiarch"
+
+    sudo apt-get update
+    echo ">>>>> packages update complete for multiarch"
+    sudo apt-get install gdb-multiarch build-essential -y
+    add_cross_compile_buildtools
+    echo ">>>>> setup multi-arch capabilities complete"
+}
+
+# Add cross compile architectures to the VM setup
+add_cross_compile_archs(){
     i=0
     DELIM=","
     for c_arch in ${ARCHS_CROSS[@]}; do
@@ -58,17 +71,13 @@ cross_setup() {
 
     sudo add-apt-repository -r "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse" || true
     sudo add-apt-repository  -n "deb [arch=$all_carchs] http://ports.ubuntu.com/ubuntu-ports $CURRENT_PACKAGE_REPO-updates main universe multiverse"
+}
 
-    sudo cat /etc/apt/sources.list
-    echo ">>>>> updated sources.list for multiarch"
-
-    sudo apt-get update
-    echo ">>>>> packages update complete for multiarch"
-    sudo apt-get install gdb-multiarch build-essential -y
+# Add the cross compile build tools for the foreign architectures
+add_cross_compile_buildtools(){
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install crossbuild-essential-$c_arch -y
     done
-    echo ">>>>> setup multi-arch capabilities complete"
 }
 
 # Install tools needed to build external third party tools needed for RIAPS
@@ -111,25 +120,25 @@ externals_cmake_install(){
     PREVIOUS_PWD=$PWD
 
     # Host architecture
-    mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$HOST_ARCH
-    cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$HOST_ARCH
-    cmake -Darch=$HOST_ARCH ..
-    make
-    cd /home/riapsadmin/riaps-integration/riaps-x86runtime
-    rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$HOST_ARCH
+    externals_cmake_build $HOST_ARCH
 
     # Cross compile architecture
     for c_arch in ${ARCHS_CROSS[@]}; do
-        mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$c_arch
-        cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$c_arch
-        cmake -Darch=$c_arch ..
-        make
-        cd /home/riapsadmin/riaps-integration/riaps-x86runtime
-        rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$c_arch
+        externals_cmake_build $c_arch
     done
 
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
+}
+
+
+externals_cmake_build(){
+    mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$1
+    cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$1
+    cmake -Darch=$1 ..
+    make
+    cd /home/riapsadmin/riaps-integration/riaps-x86runtime
+    rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-$1
 }
 
 # RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9

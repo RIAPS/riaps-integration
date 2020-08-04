@@ -3,7 +3,11 @@ set -e
 
 # Identify the host architecture
 HOST_ARCH="$(dpkg --print-architecture)"
-
+# Available RIAPS Node Architecture Types for cross compiling (no harm in including both)
+ARCHS_CROSS=("armhf" "arm64")
+ARCH_ADDED="arm64"
+# Only need to indicate new architecture tool location here
+CROSS_TOOLCHAIN_LOC=("aarch64-linux-gnu")
 
 source_scripts() {
     PWD=$(pwd)
@@ -16,12 +20,55 @@ source_scripts() {
     echo ">>>>> sourced install scripts"
 }
 
-
 # make sure date is correct
 sudo rdate -n -4 time.nist.gov
 
 # make sure pip is up to date
 sudo pip3 install --upgrade pip
+
+# New packages installed/removed
+source_scripts
+rm_snap_pkg
+
+# Add arm64 architecture to VM for development cross compiling
+add_cross_compile_archs
+sudo cat /etc/apt/sources.list
+echo ">>>>> updated sources.list for multiarch"
+sudo apt-get update
+add_cross_compile_buildtools
+
+# Setup calls that will add new architecture packages to VM
+cmake_func
+python_install
+boost_install
+nethogs_prereq_install
+zyre_czmq_prereq_install
+gnutls_install
+msgpack_install
+opendht_prereqs_install
+
+# Externals_cmake_install
+PREVIOUS_PWD=$PWD
+externals_cmake_build $ARCH_ADDED
+cd $PREVIOUS_PWD
+echo ">>>>> completed external third party builds for $ARCH_ADDED architecture"
+
+pip3_3rd_party_installs
+prctl_install
+
+# Removed reference to bbb to make generic for additional remote computing node types
+mv /home/riaps/bbb_initial_keys /home/riaps/riaps_initial_keys
+mv /home/riaps/riaps_initial_keys/bbb_initial.key /home/riaps/riaps_initial_keys/riaps_initial.key
+mv /home/riaps/riaps_initial_keys/bbb_initial.pub /home/riaps/riaps_initial_keys/riaps_initial.pub
+rm /home/riaps/secure_keys
+rm /home/riaps/riaps_install_amd64.sh
+git clone https://github.com/RIAPS/riaps-integration.git /tmp/3rdparty/riaps-integration
+cp /tmp/3rdparty/riaps-integration/riaps-x86runtime/secure_keys /home/riaps/.
+cp /tmp/3rdparty/riaps-integration/riaps-x86runtime/riaps_install_vm.sh /home/riaps/.
+chmod 700 /home/riaps/secure_keys
+chmod 711 /home/riaps/riaps_install_vm.sh
+rm -rf /tmp/3rdparty/riaps-integration
+echo ">>>>> Moved from bbb reference to generic (riaps) for additional remote computing node types"
 
 # For v1.1.18, riaps-pycom riaps.conf and riaps-log.conf files have been update
 # it is best to remove the riaps-pycom-amd64 package completely and then reinstall
@@ -32,76 +79,4 @@ sudo apt-get purge riaps-pycom-$HOST_ARCH || true
 sudo apt-get update
 sudo apt-get install riaps-core-$HOST_ARCH riaps-pycom-HOST_ARCH riaps-timesync-$HOST_ARCH -y
 
-# new packages installed/removed
-source_scripts
-
-rm_snap_pkg
-
-#MM TODO:  Updates needed - use new script calls
-#cross_setup
-   sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse" || true
-   sudo add-apt-repository -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main universe multiverse"
-
-   sudo add-apt-repository -r "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse" || true
-   sudo add-apt-repository  -n "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main universe multiverse"
-
-    sudo dpkg --add-architecture arm64
-    sudo apt-get install crossbuild-essential-arm64 -y
-
-#cmake_func
-    sudo apt-get install libreadline-dev:arm64 -y
-
-#python_install
-    sudo apt-get install libpython3-dev:arm64 -y
-
-#externals_cmake_install
-    PREVIOUS_PWD=$PWD
-    mkdir -p /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
-    cd /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
-    cmake -Darch=arm64 ..
-    make
-    cd /home/riapsadmin/riaps-integration/riaps-x86runtime
-    rm -rf /home/riapsadmin/riaps-integration/riaps-x86runtime/build-arm64
-    cd $PREVIOUS_PWD
-
-#boost_install
-    sudo apt-get install libboost-dev:arm64 -y
-
-#nethogs_prereq_install
-    sudo apt-get install libpcap-dev:arm64 -y
-
-#zyre_czmq_prereq_install
-    sudo apt-get install libzmq3-dev:arm64 -y
-    sudo apt-get install libsystemd-dev:arm64 -y
-    sudo apt-get install libuuid1:arm64 liblz4-1:arm64 -y
-
-#gnutls_install
-    sudo apt-get install libgnutls30:arm64 -y
-
-#msgpack_install
-    sudo apt-get install libmsgpackc2:arm64 -y
-
-#opendht_prereqs_install
-    sudo apt-get install libncurses5-dev:arm64 -y
-    sudo apt-get install nettle-dev:arm64 -y
-
-#other_pip3_installs
-    sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2'
-    sudo pip3 install --ignore-installed 'PyYAML==5.1.1'
-    sudo pip3 install 'gitpython==3.1.7'
-
-#prctl_install for 18.04
-    sudo apt-get install libcap-dev -y
-    pip3 install 'python-prctl==1.7'
-}
-
-#prctl_install for 20.04
-sudo apt-get install libcap-dev -y
-git clone http://github.com/seveas/python-prctl
-cd python-prctl/
-python3 setup.py build
-sudo python3 setup.py install
-
-#update the bbb_initial_keys folder to be riaps_initial_keys
-
-echo "installed RIAPS platform"
+echo "updated RIAPS platform to v1_1_18"

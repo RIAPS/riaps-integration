@@ -20,7 +20,6 @@ apparmor_monkeys_install(){
     cd /tmp/3rdparty/apparmor_monkeys
     python3 setup.py install
     cd $PREVIOUS_PWD
-    sudo apt-get install apparmor-utils -y
     rm -rf /tmp/3rdparty/apparmor_monkeys
     echo ">>>>> installed apparmor_monkeys"
 }
@@ -64,22 +63,38 @@ pycapnp_install(){
 }
 
 # Install prctl package
+# Ubuntu 20.04 uses Python 3.8 which came well after the 1.7 release date (1/26/18) of
+# this package, so pip install does not work
 prctl_install(){
     sudo apt-get install libcap-dev -y
-    pip3 install 'python-prctl==1.7'
+
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        pip3 install 'python-prctl==1.7'
+    else
+        PREVIOUS_PWD=$PWD
+        cd /tmp/3rdparty
+        git clone http://github.com/seveas/python-prctl /tmp/3rdparty/python-prctl
+        cd /tmp/3rdparty/python-prctl
+        sudo python3 setup.py install
+        cd $PREVIOUS_PWD
+        rm -rf /tmp/3rdparty/python-prctl
+    fi
+
     echo ">>>>> installed prctl"
 }
+
+
 
 # Installing butter
 # For 20.04, butter does not install with pip
 butter_install() {
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        sudo apt-get install 'butter==0.12.6' -y
+        pip3 install 'butter==0.12.6' -y
     else
         # This project is a fork of butter located at http://blitz.works/butter/file/tip at version 0.12.6.
         PREVIOUS_PWD=$PWD
         cd /tmp/3rdparty
-        git clone https://github.com/RIAPS/butter.git
+        git clone https://github.com/RIAPS/butter.git /tmp/3rdparty/butter
         cd /tmp/3rdparty/butter
         sudo python3 setup.py install
         cd $PREVIOUS_PWD
@@ -89,7 +104,7 @@ butter_install() {
 }
 
 # Install other required packages
-other_pip3_installs(){
+pip3_3rd_party_installs(){
     pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
     # Note there is an issue installing these packages in Python 3.8 right now (7/2020), Ubuntu 20.04 (and 18.04.4) uses Python 3.8
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
