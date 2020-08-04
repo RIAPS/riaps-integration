@@ -58,7 +58,7 @@ zyre_pybindings_install(){
 
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install(){
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
+    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3' --verbose
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -69,7 +69,7 @@ prctl_install(){
     sudo apt-get install libcap-dev -y
 
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'python-prctl==1.7'
+        pip3 install 'python-prctl==1.7' --verbose
     else
         PREVIOUS_PWD=$PWD
         cd /tmp/3rdparty
@@ -83,13 +83,11 @@ prctl_install(){
     echo ">>>>> installed prctl"
 }
 
-
-
 # Installing butter
 # For 20.04, butter does not install with pip
 butter_install() {
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'butter==0.12.6' -y
+        pip3 install 'butter==0.12.6' --verbose
     else
         # This project is a fork of butter located at http://blitz.works/butter/file/tip at version 0.12.6.
         PREVIOUS_PWD=$PWD
@@ -100,7 +98,7 @@ butter_install() {
         cd $PREVIOUS_PWD
         rm -rf /tmp/3rdparty/butter
     fi
-    echo "installed butter"
+    echo ">>>>> installed butter"
 }
 
 # Install other required packages
@@ -111,7 +109,7 @@ pip3_3rd_party_installs(){
         pip3 install 'Adafruit_BBIO==1.1.1' 'psutil==5.4.2' --verbose
     else
         # Python 3.8 has this installed already, need to overwrite
-        pip3 install --ignore-installed 'psutil==5.7.0'
+        pip3 install --ignore-installed 'psutil==5.7.0' --verbose
     fi
 
     # Package in distro already, leaving it in site-packages

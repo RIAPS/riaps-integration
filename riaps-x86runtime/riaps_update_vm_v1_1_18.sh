@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
+# Instructions for use:
+# 1) git clone https://github.com/RIAPS/riaps-integration.git
+# 2) cd riaps-integration/riaps-x86runtime
+# 3) sudo ./riaps_update_vm_v1_1_18.sh 2>&1 | tee install_updated_vm.log
+# 4) rm -rf riaps-integration
+
 set -e
 
 # Identify the host architecture
 HOST_ARCH="$(dpkg --print-architecture)"
+CURRENT_PACKAGE_REPO="$(lsb_release -sc | cut -d ' ' -f 2)"
+
 # Available RIAPS Node Architecture Types for cross compiling (no harm in including both)
 ARCHS_CROSS=("armhf" "arm64")
-ARCH_ADDED="arm64"
+
 # Only need to indicate new architecture tool location here
 CROSS_TOOLCHAIN_LOC=("aarch64-linux-gnu")
+
+# Username of installer
+INSTALL_USER="riaps"
 
 source_scripts() {
     PWD=$(pwd)
@@ -49,9 +60,9 @@ opendht_prereqs_install
 
 # Externals_cmake_install
 PREVIOUS_PWD=$PWD
-externals_cmake_build $ARCH_ADDED
+externals_cmake_build ${ARCHS_CROSS[1]}
 cd $PREVIOUS_PWD
-echo ">>>>> completed external third party builds for $ARCH_ADDED architecture"
+echo ">>>>> completed external third party builds for ${ARCHS_CROSS[1]} architecture"
 
 pip3_3rd_party_installs
 prctl_install
