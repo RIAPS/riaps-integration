@@ -7,6 +7,8 @@ set -e
 #
 # python3-crypto python3-keyrings.alt does not exist, a desired state
 
+# MM TODO:  Need to update for Nano, this is based on the BBB right now!!!!!!
+#           This is from the v1.1.18/20.04 branch.
 
 # Source scripts needed for this bootstrap build
 source_scripts() {
@@ -17,7 +19,7 @@ source_scripts() {
         source "$PWD/$SCRIPTS/$i"
     done
 
-    source "$PWD/bbb_node_creation.conf"
+    source "$PWD/nano_node_creation.conf"
     echo ">>>>> sourced install scripts"
 }
 
@@ -55,6 +57,17 @@ splash_screen_update() {
     echo "default username:password is [riaps:riaps]">> issue.net
     sudo mv issue.net /etc/issue.net
     echo ">>>>> setup splash screen"
+}
+
+# Create a swap file to allow spdlog-python to compile using swap
+add_swapfile() {
+    sudo fallocate -l 1G /swapfile
+    sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+    echo ">>>>> setup a swapfile"
 }
 
 #install other required packages
@@ -107,7 +120,6 @@ apparmor_monkeys_install
 butter_install
 pip3_3rd_party_installs
 spdlog_python_install
-armhf_pyinstall
 prctl_install
 remove_pkgs_used_to_build
 riaps_prereq

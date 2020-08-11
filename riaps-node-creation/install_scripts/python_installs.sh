@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-spdlog_install() {
+spdlog_python_install() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
     git clone https://github.com/RIAPS/spdlog-python.git $TMP/spdlog-python
@@ -36,7 +36,7 @@ pyzmq_install(){
     echo ">>>>> installed pyzmq"
 }
 
-#install bindings for czmq. Must be run after pyzmq, czmq install.
+# Install bindings for czmq. Must be run after pyzmq, czmq install.
 czmq_pybindings_install(){
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
@@ -49,7 +49,7 @@ czmq_pybindings_install(){
     echo ">>>>> installed CZMQ pybindings"
 }
 
-#install bindings for zyre. Must be run after zyre, pyzmq install.
+# Install bindings for zyre. Must be run after zyre, pyzmq install.
 zyre_pybindings_install(){
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
@@ -62,31 +62,62 @@ zyre_pybindings_install(){
     echo ">>>>> installed Zyre pybindings"
 }
 
-#link pycapnp with installed library. Must be run after capnproto install.
+# Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install() {
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3'
+    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3' --verbose
     echo ">>>>> linked pycapnp with capnproto"
 }
 
-# install prctl package
-# not able to do pip3 install 'python-prctl==1.7' on RPi
+# Install prctl package
+# For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
 prctl_install() {
     sudo apt-get install libcap-dev -y
-    PREVIOUS_PWD=$PWD
-    git clone http://github.com/seveas/python-prctl
-    cd python-prctl/
-    git checkout v1.7
-    python3 setup.py build
-    sudo python3 setup.py install
-    cd $PREVIOUS_PWD
+
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        pip3 install 'python-prctl==1.7' --verbose
+    else
+        PREVIOUS_PWD=$PWD
+        TMP=`mktemp -d`
+        git clone http://github.com/seveas/python-prctl $TMP/python-prctl
+        cd $TMP/python-prctl/
+        git checkout v1.7
+        sudo python3 setup.py install
+        cd $PREVIOUS_PWD
+        sudo rm -rf $TMP
+    fi
+
     echo ">>>>> installed prctl"
 }
 
+# Installing butter
+# For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
+butter_install() {
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        pip3 install 'butter==0.12.6' --verbose
+    else
+        # This project is a fork of butter located at http://blitz.works/butter/file/tip at version 0.12.6.
+        PREVIOUS_PWD=$PWD
+        TMP=`mktemp -d`
+        git clone https://github.com/RIAPS/butter.git $TMP/butter
+        cd $TMP/butter
+        sudo python3 setup.py install
+        cd $PREVIOUS_PWD
+        rm -rf $TMP
+    fi
+    echo ">>>>> installed butter"
+}
 
-#install other required packages
-other_pip3_installs(){
-    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'psutil==5.7.0' 'butter==0.12.6' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
-    # no version for RPi - pip3 install 'Adafruit_BBIO==1.1.1'
+# Install other required packages
+pip3_3rd_party_installs(){
+    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    # Ubuntu 20.04 (and 18.04.4) uses Python 3.8.
+    # Python 3.8 has this installed already, need to overwrite
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        pip3 install 'psutil==5.7.0' --verbose
+    else
+        pip3 install --ignore-installed 'psutil==5.7.0' --verbose
+    fi
+
     # Package in distro already, leaving it in site-packages
     pip3 install --ignore-installed 'PyYAML==5.1.1'
     echo ">>>>> installed pip3 packages"

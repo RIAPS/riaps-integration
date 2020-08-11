@@ -13,8 +13,8 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
-# MM TODO: libuuid1 & liblz4-1 is already install on RPi - make sure this does not cause issues in the script for RPis
-# MM TODO: libuuid1 is already installed on BBB
+# libuuid1 & liblz4-1 are already installed on some architectures, but are needed for these package.
+# Therefore, they are installed here to make sure they are available.
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
@@ -24,17 +24,21 @@ zyre_czmq_prereq_install() {
 }
 
 # Install security packages that take a long time compiling
-#MM TODO: python3-crypto python3-keyrings.alt does not exist in RPi & BBB default setup - check that this does not cause issues
+# python3-crypto and python3-keyrings.alt conflict with pycryptodomex.
+# These packages are not included in Ubuntu 20.04.
+# Removing for Ubuntu 18.04, in case it exists in the original image.
 security_pkg_install() {
     echo ">>>>> add security packages"
     sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
     sudo apt-get install apparmor-utils -y
-    sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+        sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    fi
     echo ">>>>> security packages setup"
 }
 
-#MM TODO: libgnutls30 exists in RPi and BBB default setup - check that this does not cause issues
-# install gnutls
+# libgnutls30 is already installed on some architectures, but is needed for this package.
+# Therefore, it is installed here to make sure it is available.
 gnutls_install(){
     sudo apt-get install libgnutls30 libgnutls28-dev -y
     echo ">>>>> installed gnutls"
@@ -50,10 +54,10 @@ msgpack_install(){
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev -y
     # run liblinks script to link gnutls and msgppack
-    chmod +x /home/ubuntu/riaps-integration/riaps-node-creation/liblinks.sh
+    chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
     PREVIOUS_PWD=$PWD
     cd /usr/lib/${ARCHINSTALL}
-    sudo /home/ubuntu/riaps-integration/riaps-node-creation/liblinks.sh
+    sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
     cd $PREVIOUS_PWD
     echo ">>>>> installed opendht prerequisites"
 }
@@ -66,15 +70,16 @@ remove_pkgs_used_to_build(){
     echo ">>>>> removed packages used in building process, no longer needed"
 }
 
-setup_riaps_repo() {
+# Setup RIAPS repository
+riaps_prereq() {
     sudo apt-get install software-properties-common apt-transport-https -y
 
     # Add RIAPS repository
     echo ">>>>> get riaps public key"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     echo ">>>>> add repo to sources"
-    sudo add-apt-repository -r "deb [arch=${ARCHTYPE}] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main" || true
-    sudo add-apt-repository -n "deb [arch=${ARCHTYPE}] https://riaps.isis.vanderbilt.edu/aptrepo/ bionic main"
+    sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
+    sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
     sudo apt-get update
     echo ">>>>> riaps aptrepo setup"
 }

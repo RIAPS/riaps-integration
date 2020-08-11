@@ -4,19 +4,23 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
 
 * TI Beagleboard Black
   - [Platform Information](http://beagleboard.org/black)
-  - [BBB RIAPS Image](BBB_README.md)
+  - [Instructions for building a BBB RIAPS Image](BBB_README.md)
   - Kernel: v4.19.xx-ti-rt-rxx
+  - Ubuntu: 18.04.4 LTS
 
 * Raspberry Pi 4
   - [Platform Information](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
-  - [RPi RIAPS Image](RPI_README.md)
+  - [Instructions for building a Raspberry Pi RIAPS Image](RPI_README.md)
+  - Kernel: 5.3.0-1017-raspi2
+  - Ubuntu: 18.04.4 LTS
 
 * NVIDIA Jetson Nano
   - [Platform Information](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit)
-  - [Nano RIAPS Image](NANO_README.md)
-
-
-# Usage of BBB Image
+  - [Instructions for building a Jetson Nano RIAPS Image](NANO_README.md)
+  - Kernel:
+  - Ubuntu: 18.04.4 LTS
+  -
+# Usage of Remote RIAPS Node Image
 
 Users of this image will ssh using the following:
 
@@ -25,8 +29,7 @@ Username:  riaps
 Password:  riaps
 ```
 
-The device hostname will be "riaps-xxxx", where xxxx is the first four digits of the
-board MAC address (so it will be unique per device).
+The device hostname will be "riaps-xxxx", where xxxx is the first four digits of the board MAC address (so it will be unique per device).
 
 >Note: Beaglebone blacks nodes used a hostname of "bbb-xxxx" in version v1.1.17 and earlier.
 

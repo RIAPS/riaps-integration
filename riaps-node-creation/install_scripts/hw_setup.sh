@@ -4,21 +4,50 @@ set -e
 
 # Script functions
 check_os_version() {
-    # Need to write code here to check OS version and architecture.
-    # The installation should fail if the OS version is not correct.
-    true
+    # Check that the intended host architecture is really what is setup here, if not then stop installation.
+    host_architecture="$(dpkg --print-architecture)"
+    echo ">>>>> Node arch: $host_architecture"
+    echo ">>>>> Requested arch: $NODE_ARCH"
+    if [ "$host_architecture" = "$NODE_ARCH" ]; then
+        echo ">>>>> Host architecture intended for installation matches the node architecture."
+    else
+        echo ">>>>> Host architecture intended for installation does not matches the node architecture, please correct and start again."
+        exit
+    fi
 
+    # The installation fails if the requested OS version is not the same as the node version or is not
+    # in the list of available versions
+    VALID_SETUP=0
+    NODE_OS_VERSION="$(lsb_release -sr | cut -d ' ' -f 1)"
+    echo ">>>>> Node OS: $NODE_OS_VERSION"
+    echo ">>>>> Requested OS: $UBUNTU_VERSION_INSTALL"
+    for version in ${UBUNTU_VERSION_OPTS[@]}; do
+        if [ "$version" = "$UBUNTU_VERSION_INSTALL" ] && [ "$version" = "$NODE_OS_VERSION" ]; then
+            VALID_SETUP=1
+        fi
+    done
+
+    if [ $VALID_SETUP == 1 ]; then
+        echo ">>>>> System setup is valid, installation will begin."
+    else
+        echo ">>>>> System setup is invalid, choose Ubuntu version that is available (${UBUNTU_VERSION_OPTS[*]})."
+        exit
+    fi
 }
 
+# Required for riaps-timesync
+# pps-tools is already installed on some architectures, but is needed for riaps-timesync.
+# Therefore, it is installed here to make sure it is available.
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
     sudo apt-get install  libssl-dev libffi-dev -y
-    sudo apt-get install rng-tools -y
+    sudo apt-get install rng-tools pps-tools -y
     sudo systemctl start rng-tools.service
     echo ">>>>> installed timesync requirements"
 }
 
-# MM TODO: cpufrequtils is already install on BBB - make sure this does not cause issues in the script for BBBs
+# cpufrequtils is already installed on some architectures, but is needed to set this performance.
+# Therefore, it is installed here to make sure it is available.
 freqgov_off() {
     sudo apt-get install cpufrequtils -y
     touch /etc/default/cpufrequtils

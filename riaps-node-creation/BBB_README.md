@@ -104,5 +104,5 @@ userdel -r ubuntu
 14) Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```bash
-./riaps_install_bbb.sh 2>&1 | tee install-bbb-riaps.log
+./riaps_install_node.sh "armhf" 2>&1 | tee install-node-riaps.log
 ```

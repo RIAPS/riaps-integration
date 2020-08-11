@@ -19,8 +19,7 @@ source_scripts() {
     PWD=$(pwd)
     SCRIPTS="install_scripts"
 
-    for i in `ls $PWD/$SCRIPTS`
-    do
+    for i in `ls $PWD/$SCRIPTS`; do
         source "$PWD/$SCRIPTS/$i"
     done
 

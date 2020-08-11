@@ -1,7 +1,11 @@
-# Create Raspberry Pi 4 Base Image (4GB)
+# Create NVIDIA Jetson Nano Base Image (4GB)
 
-These are instructions on how the Raspberry Pi (RPi) 4 Base image was created.  
+These are instructions on how the NVIDIA Jetson Nano base image was created.  
 
+# MM TODO:  need to update!!!!!!  This is from the v1.1.18/20.04 branch.  Need to add 18.04 information from a different branch and update per changes made to BBB script.
+
+
+>TODO: this is currently RPI instructions, update for Nano
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 
 1) Download a complete pre-configured image (Ubuntu 18.04.4, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest version available.  Note: current download of RPi 4 and RPi 3 seem to be the same.
@@ -95,6 +99,16 @@ userdel -r ubuntu
 exit
 ```
 
+14) Enable 'cgroups' for cpu and memory resource management:
+
+TBD -- have not looked in to boot structure for Nano yet or if it is even needed
+#Enable cgroups (20.04) memory feature  --- MM: for RPi only (not VM) – not in r.1.1.17, save for r1.1.18
+#•	Follow: https://askubuntu.com/questions/1237813/enabling-memory-cgroup-in-ubuntu-20-04
+#•	For 18.04
+#   o	Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1” to /boot/firmware/nobtcmd.txt and restarting. After rebooting, grep mem /proc/cgroups should show it as enabled.
+#•	For 20.04
+#   o	Add these changes to /boot/firmware/cmdline.txt
+
 14) Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```bash
@@ -106,15 +120,10 @@ exit
 16) Reboot RPi to start the RIAPS services
 
 
-### Usage of BBB Image
+## Updated Real-time enabled Kernel
 
-Users of this image will ssh using the following:
+Once rebooted, the node's kernel will be (using `uname -a`)
 
 ```
-Username:  riaps
-Password:  riaps
+Kernel: 4.9.140-tegra #1 SMP PREEMPT
 ```
-
-The device hostname will be "riaps-xxxx", where xxxx is the first four digits of the
-board MAC address (so it will be unique per device).  Note: Beaglebone blacks used a
-hostname of "bbb-xxxx".

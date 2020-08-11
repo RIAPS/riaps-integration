@@ -6,7 +6,7 @@ network_install() {
     echo ">>>>> installed utils"
 }
 
-# MM TODO: net-tools is already install on BBB - make sure this does not cause issues in the script for BBBs
+# net-tools is already installed on some architectures.  It is installed here to make sure it is available.
 setup_network() {
     sudo apt-get install net-tools -y
     echo ">>>>> replacing network/interfaces with network/interfaces-riaps"

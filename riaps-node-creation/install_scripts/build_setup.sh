@@ -9,7 +9,10 @@ cmake_func() {
     echo ">>>>> installed cmake"
 }
 
+# Python3-dev and python3-setuptools are already in the base image of some architectures,
+# but is needed for RIAPS setup/installation. Therefore, it is installed here to make sure it is available.
 python_install() {
+    sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip -y
     sudo pip3 install --upgrade pip
     sudo pip3 install pydevd
@@ -33,7 +36,7 @@ externals_cmake_install(){
     mkdir -p /tmp/3rdparty/build
     cp CMakeLists.txt /tmp/3rdparty/.
     cd /tmp/3rdparty/build
-    cmake -Darch=${ARCHTYPE} ..
+    cmake -Darch=${NODE_ARCH} ..
     make
     cd $PREVIOUS_PWD
     sudo rm -rf /tmp/3rdparty/

@@ -54,6 +54,26 @@ The last line provides feedback that the quota is setup.
 
 11) Navigate to the riaps-integration/riaps-x86runtime directory and edit the 'vm_creation.conf' file to reflect the setup desired.  This file allows configuration of Ubuntu version, the cross compile architectures (for RIAPS nodes), version number of RIAPS to install and ssh key pair.
 
+a) Indicate desired Ubuntu setup, example below
+
+- CURRENT_PACKAGE_REPO="bionic"
+- UBUNTU_VERSION_INSTALL="18.04"
+
+b) Indicate VM Host information, example below
+# Available RIAPS Node Architecture Types for cross compiling
+
+- HOST_ARCH="amd64"
+- VM_TOOLCHAIN_LOC="/usr/local"
+
+c) Indicate cross compile architecture information, example below
+
+- ARCHS_CROSS=("armhf" "arm64")
+- CROSS_TOOLCHAIN_LOC=("arm-linux-gnueabihf" "aarch64-linux-gnu")
+
+d) Indicate desired RIAPS version
+
+- RIAPS_VERSION="v1.1.18"
+
 12) Run the bootstrap script and send information provided to an installation log file.
 
 ```
