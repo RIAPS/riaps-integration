@@ -12,9 +12,37 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created.
 
 3) Install image on SD card, can use [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) and install the "custom" .img file that was downloaded (in order to utilize the 64 bit version).
 
-## Installation of RIAPS Base Configuration on Pre-configured RPi
-
 > Note: 4GB SD Card is too small, please consider a larger size card.
+
+## Add Real Time Patch to Kernel Image
+
+This part can be performed on the RIAPS VM (ubuntu system with good computing power), not on the Raspberry Pi system.
+
+Build a Real-time kernel for Raspberry Pi 4B using the instructions from https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test.
+
+1) Utilize a Ubuntu host system (such as a VM) to create this kernel image.
+
+2) Install "bison" apt package on the Ubuntu host.
+
+3) Setup configurations for the Toolchain and Kernel Configuration.
+
+4) Compile the Kernel.
+
+5) Transfer the packaged kernel to the Raspberry Pi 4 that was configured in the previous steps.
+
+    ```
+    scp rt-kernel.tgz ubuntu@<ipaddress>:/tmp
+    ```
+
+6) Install the Kernel Image, Modules & Device Tree Overlays (per instructions)
+
+  Installed kernel:  4.19.71-rt24-v7l+
+
+>MM TODO:  Installing the kernel indicates to modify the /boot/config.txt file to identify the new kernel (kernel=kernel7_rt.img). But the original image downloaded is a 5.3 kernel and the boot process has changed, there is now a u-boot sequence and the change needs to be in /boot/firmware.  Stopped here to figure out what to do.
+
+> MM TODO: this did not work, issue with kernel version
+
+## Installation of RIAPS Base Configuration on Pre-configured RPi
 
 1) With the SD Card installed in the RPi, log into using ssh with user account being 'ubuntu'.  
 ```
@@ -24,24 +52,6 @@ Kernel:    5.3.0-1017-raspi2 #19~18.04.1-Ubuntu
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
-
-> MM TODO: this did not work, issue with kernel version
-
-2) Build a Real-time kernel for Raspberry Pi 4B using the instructions from https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test.
-
-    a) Utilize a Ubuntu host system (such as a VM) to create this kernel image.
-
-    b) Install "bison" apt package on the Ubuntu host.
-
-    c) Transfer the packaged kernel to the Raspberry Pi 4 that was configured in the previous steps.
-
-        ```
-        scp rt-kernel.tgz ubuntu@<ipaddress>:/tmp
-        ```
-
-    d) Install the Kernel Image, Modules & Device Tree Overlays (per instructions)
-
-      Installed kernel:  4.19.71-rt24-v7l+
 
 3) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the RPi.
 
@@ -85,7 +95,7 @@ sudo su
 127.0.0.1 ubuntu
 ```
 
-9) Run the installation script. Provide the name of the ssh key pair added in step 5, your key filename can be any name desired. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
+9) Move back into the riaps-node-creation folder and run the installation script. The 'tee' with a filename (and 2>&1) allows you to record the installation process and any errors received. If you have any issues during installation, this is a good file to send with your questions.
 
 ```
 cd riaps-node-creation
@@ -140,20 +150,3 @@ exit
 ```
 
 18) Reboot RPi to start the RIAPS services
-
-
-## Updated Real-time enabled Kernel
-
-Once rebooted, the node's kernel will be (using `uname -a`)
-
-```
-Kernel: TBD
-```
-
->TODO: add instructions for Real-time kernel update
-
-https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test
-
-install bison
-
-Installed kernel:  4.19.71-rt24-v7l+

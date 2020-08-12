@@ -2,13 +2,12 @@
 set -e
 
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
+# GCC 7, G++ 7, GIT, pkg-config, libzmq5, liblz4-1, cmake
+# libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
 #
-# python3-crypto python3-keyrings.alt does not exist, a desired state
-
-# MM TODO:  Need to update for Nano, this is based on the BBB right now!!!!!!
-#           This is from the v1.1.18/20.04 branch.
+# python3-crypto python3-keyrings.alt does exist and needs to be removed
+#
+# Not in base image (but will be installed):  python3-dev, python3-setuptools, pps-tools
 
 # Source scripts needed for this bootstrap build
 source_scripts() {
@@ -19,22 +18,13 @@ source_scripts() {
         source "$PWD/$SCRIPTS/$i"
     done
 
-    source "$PWD/nano_node_creation.conf"
+    source "$PWD/node_creation_nano.conf"
     echo ">>>>> sourced install scripts"
-}
-
-# Install RT Kernel
-rt_kernel_install() {
-    sudo apt update
-    sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
-    # To make sure the latest overlays are available
-    sudo apt install --only-upgrade bb-cape-overlays
-    echo ">>>>> installed RT Kernel"
 }
 
 quota_install() {
     sudo apt-get install quota -y
-    sed -i "/mmcblk0p1/c\/dev/mmcblk0p1 / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
+    sed -i "/root/c\/dev/root / ext4 defaults,usrquota,grpquota 0 1" /etc/fstab
     echo ">>>>> setup quotas"
 }
 
@@ -47,36 +37,21 @@ splash_screen_update() {
     echo "# those of the United States Government or any agency thereof.                 #" >> motd
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
-    # Issue.net
-    echo "Ubuntu 18.04.4 LTS" > issue.net
-    echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2020-07-24">> issue.net
-    echo "">> issue.net
-    echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
-    echo "">> issue.net
-    echo "default username:password is [riaps:riaps]">> issue.net
-    sudo mv issue.net /etc/issue.net
     echo ">>>>> setup splash screen"
 }
 
-# Create a swap file to allow spdlog-python to compile using swap
-add_swapfile() {
-    sudo fallocate -l 1G /swapfile
-    sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576
-    sudo chmod 600 /swapfile
-    sudo mkswap /swapfile
-    sudo swapon /swapfile
-    echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
-    echo ">>>>> setup a swapfile"
-}
+# Jetson nano (4.9 kernel) /etc/network/interfaces sources the directory /etc/network/interfaces.d/
+setup_network_nano() {
+    sudo apt-get install net-tools -y
+    echo ">>>>> copying network/interfaces-riaps to network/interfaces.d/interfaces-riaps"
+    cp etc/network/interfaces-riaps /etc/network/interfaces.d/interfaces-riaps
+    echo ">>>>> replaced network interfaces"
 
-#install other required packages
-armhf_pyinstall(){
-    # Adafruit_BBIO does not have a Python3.8 version yet (7/2020) and is for BBB only
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'Adafruit_BBIO==1.1.1' --verbose
-    fi
-    echo ">>>>> installed armhf specific python packages"
+    echo ">>>>> replacing resolv.conf"
+    touch /etc/resolv.conf
+    cp /etc/resolv.conf /etc/resolv.conf.preriaps
+    cp  etc/resolv-riaps.conf /etc/resolv.conf
+    echo ">>>>> replaced resolv.conf"
 }
 
 
@@ -84,23 +59,19 @@ source_scripts
 
 # Start of script actions
 check_os_version
-rt_kernel_install
 setup_peripherals
 user_func
 setup_ssh_keys
-rdate_install
-vim_func
 htop_install
 rm_snap_pkg
 nano_install
-cmake_func
 timesync_requirements
 freqgov_off
 watchdog_timers
 quota_install
 splash_screen_update
 setup_hostname
-setup_network
+setup_network_nano
 python_install
 cython_install
 curl_func

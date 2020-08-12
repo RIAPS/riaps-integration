@@ -4,13 +4,12 @@ set -e
 # Packages already in base 18.04.4 image that are utilized by RIAPS Components:
 # git, libpcap0.8, nettle6, libncurses5, curl, libuuid1, liblz4-1, libgnutls30
 # vim, htop, software-properties-common
-
+#
 # Packages already in base 20.04.4 image that are utilized by RIAPS Components:
 # git, libpcap0.8, nettle7, libncurses6, curl, libuuid1, liblz4-1, libgnutls30,
 # libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 # vim, htop, software-properties-common, python3-setuptools
-
-# MM TODO: Packages to add?
+#
 # Current issue with Ubuntu 20.04:  cmake installs GCC-9, previously used GCC 7, G++ 7
 
 
@@ -23,7 +22,7 @@ source_scripts() {
         source "$PWD/$SCRIPTS/$i"
     done
 
-    source "$PWD/rpi_node_creation.conf"
+    source "$PWD/node_creation_rpi.conf"
     echo ">>>>> sourced install scripts"
 }
 
@@ -69,6 +68,7 @@ rdate_install
 rm_snap_pkg
 cmake_func
 timesync_requirements
+random_num_gen_install
 freqgov_off
 watchdog_timers
 quota_install

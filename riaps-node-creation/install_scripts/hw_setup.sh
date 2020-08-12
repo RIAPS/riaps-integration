@@ -40,10 +40,15 @@ check_os_version() {
 # Therefore, it is installed here to make sure it is available.
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
-    sudo apt-get install  libssl-dev libffi-dev -y
-    sudo apt-get install rng-tools pps-tools -y
-    sudo systemctl start rng-tools.service
+    sudo apt-get install libssl-dev libffi-dev -y
+    sudo apt-get install pps-tools -y
     echo ">>>>> installed timesync requirements"
+}
+
+# Jetson Nano already setups up a random number generator in the base image
+random_num_gen_install() {
+    sudo apt-get install rng-tools -y
+    sudo systemctl start rng-tools.service
 }
 
 # cpufrequtils is already installed on some architectures, but is needed to set this performance.

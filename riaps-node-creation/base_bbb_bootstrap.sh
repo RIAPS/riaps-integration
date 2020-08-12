@@ -17,7 +17,7 @@ source_scripts() {
         source "$PWD/$SCRIPTS/$i"
     done
 
-    source "$PWD/bbb_node_creation.conf"
+    source "$PWD/node_creation_bbb.conf"
     echo ">>>>> sourced install scripts"
 }
 
@@ -82,6 +82,7 @@ rm_snap_pkg
 nano_install
 cmake_func
 timesync_requirements
+random_num_gen_install
 freqgov_off
 watchdog_timers
 quota_install
