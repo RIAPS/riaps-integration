@@ -7,6 +7,7 @@
 # 5) rm -rf riaps-integration
 # 6) Reset the 'nic_name' in the /etc/riaps/riaps.conf file to be the same as the VM network
 #    interface that is attached to the router servicing the remote RIAPS nodes
+# 7) Update /etc/riaps/riaps-hosts.conf with RIAPS nodes (riaps-xxxx)
 
 set -e
 
@@ -87,7 +88,7 @@ echo ">>>>> Moved bbb reference to generic (riaps) for additional remote computi
 # For v1.1.18, riaps-pycom riaps.conf and riaps-log.conf files have been update
 # it is best to remove the riaps-pycom-amd64 package completely and then reinstall
 # Remember to update the nic name for /etc/riaps.conf after installation
-sudo apt-get purge riaps-pycom-$HOST_ARCH || true
+sudo apt-get purge riaps-pycom-$HOST_ARCH -y
 
 # install RIAPS packages
 sudo apt-get update
