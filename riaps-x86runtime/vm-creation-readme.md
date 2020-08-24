@@ -54,25 +54,34 @@ The last line provides feedback that the quota is setup.
 
 11) Navigate to the riaps-integration/riaps-x86runtime directory and edit the 'vm_creation.conf' file to reflect the setup desired.  This file allows configuration of Ubuntu version, the cross compile architectures (for RIAPS nodes), version number of RIAPS to install and ssh key pair.
 
-a) Indicate desired Ubuntu setup, example below
+    a) Indicate desired Ubuntu setup, example below
 
-- CURRENT_PACKAGE_REPO="bionic"
-- UBUNTU_VERSION_INSTALL="18.04"
+    ```
+    CURRENT_PACKAGE_REPO="bionic"
+    UBUNTU_VERSION_INSTALL="18.04"
+    ```
 
-b) Indicate VM Host information, example below
-# Available RIAPS Node Architecture Types for cross compiling
+    b) Indicate VM Host information, example below
 
-- HOST_ARCH="amd64"
-- VM_TOOLCHAIN_LOC="/usr/local"
+    ```
+    # Available RIAPS Node Architecture Types for cross compiling
 
-c) Indicate cross compile architecture information, example below
+    HOST_ARCH="amd64"
+    VM_TOOLCHAIN_LOC="/usr/local"
+    ```
 
-- ARCHS_CROSS=("armhf" "arm64")
-- CROSS_TOOLCHAIN_LOC=("arm-linux-gnueabihf" "aarch64-linux-gnu")
+    c) Indicate cross compile architecture information, example below
 
-d) Indicate desired RIAPS version
+    ```
+    ARCHS_CROSS=("armhf" "arm64")
+    CROSS_TOOLCHAIN_LOC=("arm-linux-gnueabihf" "aarch64-linux-gnu")
+    ```
 
-- RIAPS_VERSION="v1.1.18"
+    d) Indicate desired RIAPS version
+
+    ```
+    RIAPS_VERSION="v1.1.18"
+    ```
 
 12) Run the bootstrap script and send information provided to an installation log file.
 
@@ -92,37 +101,36 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 16) Add preloaded eclipse and sample applications in the default workspace.
 
-  a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of
-     riaps_eclipse.tar.gz.
+    a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of riaps_eclipse.tar.gz.
 
-  b) Untar into the /home/riaps directory.
+    b) Untar into the /home/riaps directory.
 
-  c) Create a desktop icon in /home/riaps/Desktop/Eclipse.desktop
+    c) Create a desktop icon in /home/riaps/Desktop/Eclipse.desktop
 
     ```
-     [Desktop Entry]
-       Encoding=UTF-8
-       Type=Application
-       Name=Eclipse
-       Name[en_US]=Eclipse
-       Icon=/home/riaps/eclipse/icon.xpm
-       Exec=/home/riaps/eclipse/eclipse -data /home/riaps/workspace
-     ```
+    [Desktop Entry]
+      Encoding=UTF-8
+      Type=Application
+      Name=Eclipse
+      Name[en_US]=Eclipse
+      Icon=/home/riaps/eclipse/icon.xpm
+      Exec=/home/riaps/eclipse/eclipse -data /home/riaps/workspace
+    ```
 
-  d) Import riaps_projects using "General" --> "Existing Projects into Workspace".
+    d) Import riaps_projects using "General" --> "Existing Projects into Workspace".
 
-  e) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
+    e) Configure Python (using "Advanced Auto-Config") to utilize Python 3.6.
 
-  f) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.  Set these launches to display in External Tools Favorite list.  Make sure the "Build before launch" is not checked.
+    f) Import riaps_launch_file using "Run/Debug" --> "Launch Configurations" to get riaps_ctrl and riaps_deplo.  Set these launches to display in External Tools Favorite list.  Make sure the "Build before launch" is not checked.
 
-  g) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
+    g) Under "Preferences", make sure all "C/C++" --> "Code Analysis" tools are unchecked.
 
-> Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
+    > Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
 
 17) Reset the password to the default and cause reset of password on next login.
 
-    ```
-    sudo chage -d 0 riaps
-    ```
+```
+sudo chage -d 0 riaps
+```
 
 18) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
