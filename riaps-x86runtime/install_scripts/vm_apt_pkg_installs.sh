@@ -109,17 +109,17 @@ rm_snap_pkg() {
 
 # Install redis
 redis_install () {
-   if [ ! -f "/usr/local/bin/redis-server" ]; then
-    wget http://download.redis.io/releases/redis-4.0.11.tar.gz
-    tar xzf redis-4.0.11.tar.gz
-    make -C redis-4.0.11
-    sudo make -C redis-4.0.11 install
-    rm -rf redis-4.0.11
-    rm -rf redis-4.0.11.tar.gz
-    echo ">>>>> installed redis"
-   else
-     echo ">>>>> redis already installed. skipping"
-   fi
+    if [ ! -f "/usr/local/bin/redis-server" ]; then
+        wget http://download.redis.io/releases/redis-4.0.11.tar.gz
+        tar xzf redis-4.0.11.tar.gz
+        make -C redis-4.0.11
+        sudo make -C redis-4.0.11 install
+        rm -rf redis-4.0.11
+        rm -rf redis-4.0.11.tar.gz
+        echo ">>>>> installed redis"
+    else
+        echo ">>>>> redis already installed. skipping"
+    fi
 }
 
 # Install graphical elements used by the riaps_ctrl command
