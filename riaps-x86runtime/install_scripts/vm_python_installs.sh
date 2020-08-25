@@ -67,19 +67,14 @@ pycapnp_install(){
 # this package, so pip install does not work
 prctl_install(){
     sudo apt-get install libcap-dev -y
-
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'python-prctl==1.7' --verbose
-    else
-        PREVIOUS_PWD=$PWD
-        cd /tmp/3rdparty
-        git clone http://github.com/seveas/python-prctl /tmp/3rdparty/python-prctl
-        cd /tmp/3rdparty/python-prctl
-        git checkout v1.7
-        sudo python3 setup.py install
-        cd $PREVIOUS_PWD
-        rm -rf /tmp/3rdparty/python-prctl
-    fi
+    PREVIOUS_PWD=$PWD
+    cd /tmp/3rdparty
+    git clone https://github.com/RIAPS/python-prctl.git /tmp/3rdparty/python-prctl
+    cd /tmp/3rdparty/python-prctl
+    git checkout feature-ambient
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/python-prctl
 
     echo ">>>>> installed prctl"
 }
