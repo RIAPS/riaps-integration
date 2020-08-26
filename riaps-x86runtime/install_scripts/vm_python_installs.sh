@@ -63,8 +63,6 @@ pycapnp_install(){
 }
 
 # Install prctl package
-# Ubuntu 20.04 uses Python 3.8 which came well after the 1.7 release date (1/26/18) of
-# this package, so pip install does not work
 prctl_install(){
     sudo apt-get install libcap-dev -y
     PREVIOUS_PWD=$PWD

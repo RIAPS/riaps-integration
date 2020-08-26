@@ -69,23 +69,16 @@ pycapnp_install() {
 }
 
 # Install prctl package
-# For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
 prctl_install() {
     sudo apt-get install libcap-dev -y
-
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'python-prctl==1.7' --verbose
-    else
-        PREVIOUS_PWD=$PWD
-        TMP=`mktemp -d`
-        git clone http://github.com/seveas/python-prctl $TMP/python-prctl
-        cd $TMP/python-prctl/
-        git checkout v1.7
-        sudo python3 setup.py install
-        cd $PREVIOUS_PWD
-        sudo rm -rf $TMP
-    fi
-
+    PREVIOUS_PWD=$PWD
+    TMP=`mktemp -d`
+    git clone https://github.com/RIAPS/python-prctl.git $TMP/python-prctl
+    cd $TMP/python-prctl/
+    git checkout feature-ambient
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    sudo rm -rf $TMP
     echo ">>>>> installed prctl"
 }
 
