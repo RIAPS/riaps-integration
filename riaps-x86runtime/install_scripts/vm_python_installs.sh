@@ -98,16 +98,13 @@ butter_install() {
 # Install other required packages
 pip3_3rd_party_installs(){
     pip3 install 'pydevd==1.8.0' 'rpyc==4.1.0' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'paramiko==2.7.1' 'cryptography==2.9.2' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
-    # Note there is an issue installing these packages in Python 3.8 right now (7/2020), Ubuntu 20.04 (and 18.04.4) uses Python 3.8
+    # Note there is an issue installing this package in Python 3.8 right now (7/2020), Ubuntu 20.04 (and 18.04.4) uses Python 3.8
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
         pip3 install 'Adafruit_BBIO==1.1.1' 'psutil==5.7.0' --verbose
-    else
-        # Python 3.8 has this installed already, need to overwrite
-        # Adafruit_BBIO does not have a Python3.8 version yet (7/2020)
-        pip3 install --ignore-installed 'psutil==5.7.0' --verbose
     fi
 
     # Package in distro already, leaving it in site-packages
+    pip3 install --ignore-installed 'psutil==5.7.0' --verbose
     pip3 install --ignore-installed 'PyYAML==5.1.1' --verbose
     pip3 install 'textX==1.7.1' 'graphviz==0.5.2' 'pydot==1.2.4' 'gitpython==3.1.7' 'pymultigen==0.2.0' 'Jinja2==2.10' --verbose
     echo ">>>>> installed pip3 packages"

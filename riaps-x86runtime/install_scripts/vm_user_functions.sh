@@ -90,6 +90,7 @@ add_eclipse_projects() {
     sudo cp -r /home/$INSTALL_USER/riaps-integration/riaps-x86runtime/riaps-apps/apps-vu/DistributedEstimatorGPIO /home/$RIAPSUSER/riaps_projects/.
     sudo cp -r /home/$INSTALL_USER/riaps-integration/riaps-x86runtime/riaps-apps/apps-vu/WeatherMonitor /home/$RIAPSUSER/riaps_projects/.
     sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_projects
+    sudo -H -u $RIAPSUSER chmod -R +w /home/$RIAPSUSER/riaps_projects
 
     # Add eclipse launch files to user files
     git clone https://github.com/RIAPS/riaps-pycom.git
