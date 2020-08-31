@@ -68,8 +68,11 @@ externals_cmake_build ${ARCHS_CROSS[1]}
 cd $PREVIOUS_PWD
 echo ">>>>> completed external third party builds for ${ARCHS_CROSS[1]} architecture"
 
+# Third party pip package updates
+sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
 pip3_3rd_party_installs
 prctl_install
+echo ">>>>> update 3rd party Python packages"
 
 # Removed reference to bbb to make generic for additional remote computing node types
 mv /home/riaps/bbb_initial_keys /home/riaps/riaps_initial_keys

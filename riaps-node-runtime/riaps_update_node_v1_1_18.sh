@@ -31,13 +31,28 @@ sudo apt-get remove snapd -y
 sudo apt-get purge snapd -y
 echo ">>>>> snap package manager removed"
 
-sudo apt-get install libcap-dev -y
-sudo pip3 install 'python-prctl==1.7' --verbose
+
+# Update Security Packages
+sudo pip3 install 'paramiko==2.7.1' --verbose
+sudo pip3 install --ignore-installed 'cryptography==2.9.2'
+echo ">>>>> update security packages setup"
+
+# New package for v1.1.18
+PREVIOUS_PWD=$PWD
+TMP=`mktemp -d`
+git clone https://github.com/RIAPS/python-prctl.git $TMP/python-prctl
+cd $TMP/python-prctl/
+git checkout feature-ambient
+sudo python3 setup.py install
+cd $PREVIOUS_PWD
+sudo rm -rf $TMP
 echo ">>>>> installed prctl"
 
+# Moving to generic host name for remote nodes (riaps-xxxx)
 sudo sed -i 's/bbb/riaps/g' /usr/bin/set_unique_hostname
 echo ">>>>> change host name to be riaps-, instead of bbb-"
 
+# Add a version log file for debugging
 mkdir -p /home/$RIAPSUSER/.riaps
 echo "RIAPS Version: $RIAPS_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
 echo "Ubuntu Version: $UBUNTU_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt

@@ -133,12 +133,12 @@ externals_cmake_install(){
 
 
 externals_cmake_build(){
-    mkdir -p /home/$INSTALL_USER/riaps-integration/riaps-x86runtime/build-$1
-    cd /home/$INSTALL_USER/riaps-integration/riaps-x86runtime/build-$1
+    mkdir -p /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
+    cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
     cmake -Darch=$1 ..
     make
-    cd /home/$INSTALL_USER/riaps-integration/riaps-x86runtime
-    rm -rf /home/$INSTALL_USER/riaps-integration/riaps-x86runtime/build-$1
+    cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC
+    rm -rf /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
 }
 
 # RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
