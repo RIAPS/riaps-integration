@@ -106,7 +106,7 @@ cd riaps-node-creation
 
 10) Remove install files from /home/ubuntu
 
-11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
+11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 12) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 
@@ -143,10 +143,20 @@ exit
 
     c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled.
 
-17) Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
+17) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
 
 ```bash
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
 ```
 
-18) Reboot RPi to start the RIAPS services
+- Reboot RPi to start the RIAPS services
+
+> Note: Release images do not include the RIAPS packages installed.
+
+18) Optional: Resize the image to 8 MB for release posting
+
+    a) Install 'gparted'
+    b) Become root user - 'sudo su'
+    c) Start 'gparted'
+    d) Unmount the device (i.e. /dev/sdb)
+    e) Resize to 8192 MiB

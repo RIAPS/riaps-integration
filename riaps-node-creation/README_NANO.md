@@ -71,7 +71,7 @@ sudo su
 
 7) Remove install files from /home/riapsadmin
 
-8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
+8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 9) Reboot RPi and sign in as 'riaps' user
 
@@ -88,10 +88,12 @@ userdel -r riapsadmin
 exit
 ```
 
-11) Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
+11) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
 
 ```
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
 ```
 
-12) Reboot Jetson Nano to start the RIAPS services
+- Reboot Jetson Nano to start the RIAPS services
+
+> Note: Release images do not include the RIAPS packages installed.

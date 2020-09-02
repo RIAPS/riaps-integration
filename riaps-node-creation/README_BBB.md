@@ -80,7 +80,7 @@ sudo su
 
 8) Remove install files from /home/ubuntu
 
-9) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script
+9) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 10) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 
@@ -101,8 +101,12 @@ userdel -r ubuntu
 
 13) Change owner of /opt/scripts from 1000 to root
 
-14) Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+14) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```
 ./riaps_install_node.sh "armhf" 2>&1 | tee install-node-riaps.log
 ```
+
+- Reboot BBB to start the RIAPS services
+
+> Note: Release images do not include the RIAPS packages installed.
