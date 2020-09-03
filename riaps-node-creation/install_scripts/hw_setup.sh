@@ -74,6 +74,7 @@ watchdog_timers() {
 
 setup_hostname() {
     cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
+    sudo chmod +x /usr/bin/set_unique_hostname
     echo ">>>>> setup hostname"
 }
 
