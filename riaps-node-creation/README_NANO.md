@@ -46,7 +46,7 @@ Distribution: Ubuntu 18.04.4 LTS (bionic)
     sudo bash -c 'echo "/var/swapfile swap swap defaults 0 0" >> /etc/fstab'
     ```
 
-    To check that everything worked correctly run free -h. Swap should show 4,0G or whatever other size you've chosen for the swap file.
+    To check that everything worked correctly run 'free -h'. Swap should show 4,0G or whatever other size you've chosen for the swap file.
 
 3) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the Jetson Nano.
 
@@ -69,6 +69,8 @@ sudo su
 ./base_nano_bootstrap.sh 2>&1 | tee install-nano.log
 ```
 
+> Note: This step takes about 40 mins to run.
+
 7) Remove install files from /home/riapsadmin
 
 8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
@@ -88,7 +90,9 @@ userdel -r riapsadmin
 exit
 ```
 
-11) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
+11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+
+12) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
 
 ```
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
@@ -97,3 +101,5 @@ exit
 - Reboot Jetson Nano to start the RIAPS services
 
 > Note: Release images do not include the RIAPS packages installed.
+
+> Note: 32 GB image and Swap file is left enabled on the image since this image will likely be used with machine learning activities. Current used image size is 58% (or ~18 GiB) before RIAPS package installation.
