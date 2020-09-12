@@ -48,6 +48,9 @@ cd $PREVIOUS_PWD
 sudo rm -rf $TMP
 echo ">>>>> installed prctl"
 
+# Update rpyc
+sudo pip3 install 'rpyc==1.4.5'
+
 # Moving to generic host name for remote nodes (riaps-xxxx)
 sudo sed -i 's/bbb/riaps/g' /usr/bin/set_unique_hostname
 echo ">>>>> change host name to be riaps-, instead of bbb-"

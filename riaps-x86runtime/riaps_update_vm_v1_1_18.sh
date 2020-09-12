@@ -69,7 +69,7 @@ cd $PREVIOUS_PWD
 echo ">>>>> completed external third party builds for ${ARCHS_CROSS[1]} architecture"
 
 # Third party pip package updates
-sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
+sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' 'rpyc==4.1.5' --verbose
 pip3_3rd_party_installs
 prctl_install
 echo ">>>>> update 3rd party Python packages"
