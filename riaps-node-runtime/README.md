@@ -1,18 +1,22 @@
-# Setting up the BBB images
+# Setting up the Remote RIAPS Node Images
 
-1) Download the latest BBB image (riaps_bbb_4GB_v[date].tar.gz) from
+1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_v[date].tar.gz) from
    https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
 
-2) Copy the image to the BBB SD Card using a host machine and an SD Card reader.  
+  Available architectures are:
+  - armhf for Beaglebone Black boards
+  - arm64 for both Raspberry Pi 4 and NVIDIA Jetson Nano boards
+
+2) Copy the image to a SD Card using a host machine and an SD Card reader.  
    A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
-3) Put the SD Card into the BBB and boot it up.  
+3) Put the SD Card into the RIAPS node machine and boot it up.  
 
 >Note:  newer BBBs should be set to boot to the SD card automatically, when present.
 
-4) Log into the "riaps" account on the BBB.
+4) Log into the "riaps" account on the RIAPS node.
 
- You can ssh into the BBBs using the following:
+ You can ssh into the nodes using the following:
 
     Username:  riaps
     Password:  riaps
@@ -20,27 +24,31 @@
 ```
 ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
 ```
->  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the BBB
+>  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the node
 
 5) Starting with v1.1.17, the BBB image does not have RIAPS pre-installed.  So,
    install the RIAPS platform using
 
-```./riaps_install_bbb.sh 2>&1 | tee install-riaps-bbb.log```
+```
+./riaps_install_node.sh <arch> 2>&1 | tee install-riaps-node.log
+where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
+```
+
 
 6) Optional Step:  If desired, secure communication between the Host Environment
-   and the BBBs by following the [Securing Communication Between the VM and BBBs](../riaps-x86runtime/README.md#secure-comm)
+   and the remote RIAPS nodes by following the [Securing Communication Between the VM and Remote RIAPS Nodes](../riaps-x86runtime/README.md#secure-comm)
    instructions.  Once this process completes, the host environment will automatically
-   login to the beaglebones when using ssh by utilizing your ssh keys.  Note that
-   password access to the BBBs will be disabled after running this process.  
+   login to the RIAPS nodes when using ssh by utilizing your ssh keys.  Note that
+   password access to the remote RIAPS nodes will be disabled after running this process.  
 
 > Note:  First time users should skip this step on first setup of their system.  
   The RIAPS example programs will work with the initial security configuration.
 
-7) Reboot the BBBs
+7) Reboot the RIAPS nodes
 
 # Update RIAPS Platform Packages on Existing BBBs
 
-1) Download the [RIAPS update script](riaps_install_bbb.sh) to the BBB.
+1) Download the [RIAPS update script](riaps_install_nodes.sh) to the remote RIAPS node.
 
 2) Stop the riaps_deplo service by running the kill script.
 
@@ -51,7 +59,8 @@ sudo systemctl stop riaps-deplo.service
 3) Run the update script.
 
 ```
-./riaps_install_bbb.sh 2>&1 | tee install-riaps-update-bbb.log
+./riaps_install_node.sh <arch> 2>&1 | tee install-riaps-node.log
+where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
 ```
 
 > Note:  The user configuration files (riaps.conf and riaps-log.conf) are preserved
@@ -61,7 +70,7 @@ sudo systemctl stop riaps-deplo.service
   these files from /usr/local/riaps/etc/, so no change in code is required.
 
 > Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
-  breaking builds,  in step 3 use the ```riaps_update_bbb_v1_1_16.sh``` script to
+  breaking builds, in step 3 use the ```riaps_update_bbb_v1_1_16.sh``` script to
   make sure deprecated packages and old configuration files are removed.
 
 # Helpful Hints

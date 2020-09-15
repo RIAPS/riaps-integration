@@ -2,7 +2,7 @@
 
 ## Importing the RIAPS Virtual Machine
 
-A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64 and armhf).
+A virtual machine running Xubuntu 18.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
 1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_v[date].tar.gz) and untar it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Virtual Machine Disk (.vmdk) that can be attached to VMs in both VirtualBox and VMware tools.
 
@@ -73,7 +73,7 @@ nic_name = enp0s8
 sudo systemctl restart riaps-rpyc-registry.service
 ```
 
-## <a name="secure-comm">Securing Communication Between the VM and BBBs</a>
+## <a name="secure-comm">Securing Communication Between the VM and Remote RIAPS Nodes</a>
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 

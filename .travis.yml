@@ -11,21 +11,26 @@ before_script:
 - chmod +x fetch_linux_amd64
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-arm64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-arm64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-amd64.deb" .
 - ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-armhf.deb" .
+- ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-arm64.deb" .
 script:
 - mkdir riaps-release
-- cp riaps-core-amd64.deb riaps-core-armhf.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-release/.
+- cp riaps-core-amd64.deb riaps-core-armhf.deb riaps-core-arm64.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-pycom-arm64.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
 - echo "coreversion=$coreversion" >> riaps-release/manifest.txt
 - echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
 - echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
 - tar cvzf riaps-release.tar.gz riaps-release
 - cp version.sh riaps-x86runtime/.
 - tar cvzf riaps-x86runtime.tar.gz riaps-x86runtime
-- cp version.sh riaps-bbbruntime/.
-- tar cvzf riaps-bbbruntime.tar.gz riaps-bbbruntime
+- cp version.sh riaps-node-runtime/.
+- tar cvzf riaps-node-runtime.tar.gz riaps-node-runtime
+- cp version.sh riaps-node-creation/.
+- tar cvzf riaps-node-creation.tar.gz riaps-node-creation
 #deploy:
 #  provider: releases
 #  overwrite: true
@@ -34,7 +39,8 @@ script:
 #  file:
 #    - riaps-release.tar.gz
 #    - riaps-x86runtime.tar.gz
-#    - riaps-bbbruntime.tar.gz
+#    - riaps-node-runtime.tar.gz
+#    - riaps-node-creation.tar.gz
 #  skip_cleanup: true
 #  on:
 #    tags: true

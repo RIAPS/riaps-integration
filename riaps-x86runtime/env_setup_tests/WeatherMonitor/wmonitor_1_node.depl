@@ -1,0 +1,4 @@
+app WeatherMonitor {
+	on (riaps-f652.local) WeatherReceiver;
+	on (riaps-f652.local) WeatherIndicator;
+}

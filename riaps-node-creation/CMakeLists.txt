@@ -1,7 +1,9 @@
+#Compiling on BBB (armhf), RPi (arm64) and Jetson Nano (arm64)
 cmake_minimum_required(VERSION 3.0.0)
 include(ExternalProject)
 project(riaps-thirdpartypkgs)
 include(ProcessorCount)
+option(arch "armhf/arm64" "armhf")
 
 processorcount(N)
 if(NOT N EQUAL 0)
@@ -14,6 +16,12 @@ set(minor 5 CACHE INTEGER "the minor version")
 
 set(prefix /usr/local)
 set(CMAKE_INSTALL_PREFIX ${prefix})
+
+if (${arch} STREQUAL "armhf")
+  set(TOOLCHAIN_PREFIX arm-linux-gnueabihf)
+elseif (${arch} STREQUAL "arm64")
+  set(TOOLCHAIN_PREFIX aarch64-linux-gnu)
+endif()
 
 set(CMAKE_C_COMPILER gcc-7)
 set(CMAKE_CXX_COMPILER g++-7)
@@ -171,10 +179,10 @@ externalproject_add(zyre
                      --disable-tools
                      --disable-python
                      --enable-indexation
-                     #GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
-                     #GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
-                     MsgPack_CFLAGS=-I/usr/include/arm-linux-gnueabihf
+                     #GnuTLS_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lgnutls"
+                     #GnuTLS_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
+                     MsgPack_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lmsgpackc"
+                     MsgPack_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
                      CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
                      BUILD_COMMAND
                      make
