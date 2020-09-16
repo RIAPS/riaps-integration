@@ -19,7 +19,7 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
   - [Instructions for building a Jetson Nano RIAPS Image](README_NANO.md)
   - Kernel: 4.9.xxx-tegra
   - Ubuntu: 18.04.4 LTS
-  -
+  
 # Usage of Remote RIAPS Node Image
 
 Users of this image will ssh using the following:

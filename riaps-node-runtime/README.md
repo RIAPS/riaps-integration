@@ -73,6 +73,7 @@ where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
 
 > Note for v1.1.17 users: it is best to update to new images from the downloads page.
 
+
 # Helpful Hints
 
 1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host'
