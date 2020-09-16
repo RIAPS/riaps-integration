@@ -76,7 +76,7 @@ prctl_install(){
     git checkout feature-ambient
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/python-prctl
+    sudo rm -rf /tmp/3rdparty/python-prctl
 
     echo ">>>>> installed prctl"
 }

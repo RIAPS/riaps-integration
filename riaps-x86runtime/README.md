@@ -94,11 +94,44 @@ To remove RIAPS Hosts from a system, it is suggested that you remove the desired
 If you want to only update the RIAPS platform, run the update script
 
 ```
-./riaps_install_amd64.sh 2>&1 | tee install-riaps-update-vm.log
+./riaps_install_vm.sh 2>&1 | tee install-riaps-update-vm.log
 ```
 
 > Note:  Eclipse has been install for this host.  It is a good idea to periodically update the software to get the latest RIAPS (and others) tools.  To do this, go to the **Help** menu and select **Check for Updates**.  When asked for login, hit **Cancel**, updates will start anyway.
 
 > Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
-  breaking builds,  in step 3 use the ```riaps_update_amd64_v1_1_16.sh``` script to
-  make sure deprecated packages and old configuration files are removed.
+  breaking builds, it is best to create a new VM using the image on the downloads page.
+
+> Note for v1.1.17 users: there is a 'riaps_update_vm_v1_1_18.sh' script to help
+  with this update since there are additional third party packages utilized by the
+  RIAPS updates.  Instructions on how to use this script is included in the comments at the beginning
+  of the script.  This will uninstall the local .conf files (/etc/riaps/) and key files, so 1) reset the
+  nic_name in /etc/riaps/riaps.conf, 2) update the /etc/riaps/riaps-hosts.conf file to point to desired
+  remote nodes (riaps-xxxx, instead of bbb-xxxx) and 3) re-secure the newly update remote notes to the VM
+  using the "Securing Communication between the VM and Remote RIAPS Nodes".
+
+## Suggestions for Transferring Eclipse Workspaces to a new VM
+
+There are several ways to transfer your project work between VM.  Perhaps the easiest is to keep your
+code in a code repository (such as SVN or GIT) and then create a new workspace from the retrieval of
+the code from the repository.
+
+Another way would be to use Eclipse to export an archive file that can be moved to a transfer site
+(such as Dropbox or any other file sharing tool).  And then import that file into a new VM eclipse
+workspace.  Here are some tips for doing this:
+
+1) In the old VM, choose 'File' --> 'Export' from the drop-down menus and select the
+   'General - Archive Files' option.
+
+2) Select all the files you want to include in the archive.  You can unselect compiled files or even
+   use the 'Filter Types' tool to help with this.  Indicate the file name and location to place this
+   archive ('To archive file:' box).
+
+3) Copy the file to a transfer site (such as Dropbox) and then retrieve it on the new VM.
+
+4) On the new VM, choose 'File' --> 'Import' from the drop-down menus and select the
+   'General - Existing Projects into Workspace' option.
+
+5) 'Select the archive file' option and find the transferred file.
+
+6) This should have the workspace back in place in the new VM.
