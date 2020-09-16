@@ -2,12 +2,13 @@
 # Instructions for use, user should do the following:
 # 1) git clone https://github.com/RIAPS/riaps-integration.git
 # 2) cd riaps-integration/riaps-x86runtime
-# 3) chmod +x riaps_update_vm_v1_1_18.sh
-# 4) sudo ./riaps_update_vm_v1_1_18.sh 2>&1 | tee install_updated_vm.log
-# 5) rm -rf riaps-integration
-# 6) Reset the 'nic_name' in the /etc/riaps/riaps.conf file to be the same as the VM network
+# 3) chmod +x riaps_update_vm_v1_1_18.sh (if needed)
+# 4) Update the INSTALL_SCRIPT_LOC if you cloned to a directory other than /home/$INSTALL_USER
+# 5) sudo ./riaps_update_vm_v1_1_18.sh 2>&1 | tee install_updated_vm.log
+# 6) rm -rf riaps-integration
+# 7) Reset the 'nic_name' in the /etc/riaps/riaps.conf file to be the same as the VM network
 #    interface that is attached to the router servicing the remote RIAPS nodes
-# 7) Update /etc/riaps/riaps-hosts.conf with RIAPS nodes (riaps-xxxx)
+# 8) Update /etc/riaps/riaps-hosts.conf with RIAPS nodes (riaps-xxxx)
 
 set -e
 
@@ -23,6 +24,9 @@ CROSS_TOOLCHAIN_LOC=("aarch64-linux-gnu")
 
 # Username of installer
 INSTALL_USER="riaps"
+
+# This location of the bootstrap script (i.e. where the repository is cloned) relative to /home/$INSTALL_USER
+INSTALL_SCRIPT_LOC="/riaps-integration/riaps-x86runtime"
 
 source_scripts() {
     PWD=$(pwd)

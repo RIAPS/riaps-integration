@@ -63,15 +63,16 @@ sudo systemctl stop riaps-deplo.service
 where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
 ```
 
-> Note:  The user configuration files (riaps.conf and riaps-log.conf) are preserved
+> Note: The user configuration files (riaps.conf and riaps-log.conf) are preserved
   when a new version of riaps-pycom is installed.  If you want to reset to the
   basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and
-  reinstall riaps-pycom.  Also, all files are linked such that pycom can still load
-  these files from /usr/local/riaps/etc/, so no change in code is required.
+  reinstall riaps-pycom.  
 
 > Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
-  breaking builds, in step 3 use the ```riaps_update_bbb_v1_1_16.sh``` script to
-  make sure deprecated packages and old configuration files are removed.
+  breaking builds, it is best to create new images from the downloads page.
+
+> Note for v1.1.17 users: it is best to update to new images from the downloads page.
+
 
 # Helpful Hints
 
