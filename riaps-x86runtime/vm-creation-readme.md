@@ -99,7 +99,11 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 15) Remove the riapsadmin user account (deluser command).
 
-16) Add preloaded eclipse and sample applications in the default workspace.
+16) Install the RIAPS packages
+
+```./riaps_install_vm.sh 2>&1 | tee install-riaps-vm.log```
+
+17) Add preloaded eclipse and sample applications in the default workspace.
 
     a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of riaps_eclipse.tar.gz.
 
@@ -127,10 +131,10 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
     > Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
 
-17) Reset the password to the default and cause reset of password on next login.
+18) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo chage -d 0 riaps
 ```
 
-18) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+19) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
