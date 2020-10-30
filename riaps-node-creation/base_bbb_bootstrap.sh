@@ -59,10 +59,7 @@ splash_screen_update() {
 
 #install other required packages
 armhf_pyinstall(){
-    # Adafruit_BBIO does not have a Python3.8 version yet (7/2020) and is for BBB only
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'Adafruit_BBIO==1.1.1' --verbose
-    fi
+    pip3 install 'Adafruit_BBIO==1.2.0' --verbose
     echo ">>>>> installed armhf specific python packages"
 }
 
