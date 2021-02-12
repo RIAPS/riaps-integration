@@ -23,8 +23,8 @@ elseif (${arch} STREQUAL "arm64")
   set(TOOLCHAIN_PREFIX aarch64-linux-gnu)
 endif()
 
-set(CMAKE_C_COMPILER gcc-7)
-set(CMAKE_CXX_COMPILER g++-7)
+set(CMAKE_C_COMPILER gcc-9)
+set(CMAKE_CXX_COMPILER g++-9)
 set (CMAKE_C_FLAGS "-std=c99")
 
 #Capnproto

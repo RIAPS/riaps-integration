@@ -48,7 +48,7 @@ Build a Real-time kernel for Raspberry Pi 4B using the instructions from https:/
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.3.0-1017-raspi2 #19~18.04.1-Ubuntu
+Kernel:    5.4.0-1028-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
