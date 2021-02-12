@@ -402,8 +402,8 @@ elseif(${arch} STREQUAL "armhf")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      --with-uuid=no
                      --with-libsystemd=no
@@ -438,8 +438,8 @@ elseif(${arch} STREQUAL "arm64")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      --with-uuid=no
                      --with-libsystemd=no
@@ -497,8 +497,8 @@ elseif(${arch} STREQUAL "armhf")
                      ./configure
                      --host=arm-linux-gnueabihf
                      --target=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      BUILD_COMMAND
                      make
@@ -524,8 +524,8 @@ elseif(${arch} STREQUAL "arm64")
                      ./configure
                      --host=aarch64-linux-gnu
                      --target=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      BUILD_COMMAND
                      make
@@ -579,8 +579,8 @@ elseif(${arch} STREQUAL "armhf")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
                      --disable-tools
@@ -613,8 +613,8 @@ elseif(${arch} STREQUAL "arm64")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
                      --disable-tools
