@@ -29,7 +29,7 @@ pyzmq_install(){
     cd /tmp/3rdparty
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
-    git checkout v17.1.2
+    git checkout v19.0.2
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq

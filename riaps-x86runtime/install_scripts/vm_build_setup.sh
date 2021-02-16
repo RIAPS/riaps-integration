@@ -105,7 +105,7 @@ python_install() {
 
 # Assumes that Cython3 is not on the base release (18.04.3 does not have it)
 cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5' --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.21' --verbose
     echo ">>>>> installed cython"
 }
 
