@@ -4,9 +4,7 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created.
 
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 
-1) Download a complete pre-configured image (Ubuntu 18.04.4, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest version available.  
-
-> Note: current download of RPi 4 and RPi 3 seem to be the same.
+1) Download a complete pre-configured image (Ubuntu 20.04.2, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest version available.  
 
 2) Unpack image and change into the directory (unxz file, then tar xf)
 
@@ -50,6 +48,8 @@ Username:  ubuntu
 Password:  ubuntu
 Kernel:    5.4.0-1028-raspi
 ```
+
+>MM TODO: update kernel information when available
 
 You will be asked to create a new password and will need ssh again into the device.
 

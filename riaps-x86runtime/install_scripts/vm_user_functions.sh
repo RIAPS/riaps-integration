@@ -38,6 +38,10 @@ setup_ssh_keys () {
     sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa.key
     echo "# RIAPS:  Add SSH keys to ssh agent on login" >> /home/$RIAPSUSER/.bashrc
     echo "ssh-add /home/$RIAPSUSER/.ssh/id_rsa.key" >> /home/$RIAPSUSER/.bashrc
+    sudo -H -u $RIAPSUSER touch /home/$RIAPSUSER/.bash_profile
+    echo "exec ssh-agent bash" >> /home/$RIAPSUSER/.bash_profile
+    echo "eval ssh-agent -s" >> /home/$RIAPSUSER/.bash_profile
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.bash_profile
 
     # Setup RIAPS ssh keys for use with VM
     sudo cp -r riaps_initial_keys /home/$RIAPSUSER/.

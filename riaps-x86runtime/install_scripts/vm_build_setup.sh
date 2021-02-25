@@ -2,6 +2,7 @@
 set -e
 
 # Configure for cross functional compilation - this is vagrant box config dependent
+# MM TODO:  Fix this to work with the current 20.04.02 release!!!!  Manually did it for now.  Also add back in i386 [arch=i386,amd64]
 cross_setup() {
     sudo apt-get install apt-transport-https -y
 
