@@ -29,8 +29,9 @@ pyzmq_install(){
     TMP=`mktemp -d`
     git clone https://github.com/zeromq/pyzmq.git $TMP/pyzmq
     cd $TMP/pyzmq
-    git checkout v19.0.2
-    sudo python3 setup.py install
+    git checkout v22.0.3
+    #sudo python3 setup.py install
+    sudo pip3 install -e .
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed pyzmq"
