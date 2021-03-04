@@ -79,8 +79,9 @@ riaps_prereq() {
     echo ">>>>> get riaps public key"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     echo ">>>>> add repo to sources"
-    sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
-    sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
-    sudo apt-get update
+    #MM TODO:  focal repo not created yet
+    #sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
+    #sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
+    #sudo apt-get update
     echo ">>>>> riaps aptrepo setup"
 }

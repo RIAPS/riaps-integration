@@ -30,8 +30,7 @@ pyzmq_install(){
     git clone https://github.com/zeromq/pyzmq.git $TMP/pyzmq
     cd $TMP/pyzmq
     git checkout v22.0.3
-    #sudo python3 setup.py install
-    sudo pip3 install -e .
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed pyzmq"
@@ -43,7 +42,7 @@ czmq_pybindings_install(){
     TMP=`mktemp -d`
     git clone https://github.com/zeromq/czmq.git $TMP/czmq_pybindings
     cd $TMP/czmq_pybindings/bindings/python
-    git checkout 9ee60b18e8bd8ed4adca7fdaff3e700741da706e
+    git checkout v4.2.1
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
@@ -56,7 +55,7 @@ zyre_pybindings_install(){
     TMP=`mktemp -d`
     git clone https://github.com/zeromq/zyre.git $TMP/zyre_pybindings
     cd $TMP/zyre_pybindings/bindings/python
-    git checkout b36470e70771a329583f9cf73598898b8ee05d14
+    git checkout v2.0.1
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
