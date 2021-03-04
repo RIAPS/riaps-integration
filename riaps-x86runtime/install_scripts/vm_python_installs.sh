@@ -24,14 +24,14 @@ apparmor_monkeys_install(){
     echo ">>>>> installed apparmor_monkeys"
 }
 
+#MM TODO:  this did not install when the script ran - ran manually
 pyzmq_install(){
     PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
     git checkout v22.0.3
-    #sudo python3 setup.py install
-    sudo pip3 install -e .
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
     echo ">>>>> installed pyzmq"
