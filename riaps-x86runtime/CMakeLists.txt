@@ -333,8 +333,68 @@ elseif(${arch} STREQUAL "arm64")
                       install_dev)
 endif()
 
+# Compiling armhf and arm64 versions of libzmq so that cross compiling of zyre works (need --enable-libunwind=no flag)
+# libzmq
+if(${arch} STREQUAL "armhf")
+ externalproject_add(libzmq-${arch}
+                     DEPENDS
+                     GIT_REPOSITORY
+                     "https://github.com/zeromq/libzmq.git"
+                     GIT_TAG
+                     "v4.3.2"
+                     SOURCE_DIR
+                     "/tmp/3rdparty/libzmq-${arch}"
+                     BUILD_IN_SOURCE
+                      1
+                     UPDATE_COMMAND
+                     "./autogen.sh"
+                     CONFIGURE_COMMAND
+                     ./configure
+                     --host=arm-linux-gnueabihf
+                     --target=arm-linux-gnueabihf
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
+                     --prefix=${prefix}
+                     --enable-libunwind=no
+                     BUILD_COMMAND
+                     make
+                     ${MAKE_JOB_FLAGS}
+                     INSTALL_COMMAND
+                     sudo make
+                     install)
+elseif(${arch} STREQUAL "arm64")
+ externalproject_add(libzmq-${arch}
+                     DEPENDS
+                     GIT_REPOSITORY
+                     "https://github.com/zeromq/libzmq.git"
+                     GIT_TAG
+                     "v4.3.2"
+                     SOURCE_DIR
+                     "/tmp/3rdparty/libzmq-${arch}"
+                     BUILD_IN_SOURCE
+                      1
+                     UPDATE_COMMAND
+                     "./autogen.sh"
+                     CONFIGURE_COMMAND
+                     ./configure
+                     --host=aarch64-linux-gnu
+                     --target=aarch64-linux-gnu
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
+                     --prefix=${prefix}
+                     --enable-libunwind=no
+                     BUILD_COMMAND
+                     make
+                     ${MAKE_JOB_FLAGS}
+                     INSTALL_COMMAND
+                     sudo make
+                     install)
+endif()
+
+
 # High-level C binding for ØMQ
 
+#MM TODO:  see if this flag is needed for amd64 build
 if(${arch} STREQUAL "amd64")
  externalproject_add(czmq-${arch}
                      DEPENDS
@@ -367,6 +427,7 @@ if(${arch} STREQUAL "amd64")
 elseif(${arch} STREQUAL "armhf")
  externalproject_add(czmq-${arch}
                      DEPENDS
+                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
@@ -380,10 +441,12 @@ elseif(${arch} STREQUAL "armhf")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=arm-linux-gnueabihf
+                     --target=arm-linux-gnueabihf
                      CC=/usr/bin/arm-linux-gnueabihf-gcc
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -400,6 +463,7 @@ elseif(${arch} STREQUAL "armhf")
 elseif(${arch} STREQUAL "arm64")
  externalproject_add(czmq-${arch}
                      DEPENDS
+                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
@@ -413,10 +477,12 @@ elseif(${arch} STREQUAL "arm64")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=aarch64-linux-gnu
+                     --target=aarch64-linux-gnu
                      CC=/usr/bin/aarch64-linux-gnu-gcc
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -477,6 +543,7 @@ elseif(${arch} STREQUAL "armhf")
                      CC=/usr/bin/arm-linux-gnueabihf-gcc
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
+                     PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
                      --enable-drafts
                      BUILD_COMMAND
                      make
@@ -505,6 +572,7 @@ elseif(${arch} STREQUAL "arm64")
                      CC=/usr/bin/aarch64-linux-gnu-gcc
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
+                     PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
                      --enable-drafts
                      BUILD_COMMAND
                      make

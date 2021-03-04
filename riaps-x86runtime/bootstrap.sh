@@ -2,13 +2,12 @@
 set -e
 
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, libpcap0.8, libnettle6, software-properties-common, libnss-mdns
-# Python 3.6, libcurl4, libcurl3-gnutls, libncurses5, libzmq5, libgnutls30, firefox,
+# GCC 9, G++ 9, libpcap0.8, libnettle6, software-properties-common, libnss-mdns
+# Python 3.8, libcurl4, libcurl3-gnutls, libncurses5, libzmq5, libgnutls30, firefox,
 # libhogweed4, libgmp10, openssl (1.1.0g-2ubuntu4), snapd, net-tools
 #
 # Installed prior to this script: GIT, quota
 #
-# Need to remove: python3-crypto python3-keyrings.alt -y
 
 # Source configurable values for the VM creation
 source "vm_creation.conf"
