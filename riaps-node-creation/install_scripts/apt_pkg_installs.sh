@@ -19,7 +19,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libuuid1 liblz4-1 -y
-    sudo apt-get install pkg-config -y
+    sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
@@ -67,7 +67,7 @@ remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
     sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
-    sudo apt autoremove -y
+    sudo apt autoremove libcurl4-gnutls-dev -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }
 
