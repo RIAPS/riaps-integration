@@ -29,3 +29,8 @@ nano_install() {
     sudo apt-get install nano -y
     echo ">>>>> installed nano"
 }
+
+wget_install() {
+    sudo apt-get install wget -y
+    echo ">>>>> installed wget"
+}

@@ -68,6 +68,7 @@ source_scripts
 
 # Start of script actions
 check_os_version
+wget_install
 #rt_kernel_install - comment out for now, using an RT setup kernel
 setup_peripherals
 user_func
