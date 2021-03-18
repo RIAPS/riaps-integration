@@ -67,5 +67,5 @@ eclipse_plugin_dep_install() {
 }
 
 graphing_installs() {
-    sudo apt-get install influxdb2 grafana -y
+    sudo apt-get install graphviz influxdb2 grafana -y
 }

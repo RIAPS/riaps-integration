@@ -128,16 +128,21 @@ py_lmdb_install() {
 
 # Install other required packages
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.3.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.10.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.6.2' 'toml==0.10.2' 'pycryptodomex==3.10.1' 'spdlog==2.0.4' --verbose
+    pip3 install 'pydevd==2.3.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.10.7' --verbose
+    pip3 install 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'minimalmodbus==0.7' 'pyserial==3.4' --verbose
+    pip3 install 'pybind11==2.6.2' 'toml==0.10.2' 'pycryptodomex==3.10.1' 'spdlog==2.0.4' --verbose
+
     # Ubuntu 20.04 (and 18.04.4) uses Python 3.8.
-    # Python 3.8 has this installed already, need to overwrite
+    # Python 3.8 has this installed already, need to overwrite for 18.04
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'psutil==5.7.0' --verbose
+        pip3 install 'psutil==5.5.1' --verbose
+        pip3 install --ignore-installed 'PyYAML==5.3.1' --verbose
     else
-        pip3 install --ignore-installed 'psutil==5.7.0' --verbose
+        pip3 install 'psutil==5.5.1' 'PyYAML==5.3.1' --verbose
     fi
 
     # Package in distro already, leaving it in site-packages
-    pip3 install --ignore-installed 'PyYAML==5.3.1'
+
     echo ">>>>> installed pip3 packages"
 }
