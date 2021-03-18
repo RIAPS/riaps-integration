@@ -61,10 +61,12 @@ zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
 butter_install
+rpyc_install
+py_lmdb_install
 pip3_3rd_party_installs
-spdlog_python_install
 graphviz_install
 prctl_install
+graphing_installs
 rm -rf /tmp/3rdparty
 add_set_tests
 riaps_prereq

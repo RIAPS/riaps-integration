@@ -65,3 +65,7 @@ eclipse_plugin_dep_install() {
     sudo apt-get install clang-format -y
     echo ">>>>> installed eclipse dependencies"
 }
+
+graphing_installs() {
+    sudo apt-get install influxdb2 grafana -y
+}
