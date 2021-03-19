@@ -115,7 +115,7 @@ redis_install () {
         make -C redis-6.2.1 BUILD_TLS=yes
         sudo make -C redis-6.2.1 install
         sudo mkdir -p /etc/redis
-        sudo cp redis.conf /etc/redis
+        sudo cp redis-6.2.1/redis.conf /etc/redis/.
         rm -rf redis-6.2.1
         rm -rf redis-6.2.1.tar.gz
         echo ">>>>> installed redis"

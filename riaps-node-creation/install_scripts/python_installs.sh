@@ -120,7 +120,7 @@ py_lmdb_install() {
     cd /tmp/3rdparty
     git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/py_lmdb
     cd /tmp/3rdparty/py_lmdb
-    git checkout 1.1.1
+    git checkout py-lmdb_1.1.1
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/py_lmdb

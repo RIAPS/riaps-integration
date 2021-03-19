@@ -66,6 +66,17 @@ eclipse_plugin_dep_install() {
     echo ">>>>> installed eclipse dependencies"
 }
 
+#MM TODO: need to test this function and add mininet install
 graphing_installs() {
-    sudo apt-get install graphviz influxdb2 grafana -y
+    sudo apt-get install graphviz grafana -y
+    echo ">>>>> installed graphviz"
+
+    #https://docs.influxdata.com/influxdb/v2.0/get-started
+    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.4-amd64.deb
+    sudo dpkg -i influxdb2-2.0.4-amd64.deb
+    echo ">>>>> installed influxdb2"
+
+    #https://grafana.com/docs/grafana/latest/installation/debian/
+    #echo ">>>>> installed grafana"
+    #echo ">>>>> installed mininet"
 }

@@ -34,7 +34,3 @@ wget_install() {
     sudo apt-get install wget -y
     echo ">>>>> installed wget"
 }
-
-graphing_installs() {
-    sudo apt-get install influxdb2 grafana -y
-}
