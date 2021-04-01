@@ -60,6 +60,13 @@ opendht_prereqs_install() {
     echo ">>>>> installed opendht prerequisites"
 }
 
+# Install capnproto prerequisites
+capnproto_prereqs_install() {
+    sudo apt-get install libssl-dev -y
+    echo ">>>>> installed capnproto prerequisites"
+}
+
+
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y

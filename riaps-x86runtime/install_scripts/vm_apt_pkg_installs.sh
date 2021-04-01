@@ -31,6 +31,7 @@ zyre_czmq_prereq_install() {
         sudo apt-get install libzmq3-dev:$c_arch -y
         sudo apt-get install libsystemd-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
+        sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
@@ -85,6 +86,15 @@ opendht_prereqs_install() {
     cd $PREVIOUS_PWD
     echo ">>>>> installed opendht prerequisites"
 }
+
+# Install capnproto prerequisites
+capnproto_prereqs_install() {
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libssl-dev:$c_arch -y
+    done
+    echo ">>>>> installed capnproto prerequisites"
+}
+
 
 # Setup RIAPS repository and install script
 riaps_prereq() {

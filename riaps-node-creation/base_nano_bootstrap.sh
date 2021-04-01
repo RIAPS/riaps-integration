@@ -82,6 +82,7 @@ gnutls_install
 msgpack_install
 security_pkg_install
 opendht_prereqs_install
+capnproto_prereqs_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install
