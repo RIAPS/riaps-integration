@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+# Install spdlog python logger
+# No longer using this (remove once tested)
 spdlog_python_install() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
@@ -64,7 +66,7 @@ zyre_pybindings_install(){
 
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install() {
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==0.6.3' --verbose
+    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==1.0.0' --verbose
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -84,6 +86,7 @@ prctl_install() {
 
 # Installing butter
 # For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
+# using the forked project for now since it has the desired setup.py fix ("platforms=[]"), need to update the fork when changing versions later
 butter_install() {
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
         pip3 install 'butter==0.12.6' --verbose
@@ -100,18 +103,46 @@ butter_install() {
     echo ">>>>> installed butter"
 }
 
+# Installing rpyc
+rpyc_install() {
+    PREVIOUS_PWD=$PWD
+    cd /tmp/3rdparty
+    git clone https://github.com/tomerfiliba-org/rpyc /tmp/3rdparty/rpyc
+    cd /tmp/3rdparty/rpyc
+    git checkout 5.0.1
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/rpyc
+}
+
+py_lmdb_install() {
+    PREVIOUS_PWD=$PWD
+    cd /tmp/3rdparty
+    git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/py_lmdb
+    cd /tmp/3rdparty/py_lmdb
+    git checkout py-lmdb_1.1.1
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/py_lmdb
+}
+
 # Install other required packages
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==1.8.0' 'rpyc==4.1.5' 'redis==2.10.6' 'hiredis == 0.2.0' 'netifaces==0.10.7' 'cgroups==0.1.0' 'cgroupspy==0.1.6' 'lmdb==0.94' 'fabric3==1.14.post1' 'pyroute2==0.5.2' 'minimalmodbus==0.7' 'pyserial==3.4' 'pybind11==2.2.4' 'toml==0.10.0' 'pycryptodomex==3.7.3' --verbose
+    pip3 install 'pydevd==2.3.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.10.7' --verbose
+    pip3 install 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'minimalmodbus==0.7' 'pyserial==3.4' --verbose
+    pip3 install 'pybind11==2.6.2' 'toml==0.10.2' 'pycryptodomex==3.10.1' 'spdlog==2.0.4' --verbose
+
     # Ubuntu 20.04 (and 18.04.4) uses Python 3.8.
-    # Python 3.8 has this installed already, need to overwrite
+    # Python 3.8 has this installed already, need to overwrite for 18.04
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'psutil==5.7.0' --verbose
+        pip3 install 'psutil==5.5.1' --verbose
+        pip3 install --ignore-installed 'PyYAML==5.3.1' --verbose
     else
-        pip3 install --ignore-installed 'psutil==5.7.0' --verbose
+        pip3 install 'psutil==5.5.1' 'PyYAML==5.3.1' --verbose
     fi
 
     # Package in distro already, leaving it in site-packages
-    pip3 install --ignore-installed 'PyYAML==5.1.1'
+
     echo ">>>>> installed pip3 packages"
 }

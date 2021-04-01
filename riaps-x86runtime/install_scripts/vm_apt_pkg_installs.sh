@@ -26,11 +26,12 @@ nethogs_prereq_install() {
 zyre_czmq_prereq_install() {
     sudo apt-get install libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
-    sudo apt-get install pkg-config -y
+    sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libzmq3-dev:$c_arch -y
         sudo apt-get install libsystemd-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
+        sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
@@ -86,6 +87,15 @@ opendht_prereqs_install() {
     echo ">>>>> installed opendht prerequisites"
 }
 
+# Install capnproto prerequisites
+capnproto_prereqs_install() {
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libssl-dev:$c_arch -y
+    done
+    echo ">>>>> installed capnproto prerequisites"
+}
+
+
 # Setup RIAPS repository and install script
 riaps_prereq() {
     # Add RIAPS repository
@@ -110,12 +120,14 @@ rm_snap_pkg() {
 # Install redis
 redis_install () {
     if [ ! -f "/usr/local/bin/redis-server" ]; then
-        wget http://download.redis.io/releases/redis-4.0.11.tar.gz
-        tar xzf redis-4.0.11.tar.gz
-        make -C redis-4.0.11
-        sudo make -C redis-4.0.11 install
-        rm -rf redis-4.0.11
-        rm -rf redis-4.0.11.tar.gz
+        wget http://download.redis.io/releases/redis-6.2.1.tar.gz
+        tar xzf redis-6.2.1.tar.gz
+        make -C redis-6.2.1 BUILD_TLS=yes
+        sudo make -C redis-6.2.1 install
+        sudo mkdir -p /etc/redis
+        sudo cp redis-6.2.1/redis.conf /etc/redis/.
+        rm -rf redis-6.2.1
+        rm -rf redis-6.2.1.tar.gz
         echo ">>>>> installed redis"
     else
         echo ">>>>> redis already installed. skipping"

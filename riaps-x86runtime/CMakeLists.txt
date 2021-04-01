@@ -50,7 +50,7 @@ if(${arch} STREQUAL "amd64")
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"
                     GIT_TAG
-                    "v0.6.1"
+                    "v0.8.0"
                     SOURCE_DIR
                     "/tmp/3rdparty/capnproto-${arch}"
                     BUILD_IN_SOURCE
@@ -82,7 +82,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -118,7 +118,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -156,7 +156,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -183,7 +183,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -217,7 +217,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -424,7 +424,6 @@ if(${arch} STREQUAL "amd64")
                      INSTALL_COMMAND
                      sudo make
                      install)
-#MM TODO:  --with-libzmq=no - not sure if it is really needed or not here (double check later)
 elseif(${arch} STREQUAL "armhf")
  externalproject_add(czmq-${arch}
                      DEPENDS
@@ -447,6 +446,7 @@ elseif(${arch} STREQUAL "armhf")
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -482,6 +482,7 @@ elseif(${arch} STREQUAL "arm64")
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no

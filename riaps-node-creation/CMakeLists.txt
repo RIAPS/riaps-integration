@@ -32,7 +32,7 @@ externalproject_add(capnproto
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto"
                       BUILD_IN_SOURCE
@@ -64,7 +64,7 @@ externalproject_add(liblmdb
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND

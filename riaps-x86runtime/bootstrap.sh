@@ -53,6 +53,7 @@ gnutls_install
 msgpack_install
 security_prereq_install
 opendht_prereqs_install
+capnproto_prereqs_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install
@@ -61,10 +62,12 @@ zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
 butter_install
+rpyc_install
+py_lmdb_install
 pip3_3rd_party_installs
-spdlog_python_install
 graphviz_install
 prctl_install
+graphing_installs
 rm -rf /tmp/3rdparty
 add_set_tests
 riaps_prereq

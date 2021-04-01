@@ -82,6 +82,7 @@ gnutls_install
 msgpack_install
 security_pkg_install
 opendht_prereqs_install
+capnproto_prereqs_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install
@@ -89,8 +90,9 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 butter_install
+rpyc_install
+py_lmdb_install
 pip3_3rd_party_installs
-spdlog_python_install
 prctl_install
 remove_pkgs_used_to_build
 riaps_prereq
