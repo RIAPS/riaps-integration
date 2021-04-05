@@ -79,13 +79,12 @@ graphing_installs() {
     #https://grafana.com/docs/grafana/latest/installation/debian/
     #TBD
     #echo ">>>>> installed grafana"
-    PREVIOUS_PWD=$PWD
-    git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
-    cd /tmp/3rdparty/mininet
-    git checkout 2.3.0
-    #MM TODO: not sure next line is correct
-    util/install.sh -fnv --setup.py install
-    cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/mininet
+    #PREVIOUS_PWD=$PWD
+    #git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
+    #cd /tmp/3rdparty/mininet
+    #git checkout 2.3.0
+    #util/install.sh -fnv --setup.py install
+    #cd $PREVIOUS_PWD
+    #rm -rf /tmp/3rdparty/mininet
     #echo ">>>>> installed mininet"
 }

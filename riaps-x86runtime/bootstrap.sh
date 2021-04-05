@@ -70,5 +70,6 @@ prctl_install
 graphing_installs
 rm -rf /tmp/3rdparty
 add_set_tests
-riaps_prereq
+# MM TODO: temporarily remove - packages are not yet in apt-get (but are .deb files)
+#riaps_prereq
 create_riaps_version_file
