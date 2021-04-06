@@ -84,7 +84,7 @@ graphing_installs() {
     #git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
     #cd /tmp/3rdparty/mininet
     #git checkout 2.3.0
-    #util/install.sh -fnv --setup.py install
+    #sudo util/install.sh -fnv --setup.py install
     #cd $PREVIOUS_PWD
     #rm -rf /tmp/3rdparty/mininet
     #echo ">>>>> installed mininet"
