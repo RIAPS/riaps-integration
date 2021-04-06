@@ -68,17 +68,18 @@ eclipse_plugin_dep_install() {
 
 #MM TODO: need to test this function and add mininet install
 graphing_installs() {
-    sudo apt-get install graphviz grafana -y
-    echo ">>>>> installed graphviz"
+    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+    sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://packages.grafana.com/oss/deb stable main"
+    sudo apt-get update
+    sudo apt-get install grafana
+    # decided not to start the service automatically, it can be started using:  sudo /bin/systemctl start grafana-server
+    echo ">>>>> installed grafana"
 
     #https://docs.influxdata.com/influxdb/v2.0/get-started
     wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.4-amd64.deb
     sudo dpkg -i influxdb2-2.0.4-amd64.deb
     echo ">>>>> installed influxdb2"
 
-    #https://grafana.com/docs/grafana/latest/installation/debian/
-    #TBD
-    #echo ">>>>> installed grafana"
     #PREVIOUS_PWD=$PWD
     #git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
     #cd /tmp/3rdparty/mininet
