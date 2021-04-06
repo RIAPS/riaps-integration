@@ -141,8 +141,5 @@ pip3_3rd_party_installs(){
     else
         pip3 install 'psutil==5.5.1' 'PyYAML==5.3.1' --verbose
     fi
-
-    # Package in distro already, leaving it in site-packages
-
     echo ">>>>> installed pip3 packages"
 }

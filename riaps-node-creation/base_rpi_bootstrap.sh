@@ -77,6 +77,7 @@ setup_hostname
 setup_network
 python_install
 cython_install
+curl_func
 boost_install
 nethogs_prereq_install
 zyre_czmq_prereq_install

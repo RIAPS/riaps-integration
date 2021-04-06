@@ -163,7 +163,7 @@ externalproject_add(zyre
 
 
 # OpenDHT
- externalproject_add(opendht
+externalproject_add(opendht
                      DEPENDS
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
@@ -193,7 +193,8 @@ externalproject_add(zyre
 
 
 #libsoc
-externalproject_add(libsoc
+if(${arch} STREQUAL "armhf")
+ externalproject_add(libsoc
                       GIT_REPOSITORY
                       "https://github.com/jackmitch/libsoc.git"
                       GIT_TAG
@@ -207,9 +208,11 @@ externalproject_add(libsoc
                       -i
                       CONFIGURE_COMMAND
                       ./configure
+                      --enable-board=beaglebone_black
                       BUILD_COMMAND
                       make
                       ${MAKE_JOB_FLAGS}
                       INSTALL_COMMAND
                       sudo make
                       install)
+endif()
