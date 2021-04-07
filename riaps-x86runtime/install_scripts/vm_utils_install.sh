@@ -81,11 +81,13 @@ graphing_installs() {
     echo ">>>>> installed influxdb2"
 
     #PREVIOUS_PWD=$PWD
-    #git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
-    #cd /tmp/3rdparty/mininet
-    #git checkout 2.3.0
-    #sudo util/install.sh -fnv --setup.py install
-    #cd $PREVIOUS_PWD
-    #rm -rf /tmp/3rdparty/mininet
-    #echo ">>>>> installed mininet"
+    git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
+    cd /tmp/3rdparty/mininet
+    git checkout 2.3.0
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    sudo $PYTHON=python3 util/install.sh -fnv
+    sudo pip3 install 'pyflakes==2.2.0'
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/mininet
+    echo ">>>>> installed mininet"
 }
