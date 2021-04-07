@@ -17,6 +17,12 @@ set(minor 5 CACHE INTEGER "the minor version")
 set(prefix /usr/local)
 set(CMAKE_INSTALL_PREFIX ${prefix})
 
+if (${arch} STREQUAL "armhf")
+  set(TOOLCHAIN_PREFIX arm-linux-gnueabihf)
+elseif (${arch} STREQUAL "arm64")
+  set(TOOLCHAIN_PREFIX aarch64-linux-gnu)
+endif()
+
 set(CMAKE_C_COMPILER gcc-9)
 set(CMAKE_CXX_COMPILER g++-9)
 set (CMAKE_C_FLAGS "-std=c99")
