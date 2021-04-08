@@ -1,5 +1,5 @@
 #Compiling on BBB (armhf), RPi (arm64) and Jetson Nano (arm64)
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.16.0)
 include(ExternalProject)
 project(riaps-thirdpartypkgs)
 include(ProcessorCount)
@@ -192,7 +192,7 @@ externalproject_add(opendht
                      install)
 
 
-#libsoc
+#libsoc - does not have a board configuration for RPi (so not built)
 if(${arch} STREQUAL "armhf")
  externalproject_add(libsoc
                       GIT_REPOSITORY
