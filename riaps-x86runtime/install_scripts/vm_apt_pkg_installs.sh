@@ -70,10 +70,10 @@ msgpack_install(){
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
-    sudo apt-get install nettle-dev -y
+    sudo apt-get install nettle-dev libasio-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
-        sudo apt-get install nettle-dev:$c_arch -y
+        sudo apt-get install nettle-dev:$c_arch libasio-dev:$c_arch -y
     done
 
     # run liblinks script to link gnutls and msgppack

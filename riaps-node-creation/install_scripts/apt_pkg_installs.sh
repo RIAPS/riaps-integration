@@ -50,7 +50,7 @@ msgpack_install(){
 
 #install opendht prerequisites - expect libncurses5-dev installed
 opendht_prereqs_install() {
-    sudo apt-get install nettle-dev -y
+    sudo apt-get install nettle-dev libasio-dev -y
     # run liblinks script to link gnutls and msgppack
     chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
     PREVIOUS_PWD=$PWD
@@ -72,7 +72,7 @@ remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
     sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
-    sudo apt-get remove libcurl4-gnutls-dev
+    sudo apt-get remove libcurl4-gnutls-dev libasio-dev
     sudo apt autoremove -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }
