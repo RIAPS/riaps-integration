@@ -89,7 +89,7 @@ externalproject_add(libnethogs
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -168,7 +168,7 @@ externalproject_add(opendht
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht"
                      BUILD_IN_SOURCE

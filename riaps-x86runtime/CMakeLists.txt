@@ -256,7 +256,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -279,7 +279,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -308,7 +308,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -589,7 +589,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -615,7 +615,7 @@ elseif(${arch} STREQUAL "armhf")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -649,7 +649,7 @@ elseif(${arch} STREQUAL "arm64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
