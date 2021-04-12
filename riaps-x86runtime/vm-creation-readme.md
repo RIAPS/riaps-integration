@@ -4,7 +4,8 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/xubuntu-20.04.2-desktop-amd64.iso
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/
+version 20.04.2 was used for the download image
 
 Kernel:  5.4.0-42-generic (after SW update)
 ```
@@ -19,6 +20,8 @@ Kernel:  5.4.0-42-generic (after SW update)
   - USB Ports:  USB 2.0 (EHCI) Controller  
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
+
+> ***Note: Must manually setup the second adapter setting.  This is important for `nic_name` configuration after RIAPS packages are installed.***
 
 3) Setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the remote RIAPS nodes.
 
@@ -103,6 +106,8 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 ```./riaps_install_vm.sh 2>&1 | tee install-riaps-vm.log```
 
+  Note:  Remember to setup the correct `nic_name` in the /etc/riaps/riaps.etc file for the VM.  The default is setup for the BBB images.  See [Configuring Environment for Local Network Setup](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/README.md#configuring-environment-for-local-network-setup).
+
 17) Add preloaded eclipse and sample applications in the default workspace.
 
     a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of riaps_eclipse.tar.gz.
@@ -134,6 +139,7 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 18) Reset the password to the default and cause reset of password on next login.
 
 ```
+sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
