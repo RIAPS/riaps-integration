@@ -144,3 +144,5 @@ sudo chage -d 0 riaps
 ```
 
 19) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+
+>***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
