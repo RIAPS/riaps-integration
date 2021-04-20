@@ -49,8 +49,6 @@ Password:  ubuntu
 Kernel:    5.4.0-1028-raspi
 ```
 
->MM TODO: update kernel information when available
-
 You will be asked to create a new password and will need ssh again into the device.
 
 3) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the RPi.

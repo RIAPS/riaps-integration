@@ -51,12 +51,14 @@ msgpack_install(){
 #install opendht prerequisites - expect libncurses5-dev installed
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev libasio-dev -y
-    # run liblinks script to link gnutls and msgppack
-    chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
-    PREVIOUS_PWD=$PWD
-    cd /usr/lib/${ARCHINSTALL}
-    sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
-    cd $PREVIOUS_PWD
+    # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
+    if [ $NODE_ARCH = "armhf" ]; then
+        chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
+        PREVIOUS_PWD=$PWD
+        cd /usr/lib/${ARCHINSTALL}
+        sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
+        cd $PREVIOUS_PWD
+    fi
     echo ">>>>> installed opendht prerequisites"
 }
 
