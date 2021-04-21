@@ -1,6 +1,6 @@
 # Create Raspberry Pi 4 Base Image (4GB)
 
-These are instructions on how the Raspberry Pi (RPi) 4 Base image was created.  
+These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (arm64 architecture).  If you are creating an image for a Raspberry Pi 3, the architecture type would be armhf (32 bit architecture) similar to the Beaglebone Black.
 
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 

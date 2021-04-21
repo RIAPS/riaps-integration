@@ -2,6 +2,7 @@
 set -e
 
 cmake_func() {
+    sudo apt-get update
     sudo apt-get install cmake -y
     sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
