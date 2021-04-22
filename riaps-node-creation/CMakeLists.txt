@@ -177,10 +177,14 @@ externalproject_add(opendht
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     PKG_CONFIG_PATH=${prefix}/pkgconfig
+                     PKG_CONFIG_PATH=${prefix}/lib/pkgconfig
+                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
                      MsgPack_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lmsgpackc"
                      MsgPack_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
-                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+                     Nettle_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lnettle"
+                     Nettle_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
+                     GnuTLS_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lgnutls"
+                     GnuTLS_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
