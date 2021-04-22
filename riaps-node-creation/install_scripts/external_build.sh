@@ -99,7 +99,7 @@ build_opendht() {
     cd $TMP/opendht
     git checkout 2.1.10
     ./autogen.sh
-    ./configure PKG_CONFIG_PATH=/usr/local/pkgconfig --disable-tools --disable-python --enable-indexation MsgPack_LIBS="-L/usr/lib/$ARCHINSTALL -lmsgpackc" MsgPack_CFLAGS=-I/usr/include/$ARCHINSTALL CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+    ./configure PKG_CONFIG_PATH=/usr/local/pkgconfig MsgPack_LIBS="-L/usr/lib/$ARCHINSTALL -lmsgpackc" MsgPack_CFLAGS=-I/usr/include/$ARCHINSTALL CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
     make -j2
     sudo make install
     cd $PREVIOUS_PWD

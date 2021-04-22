@@ -599,9 +599,6 @@ if(${arch} STREQUAL "amd64")
                      CONFIGURE_COMMAND
                      ./configure
                      PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      LDFLAGS=-L/usr/lib/x86_64-linux-gnu
                      BUILD_COMMAND
                      make
@@ -629,9 +626,6 @@ elseif(${arch} STREQUAL "armhf")
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
@@ -663,9 +657,6 @@ elseif(${arch} STREQUAL "arm64")
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
