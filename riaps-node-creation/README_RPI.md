@@ -139,7 +139,7 @@ exit
 
     b) Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1” to the end of the command line.
 
-    c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled.
+    c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
 
 17) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
 
@@ -154,7 +154,11 @@ exit
 18) Optional: Resize the image to 8 MB for release posting
 
     a) Install 'gparted'
+
     b) Become root user - 'sudo su'
+
     c) Start 'gparted'
+
     d) Unmount the device (i.e. /dev/sdb)
+
     e) Resize to 8192 MiB
