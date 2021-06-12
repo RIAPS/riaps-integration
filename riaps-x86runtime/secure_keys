@@ -112,7 +112,7 @@ if __name__ == '__main__':
 
     fcmd = "fab"
     fflag = "-f"
-    fpath = "/usr/local/lib/python3.6/dist-packages/riaps/fabfile/"
+    fpath = "/usr/local/lib/python3.8/dist-packages/riaps/fabfile/"
     fIdentityFile = ""
     fIdentFileFlag = "-i"
     fhost = "-H"
