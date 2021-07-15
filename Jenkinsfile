@@ -6,14 +6,14 @@ pipeline {
   stages {
     stage('Fetch packages') {
       steps {
-        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_OAUTH_TOKEN')]) {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
           sh '''#!/bin/bash
             wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
             chmod +x fetch_linux_amd64
             source version.sh
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-amd64.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-arm64.deb" .
+            // ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-amd64.deb" .
+            // ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-armhf.deb" .
+            // ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-core" --tag=$coreversion --release-asset="riaps-core-arm64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-armhf.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-arm64.deb" .
@@ -29,8 +29,9 @@ pipeline {
         sh '''#!/bin/bash
           source version.sh
           mkdir riaps-release
-          cp riaps-core-amd64.deb riaps-core-armhf.deb riaps-core-arm64.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-pycom-arm64.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
-          echo "coreversion=$coreversion" >> riaps-release/manifest.txt
+          // cp riaps-core-amd64.deb riaps-core-armhf.deb riaps-core-arm64.deb riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-pycom-arm64.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
+          cp riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-pycom-arm64.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
+          // echo "coreversion=$coreversion" >> riaps-release/manifest.txt
           echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
           echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
           tar cvzf riaps-release.tar.gz riaps-release
