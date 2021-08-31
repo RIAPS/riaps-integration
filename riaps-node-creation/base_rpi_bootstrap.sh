@@ -10,8 +10,7 @@ set -e
 # libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 # vim, htop, software-properties-common, python3-setuptools
 #
-# Current issue with Ubuntu 20.04:  cmake installs GCC-9, previously used GCC 7, G++ 7
-
+# MM TODO: consider if network setup needs to add auto can0
 
 # Source scripts needed for this bootstrap build
 source_scripts() {

@@ -101,7 +101,16 @@ userdel -r ubuntu
 
 13) Change owner of /opt/scripts from 1000 to root
 
-14) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+14) Optional: Add SPI capability (which can be used for CAN communication)
+
+    Edit the `/boot/uEnv.txt` file to add the following (as appropriate to the SPI port desired):
+
+```
+    ###Additional custom capes  
+    uboot_overlay_addr4=/lib/firmware/BB-SPIDEV0-00A0.dtbo  
+```
+
+15) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```
 ./riaps_install_node.sh "armhf" 2>&1 | tee install-node-riaps.log

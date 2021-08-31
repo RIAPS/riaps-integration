@@ -46,7 +46,7 @@ Build a Real-time kernel for Raspberry Pi 4B using the instructions from https:/
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.4.0-1028-raspi
+Kernel:    5.4.0-1034-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
@@ -133,15 +133,24 @@ exit
 127.0.0.1 ubuntu
 ```
 
-16) Enable 'cgroups' for cpu and memory resource management:
+16) Enable 'cgroups' for cpu and memory resource management, along with apparmor fir security:
 
     a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04, modify '/boot/firmware/cmdline.txt'
 
-    b) Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1” to the end of the command line.
+    b) Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 security=apparmor" to the end of the command line.
 
     c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
 
-17) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
+17) Optional: Add SPI capability (which can be used for CAN communication)
+
+    Edit the `/boot/firmware/usercfg.txt` file to add the following:
+
+```
+    dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
+    dtoverlay=spi-bcm2835-overlay
+```
+
+18) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
 
 ```bash
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
@@ -151,7 +160,7 @@ exit
 
 > Note: Release images do not include the RIAPS packages installed.
 
-18) Optional: Resize the image to 8 MB for release posting
+19) Optional: Resize the image to 8 MB for release posting
 
     a) Install 'gparted'
 

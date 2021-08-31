@@ -16,9 +16,14 @@ setup_network() {
     cp etc/network/interfaces-riaps /etc/network/interfaces
     echo ">>>>> replaced network interfaces"
 
-    echo ">>>>> replacing resolv.conf"
-    touch /etc/resolv.conf
-    cp /etc/resolv.conf /etc/resolv.conf.preriaps
-    cp  etc/resolv-riaps.conf /etc/resolv.conf
-    echo ">>>>> replaced resolv.conf"
+    # Removing since not used with Netplan (Ubuntu's latest networking style)
+    #echo ">>>>> replacing resolv.conf"
+    #touch /etc/resolv.conf
+    #cp /etc/resolv.conf /etc/resolv.conf.preriaps
+    #cp  etc/resolv-riaps.conf /etc/resolv.conf
+    #echo ">>>>> replaced resolv.conf"
+
+    echo ">>>>> setup dhcp client configuration"
+    touch /etc/systemd/network/dhcp.network
+    cp etc/systemd/network/dhcp.network /etc/systemd/network/dhcp.network
 }

@@ -2,6 +2,8 @@
 
 These are instructions on how the NVIDIA Jetson Nano base image was created.  
 
+> Note: these instructions have not yet been updated for the Ubuntu 20.04 release
+
 ## Start with Ubuntu Pre-configured Image from NVIDIA
 
 1) Begin with the [Getting Started with Jetson Nano Developer Kit](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit) to find the base image (jetson-nano-developer-kit-sd-card-image.zip).
