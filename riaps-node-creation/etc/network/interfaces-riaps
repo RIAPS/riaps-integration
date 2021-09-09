@@ -13,3 +13,5 @@ iface lo inet loopback
 #    netmask 255.255.255.252
 #    network 192.168.7.0
 #    gateway 192.168.7.1
+
+#auto can0

@@ -9,8 +9,6 @@ set -e
 # git, libpcap0.8, nettle7, libncurses6, curl, libuuid1, liblz4-1, libgnutls30,
 # libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 # vim, htop, software-properties-common, python3-setuptools
-#
-# MM TODO: consider if network setup needs to add auto can0
 
 # Source scripts needed for this bootstrap build
 source_scripts() {

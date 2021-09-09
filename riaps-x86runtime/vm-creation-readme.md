@@ -136,13 +136,45 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
     > Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
 
-18) Reset the password to the default and cause reset of password on next login.
+18) Turn off Snapshotting for the "Redis" tools
+
+    Edit /etc/redis/redis.conf file to uncomment the `save ""` lines
+
+```
+################################ SNAPSHOTTING  ################################
+
+# Save the DB to disk.
+#
+# save <seconds> <changes>
+#
+# Redis will save the DB if both the given number of seconds and the given
+# number of write operations against the DB occurred.
+#
+# Snapshotting can be completely disabled with a single empty string argument
+# as in following example:
+#
+save ""
+```
+
+19) Turn off apt tool automatic updating
+    a) Edit `/etc/apt/apt.conf.d/20auto-upgrades` to set `Unattended-Upgrade` to "0"
+    b) Edit `/etc/apt/apt.conf.d/10periodic` to set `Unattended-Upgrade` to "0"
+
+    The settings should be for both files:
+    ```
+    APT::Periodic::Update-Package-Lists "1";
+    APT::Periodic::Download-Upgradeable-Packages "0";
+    APT::Periodic::AutocleanInterval "0";
+    APT::Periodic::Unattended-Upgrade "0";
+    ```
+
+19) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-19) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+20) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
