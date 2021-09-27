@@ -4,7 +4,7 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 
-1) Download a complete pre-configured image (Ubuntu 20.04.2, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest version available.  
+1) Download a complete pre-configured image (Ubuntu 20.04.3, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest server version available.  
 
 2) Unpack image and change into the directory (unxz file, then tar xf)
 
@@ -46,7 +46,7 @@ Build a Real-time kernel for Raspberry Pi 4B using the instructions from https:/
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.4.0-1034-raspi
+Kernel:    5.4.0-1042-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
@@ -104,7 +104,7 @@ cd riaps-node-creation
 
 10) Remove install files from /home/ubuntu
 
-11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 12) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 
@@ -133,7 +133,7 @@ exit
 127.0.0.1 ubuntu
 ```
 
-16) Enable 'cgroups' for cpu and memory resource management, along with apparmor fir security:
+16) Enable 'cgroups' for cpu and memory resource management, along with apparmor for security:
 
     a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04, modify '/boot/firmware/cmdline.txt'
 
