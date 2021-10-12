@@ -46,7 +46,7 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 18.04.4 LTS" > issue.net
+    echo "Ubuntu 20.04.3 LTS" > issue.net
     echo "" >> issue.net
     echo "rcn-ee.net console Ubuntu Image 2020-07-24">> issue.net
     echo "">> issue.net
