@@ -87,6 +87,7 @@ quota_install
 splash_screen_update
 setup_hostname
 setup_network
+iptables_install
 python_install
 cython_install
 curl_func

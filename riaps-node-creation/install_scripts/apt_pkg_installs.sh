@@ -68,11 +68,15 @@ capnproto_prereqs_install() {
     echo ">>>>> installed capnproto prerequisites"
 }
 
+iptables_install() {
+    sudo apt-get install iptables
+}
+
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
-    sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
+    sudo apt-get remove libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
     sudo apt autoremove -y

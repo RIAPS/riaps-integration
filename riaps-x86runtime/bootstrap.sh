@@ -35,6 +35,7 @@ user_func
 set_riaps_sudoer
 setup_ssh_keys
 rm_snap_pkg
+watchdog_timers
 cross_setup
 java_func
 cmake_func
