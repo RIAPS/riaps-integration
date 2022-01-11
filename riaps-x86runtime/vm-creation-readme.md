@@ -5,9 +5,9 @@ This is information on how the preloaded RIAPS virtual machine was created.
 1) Download the latest version of Xubuntu:
 ```
 http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/
-version 20.04.2 was used for the download image
+version 20.04.3 was used for the download image
 
-Kernel:  5.4.0-42-generic (after SW update)
+Kernel:  5.11.0-44-generic (after SW update)
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -17,7 +17,7 @@ Kernel:  5.4.0-42-generic (after SW update)
   - Processor(s):  4
   - Video Memory:  16 MB
   - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-  - USB Ports:  USB 2.0 (EHCI) Controller  
+  - USB Ports:  USB 1.1 (OHCI) Controller  
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
@@ -96,7 +96,9 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 > Note: This script takes about an hour to run. For some reason, the redis_install function does not always do the wget on the first run. If this happens, edit to bootstrap.sh file to comment out the function calls at the bottom of the file that have already run (keeping the set -e and 'source_scripts' lines) and start with this function.
 
-13) If everything installed correctly, remove riaps-integration repository from /home/riapsadmin/. Keep in mind that you will loss the install logs when removing this information.
+> Note:  Files used to setup the eclipse projects are located in a private repository now.  This step (add_eclipse_projects within bootstrap.sh) can be skipped.
+
+13) If everything installed correctly, remove riaps-integration repository from /home/riapsadmin/. Keep in mind that you will lose the install logs when removing this information.
 
 14) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
