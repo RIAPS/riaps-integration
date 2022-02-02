@@ -68,6 +68,7 @@ capnproto_prereqs_install() {
     echo ">>>>> installed capnproto prerequisites"
 }
 
+# Already on iot device
 iptables_install() {
     sudo apt-get install iptables
 }

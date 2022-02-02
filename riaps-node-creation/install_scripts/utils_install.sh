@@ -19,6 +19,7 @@ htop_install() {
 }
 
 # Remove the software deployment and package management system called "Snap"
+# Snap not installed on iot
 rm_snap_pkg() {
     sudo apt-get remove snapd -y
     sudo apt-get purge snapd -y
@@ -30,6 +31,7 @@ nano_install() {
     echo ">>>>> installed nano"
 }
 
+# installed on iot
 wget_install() {
     sudo apt-get install wget -y
     echo ">>>>> installed wget"

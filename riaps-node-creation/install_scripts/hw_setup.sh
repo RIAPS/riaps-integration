@@ -38,6 +38,7 @@ check_os_version() {
 # Required for riaps-timesync
 # pps-tools is already installed on some architectures, but is needed for riaps-timesync.
 # Therefore, it is installed here to make sure it is available.
+# gpsd already on iot
 timesync_requirements() {
     sudo apt-get install linuxptp libnss-mdns gpsd chrony -y
     sudo apt-get install libssl-dev libffi-dev -y
@@ -84,6 +85,7 @@ setup_hostname() {
     echo ">>>>> setup hostname"
 }
 
+# dialout group exists on iot
 setup_peripherals() {
     getent group gpio ||groupadd gpio
     getent group dialout ||groupadd dialout

@@ -91,7 +91,7 @@ build_zyre() {
     echo ">>>>> built zyre library"
 }
 
-# OpenDHT
+# OpenDHT - cython must be install prior to this to allow python package to be installed
 build_opendht() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`

@@ -24,6 +24,7 @@ cython_install() {
     echo ">>>>> installed cython"
 }
 
+# Already on iot device
 curl_func() {
     sudo apt install curl -y
     echo ">>>>> installed curl"
