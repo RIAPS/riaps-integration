@@ -5,9 +5,11 @@ Created on March 20, 2019
 Arguments:
     optional argument:
     - ``-H | --hosts hostnames``:  list of hostnames (comma separated), VM will be rekeyed
+    - ``-R | --roles rolenames``:  list of roles (comma separated)
     - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
     - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
     - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
+
 If specific hostnames are not given, the command will be called for all hosts
 listed in /usr/local/riaps/etc/riaps_hosts.conf
 @author: timkrentz
@@ -17,6 +19,7 @@ import os
 import sys
 import shlex
 import argparse
+import site
 import subprocess
 
 
@@ -64,7 +67,7 @@ def rekey_VM():
     #add private key to ssh agent for immediate use
     bash('ssh-add /home/riaps/.ssh/id_rsa.key')
 
-    #generate public key from private key, riaps_gen_cert creates a PEM/PKCS8 formated public key
+    #generate public key from private key, riaps_gen_cert creates a PEM/OpenSSH formated public key
     #  which does not work well with ssh-add
     subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
 
@@ -105,100 +108,62 @@ def rekey_VM():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--hosts", default="", help="list of hostnames, comma separated, for a complete reconfiguration")    # List of hostnames to used instead of system configured file
+    parser.add_argument("-R", "--roles", default="", help="list of roles, comma separated")
     parser.add_argument("-f", dest='hostsFile', help="absolute path to riaps-hosts.conf")
     parser.add_argument("-A", dest='addtlHosts', help="list of hostnames, comma separated, to add to a current configuration")
     parser.add_argument("-i", dest='keyFile', help="absolute path to pre-established RIAPS private key")
+    parser.add_argument("-v", "--validate", action='store_const', const=True, help="validate host names")
     args = parser.parse_args()
 
     fcmd = "fab"
     fflag = "-f"
-    fpath = "/usr/local/lib/python3.8/dist-packages/riaps/fabfile/"
-    fIdentityFile = ""
-    fIdentFileFlag = "-i"
-    fhost = "-H"
-    fset = "--set"
+    fpath = [p + "/riaps/" for p in site.getsitepackages()] + [os.getenv('RIAPSHOME')]
+    rekeyVM = True
+    if args.hosts:
+        fhosts = ("--hosts=" + args.hosts)
+    elif args.addtlHosts:
+        fhosts = ("--hosts=" + args.addtlHosts)
+        # Do not rekey VM if just adding additional hosts
+        rekeyVM = False
+    else:
+        fhosts = ""
+    froles = ("--roles=" + args.roles) if args.roles else ""
+    fhostsFile = ("--set hostsFile=" + args.hostsFile) if args.hostsFile else ""
+    fident = "-i "+ args.privateKeyPath \
+                        if args.privateKeyPath and os.path.isfile(args.privateKeyPath) else ""
+
+    fvalidate = "--set validate" if args.validate else ""
     fsyscheck = "sys.check"
     fupdate = "riaps.updateRemoteNodeKey"
 
-    if args.keyFile:
-        if os.path.isfile(args.keyFile):
-            fIdentityFile = args.keyFile
-        else:
-            print("Given private key does not exist, exiting...")
+    fpath = None
+    for p in fpaths:
+        if p is None: continue
+        fp = os.path.join(p,"fabfile","")
+        if os.path.isdir(fp):
+            fpath = fp; break
+
+    if fpath is not None:
+        # Make sure RIAPS nodes are available first
+        print("Validating host availability: {}".format(args.hosts))
+        cmd = str.join(' ',(fcmd, fflag, fpath, fsyscheck, fhostsFile, fhosts, froles, fvalidate, fident))
+        p = subprocess.run(cmd)
+        if p.returncode != 0:
+            print("Unable to find hosts, aborting update process now ...")
             sys.exit(-1)
 
-    if os.path.isdir(fpath):
-        if args.hosts:
-            print("Rekeying hostnames: {}".format(args.hosts))
-            #make sure RIAPS nodes are available
-            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
-            p = subprocess.run(s)
-            if p.returncode != 0:
-                print("Unable to find hosts, aborting update process now ...")
-                sys.exit(-1)
-            #hosts available, proceed
+        if rekeyVM:
+            print("Rekeying VM")
             rekey_VM()
-            s = [fcmd, fflag, fpath, fupdate, fhost, args.hosts, fIdentFileFlag, fIdentityFile]
-            #rekey remote hosts
-            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
-            openKeyPerms()
-            subprocess.run(s)
-            closeKeyPerms()
-            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
 
-        elif args.hostsFile:
-            print("Rekeying hostnames from ",args.hostsFile)
-            #make sure RIAPS nodes are available
-            s = [fcmd, fset, fenvVar, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
-            p = subprocess.run(s)
-            if p.returncode != 0:
-                print("Unable to find hosts, aborting update process now ...")
-                sys.exit(-1)
-            #hosts available, proceed
-            rekey_VM()
-            fenvVar = "hostsFile="+args.hostsFile
-            s = [fcmd, fset, fenvVar, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
-            #rekey remote hosts
-            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
-            openKeyPerms()
-            subprocess.run(s)
-            closeKeyPerms()
-            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
-
-        elif args.addtlHosts:
-            print("Adding hostnames to system: ",args.addtlHosts)
-            #make sure RIAPS nodes are available
-            s = [fcmd, fflag, fpath, fsyscheck, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
-            p = subprocess.run(s)
-            if p.returncode != 0:
-                print("Unable to find hosts, aborting update process now ...")
-                sys.exit(-1)
-            #hosts available, proceed
-            s = [fcmd, fflag, fpath, fupdate, fhost, args.addtlHosts, fIdentFileFlag, fIdentityFile]
-            #rekey remote hosts
-            openKeyPerms()
-            subprocess.run(s)
-            closeKeyPerms()
-
-        else:
-            print("Rekeying hostname(s) from /usr/local/riaps/etc/riaps_hosts.conf")
-            #make sure RIAPS nodes are available
-            s = [fcmd, fflag, fpath, fsyscheck, fIdentFileFlag, fIdentityFile]
-            p = subprocess.run(s)
-            if p.returncode != 0:
-                print("Unable to find hosts, aborting update process now ...")
-                sys.exit(-1)
-            #hosts available, proceed
-            rekey_VM()
-            s = [fcmd, fflag, fpath, fupdate, fIdentFileFlag, fIdentityFile]
-            #rekey remote hosts
-            bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
-            openKeyPerms()
-            subprocess.run(s)
-            closeKeyPerms()
-            bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
-
+        # Rekey remote hosts
+        print("Rekeying hostnames: {}".format(args.hosts))
+        cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
+        bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
+        openKeyPerms()
+        subprocess.run(cmd)
+        closeKeyPerms()
+        bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
+        print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
-
-    print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
