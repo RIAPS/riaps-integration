@@ -9,9 +9,10 @@ Arguments:
     - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
     - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
     - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
+    - ``-p | --passwd ``        :  keep password enabled on remote nodes
 
 If specific hostnames are not given, the command will be called for all hosts
-listed in /usr/local/riaps/etc/riaps_hosts.conf
+listed in /etc/riaps/riaps_hosts.conf
 @author: timkrentz
 '''
 
@@ -26,7 +27,8 @@ import subprocess
 def bash(cmd):
     t = shlex.split(cmd)
     print("=== "+str(t))
-    subprocess.run(t)
+    result = subprocess.run(t)
+    return result
 
 def openKeyPerms():
     #temporarily open private key and certs, so that they can be moved to new RIAPS nodes
@@ -113,6 +115,7 @@ if __name__ == '__main__':
     parser.add_argument("-A", dest='addtlHosts', help="list of hostnames, comma separated, to add to a current configuration")
     parser.add_argument("-i", dest='keyFile', help="absolute path to pre-established RIAPS private key")
     parser.add_argument("-v", "--validate", action='store_const', const=True, help="validate host names")
+    parser.add_argument("-p", "--passwd", action='store_true', help="keep password for remote nodes")
     args = parser.parse_args()
 
     fcmd = "fab"
@@ -134,7 +137,7 @@ if __name__ == '__main__':
 
     fvalidate = "--set validate" if args.validate else ""
     fsyscheck = "sys.check"
-    fupdate = "riaps.updateRemoteNodeKey"
+    fupdate = "riaps.updateNodeKey:%s" % args.passwd
 
     fpath = None
     for p in fpaths:
@@ -147,7 +150,7 @@ if __name__ == '__main__':
         # Make sure RIAPS nodes are available first
         print("Validating host availability: {}".format(args.hosts))
         cmd = str.join(' ',(fcmd, fflag, fpath, fsyscheck, fhostsFile, fhosts, froles, fvalidate, fident))
-        p = subprocess.run(cmd)
+        p = bash(cmd)
         if p.returncode != 0:
             print("Unable to find hosts, aborting update process now ...")
             sys.exit(-1)
@@ -161,7 +164,7 @@ if __name__ == '__main__':
         cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
         bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
         openKeyPerms()
-        subprocess.run(cmd)
+        bash(cmd)
         closeKeyPerms()
         bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
         print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")

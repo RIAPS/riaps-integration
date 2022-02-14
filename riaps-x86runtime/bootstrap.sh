@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-# Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 9, G++ 9, libpcap0.8, libnettle6, software-properties-common, libnss-mdns
-# Python 3.8, libcurl4, libcurl3-gnutls, libncurses5, libzmq5, libgnutls30, firefox,
-# libhogweed4, libgmp10, openssl (1.1.0g-2ubuntu4), snapd, net-tools
+# Packages already in base 20.04 image that are utilized by RIAPS Components:
+# GCC 9, G++ 9, libpcap0.8, libnettle7, software-properties-common, libnss-mdns
+# Python 3.8, libcurl4, libcurl3-gnutls, libncurses6, libzmq5, libgnutls30, firefox,
+# libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2.5), snapd
 #
 # Installed prior to this script: GIT, quota
 #
@@ -71,6 +71,5 @@ prctl_install
 graphing_installs
 rm -rf /tmp/3rdparty
 add_set_tests
-# MM TODO: temporarily remove - packages are not yet in apt-get (but are .deb files)
-#riaps_prereq
+riaps_prereq
 create_riaps_version_file

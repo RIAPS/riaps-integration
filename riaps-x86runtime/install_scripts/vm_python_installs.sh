@@ -1,18 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Install spdlog python logger
-# No longer using this (remove once tested)
-spdlog_python_install(){
-    PREVIOUS_PWD=$PWD
-    git clone https://github.com/RIAPS/spdlog-python.git /tmp/3rdparty/spdlog-python
-    cd /tmp/3rdparty/spdlog-python
-    git clone -b v0.17.0 --depth 1 https://github.com/gabime/spdlog.git
-    python3 setup.py install
-    cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/spdlog-python
-    echo ">>>>> installed spdlog python"
-}
 
 # Install apparmor_monkeys
 apparmor_monkeys_install(){

@@ -106,7 +106,7 @@ riaps_prereq() {
     sudo cp /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/riaps_install_vm.sh /home/$RIAPSUSER/.
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_vm.sh
     sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_vm.sh
-    #./riaps_install_vm.sh
+    ./riaps_install_vm.sh
     echo ">>>>> riaps prerequisites installed"
 }
 

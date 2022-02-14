@@ -25,7 +25,7 @@ Kernel:  5.11.0-44-generic (after SW update)
 
 3) Setup the Setting --> Network to have 'Adapter' to have 'Bridged Adapter' and configure with connection used to reach the router connected to the remote RIAPS nodes.
 
-4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-20.04.2-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
+4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-20.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
 5) Create a 'riapsadmin' user with password of 'riapsadmin' and set computer name to `riaps-VirtualBox`.
 

@@ -122,13 +122,6 @@ externals_cmake_install(){
 
     # Host architecture
     externals_cmake_build $HOST_ARCH
-
-    # MM TODO: temporary change - not cross compiling the external packages used by RIAPS, only Python code planned for this release.
-    # Cross compile architecture
-    #for c_arch in ${ARCHS_CROSS[@]}; do
-    #    externals_cmake_build $c_arch
-    #done
-
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
 }
