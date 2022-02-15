@@ -1,6 +1,6 @@
 # Setting up the Remote RIAPS Node Images
 
-1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_v[date].tar.gz) from
+1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_[verion].tar.gz) from
    https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
 
   Available architectures are:

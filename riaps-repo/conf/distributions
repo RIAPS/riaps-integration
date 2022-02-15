@@ -1,5 +1,5 @@
 Architectures:  amd64 armhf arm64
-Codename: bionic
+Codename: focal
 Components: main
 Description: Repository for packages developed for Resilient Information Architecture for Smart Grid
 Label: Ubuntu

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# MM TODO:  put in SPI information (needed for CAN), but have not tested it yet
 user_func() {
     if ! id -u $RIAPSUSER > /dev/null 2>&1; then
         echo ">>>>> The user does not exist; setting user account up now"

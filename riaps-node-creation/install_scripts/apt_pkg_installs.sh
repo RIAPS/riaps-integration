@@ -75,7 +75,7 @@ iptables_install() {
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
-    sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
+    sudo apt-get remove libboost-all-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev -y
     sudo apt-get remove libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
@@ -91,9 +91,8 @@ riaps_prereq() {
     echo ">>>>> get riaps public key"
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     echo ">>>>> add repo to sources"
-    #MM TODO:  focal repo not created yet
-    #sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
-    #sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
-    #sudo apt-get update
+    sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
+    sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
+    sudo apt-get update
     echo ">>>>> riaps aptrepo setup"
 }

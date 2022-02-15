@@ -99,7 +99,8 @@ build_opendht() {
     cd $TMP/opendht
     git checkout 2.1.10
     ./autogen.sh
-    ./configure PKG_CONFIG_PATH=/usr/local/lib/pkgconfig MsgPack_LIBS="-L/usr/lib/$ARCHINSTALL -lmsgpackc" MsgPack_CFLAGS=-I/usr/include/$ARCHINSTALL Nettle_LIBS="-L/usr/lib/$ARCHINSTALL -lnettle" Nettle_CFLAGS=-I/usr/include/$ARCHINSTALL GnuTLS_LIBS="-L/usr/lib/$ARCHINSTALL -lgnutls" GnuTLS_CFLAGS=-I/usr/include/$ARCHINSTALL CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+    ./configure PKG_CONFIG_PATH=/usr/local/lib/pkgconfig MsgPack_LIBS="-L/usr/lib/$ARCHINSTALL -lmsgpackc" MsgPack_CFLAGS=-I/usr/include/$ARCHINSTALL CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+    #Nettle_LIBS="-L/usr/lib/$ARCHINSTALL -lnettle" Nettle_CFLAGS=-I/usr/include/$ARCHINSTALL GnuTLS_LIBS="-L/usr/lib/$ARCHINSTALL -lgnutls" GnuTLS_CFLAGS=-I/usr/include/$ARCHINSTALL
     make -j2
     sudo make install
     cd $PREVIOUS_PWD
