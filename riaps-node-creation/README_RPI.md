@@ -122,7 +122,14 @@ exit
     dtoverlay=spi-bcm2835-overlay
 ```
 
-17) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
+17) Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+
+```
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "0";
+```
+
+18) Optional: Add the RIAPS packages to the Raspberry Pi 4 by using the following command (on the Pi).
 
 ```bash
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
@@ -132,7 +139,7 @@ exit
 
 > Note: Release images do not include the RIAPS packages installed.
 
-18) Optional: Resize the image to 8 MB for release posting
+19) Optional: Resize the image to 8 MB for release posting
 
     a) Install 'gparted'
 

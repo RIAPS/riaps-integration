@@ -110,7 +110,14 @@ userdel -r ubuntu
     uboot_overlay_addr4=/lib/firmware/BB-SPIDEV0-00A0.dtbo  
 ```
 
-15) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+15) Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+
+```
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "0";
+```
+
+16) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```
 ./riaps_install_node.sh "armhf" 2>&1 | tee install-node-riaps.log

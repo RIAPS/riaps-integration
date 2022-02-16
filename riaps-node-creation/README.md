@@ -5,20 +5,20 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
 * TI Beagleboard Black
   - [Platform Information](http://beagleboard.org/black)
   - [Instructions for building a BBB RIAPS Image](README_BBB.md)
-  - Kernel: v4.19.xx-ti-rt-rxx
-  - Ubuntu: 18.04.5 LTS
+  - Kernel: v5.10.xx-ti-rt-rxx
+  - Ubuntu: 20.04.3 LTS
 
 * Raspberry Pi 4
   - [Platform Information](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
   - [Instructions for building a Raspberry Pi RIAPS Image](README_RPI.md)
-  - Kernel: 5.3.0-xxxx-raspi2
-  - Ubuntu: 18.04.4 LTS
+  - Kernel: 5.4.0-xxxx-raspi
+  - Ubuntu: 20.04.3 LTS
 
-* NVIDIA Jetson Nano
+* NVIDIA Jetson Nano (not yet available)
   - [Platform Information](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit)
   - [Instructions for building a Jetson Nano RIAPS Image](README_NANO.md)
   - Kernel: 4.9.xxx-tegra
-  - Ubuntu: 18.04.4 LTS
+  - Ubuntu: 20.04.3 LTS
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
 
