@@ -30,8 +30,7 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
    install the RIAPS platform using
 
 ```
-./riaps_install_node.sh <arch> 2>&1 | tee install-riaps-node.log
-where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
+./riaps_install_node.sh 2>&1 | tee install-riaps-node.log
 ```
 
 
