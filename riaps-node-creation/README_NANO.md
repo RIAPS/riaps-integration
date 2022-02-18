@@ -18,7 +18,11 @@ These are instructions on how the NVIDIA Jetson Nano base image was created.
 
     c) Use the default APP partition size.
 
-    d) System will update packages and then shutdown.
+    d) Allow the system to delete un-used bootloader partitions.
+
+    e) Select the default Nvpmodel Mode (MAXN).
+
+    f) System will update packages and then shutdown.
 
 4) The device is now ready to be logged into without a display, so make sure the device is connected using ethernet to the router used to communicate between the VM and remote nodes.
 
