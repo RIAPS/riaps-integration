@@ -32,6 +32,12 @@ These are instructions on how the NVIDIA Jetson Nano base image was created.
 
     a) Found the following instructions for the upgrade - https://qengineering.eu/install-ubuntu-20.04-on-jetson-nano.html
 
+    b) Left the gcc/g++ pointing to version 9.3.0 to use in installation of RIAPS setup.  
+
+    c) There were no issues with `sudo apt-get upgrade` after this process related to nvidia-l4t-init, so information provided was not needed at this time.
+
+    d) Just to be cautious, Power Saving for Blank Screen was set to `Never`.
+
 ## Add Real Time Patch to Kernel Image
 
 This part can be performed on the RIAPS VM (ubuntu system with good computing power), not on the Jetson Nano.
@@ -83,18 +89,31 @@ sudo su
 
 > Note: This step takes about 40 mins to run.
 
-7) Remove install files from /home/riapsadmin
+7) Configure gcc/g++ to point to version 8 to allow work with CUDA or cuDNN (such as OpenCV) software.  With the following commands select option 8.
 
-8) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+```
+sudo update-alternatives --config gcc
+sudo update-alternatives --config g++
+```
 
-9) Reboot RPi and sign in as 'riaps' user
+8) Setup alternatives configuration for clang.  Version 8 was installed with the Ubuntu 20.04 upgrade, use the following to create the default for clang.
+
+```
+sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-8 8
+```
+
+9) Remove install files from /home/riapsadmin
+
+10) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+
+11) Reboot RPi and sign in as 'riaps' user
 
 ```
 Username:  riaps
 Password:  riaps
 ```
 
-10) Remove the 'riapsadmin' user
+12) Remove the 'riapsadmin' user
 
 ```
 sudo su
@@ -102,9 +121,9 @@ userdel -r riapsadmin
 exit
 ```
 
-11) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+13) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
-12) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
+14) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
 
 ```
 ./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
