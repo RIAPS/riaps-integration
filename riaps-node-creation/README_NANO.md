@@ -26,6 +26,12 @@ These are instructions on how the NVIDIA Jetson Nano base image was created.
 
 4) The device is now ready to be logged into without a display, so make sure the device is connected using ethernet to the router used to communicate between the VM and remote nodes.
 
+>Note: This is Ubuntu 18.04 setup
+
+5) Upgrade to Ubuntu 20.04
+
+    a) Found the following instructions for the upgrade - https://qengineering.eu/install-ubuntu-20.04-on-jetson-nano.html
+
 ## Add Real Time Patch to Kernel Image
 
 This part can be performed on the RIAPS VM (ubuntu system with good computing power), not on the Jetson Nano.
