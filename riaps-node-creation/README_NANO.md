@@ -50,8 +50,8 @@ This part can be performed on the RIAPS VM (ubuntu system with good computing po
 ```
 Username:  riapsadmin
 Password:  riapsadmin
-Kernel:    4.9.140-tegra #1 SMP PREEMPT Thu Jun 25 21:25:44 PDT 2020 aarch64 aarch64 aarch64 GNU/Linux
-Distribution: Ubuntu 18.04.4 LTS (bionic)
+Kernel:    4.9.xxx-tegra aarch64
+Distribution: Ubuntu 20.04.4 LTS (focal)
 ```
 
 2) Create a swapfile on the Jetson Nano to allow larger packages to run (such as spdlog).  Instructions used for this are at https://medium.com/@heldenkombinat/getting-started-with-the-jetson-nano-37af65a07aab#4098.
