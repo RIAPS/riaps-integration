@@ -9,20 +9,23 @@ user_func() {
         getent group gpio || sudo groupadd gpio
         getent group dialout || sudo groupadd dialout
         getent group pwm || sudo groupadd pwm
-        getent group spi || sudo groupadd spi
         sudo usermod -aG sudo $RIAPSUSER
         sudo usermod -aG dialout $RIAPSUSER
         sudo usermod -aG gpio  $RIAPSUSER
         sudo usermod -aG pwm $RIAPSUSER
-        sudo usermod -aG spi $RIAPSUSER
-        sudo chown :spi /dev/spidev0.0
-        sudo chmod g+rw /dev/spidev0.0
-        sudo chown :spi /dev/spidev0.1
-        sudo chmod g+rw /dev/spidev0.1
         sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/riaps_apps
         cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
         echo ">>>>> created user accounts"
     fi
+}
+
+add_spi_func() {
+    getent group spi || sudo groupadd spi
+    sudo usermod -aG spi $RIAPSUSER
+    sudo chown :spi /dev/spidev0.0
+    sudo chmod g+rw /dev/spidev0.0
+    sudo chown :spi /dev/spidev0.1
+    sudo chmod g+rw /dev/spidev0.1
 }
 
 # This function requires that riaps_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-creation/riaps_initial_keys/id_rsa.pub

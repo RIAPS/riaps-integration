@@ -60,6 +60,7 @@ check_os_version
 #rt_kernel_install
 setup_peripherals
 user_func
+add_spi_func
 setup_ssh_keys
 rdate_install
 rm_snap_pkg

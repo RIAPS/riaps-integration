@@ -121,12 +121,10 @@ userdel -r riapsadmin
 exit
 ```
 
-13) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script.  Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
-
-14) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
+13) Optional: Add the RIAPS packages to the Jetson Nano by using the following command (on the Nano).
 
 ```
-./riaps_install_node.sh "arm64" 2>&1 | tee install-node-riaps.log
+./riaps_install_node.sh 2>&1 | tee install-node-riaps.log
 ```
 
 - Reboot Jetson Nano to start the RIAPS services

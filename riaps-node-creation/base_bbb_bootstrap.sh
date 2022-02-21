@@ -72,6 +72,7 @@ wget_install
 #rt_kernel_install - comment out for now, using an RT setup kernel
 setup_peripherals
 user_func
+add_spi_func
 setup_ssh_keys
 rdate_install
 vim_func

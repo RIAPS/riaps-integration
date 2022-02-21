@@ -10,7 +10,9 @@ build_external_libraries() {
     build_czmq
     build_zyre
     build_opendht
-    build_libsoc
+    if [ "$NODE_ARCH" = "armhf" ]; then
+        build_libsoc
+    fi
     echo ">>>>> built all external libraries"
 }
 

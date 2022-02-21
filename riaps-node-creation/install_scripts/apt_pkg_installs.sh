@@ -48,9 +48,11 @@ msgpack_install(){
     echo ">>>>> installed msgpack"
 }
 
-#install opendht prerequisites - expect libreadline-dev libncurses-dev libmsgpack-dev libgnutls28-dev libasio-dev installed
+#install opendht prerequisites - expect libncurses-dev libmsgpack-dev libgnutls28-dev libasio-dev installed
+#                                libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev libasio-dev -y
+    sudo apt-get install libreadline-dev
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
     if [ $NODE_ARCH = "armhf" ]; then
         chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh

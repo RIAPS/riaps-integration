@@ -44,6 +44,7 @@ splash_screen_update() {
 setup_network_nano() {
     sudo apt-get install net-tools -y
     echo ">>>>> copying network/interfaces-riaps to network/interfaces.d/interfaces-riaps"
+    sudo mkdir -p /etc/network/interfaces.d
     cp etc/network/interfaces-riaps /etc/network/interfaces.d/interfaces-riaps
     echo ">>>>> replaced network interfaces"
 
@@ -61,6 +62,7 @@ source_scripts
 check_os_version
 setup_peripherals
 user_func
+# add_spi_func - spi not setup the same way on Nano as BBB or RPi, so not setting this up at this time
 setup_ssh_keys
 htop_install
 rm_snap_pkg
@@ -71,7 +73,7 @@ watchdog_timers
 quota_install
 splash_screen_update
 setup_hostname
-setup_network_nano
+#setup_network_nano
 python_install
 cython_install
 curl_func
