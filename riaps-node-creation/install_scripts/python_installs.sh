@@ -89,6 +89,7 @@ prctl_install() {
 # For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
 # using the forked project for now since it has the desired setup.py fix ("platforms=[]"), need to update the fork when changing versions later
 butter_install() {
+    pip3 install 'cffi==1.15.0' --verbose
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
         pip3 install 'butter==0.12.6' --verbose
     else

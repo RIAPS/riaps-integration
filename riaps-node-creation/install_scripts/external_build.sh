@@ -13,6 +13,7 @@ build_external_libraries() {
     if [ "$NODE_ARCH" = "armhf" ]; then
         build_libsoc
     fi
+    sudo ldconfig
     echo ">>>>> built all external libraries"
 }
 
