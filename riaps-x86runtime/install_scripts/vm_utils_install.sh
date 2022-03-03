@@ -66,7 +66,6 @@ eclipse_plugin_dep_install() {
     echo ">>>>> installed eclipse dependencies"
 }
 
-#MM TODO: need to test this function and add mininet install
 graphing_installs() {
     wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://packages.grafana.com/oss/deb stable main"

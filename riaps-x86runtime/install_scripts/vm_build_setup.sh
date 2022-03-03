@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Configure for cross functional compilation - this is vagrant box config dependent
-# MM TODO:  Fix this to work with the current 20.04.02 release!!!!  Manually did it for now.  Also add back in i386 [arch=i386,amd64]
+# Configure for cross functional compilation - this is xubuntu release config dependent
 cross_setup() {
     sudo apt-get install apt-transport-https -y
 
@@ -136,10 +135,7 @@ externals_cmake_build(){
     rm -rf /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
 }
 
-# RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
-# Setup update-alternative to have this VM use GCC/G++ 7.
-#MM TODO: this part is still in development, plan to call from cross_setup.  Most likely it will stay with gcc-9 if all
-#         builds well and this section will not be needed
+# Configure gcc setup when multiple versions available
 config_gcc() {
     if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
         sudo apt-get install gcc-7 g++-7 -y

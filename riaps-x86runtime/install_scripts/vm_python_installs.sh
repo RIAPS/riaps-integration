@@ -13,7 +13,6 @@ apparmor_monkeys_install(){
     echo ">>>>> installed apparmor_monkeys"
 }
 
-#MM TODO:  this did not install when the script ran - ran manually
 pyzmq_install(){
     PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty

@@ -23,14 +23,11 @@ source_scripts() {
     echo ">>>>> sourced install scripts"
 }
 
-# MM TODO: still working out the details to install this kernel on base system
+# Still working out the details to install this kernel on base system, not used at this time
 # Install RT Kernel
 # https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test
 rt_kernel_install() {
     sudo apt update
-    #sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
-    # To make sure the latest overlays are available
-    #sudo apt install --only-upgrade bb-cape-overlays
     echo "installed RT Kernel"
 }
 

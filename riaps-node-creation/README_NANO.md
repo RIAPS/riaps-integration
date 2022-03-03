@@ -42,7 +42,7 @@ These are instructions on how the NVIDIA Jetson Nano base image was created.
 
 This part can be performed on the RIAPS VM (ubuntu system with good computing power), not on the Jetson Nano.
 
-> MM TODO:  Found instructions at https://forums.developer.nvidia.com/t/preempt-rt-patches-for-jetson-nano/72941/31.  Have not tried it yet.
+> Found instructions at https://forums.developer.nvidia.com/t/preempt-rt-patches-for-jetson-nano/72941/31.  Have not tried it yet, skipped for now since Nano runs fast enough.
 
 ## Installation of RIAPS Base Configuration on Pre-configured Nano
 

@@ -394,7 +394,6 @@ endif()
 
 # High-level C binding for ØMQ
 
-#MM TODO:  see if this flag is needed for amd64 build
 if(${arch} STREQUAL "amd64")
  externalproject_add(czmq-${arch}
                      DEPENDS
@@ -719,7 +718,7 @@ elseif(${arch} STREQUAL "armhf")
                       INSTALL_COMMAND
                       sudo make
                       install)
-# MM TODO: no RaspberryPi 4 board yet in libsoc
+# No RaspberryPi 4 board yet in libsoc
 #elseif(${arch} STREQUAL "arm64")
 # externalproject_add(libsoc-${arch}
 #                      GIT_REPOSITORY
@@ -737,7 +736,7 @@ elseif(${arch} STREQUAL "armhf")
 #                      ./configure
 #                      --prefix=${prefix}
 #                      --host=aarch64-linux-gnu
-#MM TODO              --enable-board=????
+#                      --enable-board=????
 #                      BUILD_COMMAND
 #                      make
 #                      ${MAKE_JOB_FLAGS}

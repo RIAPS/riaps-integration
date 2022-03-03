@@ -9,7 +9,7 @@ Steps used to create the apt repository are:
 
 3) Clean with ```git clean -fxd```
 
-4) Check the repo to make sure it is ready for the appropriate ubuntu release.  Currently setup for bionic.
+4) Check the repo to make sure it is ready for the appropriate ubuntu release.  Currently setup for focal.
 
 ```
 reprepro check
