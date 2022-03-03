@@ -9,9 +9,6 @@ set -e
 # git, libpcap0.8, nettle7, libncurses6, curl, libuuid1, liblz4-1, libgnutls30,
 # libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 # vim, htop, software-properties-common, python3-setuptools
-#
-# Current issue with Ubuntu 20.04:  cmake installs GCC-9, previously used GCC 7, G++ 7
-
 
 # Source scripts needed for this bootstrap build
 source_scripts() {
@@ -26,14 +23,11 @@ source_scripts() {
     echo ">>>>> sourced install scripts"
 }
 
-# MM TODO: still working out the details to install this kernel on base system
+# Still working out the details to install this kernel on base system, not used at this time
 # Install RT Kernel
 # https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test
 rt_kernel_install() {
     sudo apt update
-    #sudo /opt/scripts/tools/update_kernel.sh --ti-rt-kernel --lts-4_14
-    # To make sure the latest overlays are available
-    #sudo apt install --only-upgrade bb-cape-overlays
     echo "installed RT Kernel"
 }
 
@@ -63,6 +57,7 @@ check_os_version
 #rt_kernel_install
 setup_peripherals
 user_func
+add_spi_func
 setup_ssh_keys
 rdate_install
 rm_snap_pkg
@@ -77,6 +72,7 @@ setup_hostname
 setup_network
 python_install
 cython_install
+curl_func
 boost_install
 nethogs_prereq_install
 zyre_czmq_prereq_install
@@ -84,15 +80,17 @@ gnutls_install
 msgpack_install
 security_pkg_install
 opendht_prereqs_install
-externals_cmake_install
+capnproto_prereqs_install
+build_external_libraries
 pycapnp_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 butter_install
+rpyc_install
+py_lmdb_install
 pip3_3rd_party_installs
-spdlog_python_install
 prctl_install
 remove_pkgs_used_to_build
 riaps_prereq

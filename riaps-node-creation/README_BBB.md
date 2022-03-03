@@ -1,15 +1,17 @@
 # Create RIAPS BBB Base Image (4GB)
 
-These are instructions on how the BBB Base image was created.  
+These are instructions on how the BBB Base image can be created from a Ubuntu pre-configured image.  
+
+>Note:  This method had not been tested for this revision, but it has been kept up with the changes made in the automated full image creation method found in https://github.com/RIAPS/riaps-bbb-image-build.  
 
 ## Start with Ubuntu Pre-configured Image from Robert Nelson
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
-1) Download a complete pre-configured image (Ubuntu 18.04.4) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
+1) Download a complete pre-configured image (Ubuntu 20.04.1) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
 
 ```
-wget https://rcn-ee.com/rootfs/2020-04-09/elinux/ubuntu-18.04.4-console-armhf-2020-04-09.tar.xz
+wget https://rcn-ee.com/rootfs/ubuntu-armhf/2022-03-03/ubuntu-20.04.4-console-armhf-2022-03-03.tar.xz
 ```
 
 2) Unpack image and change into the directory (unxz file, then tar xf)
@@ -31,7 +33,7 @@ Resulting image information:
 ```
 Username:  ubuntu
 Password:  temppwd
-Kernel:    v4.19.xx-ti-rxx
+Kernel:    v5.10.xx-ti-rxx
 ```
 
 ## Installation of RIAPS Base Configuration on Pre-configured BBB
@@ -101,7 +103,23 @@ userdel -r ubuntu
 
 13) Change owner of /opt/scripts from 1000 to root
 
-14) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
+14) Optional: Add SPI capability (which can be used for CAN communication)
+
+    Edit the `/boot/uEnv.txt` file to add the following (as appropriate to the SPI port desired):
+
+```
+    ###Additional custom capes  
+    uboot_overlay_addr4=/lib/firmware/BB-SPIDEV0-00A0.dtbo  
+```
+
+15) Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+
+```
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "0";
+```
+
+16) Optional: Add the RIAPS packages to the BBBs by using the following command (on the BBB).
 
 ```
 ./riaps_install_node.sh "armhf" 2>&1 | tee install-node-riaps.log

@@ -65,3 +65,28 @@ eclipse_plugin_dep_install() {
     sudo apt-get install clang-format -y
     echo ">>>>> installed eclipse dependencies"
 }
+
+graphing_installs() {
+    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+    sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://packages.grafana.com/oss/deb stable main"
+    sudo apt-get update
+    sudo apt-get install grafana
+    # decided not to start the service automatically, it can be started using:  sudo /bin/systemctl start grafana-server
+    echo ">>>>> installed grafana"
+
+    #https://docs.influxdata.com/influxdb/v2.0/get-started
+    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.4-amd64.deb
+    sudo dpkg -i influxdb2-2.0.4-amd64.deb
+    echo ">>>>> installed influxdb2"
+
+    #PREVIOUS_PWD=$PWD
+    git clone https://github.com/RIAPS/mininet.git /tmp/3rdparty/mininet
+    cd /tmp/3rdparty/mininet
+    git checkout 2.3.0
+    sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+    sudo $PYTHON=python3 util/install.sh -fnv
+    sudo pip3 install 'pyflakes==2.2.0'
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/mininet
+    echo ">>>>> installed mininet"
+}

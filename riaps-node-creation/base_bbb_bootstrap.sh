@@ -46,7 +46,7 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 18.04.4 LTS" > issue.net
+    echo "Ubuntu 20.04.3 LTS" > issue.net
     echo "" >> issue.net
     echo "rcn-ee.net console Ubuntu Image 2020-07-24">> issue.net
     echo "">> issue.net
@@ -59,10 +59,7 @@ splash_screen_update() {
 
 #install other required packages
 armhf_pyinstall(){
-    # Adafruit_BBIO does not have a Python3.8 version yet (7/2020) and is for BBB only
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'Adafruit_BBIO==1.1.1' --verbose
-    fi
+    pip3 install 'Adafruit_BBIO==1.2.0' --verbose
     echo ">>>>> installed armhf specific python packages"
 }
 
@@ -71,9 +68,11 @@ source_scripts
 
 # Start of script actions
 check_os_version
-rt_kernel_install
+wget_install
+#rt_kernel_install - comment out for now, using an RT setup kernel
 setup_peripherals
 user_func
+add_spi_func
 setup_ssh_keys
 rdate_install
 vim_func
@@ -89,6 +88,7 @@ quota_install
 splash_screen_update
 setup_hostname
 setup_network
+iptables_install
 python_install
 cython_install
 curl_func
@@ -99,15 +99,17 @@ gnutls_install
 msgpack_install
 security_pkg_install
 opendht_prereqs_install
-externals_cmake_install
+capnproto_prereqs_install
+build_external_libraries
 pycapnp_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 butter_install
+rpyc_install
+py_lmdb_install
 pip3_3rd_party_installs
-spdlog_python_install
 armhf_pyinstall
 prctl_install
 remove_pkgs_used_to_build

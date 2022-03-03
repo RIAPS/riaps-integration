@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-
 user_func() {
     if ! id -u $RIAPSUSER > /dev/null 2>&1; then
         echo ">>>>> The user does not exist; setting user account up now"
@@ -18,6 +17,15 @@ user_func() {
         cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
         echo ">>>>> created user accounts"
     fi
+}
+
+add_spi_func() {
+    getent group spi || sudo groupadd spi
+    sudo usermod -aG spi $RIAPSUSER
+    sudo chown :spi /dev/spidev0.0
+    sudo chmod g+rw /dev/spidev0.0
+    sudo chown :spi /dev/spidev0.1
+    sudo chmod g+rw /dev/spidev0.1
 }
 
 # This function requires that riaps_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-creation/riaps_initial_keys/id_rsa.pub

@@ -2,6 +2,7 @@
 set -e
 
 cmake_func() {
+    sudo apt-get update
     sudo apt-get install cmake -y
     sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
@@ -15,12 +16,11 @@ python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip -y
     sudo pip3 install --upgrade pip
-    sudo pip3 install pydevd
-    echo ">>>>> installed python3 and pydev"
+    echo ">>>>> installed python3"
 }
 
 cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5' --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.21' --verbose
     echo ">>>>> installed cython"
 }
 

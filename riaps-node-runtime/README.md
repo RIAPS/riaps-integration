@@ -1,6 +1,6 @@
 # Setting up the Remote RIAPS Node Images
 
-1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_v[date].tar.gz) from
+1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_[verion].tar.gz) from
    https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
 
   Available architectures are:
@@ -30,8 +30,7 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
    install the RIAPS platform using
 
 ```
-./riaps_install_node.sh <arch> 2>&1 | tee install-riaps-node.log
-where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
+./riaps_install_node.sh 2>&1 | tee install-riaps-node.log
 ```
 
 

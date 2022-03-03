@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Configure for cross functional compilation - this is vagrant box config dependent
+# Configure for cross functional compilation - this is xubuntu release config dependent
 cross_setup() {
     sudo apt-get install apt-transport-https -y
 
@@ -105,7 +105,7 @@ python_install() {
 
 # Assumes that Cython3 is not on the base release (18.04.3 does not have it)
 cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.28.5' --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.21' --verbose
     echo ">>>>> installed cython"
 }
 
@@ -121,12 +121,6 @@ externals_cmake_install(){
 
     # Host architecture
     externals_cmake_build $HOST_ARCH
-
-    # Cross compile architecture
-    for c_arch in ${ARCHS_CROSS[@]}; do
-        externals_cmake_build $c_arch
-    done
-
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
 }
@@ -141,38 +135,45 @@ externals_cmake_build(){
     rm -rf /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
 }
 
-# RIAPS was developed using GCC/G++ 7 compilers, yet Ubuntu 20.04 is configured for GCC/G++ 9
-# Setup update-alternative to have this VM use GCC/G++ 7.
-#MM TODO: this part is still in development, plan to call from cross_setup.  Most likely it will stay with gcc-9 if all
-#         builds well and this section will not be needed
+# Configure gcc setup when multiple versions available
 config_gcc() {
-    sudo apt-get install gcc-7 g++-7 -y
+    if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+        sudo apt-get install gcc-7 g++-7 -y
 
-    # Setup GCC-7 as default in all architectures
-    # Host architecture
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
-    sudo update-alternatives --set gcc /usr/bin/gcc-7
-    sudo update-alternatives --set g++ /usr/bin/g++-7
-    gcc --version
-    g++ --version
+        # Setup GCC-7 as default in all architectures
+        # Host architecture
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+        sudo update-alternatives --set gcc /usr/bin/gcc-7
+        sudo update-alternatives --set g++ /usr/bin/g++-7
+        gcc --version
+        g++ --version
+    elif [ $UBUNTU_VERSION_INSTALL = "20.04" ]; then
+        sudo apt-get install gcc-9 g++-9 -y
+    fi
 
     # Cross compile architectures
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
+        if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+            sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
+        elif [ $UBUNTU_VERSION_INSTALL = "20.04" ]; then
+            sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
+        fi
     done
 
     for c_arch_tool in ${CROSS_TOOLCHAIN_LOC[@]}; do
-        sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-7 7
-        sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-9 9
-        sudo update-alternatives --install /usr/bin/$c_arch_tool-g++ g++ /usr/bin/$c_arch_tool-g++-7 7
-        sudo update-alternatives --install /usr/bin/$c_arch_tool-g++ g++ /usr/bin/$c_arch_tool-g++-9 9
-        sudo update-alternatives --set gcc /usr/bin/$c_arch_tool-gcc-7
-        sudo update-alternatives --set g++ /usr/bin/$c_arch_tool-g++-7
-        $c_arch_tool-gcc --version
-        $c_arch_tool-g++ --version
+        if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+            sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-7 7
+            sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-9 9
+            sudo update-alternatives --install /usr/bin/$c_arch_tool-g++ g++ /usr/bin/$c_arch_tool-g++-7 7
+            sudo update-alternatives --install /usr/bin/$c_arch_tool-g++ g++ /usr/bin/$c_arch_tool-g++-9 9
+            sudo update-alternatives --set gcc /usr/bin/$c_arch_tool-gcc-7
+            sudo update-alternatives --set g++ /usr/bin/$c_arch_tool-g++-7
+            $c_arch_tool-gcc --version
+            $c_arch_tool-g++ --version
+        fi
     done
 
     echo "configured gcc/g++"

@@ -25,7 +25,6 @@ endif()
 set(CMAKE_INSTALL_PREFIX ${prefix})
 
 #Set the platform
-#MM TODO: moving to gcc-9 to see if it all builds well - needed for Ubuntu 20.04
 if (${arch} STREQUAL "armhf")
  set(TOOLCHAIN_PREFIX /usr/bin/arm-linux-gnueabihf)
  set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
@@ -51,7 +50,7 @@ if(${arch} STREQUAL "amd64")
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"
                     GIT_TAG
-                    "v0.6.1"
+                    "v0.8.0"
                     SOURCE_DIR
                     "/tmp/3rdparty/capnproto-${arch}"
                     BUILD_IN_SOURCE
@@ -65,7 +64,6 @@ if(${arch} STREQUAL "amd64")
                     c++
                     &&
                     ./configure
-                    #--prefix=${prefix}
                     --enable-shared
                     BUILD_COMMAND
                     make
@@ -84,7 +82,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -120,7 +118,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -158,7 +156,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -185,7 +183,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -219,7 +217,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -258,7 +256,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -269,13 +267,11 @@ if(${arch} STREQUAL "amd64")
                       make
                       ${MAKE_JOB_FLAGS}
                       -e
-                      #PREFIX=${prefix}
                       libnethogs
                       INSTALL_COMMAND
                       sudo make
                       ${MAKE_JOB_FLAGS}
                       -e
-                      #PREFIX=${prefix}
                       install_dev)
 elseif(${arch} STREQUAL "armhf")
   externalproject_add(libnethogs-${arch}
@@ -283,7 +279,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -312,7 +308,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -337,6 +333,65 @@ elseif(${arch} STREQUAL "arm64")
                       install_dev)
 endif()
 
+# Compiling armhf and arm64 versions of libzmq so that cross compiling of zyre works (need --enable-libunwind=no flag)
+# libzmq
+if(${arch} STREQUAL "armhf")
+ externalproject_add(libzmq-${arch}
+                     DEPENDS
+                     GIT_REPOSITORY
+                     "https://github.com/zeromq/libzmq.git"
+                     GIT_TAG
+                     "v4.3.2"
+                     SOURCE_DIR
+                     "/tmp/3rdparty/libzmq-${arch}"
+                     BUILD_IN_SOURCE
+                      1
+                     UPDATE_COMMAND
+                     "./autogen.sh"
+                     CONFIGURE_COMMAND
+                     ./configure
+                     --host=arm-linux-gnueabihf
+                     --target=arm-linux-gnueabihf
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
+                     --prefix=${prefix}
+                     --enable-libunwind=no
+                     BUILD_COMMAND
+                     make
+                     ${MAKE_JOB_FLAGS}
+                     INSTALL_COMMAND
+                     sudo make
+                     install)
+elseif(${arch} STREQUAL "arm64")
+ externalproject_add(libzmq-${arch}
+                     DEPENDS
+                     GIT_REPOSITORY
+                     "https://github.com/zeromq/libzmq.git"
+                     GIT_TAG
+                     "v4.3.2"
+                     SOURCE_DIR
+                     "/tmp/3rdparty/libzmq-${arch}"
+                     BUILD_IN_SOURCE
+                      1
+                     UPDATE_COMMAND
+                     "./autogen.sh"
+                     CONFIGURE_COMMAND
+                     ./configure
+                     --host=aarch64-linux-gnu
+                     --target=aarch64-linux-gnu
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
+                     --prefix=${prefix}
+                     --enable-libunwind=no
+                     BUILD_COMMAND
+                     make
+                     ${MAKE_JOB_FLAGS}
+                     INSTALL_COMMAND
+                     sudo make
+                     install)
+endif()
+
+
 # High-level C binding for ØMQ
 
 if(${arch} STREQUAL "amd64")
@@ -345,21 +400,16 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
-                     "9ee60b18e8bd8ed4adca7fdaff3e700741da706e"
+                     "v4.2.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/czmq-${arch}"
                      BUILD_IN_SOURCE
                       1
                      UPDATE_COMMAND
                      "./autogen.sh"
-                     #CMAKE_ARGS
-                     #${armcmaketoolchain}
-                     #-DCMAKE_INSTALL_PREFIX=${riaps_prefix}/${arch}
-                     #-DCMAKE_PREFIX_PATH=${riaps_prefix}/${arch}
                      CONFIGURE_COMMAND
-                     #cd
-                     #/tmp/3rdparty/czmq-${arch}
                      ./configure
+                     --enable-drafts
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -373,38 +423,29 @@ if(${arch} STREQUAL "amd64")
                      INSTALL_COMMAND
                      sudo make
                      install)
-                     #COMMAND
-                     #mkdir
-                     #-p
-                     #${riaps_prefix}/${arch}/bindings/czmq
-                     #COMMAND
-                     #cp
-                     #-r
-                     #${CMAKE_SOURCE_DIR}/3rdparty/czmq-${arch}/bindings/python
-                     #${riaps_prefix}/${arch}/bindings/czmq/.)
 elseif(${arch} STREQUAL "armhf")
  externalproject_add(czmq-${arch}
                      DEPENDS
+                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
-                     "9ee60b18e8bd8ed4adca7fdaff3e700741da706e"
+                     "v4.2.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/czmq-${arch}"
                      BUILD_IN_SOURCE
                       1
-                     #CMAKE_ARGS
-                     #${armcmaketoolchain}
-                     #-DCMAKE_INSTALL_PREFIX=${riaps_prefix}/${arch}
-                     #-DCMAKE_PREFIX_PATH=${riaps_prefix}/${arch}
                      UPDATE_COMMAND
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
                      --host=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     --target=arm-linux-gnueabihf
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
+                     --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -421,26 +462,26 @@ elseif(${arch} STREQUAL "armhf")
 elseif(${arch} STREQUAL "arm64")
  externalproject_add(czmq-${arch}
                      DEPENDS
+                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
-                     "9ee60b18e8bd8ed4adca7fdaff3e700741da706e"
+                     "v4.2.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/czmq-${arch}"
                      BUILD_IN_SOURCE
                       1
-                     #CMAKE_ARGS
-                     #${armcmaketoolchain}
-                     #-DCMAKE_INSTALL_PREFIX=${riaps_prefix}/${arch}
-                     #-DCMAKE_PREFIX_PATH=${riaps_prefix}/${arch}
                      UPDATE_COMMAND
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
                      --host=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     --target=aarch64-linux-gnu
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
+                     --enable-drafts
+                     --with-libzmq=no
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -464,7 +505,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
-                     "b36470e70771a329583f9cf73598898b8ee05d14"
+                     "v2.0.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/zyre-${arch}"
                      BUILD_IN_SOURCE
@@ -473,6 +514,7 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -486,7 +528,7 @@ elseif(${arch} STREQUAL "armhf")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
-                     "b36470e70771a329583f9cf73598898b8ee05d14"
+                     "v2.0.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/zyre-${arch}"
                      BUILD_IN_SOURCE
@@ -497,9 +539,11 @@ elseif(${arch} STREQUAL "armhf")
                      ./configure
                      --host=arm-linux-gnueabihf
                      --target=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
+                     PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -513,7 +557,7 @@ elseif(${arch} STREQUAL "arm64")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
-                     "b36470e70771a329583f9cf73598898b8ee05d14"
+                     "v2.0.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/zyre-${arch}"
                      BUILD_IN_SOURCE
@@ -524,9 +568,11 @@ elseif(${arch} STREQUAL "arm64")
                      ./configure
                      --host=aarch64-linux-gnu
                      --target=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
+                     PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -542,7 +588,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -552,11 +598,7 @@ if(${arch} STREQUAL "amd64")
                      CONFIGURE_COMMAND
                      ./configure
                      PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      LDFLAGS=-L/usr/lib/x86_64-linux-gnu
-                     #CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -569,7 +611,7 @@ elseif(${arch} STREQUAL "armhf")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -579,13 +621,10 @@ elseif(${arch} STREQUAL "armhf")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=arm-linux-gnueabihf
-                     CC=arm-linux-gnueabihf-gcc
-                     CXX=arm-linux-gnueabihf-g++
+                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+                     CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
@@ -603,7 +642,7 @@ elseif(${arch} STREQUAL "arm64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -613,13 +652,10 @@ elseif(${arch} STREQUAL "arm64")
                      CONFIGURE_COMMAND
                      ./configure
                      --host=aarch64-linux-gnu
-                     CC=aarch64-linux-gnu-gcc
-                     CXX=aarch64-linux-gnu-g++
+                     CC=/usr/bin/aarch64-linux-gnu-gcc
+                     CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
                      GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
@@ -682,7 +718,7 @@ elseif(${arch} STREQUAL "armhf")
                       INSTALL_COMMAND
                       sudo make
                       install)
-# MM TODO: no RaspberryPi 4 board yet in libsoc
+# No RaspberryPi 4 board yet in libsoc
 #elseif(${arch} STREQUAL "arm64")
 # externalproject_add(libsoc-${arch}
 #                      GIT_REPOSITORY
@@ -700,7 +736,7 @@ elseif(${arch} STREQUAL "armhf")
 #                      ./configure
 #                      --prefix=${prefix}
 #                      --host=aarch64-linux-gnu
-#MM TODO              --enable-board=????
+#                      --enable-board=????
 #                      BUILD_COMMAND
 #                      make
 #                      ${MAKE_JOB_FLAGS}

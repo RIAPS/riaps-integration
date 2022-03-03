@@ -9,11 +9,11 @@ Power application developers can quickly setup a distributed environment by util
 
 ### 1) RIAPS Development Host Setup Instructions
 
-The RIAPS development host environment is based on a virtual machine setup using Ubuntu 18.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
+The RIAPS development host environment is based on a virtual machine setup using Ubuntu 20.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
 
 ### 2) RIAPS Target Node Setup Instructions
 
-The main RIAPS target node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Additional node environments are available starting with release 1.1.18 (Raspberry Pi 4 and NVIDIA Jetson Nano). Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
+The main RIAPS target node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Additional node environments are available starting with release 1.1.19 (Raspberry Pi 4 and NVIDIA Jetson Nano). Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
 
 ### 3) Testing the RIAPS Platform Environment
 

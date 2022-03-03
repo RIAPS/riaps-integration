@@ -1,5 +1,5 @@
 #Compiling on BBB (armhf), RPi (arm64) and Jetson Nano (arm64)
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.16.0)
 include(ExternalProject)
 project(riaps-thirdpartypkgs)
 include(ProcessorCount)
@@ -23,8 +23,8 @@ elseif (${arch} STREQUAL "arm64")
   set(TOOLCHAIN_PREFIX aarch64-linux-gnu)
 endif()
 
-set(CMAKE_C_COMPILER gcc-7)
-set(CMAKE_CXX_COMPILER g++-7)
+set(CMAKE_C_COMPILER gcc-9)
+set(CMAKE_CXX_COMPILER g++-9)
 set (CMAKE_C_FLAGS "-std=c99")
 
 #Capnproto
@@ -32,7 +32,7 @@ externalproject_add(capnproto
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.6.1"
+                      "v0.8.0"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto"
                       BUILD_IN_SOURCE
@@ -64,7 +64,7 @@ externalproject_add(liblmdb
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.24"
+                      "LMDB_0.9.28"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -89,7 +89,7 @@ externalproject_add(libnethogs
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "dbbee09d7939bf8efacdc90aa6c738f46e939f41"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -112,7 +112,7 @@ externalproject_add(czmq
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
-                     "9ee60b18e8bd8ed4adca7fdaff3e700741da706e"
+                     "v4.2.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/czmq"
                      BUILD_IN_SOURCE
@@ -121,6 +121,7 @@ externalproject_add(czmq
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
+                     --enable-drafts
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -143,7 +144,7 @@ externalproject_add(zyre
                      GIT_REPOSITORY
                      "https://github.com/zeromq/zyre.git"
                      GIT_TAG
-                     "b36470e70771a329583f9cf73598898b8ee05d14"
+                     "v2.0.1"
                      SOURCE_DIR
                      "/tmp/3rdparty/zyre"
                      BUILD_IN_SOURCE
@@ -152,6 +153,7 @@ externalproject_add(zyre
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -161,12 +163,12 @@ externalproject_add(zyre
 
 
 # OpenDHT
- externalproject_add(opendht
+externalproject_add(opendht
                      DEPENDS
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "1.7.4"
+                     "2.1.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht"
                      BUILD_IN_SOURCE
@@ -175,15 +177,14 @@ externalproject_add(zyre
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     PKG_CONFIG_PATH=${prefix}/pkgconfig
-                     --disable-tools
-                     --disable-python
-                     --enable-indexation
-                     #GnuTLS_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lgnutls"
-                     #GnuTLS_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
+                     PKG_CONFIG_PATH=${prefix}/lib/pkgconfig
+                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
                      MsgPack_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lmsgpackc"
                      MsgPack_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
-                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+                     Nettle_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lnettle"
+                     Nettle_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
+                     GnuTLS_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lgnutls"
+                     GnuTLS_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -192,8 +193,9 @@ externalproject_add(zyre
                      install)
 
 
-#libsoc
-externalproject_add(libsoc
+#libsoc - does not have a board configuration for RPi (so not built)
+if(${arch} STREQUAL "armhf")
+ externalproject_add(libsoc
                       GIT_REPOSITORY
                       "https://github.com/jackmitch/libsoc.git"
                       GIT_TAG
@@ -207,9 +209,11 @@ externalproject_add(libsoc
                       -i
                       CONFIGURE_COMMAND
                       ./configure
+                      --enable-board=beaglebone_black
                       BUILD_COMMAND
                       make
                       ${MAKE_JOB_FLAGS}
                       INSTALL_COMMAND
                       sudo make
                       install)
+endif()

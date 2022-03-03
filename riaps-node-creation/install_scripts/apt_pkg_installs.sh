@@ -19,7 +19,7 @@ zyre_czmq_prereq_install() {
     sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libuuid1 liblz4-1 -y
-    sudo apt-get install pkg-config -y
+    sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     echo ">>>>> installed CZMQ and Zyre prerequisites"
 }
 
@@ -28,8 +28,6 @@ zyre_czmq_prereq_install() {
 # These packages are not included in Ubuntu 20.04.
 # Removing for Ubuntu 18.04, in case it exists in the original image.
 security_pkg_install() {
-    echo ">>>>> add security packages"
-    sudo pip3 install 'paramiko==2.7.1' 'cryptography==2.9.2' --verbose
     sudo apt-get install apparmor-utils -y
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
@@ -50,23 +48,39 @@ msgpack_install(){
     echo ">>>>> installed msgpack"
 }
 
-#install opendht prerequisites - expect libncurses5-dev installed
+#install opendht prerequisites - expect libncurses-dev libmsgpack-dev libgnutls28-dev libasio-dev installed
+#    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
-    sudo apt-get install nettle-dev -y
-    # run liblinks script to link gnutls and msgppack
-    chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
-    PREVIOUS_PWD=$PWD
-    cd /usr/lib/${ARCHINSTALL}
-    sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
-    cd $PREVIOUS_PWD
+    sudo apt-get install nettle-dev libasio-dev -y
+    # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
+    if [ $NODE_ARCH = "armhf" ]; then
+        chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
+        PREVIOUS_PWD=$PWD
+        cd /usr/lib/${ARCHINSTALL}
+        sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
+        cd $PREVIOUS_PWD
+    fi
     echo ">>>>> installed opendht prerequisites"
 }
 
+# Install capnproto prerequisites
+capnproto_prereqs_install() {
+    sudo apt-get install libssl-dev -y
+    echo ">>>>> installed capnproto prerequisites"
+}
+
+iptables_install() {
+    sudo apt-get install iptables
+}
+
+
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
-    sudo apt-get remove libboost-all-dev libffi-dev libgnutls28-dev libncurses5-dev -y
-    sudo apt-get remove libpcap-dev libreadline-dev libsystemd-dev -y
+    sudo apt-get remove libboost-all-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev -y
+    sudo apt-get remove libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
+    sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
+    sudo apt autoremove -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }
 
