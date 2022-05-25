@@ -10,7 +10,6 @@ Arguments:
     - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
     - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
     - ``-p | --passwd ``        :  keep password enabled on remote nodes
-
 If specific hostnames are not given, the command will be called for all hosts
 listed in /etc/riaps/riaps_hosts.conf
 @author: timkrentz
@@ -113,14 +112,14 @@ if __name__ == '__main__':
     parser.add_argument("-R", "--roles", default="", help="list of roles, comma separated")
     parser.add_argument("-f", dest='hostsFile', help="absolute path to riaps-hosts.conf")
     parser.add_argument("-A", dest='addtlHosts', help="list of hostnames, comma separated, to add to a current configuration")
-    parser.add_argument("-i", dest='keyFile', help="absolute path to pre-established RIAPS private key")
+    parser.add_argument("-i", dest='privateKeyPath', help="absolute path to pre-established RIAPS private key")
     parser.add_argument("-v", "--validate", action='store_const', const=True, help="validate host names")
     parser.add_argument("-p", "--passwd", action='store_true', help="keep password for remote nodes")
     args = parser.parse_args()
 
     fcmd = "fab"
     fflag = "-f"
-    fpath = [p + "/riaps/" for p in site.getsitepackages()] + [os.getenv('RIAPSHOME')]
+    fpaths = [p + "/riaps/" for p in site.getsitepackages()] + [os.getenv('RIAPSHOME')]
     rekeyVM = True
     if args.hosts:
         fhosts = ("--hosts=" + args.hosts)
