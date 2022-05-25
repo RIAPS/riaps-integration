@@ -22,7 +22,8 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
 
 4) Setup the network settings to have Adapter 1 = "NAT" and Adapter 2 = "Bridged Adapter" pointing to the local network where the RIAPS nodes are attached.
 
-5) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.
+5) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
+    - Hint: After first entering the initial password (`riaps`), the login window might prompt "Change Password". Enter `riaps` again to confirm this and see the first "Enter New Password" prompt. Enter your new password, and it will ask you to confirm. Entering your new password at "Change Password" will result in an incorrect attempt.
 
 6) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
 
