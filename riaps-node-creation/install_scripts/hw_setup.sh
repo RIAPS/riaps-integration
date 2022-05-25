@@ -85,11 +85,19 @@ setup_hostname() {
     echo ">>>>> setup hostname"
 }
 
-# dialout group exists on iot
+# dialout group exists on Compulab imx8
 setup_peripherals() {
-    getent group gpio ||groupadd gpio
-    getent group dialout ||groupadd dialout
-    getent group pwm ||groupadd pwm
+    getent group gpio || sudo groupadd gpio
+    getent group dialout || sudo groupadd dialout
+    getent group pwm || sudo groupadd pwm
+    getent group spi || sudo groupadd spi
 
+    # For BBB and RPi, not tested for Nano and Compulab imx8
+    if [ $HW_BOARD = "bbb" || $HW_BOARD = "rpi" ]; then
+        sudo chown :spi /dev/spidev0.0
+        sudo chmod g+rw /dev/spidev0.0
+        sudo chown :spi /dev/spidev0.1
+        sudo chmod g+rw /dev/spidev0.1
+    fi
     echo ">>>>> setup peripherals - gpio, uart, and pwm"
 }

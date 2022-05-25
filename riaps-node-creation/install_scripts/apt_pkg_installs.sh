@@ -7,6 +7,7 @@ boost_install() {
 }
 
 # install nethogs pre-requisites
+# MM TODO: for imx8 used libncurses-dev
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
