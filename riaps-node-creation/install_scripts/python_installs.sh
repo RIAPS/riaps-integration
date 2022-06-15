@@ -128,6 +128,7 @@ py_lmdb_install() {
 }
 
 # Install other required packages
+# for Compulab IOT, moved pyroute2==0.6.8
 pip3_3rd_party_installs(){
     pip3 install 'pydevd==2.3.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.10.7' --verbose
     pip3 install 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
