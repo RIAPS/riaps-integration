@@ -588,7 +588,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "2.1.10"
+                     "v2.4.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -611,7 +611,7 @@ elseif(${arch} STREQUAL "armhf")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "2.1.10"
+                     "v2.4.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -625,11 +625,14 @@ elseif(${arch} STREQUAL "armhf")
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
+                     Argon2_LIBS="-L/usr/lib/arm-linux-gnueabihf -largon2"
+                     Argon2_CFLAGS=-I/usr/include
                      GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
                      MsgPack_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+                     Nettle_LIBS="-L/usr/lib/arm-linux-gnueabihf -lnettle"
+                     Nettle_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -642,7 +645,7 @@ elseif(${arch} STREQUAL "arm64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "2.1.10"
+                     "v2.4.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -656,11 +659,14 @@ elseif(${arch} STREQUAL "arm64")
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
+                     Argon2_LIBS="-L/usr/lib/aarch64-linux-gnu -largon2"
+                     Argon2_CFLAGS=-I/usr/include
                      GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
                      MsgPack_CFLAGS=-I/usr/include/aarch64-linux-gnu
-                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
+                     Nettle_LIBS="-L/usr/lib/aarch64-linux-gnu -lnettle"
+                     Nettle_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}

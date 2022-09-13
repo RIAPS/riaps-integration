@@ -51,7 +51,9 @@ msgpack_install(){
 #install opendht prerequisites - expect libncurses-dev libmsgpack-dev libgnutls28-dev libasio-dev installed
 #    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
-    sudo apt-get install nettle-dev libasio-dev -y
+    sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
+    sudo apt-get install fmt-dev libhttp-parser-dev libjsoncpp-dev -y
+
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
     if [ $NODE_ARCH = "armhf" ]; then
         chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
@@ -73,13 +75,17 @@ iptables_install() {
     sudo apt-get install iptables
 }
 
+gpio_install() {
+    sudo apt-get install gpiod libgpiod-dev libiio-utils -y
+}
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
-    sudo apt-get remove libboost-all-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev -y
+    sudo apt-get remove libboost-all-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
     sudo apt-get remove libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
+    sudo apt-get remove libargon2-0-dev libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
     sudo apt autoremove -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }

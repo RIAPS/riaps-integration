@@ -55,6 +55,7 @@ msgpack_install
 security_prereq_install
 opendht_prereqs_install
 capnproto_prereqs_install
+gpio_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install

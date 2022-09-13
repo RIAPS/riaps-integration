@@ -70,7 +70,8 @@ msgpack_install(){
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
-    sudo apt-get install nettle-dev libasio-dev -y
+    sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
+    sudo apt-get install fmt-dev libhttp-parser-dev libjsoncpp-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
         sudo apt-get install nettle-dev:$c_arch libasio-dev:$c_arch -y
@@ -95,6 +96,9 @@ capnproto_prereqs_install() {
     echo ">>>>> installed capnproto prerequisites"
 }
 
+gpio_install() {
+    sudo apt-get install gpiod libgpiod-dev libiio-utils -y
+}
 
 # Setup RIAPS repository and install script
 riaps_prereq() {

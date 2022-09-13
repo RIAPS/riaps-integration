@@ -113,13 +113,25 @@ py_lmdb_install() {
     rm -rf /tmp/3rdparty/py_lmdb
 }
 
+# Install spdlog python logger
+spdlog_python_install() {
+    PREVIOUS_PWD=$PWD
+    TMP=`mktemp -d`
+    git clone https://github.com/RIAPS/spdlog-python.git $TMP/spdlog-python
+    cd $TMP/spdlog-python
+    git clone -b v1.10.0 --depth 1 https://github.com/gabime/spdlog.git
+    sudo python3 setup.py install
+    cd $PREVIOUS_PWD
+    sudo rm -rf $TMP
+    echo ">>>>> installed spdlog"
+}
 
 # Install other required packages
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.3.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.10.7' --verbose
-    pip3 install 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
-    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'minimalmodbus==0.7' 'pyserial==3.4' --verbose
-    pip3 install 'pybind11==2.6.2' 'toml==0.10.2' 'pycryptodomex==3.10.1' 'spdlog==2.0.4' --verbose
+    pip3 install 'pydevd==2.8.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.11.0' --verbose
+    pip3 install 'bcrypt==3.2.0' 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'pyserial==3.5' --verbose
+    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.10.1' --verbose
     pip3 install 'Adafruit_BBIO==1.2.0' --verbose
     pip3 install 'parse==1.19.0' --verbose
 
