@@ -71,10 +71,11 @@ msgpack_install(){
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
-    sudo apt-get install fmt-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
         sudo apt-get install nettle-dev:$c_arch libasio-dev:$c_arch -y
+        sudo apt-get install libfmt-dev:$c_arch libhttp-parser-dev:$c_arch libjsoncpp-dev:$c_arch -y
     done
 
     # run liblinks script to link gnutls and msgppack
@@ -98,6 +99,9 @@ capnproto_prereqs_install() {
 
 gpio_install() {
     sudo apt-get install gpiod libgpiod-dev libiio-utils -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libgpiod-dev:$c_arch -y
+    done
 }
 
 # Setup RIAPS repository and install script

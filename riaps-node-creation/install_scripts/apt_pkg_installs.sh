@@ -52,7 +52,7 @@ msgpack_install(){
 #    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
-    sudo apt-get install fmt-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
 
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
     if [ $NODE_ARCH = "armhf" ]; then
