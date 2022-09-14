@@ -61,6 +61,7 @@ add_spi_func
 setup_ssh_keys
 rdate_install
 rm_snap_pkg
+tmux_install
 cmake_func
 timesync_requirements
 random_num_gen_install

@@ -34,3 +34,8 @@ wget_install() {
     sudo apt-get install wget -y
     echo ">>>>> installed wget"
 }
+
+
+tmux_install() {
+    sudo apt-get install tmux -y
+}

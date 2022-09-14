@@ -68,6 +68,7 @@ rdate_install
 htop_install
 rm_snap_pkg
 nano_install
+tmux_install
 timesync_requirements
 freqgov_off
 watchdog_timers

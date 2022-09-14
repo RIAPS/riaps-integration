@@ -76,6 +76,7 @@ add_spi_func
 setup_ssh_keys
 rdate_install
 vim_func
+tmux_install
 htop_install
 rm_snap_pkg
 nano_install

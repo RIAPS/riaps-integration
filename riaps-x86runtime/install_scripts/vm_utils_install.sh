@@ -4,7 +4,7 @@ set -e
 # Install utilities used by developers
 # net-tools exists in 18.04, but is no longer in 20.04
 utils_install() {
-    sudo apt-get install htop -y
+    sudo apt-get install htop vim tmux -y
     sudo apt-get install openssl openssh-server -y
     sudo apt-get install mininet -y
     sudo apt-get install net-tools -y
