@@ -626,13 +626,13 @@ elseif(${arch} STREQUAL "armhf")
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
                      Argon2_LIBS="-L/usr/lib/arm-linux-gnueabihf -largon2"
-                     Argon2_CFLAGS=-I/usr/include
+                     Argon2_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
                      MsgPack_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      Nettle_LIBS="-L/usr/lib/arm-linux-gnueabihf -lnettle"
-                     Nettle_CFLAGS=-I/usr/include/aarch64-linux-gnu
+                     Nettle_CFLAGS=-I/usr/include/arm-linux-gnueabihf
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -660,7 +660,7 @@ elseif(${arch} STREQUAL "arm64")
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
                      Argon2_LIBS="-L/usr/lib/aarch64-linux-gnu -largon2"
-                     Argon2_CFLAGS=-I/usr/include
+                     Argon2_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
                      GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
                      MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
