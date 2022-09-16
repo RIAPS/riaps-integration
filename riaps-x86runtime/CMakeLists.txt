@@ -605,74 +605,75 @@ if(${arch} STREQUAL "amd64")
                      INSTALL_COMMAND
                      sudo make
                      install)
-elseif(${arch} STREQUAL "armhf")
- externalproject_add(opendht-${arch}
-                     DEPENDS
-                     GIT_REPOSITORY
-                     "https://github.com/savoirfairelinux/opendht.git"
-                     GIT_TAG
-                     "v2.4.10"
-                     SOURCE_DIR
-                     "/tmp/3rdparty/opendht-${arch}"
-                     BUILD_IN_SOURCE
-                     1
-                     UPDATE_COMMAND
-                     "./autogen.sh"
-                     CONFIGURE_COMMAND
-                     ./configure
-                     --host=arm-linux-gnueabihf
-                     CC=/usr/bin/arm-linux-gnueabihf-gcc
-                     CXX=/usr/bin/arm-linux-gnueabihf-g++
-                     --prefix=${prefix}
-                     PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
-                     Argon2_LIBS="-L/usr/lib/arm-linux-gnueabihf -largon2"
-                     Argon2_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
-                     GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
-                     MsgPack_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     Nettle_LIBS="-L/usr/lib/arm-linux-gnueabihf -lnettle"
-                     Nettle_CFLAGS=-I/usr/include/arm-linux-gnueabihf
-                     BUILD_COMMAND
-                     make
-                     ${MAKE_JOB_FLAGS}
-                     INSTALL_COMMAND
-                     sudo make
-                     install)
-elseif(${arch} STREQUAL "arm64")
- externalproject_add(opendht-${arch}
-                     DEPENDS
-                     GIT_REPOSITORY
-                     "https://github.com/savoirfairelinux/opendht.git"
-                     GIT_TAG
-                     "v2.4.10"
-                     SOURCE_DIR
-                     "/tmp/3rdparty/opendht-${arch}"
-                     BUILD_IN_SOURCE
-                     1
-                     UPDATE_COMMAND
-                     "./autogen.sh"
-                     CONFIGURE_COMMAND
-                     ./configure
-                     --host=aarch64-linux-gnu
-                     CC=/usr/bin/aarch64-linux-gnu-gcc
-                     CXX=/usr/bin/aarch64-linux-gnu-g++
-                     --prefix=${prefix}
-                     PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
-                     Argon2_LIBS="-L/usr/lib/aarch64-linux-gnu -largon2"
-                     Argon2_CFLAGS=-I/usr/include/aarch64-linux-gnu
-                     GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
-                     GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
-                     MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
-                     MsgPack_CFLAGS=-I/usr/include/aarch64-linux-gnu
-                     Nettle_LIBS="-L/usr/lib/aarch64-linux-gnu -lnettle"
-                     Nettle_CFLAGS=-I/usr/include/aarch64-linux-gnu
-                     BUILD_COMMAND
-                     make
-                     ${MAKE_JOB_FLAGS}
-                     INSTALL_COMMAND
-                     sudo make
-                     install)
+# MM TODO: working out a cross compile issue, this is not really needed at this time
+#elseif(${arch} STREQUAL "armhf")
+# externalproject_add(opendht-${arch}
+#                     DEPENDS
+#                     GIT_REPOSITORY
+#                     "https://github.com/savoirfairelinux/opendht.git"
+#                     GIT_TAG
+#                    "v2.4.10"
+#                     SOURCE_DIR
+#                     "/tmp/3rdparty/opendht-${arch}"
+#                     BUILD_IN_SOURCE
+#                     1
+#                    UPDATE_COMMAND
+#                    "./autogen.sh"
+#                     CONFIGURE_COMMAND
+#                     ./configure
+#                     --host=arm-linux-gnueabihf
+#                     CC=/usr/bin/arm-linux-gnueabihf-gcc
+#                    CXX=/usr/bin/arm-linux-gnueabihf-g++
+#                     --prefix=${prefix}
+#                     PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
+#                     Argon2_LIBS="-L/usr/lib/arm-linux-gnueabihf -largon2"
+#                     Argon2_CFLAGS=-I/usr/include/arm-linux-gnueabihf
+#                     GnuTLS_LIBS="-L/usr/lib/arm-linux-gnueabihf -lgnutls"
+#                     GnuTLS_CFLAGS=-I/usr/include/arm-linux-gnueabihf
+#                    MsgPack_LIBS="-L/usr/lib/arm-linux-gnueabihf -lmsgpackc"
+#                     MsgPack_CFLAGS=-I/usr/include/arm-linux-gnueabihf
+#                     Nettle_LIBS="-L/usr/lib/arm-linux-gnueabihf -lnettle"
+#                     Nettle_CFLAGS=-I/usr/include/arm-linux-gnueabihf
+#                     BUILD_COMMAND
+#                     make
+#                     ${MAKE_JOB_FLAGS}
+#                     INSTALL_COMMAND
+#                     sudo make
+#                     install)
+#elseif(${arch} STREQUAL "arm64")
+# externalproject_add(opendht-${arch}
+#                     DEPENDS
+#                     GIT_REPOSITORY
+#                     "https://github.com/savoirfairelinux/opendht.git"
+#                     GIT_TAG
+#                    "v2.4.10"
+#                     SOURCE_DIR
+#                    "/tmp/3rdparty/opendht-${arch}"
+#                     BUILD_IN_SOURCE
+#                    1
+#                     UPDATE_COMMAND
+#                    "./autogen.sh"
+#                    CONFIGURE_COMMAND
+#                    ./configure
+#                     --host=aarch64-linux-gnu
+#                     CC=/usr/bin/aarch64-linux-gnu-gcc
+#                     CXX=/usr/bin/aarch64-linux-gnu-g++
+#                     --prefix=${prefix}
+#                     PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
+#                     Argon2_LIBS="-L/usr/lib/aarch64-linux-gnu -largon2"
+#                     Argon2_CFLAGS=-I/usr/include/aarch64-linux-gnu
+#                     GnuTLS_LIBS="-L/usr/lib/aarch64-linux-gnu -lgnutls"
+#                     GnuTLS_CFLAGS=-I/usr/include/aarch64-linux-gnu
+#                     MsgPack_LIBS="-L/usr/lib/aarch64-linux-gnu -lmsgpackc"
+#                     MsgPack_CFLAGS=-I/usr/include/aarch64-linux-gnu
+#                     Nettle_LIBS="-L/usr/lib/aarch64-linux-gnu -lnettle"
+#                     Nettle_CFLAGS=-I/usr/include/aarch64-linux-gnu
+#                     BUILD_COMMAND
+#                     make
+#                     ${MAKE_JOB_FLAGS}
+#                     INSTALL_COMMAND
+#                     sudo make
+#                     install)
 endif()
 
 

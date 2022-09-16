@@ -90,3 +90,34 @@ graphing_installs() {
     rm -rf /tmp/3rdparty/mininet
     echo ">>>>> installed mininet"
 }
+
+nodered_install() {
+    # install FlashMQ
+    git clone https://github.com/halfgaar/FlashMQ.git
+    cd FlashMQ/
+    ./build.sh
+    cd FlashMQBuildRelease/
+    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.debs
+
+    # install MQTT
+    sudo pip3 install paho-MQTT
+
+    # install nodejs version (latest)
+    # Note: this installation did not go smoothly, this step might be best taken manually
+    #       issues are around installing nodejs and npm
+    curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh
+    sudo bash /tmp/nodesource_setup.sh
+    sudo apt-get install nodejs
+    node -v
+    # MM TODO:  stopped here due to unresolved dependency issue when trying to install npm
+    sudo apt-get install npm
+    npm -v
+    nvm list-remote
+    nvm install v18.7.0
+    nvm install -g npm@latest
+    npm -v
+
+    # install nodered
+    sudo npm install -g --unsafe-perm node-red
+    npm install node-red-dashboard
+}

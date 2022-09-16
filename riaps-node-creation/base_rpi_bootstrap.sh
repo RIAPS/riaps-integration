@@ -89,6 +89,7 @@ pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
+spdlog_python_install
 butter_install
 rpyc_install
 py_lmdb_install

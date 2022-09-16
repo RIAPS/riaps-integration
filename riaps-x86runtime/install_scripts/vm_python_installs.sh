@@ -146,5 +146,6 @@ pip3_3rd_party_installs(){
 
     # VM Only packages
     pip3 install 'textX==2.3.0' 'pydot==1.4.2' 'gitpython==3.1.14' 'pymultigen==0.2.0' 'Jinja2==2.11.3' 'influxdb-client==1.15.0' --verbose
+    pip3 install 'libtmux==0.15.1'
     echo ">>>>> installed pip3 packages"
 }
