@@ -65,7 +65,7 @@ apparmor_monkeys_install
 redis_install
 spdlog_python_install
 #butter_install - this may no longer be needed (MM - 092022)
-rpyc_install
+#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install

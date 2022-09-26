@@ -106,6 +106,7 @@ butter_install() {
 }
 
 # Installing rpyc
+# MM removing, latest package is pypi now
 rpyc_install() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
