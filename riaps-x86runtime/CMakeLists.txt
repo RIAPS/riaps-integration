@@ -156,7 +156,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.28"
+                      "LMDB_0.9.29"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -183,7 +183,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.28"
+                      "LMDB_0.9.29"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -217,7 +217,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.28"
+                      "LMDB_0.9.29"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND

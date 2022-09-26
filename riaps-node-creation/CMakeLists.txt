@@ -64,7 +64,7 @@ externalproject_add(liblmdb
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.28"
+                      "LMDB_0.9.29"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND

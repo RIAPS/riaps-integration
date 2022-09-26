@@ -128,14 +128,14 @@ rm_snap_pkg() {
 # Install redis
 redis_install () {
     if [ ! -f "/usr/local/bin/redis-server" ]; then
-        wget http://download.redis.io/releases/redis-6.2.1.tar.gz
-        tar xzf redis-6.2.1.tar.gz
-        make -C redis-6.2.1 BUILD_TLS=yes
-        sudo make -C redis-6.2.1 install
+        wget http://download.redis.io/releases/redis-7.0.5.tar.gz
+        tar xzf redis-7.0.5.tar.gz
+        make -C redis-7.0.5 BUILD_TLS=yes
+        sudo make -C redis-7.0.5 install
         sudo mkdir -p /etc/redis
-        sudo cp redis-6.2.1/redis.conf /etc/redis/.
-        rm -rf redis-6.2.1
-        rm -rf redis-6.2.1.tar.gz
+        sudo cp redis-7.0.5/redis.conf /etc/redis/.
+        rm -rf redis-7.0.5
+        rm -rf redis-7.0.5.tar.gz
         echo ">>>>> installed redis"
     else
         echo ">>>>> redis already installed. skipping"

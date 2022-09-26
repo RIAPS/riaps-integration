@@ -30,7 +30,7 @@ pyzmq_install(){
     TMP=`mktemp -d`
     git clone https://github.com/zeromq/pyzmq.git $TMP/pyzmq
     cd $TMP/pyzmq
-    git checkout v22.0.3
+    git checkout v23.2.1
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
@@ -87,6 +87,7 @@ prctl_install() {
 # Installing butter
 # For Python 3.8 (used in Ubuntu 20.04), butter does not install with pip
 # using the forked project for now since it has the desired setup.py fix ("platforms=[]"), need to update the fork when changing versions later
+# MM TODO (9/20/22) - going to try pip package again, this may not be needed anymore
 butter_install() {
     pip3 install 'cffi==1.15.0' --verbose
     if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
@@ -110,7 +111,7 @@ rpyc_install() {
     TMP=`mktemp -d`
     git clone https://github.com/tomerfiliba-org/rpyc $TMP/rpyc
     cd $TMP/rpyc
-    git checkout 5.0.1
+    git checkout 5.2.3
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf $TMP/rpyc
@@ -121,7 +122,7 @@ py_lmdb_install() {
     TMP=`mktemp -d`
     git clone https://github.com/jnwatson/py-lmdb.git $TMP/py_lmdb
     cd $TMP/py_lmdb
-    git checkout py-lmdb_1.1.1
+    git checkout py-lmdb_1.3.0
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf $TMP/py_lmdb
@@ -129,18 +130,14 @@ py_lmdb_install() {
 
 # Install other required packages
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.8.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.11.0' --verbose
-    pip3 install 'bcrypt==3.2.0' 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
-    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'pyserial==3.5' --verbose
-    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.10.1' --verbose
-    pip3 install 'psutil==5.5.1' 'parse==1.19.0' --verbose
-
-    # Ubuntu 20.04 (and 18.04.4) uses Python 3.8.
-    # Python 3.8 has this installed already, need to overwrite for 18.04
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install --ignore-installed 'PyYAML==5.3.1' --verbose
-    else
-        pip3 install 'PyYAML==5.3.1' --verbose
-    fi
+    pip3 install 'pydevd==2.8.0' 'redis==4.3.4' 'hiredis==2.0.0' 'netifaces==0.11.0' --verbose
+    pip3 install 'bcrypt==3.2.2' 'paramiko==2.11.0' 'cryptography==3.3.2' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
+    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
+    pip3 install 'psutil==5.9.2' 'rpyc==5.2.3' --verbose
+    pip3 install 'parse==1.19.0' 'butter==0.13.1' --verbose
+    # Use a newer version than distribution installed
+    # Python 3.8 has this installed already, need to overwrite 
+    pip3 install --ignore-installed 'PyYAML==6.0' --verbose
     echo ">>>>> installed pip3 packages"
 }

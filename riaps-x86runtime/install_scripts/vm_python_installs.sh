@@ -95,7 +95,7 @@ rpyc_install() {
     cd /tmp/3rdparty
     git clone https://github.com/tomerfiliba-org/rpyc /tmp/3rdparty/rpyc
     cd /tmp/3rdparty/rpyc
-    git checkout 5.0.1
+    git checkout 5.2.3
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/rpyc
@@ -128,24 +128,17 @@ spdlog_python_install() {
 
 # Install other required packages
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.8.0' 'redis==3.5.3' 'hiredis==1.1.0' 'netifaces==0.11.0' --verbose
-    pip3 install 'bcrypt==3.2.0' 'paramiko==2.7.2' 'cryptography==2.8' 'cgroups==0.1.0' 'cgroupspy==0.1.6' --verbose
-    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.5.14' 'pyserial==3.5' --verbose
-    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.10.1' --verbose
-    pip3 install 'Adafruit_BBIO==1.2.0' --verbose
-    pip3 install 'parse==1.19.0' --verbose
-
-    # Ubuntu 20.04 (and 18.04.4) uses Python 3.8.
-    # Python 3.8 has this installed already, need to overwrite for 18.04
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'psutil==5.5.1' --verbose
-        pip3 install --ignore-installed 'PyYAML==5.3.1' --verbose
-    else
-        pip3 install 'psutil==5.5.1' 'PyYAML==5.3.1' --verbose
-    fi
+    pip3 install 'pydevd==2.8.0' 'redis==4.3.4' 'hiredis==2.0.0' 'netifaces==0.11.0' --verbose
+    pip3 install 'bcrypt==3.2.2' 'paramiko==2.11.0' 'cryptography==3.3.2' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
+    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
+    pip3 install 'psutil==5.9.2' 'rpyc==5.2.3' --verbose
+    pip3 install 'parse==1.19.0' 'butter==0.13.1' --verbose
+    # Use a newer version than distribution installed
+    pip3 install --ignore-installed 'PyYAML==6.0' --verbose
 
     # VM Only packages
-    pip3 install 'textX==2.3.0' 'pydot==1.4.2' 'gitpython==3.1.14' 'pymultigen==0.2.0' 'Jinja2==2.11.3' 'influxdb-client==1.15.0' --verbose
-    pip3 install 'libtmux==0.15.1'
+    pip3 install 'textX==3.0.0' 'pydot==1.4.2' 'gitpython==3.1.27' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose
+    pip3 install 'libtmux==0.15.7' 'graphviz==0.20.1' 'python-magic==0.4.27' 'influxdb-client==1.32.0' --verbose
     echo ">>>>> installed pip3 packages"
 }

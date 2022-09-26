@@ -40,7 +40,7 @@ build_lmdb() {
     TMP=`mktemp -d`
     git clone https://github.com/LMDB/lmdb.git $TMP/lmdb
     cd $TMP/lmdb
-    git checkout LMDB_0.9.28
+    git checkout LMDB_0.9.29
     make -j2 -C ./libraries/liblmdb
     sudo make -C ./libraries/liblmdb install
     cd $PREVIOUS_PWD

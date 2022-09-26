@@ -14,13 +14,13 @@ cmake_func() {
 # but is needed for RIAPS setup/installation. Therefore, it is installed here to make sure it is available.
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
-    sudo apt-get install python3-pip -y
+    sudo apt-get install python3-pip python-is-python3 -y
     sudo pip3 install --upgrade pip
     echo ">>>>> installed python3"
 }
 
 cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.21' --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.32' --verbose
     echo ">>>>> installed cython"
 }
 

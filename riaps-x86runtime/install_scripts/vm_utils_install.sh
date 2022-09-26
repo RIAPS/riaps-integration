@@ -75,8 +75,8 @@ graphing_installs() {
     echo ">>>>> installed grafana"
 
     #https://docs.influxdata.com/influxdb/v2.0/get-started
-    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.4-amd64.deb
-    sudo dpkg -i influxdb2-2.0.4-amd64.deb
+    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.4.0-amd64.deb
+    sudo dpkg -i influxdb2-2.4.0-amd64.deb
     echo ">>>>> installed influxdb2"
 
     #PREVIOUS_PWD=$PWD
