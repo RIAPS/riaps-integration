@@ -74,8 +74,8 @@ opendht_prereqs_install() {
     sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
-        sudo apt-get install nettle-dev:$c_arch libasio-dev:$c_arch libargon2-0-dev:$c_arch -y
-        sudo apt-get install libfmt-dev:$c_arch libhttp-parser-dev:$c_arch libjsoncpp-dev:$c_arch -y
+        sudo apt-get install nettle-dev:$c_arch libargon2-0-dev:$c_arch -y
+        sudo apt-get install libjsoncpp-dev:$c_arch -y
     done
 
     # run liblinks script to link gnutls and msgppack
