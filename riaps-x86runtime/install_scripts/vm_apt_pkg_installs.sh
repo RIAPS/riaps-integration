@@ -15,7 +15,7 @@ nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install libpcap-dev:$c_arch -y
+        sudo apt-get install libpcap-dev:$c_arch libncurses5-dev:$c_arch -y
     done
     echo ">>>>> installed nethogs prerequisites"
 }

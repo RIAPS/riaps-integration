@@ -597,8 +597,8 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-                     LDFLAGS=-L/usr/lib/x86_64-linux-gnu
+                     #PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+                     #LDFLAGS=-L/usr/lib/x86_64-linux-gnu
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}

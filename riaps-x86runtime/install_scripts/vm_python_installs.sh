@@ -18,7 +18,7 @@ pyzmq_install(){
     cd /tmp/3rdparty
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
-    git checkout v22.0.3
+    git checkout v23.2.1
     sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
@@ -108,7 +108,7 @@ py_lmdb_install() {
     cd /tmp/3rdparty
     git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/py_lmdb
     cd /tmp/3rdparty/py_lmdb
-    git checkout py-lmdb_1.1.1
+    git checkout py-lmdb_1.3.0
     sudo python3 setup.py install
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/py_lmdb
@@ -133,10 +133,10 @@ pip3_3rd_party_installs(){
     pip3 install 'bcrypt==3.2.2' 'paramiko==2.11.0' 'cryptography==3.3.2' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
     pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
-    pip3 install 'psutil==5.9.2' 'rpyc==5.2.3' --verbose
-    pip3 install 'parse==1.19.0' 'butter==0.13.1' --verbose
+    pip3 install 'rpyc==5.2.3' 'parse==1.19.0' 'butter==0.13.1' --verbose
     # Use a newer version than distribution installed
     pip3 install --ignore-installed 'PyYAML==6.0' --verbose
+    pip3 install --ignore-installed 'psutil==5.9.2' --verbose
 
     # VM Only packages
     pip3 install 'textX==3.0.0' 'pydot==1.4.2' 'gitpython==3.1.27' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose
