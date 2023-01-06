@@ -1,27 +1,3 @@
-#!/usr/bin/env bash
-set -e
-
-# Install utilities used by developers
-# net-tools exists in 18.04, but is no longer in 20.04
-utils_install() {
-    sudo apt-get install htop vim tmux -y
-    sudo apt-get install openssl openssh-server -y
-    sudo apt-get install mininet -y
-    sudo apt-get install net-tools -y
-    # make sure date is correct
-    sudo apt-get install rdate -y
-    # rdate command can timeout, restart script from here if this happens
-    sudo rdate -n -4 time.nist.gov
-    echo ">>>>> installed utils"
-}
-
-# Remove the software deployment and package management system called "Snap"
-rm_snap_pkg() {
-    sudo apt-get remove snapd -y
-    sudo apt-get purge snapd -y
-    echo ">>>>> snap package manager removed"
-}
-
 # Package needed for eclipse
 java_func () {
     sudo apt-get install openjdk-11-jre-headless -y

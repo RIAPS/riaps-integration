@@ -134,6 +134,7 @@ pip3_3rd_party_installs(){
     pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
     pip3 install 'rpyc==5.2.3' 'parse==1.19.0' 'butter==0.13.1' --verbose
+    pip3 install 'gpiod==1.5.3' --verbose
     # Use a newer version than distribution installed
     pip3 install --ignore-installed 'PyYAML==6.0' --verbose
     pip3 install --ignore-installed 'psutil==5.9.2' --verbose
