@@ -45,9 +45,9 @@ python_install
 cython_install
 curl_func
 boost_install
-#eclipse_func - MM removed, done manually at this time
+#eclipse_func - this step is done manually at this time
 eclipse_plugin_dep_install
-add_eclipse_projects
+#add_eclipse_projects - these projects are now in a private repo, do this manually
 nethogs_prereq_install
 zyre_czmq_prereq_install
 gnutls_install
@@ -55,6 +55,7 @@ msgpack_install
 security_prereq_install
 opendht_prereqs_install
 capnproto_prereqs_install
+gpio_install
 externals_cmake_install
 pycapnp_install
 pyzmq_install
@@ -62,13 +63,13 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
-butter_install
-rpyc_install
+spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install
 prctl_install
 graphing_installs
+#nodered_install - this step is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
 rm -rf /tmp/3rdparty
 add_set_tests
 riaps_prereq

@@ -5,9 +5,9 @@ This is information on how the preloaded RIAPS virtual machine was created.
 1) Download the latest version of Xubuntu:
 ```
 http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/
-version 20.04.3 was used for the download image
+version 20.04.5s was used for the download image
 
-Kernel:  5.11.0-44-generic (after SW update)
+Kernel:  5.15.0-46-generic (after SW update)
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -83,7 +83,7 @@ The last line provides feedback that the quota is setup.
     d) Indicate desired RIAPS version
 
     ```
-    RIAPS_VERSION="v1.1.19"
+    RIAPS_VERSION="v1.1.20"
     ```
 
 12) Run the bootstrap script and send information provided to an installation log file.
@@ -170,13 +170,15 @@ save ""
     APT::Periodic::Unattended-Upgrade "0";
     ```
 
-19) Reset the password to the default and cause reset of password on next login.
+20) Add example applications for use in Eclipse.  Typically load DistributedEstimator, DistributedEstimatorGPIO and WeatherMonitor.  This files are in a private repo, but any RIAPS application can be used as examples.
+
+21) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-20) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+22) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+# Note:  for 1.1.20 release, the Nano image had not yet been created nor code updated
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, libzmq5, liblz4-1, cmake
 # libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
@@ -68,6 +69,7 @@ rdate_install
 htop_install
 rm_snap_pkg
 nano_install
+tmux_install
 timesync_requirements
 freqgov_off
 watchdog_timers
@@ -86,17 +88,20 @@ msgpack_install
 security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
+gpio_install
 build_external_libraries
 pycapnp_install
 pyzmq_install
 czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
-butter_install
-rpyc_install
+spdlog_python_install
+#butter_install - this may no longer be needed (MM - 092022)
+#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 prctl_install
 remove_pkgs_used_to_build
 riaps_prereq
 create_riaps_version_file
+set_date

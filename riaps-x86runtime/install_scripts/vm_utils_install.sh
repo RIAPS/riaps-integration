@@ -4,7 +4,7 @@ set -e
 # Install utilities used by developers
 # net-tools exists in 18.04, but is no longer in 20.04
 utils_install() {
-    sudo apt-get install htop -y
+    sudo apt-get install htop vim tmux -y
     sudo apt-get install openssl openssh-server -y
     sudo apt-get install mininet -y
     sudo apt-get install net-tools -y
@@ -75,8 +75,8 @@ graphing_installs() {
     echo ">>>>> installed grafana"
 
     #https://docs.influxdata.com/influxdb/v2.0/get-started
-    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.4-amd64.deb
-    sudo dpkg -i influxdb2-2.0.4-amd64.deb
+    wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.4.0-amd64.deb
+    sudo dpkg -i influxdb2-2.4.0-amd64.deb
     echo ">>>>> installed influxdb2"
 
     #PREVIOUS_PWD=$PWD
@@ -89,4 +89,44 @@ graphing_installs() {
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/mininet
     echo ">>>>> installed mininet"
+}
+
+# Automation of this function has not yet been tested, the node-red install requires interaction
+# Consider automation in the future
+nodered_install() {
+    # install FlashMQ
+    git clone https://github.com/halfgaar/FlashMQ.git
+    cd FlashMQ/
+    ./build.sh
+    cd FlashMQBuildRelease/
+    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.debs
+
+    # install MQTT
+    sudo pip3 install paho-MQTT
+
+    # install nodejs version (latest)
+    # Note: this installation did not go smoothly, this step might be best taken manually
+    #       issues are around installing nodejs and npm
+    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    node -v
+    npm -v
+
+    # install global node-red
+    sudo npm install -g --unsafe-perm node-red
+    npm i --package-lock-only
+    npm audit fix
+
+    # run node-red to get the .node-red directory
+    node-red
+
+    # install the dashboard
+    cd /home/$RIAPSUSER/.node-red
+    npm install node-red-dashboard
+    npm install node-red-contrib-ui-svg
+
+    # desired result of "npm list":
+    # node-red-project@0.0.1 /home/riaps/.node-red
+    # |--- node-red-contrib-ui-svg@2.3.1
+    # |--- node-red-dashboard@3.2.0
 }

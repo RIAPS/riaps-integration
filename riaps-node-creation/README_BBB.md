@@ -8,10 +8,10 @@ These are instructions on how the BBB Base image can be created from a Ubuntu pr
 
 This work should be done on a Linux machine or VM. We are starting with a pre-configured BBB Ubuntu image and modifying it to add the RT Patch kernel and any other customizations needed for RIAPS.
 
-1) Download a complete pre-configured image (Ubuntu 20.04.1) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
+1) Download a complete pre-configured image (Ubuntu 20.04.5) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
 
 ```
-wget https://rcn-ee.com/rootfs/ubuntu-armhf/2022-03-03/ubuntu-20.04.4-console-armhf-2022-03-03.tar.xz
+wget https://rcn-ee.com/rootfs/ubuntu-armhf-focal-minimal/2023-01-09/ubuntu-20.04.5-console-armhf-2023-01-09.tar.xz
 ```
 
 2) Unpack image and change into the directory (unxz file, then tar xf)

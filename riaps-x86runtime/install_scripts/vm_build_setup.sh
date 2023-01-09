@@ -95,7 +95,7 @@ cmake_func() {
 # Install pip3 and python development tools
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
-    sudo apt-get install python3-pip -y
+    sudo apt-get install python3-pip python-is-python3 -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libpython3-dev:$c_arch -y
     done
@@ -105,7 +105,7 @@ python_install() {
 
 # Assumes that Cython3 is not on the base release (18.04.3 does not have it)
 cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.21' --verbose
+    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.32' --verbose
     echo ">>>>> installed cython"
 }
 

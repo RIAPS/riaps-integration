@@ -6,13 +6,13 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
   - [Platform Information](http://beagleboard.org/black)
   - [Instructions for building a BBB RIAPS Image](README_BBB.md)
   - Kernel: v5.10.xx-ti-rt-rxx
-  - Ubuntu: 20.04.3 LTS
+  - Ubuntu: 20.04.5 LTS
 
 * Raspberry Pi 4
   - [Platform Information](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
   - [Instructions for building a Raspberry Pi RIAPS Image](README_RPI.md)
   - Kernel: 5.4.0-xxxx-raspi
-  - Ubuntu: 20.04.3 LTS
+  - Ubuntu: 20.04.5 LTS
 
 * NVIDIA Jetson Nano (not yet available)
   - [Platform Information](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit)

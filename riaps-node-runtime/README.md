@@ -26,13 +26,18 @@ ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
 ```
 >  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the node
 
-5) Starting with v1.1.17, the BBB image does not have RIAPS pre-installed.  So,
+5) Starting with v1.1.17, the RIAPS Node images do not have RIAPS pre-installed.  So,
    install the RIAPS platform using
 
 ```
 ./riaps_install_node.sh 2>&1 | tee install-riaps-node.log
 ```
 
+> Note: The RIAPS remote nodes must have access to internet to use this method to install RIAPS packages.
+  Deb packages can be retrieve from the network on an attached machine and then `scp` can be used to transfer
+  the files to the remote nodes. The packages can then be installed using ```sudo dpkg -i <package name>```.  
+  To retrieve the packages, pull the appropriate architecture and latest version from
+  https://github.com/RIAPS/riaps-pycom/releases and https://github.com/RIAPS/riaps-timesync/releases.
 
 6) Optional Step:  If desired, secure communication between the Host Environment
    and the remote RIAPS nodes by following the [Securing Communication Between the VM and Remote RIAPS Nodes](../riaps-x86runtime/README.md#secure-comm)

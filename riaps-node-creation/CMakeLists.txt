@@ -25,7 +25,7 @@ endif()
 
 set(CMAKE_C_COMPILER gcc-9)
 set(CMAKE_CXX_COMPILER g++-9)
-set (CMAKE_C_FLAGS "-std=c99")
+set(CMAKE_C_FLAGS "-std=c99")
 
 #Capnproto
 externalproject_add(capnproto
@@ -64,7 +64,7 @@ externalproject_add(liblmdb
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.28"
+                      "LMDB_0.9.29"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -168,7 +168,7 @@ externalproject_add(opendht
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "2.1.10"
+                     "v2.4.10"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht"
                      BUILD_IN_SOURCE
@@ -177,14 +177,6 @@ externalproject_add(opendht
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     PKG_CONFIG_PATH=${prefix}/lib/pkgconfig
-                     CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
-                     MsgPack_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lmsgpackc"
-                     MsgPack_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
-                     Nettle_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lnettle"
-                     Nettle_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
-                     GnuTLS_LIBS="-L/usr/lib/${TOOLCHAIN_PREFIX} -lgnutls"
-                     GnuTLS_CFLAGS=-I/usr/include/${TOOLCHAIN_PREFIX}
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}

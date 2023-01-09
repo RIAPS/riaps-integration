@@ -15,7 +15,7 @@ nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install libpcap-dev:$c_arch -y
+        sudo apt-get install libpcap-dev:$c_arch libncurses5-dev:$c_arch -y
     done
     echo ">>>>> installed nethogs prerequisites"
 }
@@ -70,10 +70,12 @@ msgpack_install(){
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev -y
-    sudo apt-get install nettle-dev libasio-dev -y
+    sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
+    sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
-        sudo apt-get install nettle-dev:$c_arch libasio-dev:$c_arch -y
+        sudo apt-get install nettle-dev:$c_arch libargon2-0-dev:$c_arch -y
+        sudo apt-get install libjsoncpp-dev:$c_arch -y
     done
 
     # run liblinks script to link gnutls and msgppack
@@ -95,6 +97,12 @@ capnproto_prereqs_install() {
     echo ">>>>> installed capnproto prerequisites"
 }
 
+gpio_install() {
+    sudo apt-get install gpiod libgpiod-dev libiio-utils -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libgpiod-dev:$c_arch -y
+    done
+}
 
 # Setup RIAPS repository and install script
 riaps_prereq() {
@@ -120,14 +128,14 @@ rm_snap_pkg() {
 # Install redis
 redis_install () {
     if [ ! -f "/usr/local/bin/redis-server" ]; then
-        wget http://download.redis.io/releases/redis-6.2.1.tar.gz
-        tar xzf redis-6.2.1.tar.gz
-        make -C redis-6.2.1 BUILD_TLS=yes
-        sudo make -C redis-6.2.1 install
+        wget http://download.redis.io/releases/redis-7.0.5.tar.gz
+        tar xzf redis-7.0.5.tar.gz
+        make -C redis-7.0.5 BUILD_TLS=yes
+        sudo make -C redis-7.0.5 install
         sudo mkdir -p /etc/redis
-        sudo cp redis-6.2.1/redis.conf /etc/redis/.
-        rm -rf redis-6.2.1
-        rm -rf redis-6.2.1.tar.gz
+        sudo cp redis-7.0.5/redis.conf /etc/redis/.
+        rm -rf redis-7.0.5
+        rm -rf redis-7.0.5.tar.gz
         echo ">>>>> installed redis"
     else
         echo ">>>>> redis already installed. skipping"

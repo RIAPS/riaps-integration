@@ -91,3 +91,8 @@ setup_peripherals() {
 
     echo ">>>>> setup peripherals - gpio, uart, and pwm"
 }
+
+# To create an image with a date close to the creation date
+set_date() {
+    sudo rdate -n -4 time.nist.gov
+}

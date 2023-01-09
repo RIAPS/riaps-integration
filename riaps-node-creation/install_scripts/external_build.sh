@@ -40,7 +40,7 @@ build_lmdb() {
     TMP=`mktemp -d`
     git clone https://github.com/LMDB/lmdb.git $TMP/lmdb
     cd $TMP/lmdb
-    git checkout LMDB_0.9.28
+    git checkout LMDB_0.9.29
     make -j2 -C ./libraries/liblmdb
     sudo make -C ./libraries/liblmdb install
     cd $PREVIOUS_PWD
@@ -100,10 +100,9 @@ build_opendht() {
     TMP=`mktemp -d`
     git clone https://github.com/savoirfairelinux/opendht.git $TMP/opendht
     cd $TMP/opendht
-    git checkout 2.1.10
+    git checkout v2.4.10
     ./autogen.sh
-    ./configure PKG_CONFIG_PATH=/usr/local/lib/pkgconfig MsgPack_LIBS="-L/usr/lib/$ARCHINSTALL -lmsgpackc" MsgPack_CFLAGS=-I/usr/include/$ARCHINSTALL CFLAGS=-I/tmp/3rdparty/opendht/argon2/include
-    #Nettle_LIBS="-L/usr/lib/$ARCHINSTALL -lnettle" Nettle_CFLAGS=-I/usr/include/$ARCHINSTALL GnuTLS_LIBS="-L/usr/lib/$ARCHINSTALL -lgnutls" GnuTLS_CFLAGS=-I/usr/include/$ARCHINSTALL
+    ./configure 
     make -j2
     sudo make install
     cd $PREVIOUS_PWD
