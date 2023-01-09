@@ -38,4 +38,5 @@ wget_install() {
 
 tmux_install() {
     sudo apt-get install tmux -y
+    echo ">>>>> installed tmux"
 }

@@ -91,6 +91,8 @@ graphing_installs() {
     echo ">>>>> installed mininet"
 }
 
+# Automation of this function has not yet been tested, the node-red install requires interaction
+# Consider automation in the future
 nodered_install() {
     # install FlashMQ
     git clone https://github.com/halfgaar/FlashMQ.git
@@ -105,19 +107,26 @@ nodered_install() {
     # install nodejs version (latest)
     # Note: this installation did not go smoothly, this step might be best taken manually
     #       issues are around installing nodejs and npm
-    curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh
-    sudo bash /tmp/nodesource_setup.sh
-    sudo apt-get install nodejs
+    curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
     node -v
-    # MM TODO:  stopped here due to unresolved dependency issue when trying to install npm
-    sudo apt-get install npm
-    npm -v
-    nvm list-remote
-    nvm install v18.7.0
-    nvm install -g npm@latest
     npm -v
 
-    # install nodered
+    # install global node-red
     sudo npm install -g --unsafe-perm node-red
+    npm i --package-lock-only
+    npm audit fix
+
+    # run node-red to get the .node-red directory
+    node-red
+
+    # install the dashboard
+    cd /home/$RIAPSUSER/.node-red
     npm install node-red-dashboard
+    npm install node-red-contrib-ui-svg
+
+    # desired result of "npm list":
+    # node-red-project@0.0.1 /home/riaps/.node-red
+    # |--- node-red-contrib-ui-svg@2.3.1
+    # |--- node-red-dashboard@3.2.0
 }

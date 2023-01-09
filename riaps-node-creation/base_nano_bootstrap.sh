@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+# Note:  for 1.1.20 release, the Nano image had not yet been created nor code updated
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, libzmq5, liblz4-1, cmake
 # libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1

@@ -45,7 +45,7 @@ python_install
 cython_install
 curl_func
 boost_install
-#eclipse_func - MM removed, done manually at this time
+#eclipse_func - this step is done manually at this time
 eclipse_plugin_dep_install
 #add_eclipse_projects - these projects are now in a private repo, do this manually
 nethogs_prereq_install
@@ -64,14 +64,12 @@ zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
 spdlog_python_install
-#butter_install - this may no longer be needed (MM - 092022)
-#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install
 prctl_install
 graphing_installs
-#nodered_install - working on this now (MM 09/27/22)
+#nodered_install - this step is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
 rm -rf /tmp/3rdparty
 add_set_tests
 riaps_prereq

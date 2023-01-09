@@ -70,38 +70,6 @@ prctl_install(){
     echo ">>>>> installed prctl"
 }
 
-# Installing butter
-# For 20.04, butter does not install with pip
-# using the forked project for now since it has the desired setup.py fix ("platforms=[]"), need to update the fork when changing versions later
-butter_install() {
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
-        pip3 install 'butter==0.12.6' --verbose
-    else
-        # This project is a fork of butter located at http://blitz.works/butter/file/tip at version 0.12.6.
-        PREVIOUS_PWD=$PWD
-        cd /tmp/3rdparty
-        git clone https://github.com/RIAPS/butter.git /tmp/3rdparty/butter
-        cd /tmp/3rdparty/butter
-        sudo python3 setup.py install
-        cd $PREVIOUS_PWD
-        rm -rf /tmp/3rdparty/butter
-    fi
-    echo ">>>>> installed butter"
-}
-
-# Installing rpyc
-# MM removing, latest package is pypi now
-rpyc_install() {
-    PREVIOUS_PWD=$PWD
-    cd /tmp/3rdparty
-    git clone https://github.com/tomerfiliba-org/rpyc /tmp/3rdparty/rpyc
-    cd /tmp/3rdparty/rpyc
-    git checkout 5.2.3
-    sudo python3 setup.py install
-    cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/rpyc
-}
-
 # Installing py-lmdb
 py_lmdb_install() {
     PREVIOUS_PWD=$PWD

@@ -90,8 +90,6 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 spdlog_python_install
-#butter_install - this may no longer be needed (MM - 092022)
-#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 prctl_install

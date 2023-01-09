@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Packages already in base 18.04 image that are utilized by RIAPS Components:
+# Packages already in base 20.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
 # pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
 #
@@ -46,9 +46,9 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 20.04.3 LTS" > issue.net
+    echo "Ubuntu 20.04.4 LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2020-07-24">> issue.net
+    echo "rcn-ee.net console Ubuntu Image 2022-10-04">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -109,8 +109,6 @@ czmq_pybindings_install
 zyre_pybindings_install
 apparmor_monkeys_install
 spdlog_python_install
-#butter_install - this may no longer be needed (MM - 092022)
-#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 armhf_pyinstall
