@@ -96,6 +96,7 @@ cmake_func() {
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
+    sudo apt-get install python3.8-venv -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libpython3-dev:$c_arch -y
     done
