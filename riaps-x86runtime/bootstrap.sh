@@ -69,6 +69,7 @@ pip3_3rd_party_installs
 graphviz_install
 prctl_install
 graphing_installs
+chrome_install
 #nodered_install - this step is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
 rm -rf /tmp/3rdparty
 add_set_tests

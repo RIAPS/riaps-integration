@@ -129,4 +129,26 @@ nodered_install() {
     # node-red-project@0.0.1 /home/riaps/.node-red
     # |--- node-red-contrib-ui-svg@2.3.1
     # |--- node-red-dashboard@3.2.0
+
+    # Add script to start MQTT Broker and Node-Red server
+    cd /home/$RIAPSUSER
+    sudo echo "#!/usr/bin/env bash" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "set -e" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo " " >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "sudo systemctl enable flashmq.service" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "echo 'Started the MQTT Broker'" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "echo 'To edit the Node-Red setup, go to http://localhost:1880/'" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "'See the Node-Red GUI at: http://localhost:1880/ui'" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "'To quit Node-Red, press CTL-C in the pop-up server window'" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "xterm -geometry 93x31+70+100 -hold -e node-red &" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "sleep 2" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo echo "google-chrome http://localhost:1880/" >> /home/$RIAPSUSER/node-red-start.sh
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/node-red-start.sh
+    sudo -H -u $RIAPSUSER chmod +x /home/$RIAPSUSER/node-red-start.sh
+    echo ">>>>> Created RIAPS Node-Red Setup"
+}
+
+chrome_install(){
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
 }
