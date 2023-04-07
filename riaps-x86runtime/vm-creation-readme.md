@@ -172,13 +172,36 @@ save ""
 
 20) Add example applications for use in Eclipse.  Typically load DistributedEstimator, DistributedEstimatorGPIO and WeatherMonitor.  This files are in a private repo, but any RIAPS application can be used as examples.
 
-21) Reset the password to the default and cause reset of password on next login.
+21) Add Node-Red start script icon to Desktop.  
+    a) Download the Node-Red icon from https://nodered.org/about/resources/media/node-red-icon.png
+    b) Place icon image in /home/riaps folder
+    c) Create a file on the Desktop call `node-red.desktop`, code is as follows:
+    ```
+    #!/usr/bin/env xdg-open
+    
+    [Desktop Entry]
+    Type=Application
+    Terminal=true
+    Encoding=UTF-8
+    Version=1.1
+    Name=Node-Red Start
+    Exec=/home/riaps/node-red-start.sh
+    Categories=Development;GUIDesigner
+    Icon=/home/riaps/node-red-icon.png
+
+    Comment=
+    Path=
+    StartupNotify=false
+    GenericName=MQTT and Node-Red Startup Script
+    ```
+
+22) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-22) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+23) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
