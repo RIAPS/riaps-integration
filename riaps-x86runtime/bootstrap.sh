@@ -67,10 +67,12 @@ spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install
+#mininet_install - this step is done manually due to issue in mininet install script (see function for more information)
 prctl_install
 graphing_installs
 chrome_install
-#nodered_install - this step is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
+#nodered_install - these two steps is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
+#node_red_shortcut
 rm -rf /tmp/3rdparty
 add_set_tests
 riaps_prereq
