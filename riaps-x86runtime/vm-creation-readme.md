@@ -5,14 +5,14 @@ This is information on how the preloaded RIAPS virtual machine was created.
 1) Download the latest version of Xubuntu:
 ```
 http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/
-version 20.04.5s was used for the download image
+version 20.04.5 was used for the download image
 
 Kernel:  5.15.0-46-generic (after SW update)
 ```
 
 2) Create a virtual machines configured with the following settings:
   - Disk Size:  100 GB dynamically allocated
-  - Hard Disk File Type:  VMDK (Virtual Machine Disk)
+  - Hard Disk File Type:  VDI (Virtual Machine Disk)
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
