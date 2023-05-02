@@ -4,7 +4,7 @@
 
 A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
-1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_[version].vmdk.xz) and unxz it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/downloads/.  This is an Virtual Machine Disk (.vmdk) that can be attached to VMs in both VirtualBox and VMware tools.
+1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_[version].vmdk.xz) and unxz it.  Choose the latest date folder under https://riaps.isis.vanderbilt.edu/rdownloads.html.  This is an Virtual Machine Disk (.vmdk) that can be attached to VMs in both VirtualBox and VMware tools.
 
   This virtual machine (riaps-devbox.vmdk) was configured with the following settings:
   - Disk Size:  100 GB dynamically allocated
