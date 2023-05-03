@@ -1,3 +1,6 @@
+# MM NOTE:  This is a work in progress, commented lines indicate things that are needed to be added
+#           Originally flattened this out into a single file, but might need to reconsider segmenting it out
+#           again for maintainability with the original version
 ARG CREATED=test
 ARG REVISION=test
 
@@ -5,9 +8,10 @@ FROM ubuntu:20.04 as riaps-dev
 ENV TZ=US/Central
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-ARG RIAPS_VERSION="v1.1.20"
+ARG RIAPS_VERSION="v1.1.21"
 ENV RIAPS_VERSION=${RIAPS_VERSION}
-ENV RIAPS_SETUP_HOME=/opt/riaps
+# MM TODO: Not sure this next variable is necessary
+ENV RIAPS_SETUP_HOME=/opt/riaps 
 ARG RIAPSUSER="riaps"
 
 WORKDIR /opt
@@ -24,18 +28,22 @@ RUN apt-get update && apt-get install -q -y \
     libtool \
     libtool-bin \
     libreadline-dev
+    # MM TODO: add for cross compile: libreadline-dev:$archs
 
 # Install Python / PIP
 RUN apt-get update && apt-get install -q -y \
     python3-dev \
     python3-setuptools \
     python3-pip \
-    python-is-python3
+    python-is-python3 \ 
+    python3.8-venv 
+    # MM TODO: add for cross compile: libpython3-dev:$archs
 
 RUN pip3 install --upgrade pip
 
 # Install utilities
 RUN apt-get update && apt-get install -q -y \
+    clang-format \
     curl \
     git \
     htop \
@@ -47,7 +55,8 @@ RUN apt-get update && apt-get install -q -y \
     rdate \
     tmux \
     vim \
-    wget
+    wget \
+    zerofree
     
 # rdate command can timeout, restart script from here if this happens
 # MM TODO: this needs an interface to reach time.nist.gov, work later
@@ -69,8 +78,10 @@ RUN apt-get update && apt-get install -q -y \
     libssl-dev \
     linuxptp \
     rng-tools
+    # MM TODO: add for cross compile: libssl-dev:$archs, libgpiod-dev:$archs
 # MM TODO:  figure out why this does not run
 #RUN systemctl start rng-tools.service
+
 
 # watchdog_timers
 RUN echo " " >> /etc/sysctl.conf
@@ -91,6 +102,7 @@ RUN apt-get update && apt-get install -q -y \
     libboost-dev \
     libpcap-dev \
     libncurses5-dev
+    # MM TODO: add for cross compile: libboost-dev:$archs, libpcap-dev:archs, libncurses5-dev:archs
 
 # Install libraries for czmq and zyre
 # Assumes libzmq5 is already installed
@@ -100,13 +112,15 @@ RUN apt-get update && apt-get install -q -y \
     libsystemd-dev \
     libzmq3-dev \
     pkg-config
+    # MM TODO: add for cross compile: libzmq3-dev:$archs, libsystemd-dev:$archs, libuuid1-dev:$archs, libcurl4-gnutls-dev:$archs
 
-# Install apparmor, gnutls, msgpack and opendht prerequisties
+# Install apparmor, gnutls, prctl, msgpack and opendht prerequisties
 # Assumes libgnutls30 is already installed
 # For Ubuntu 20.04, python3-cryto and python3-keyrings.alt are not installed
 # Assumes libncurses5-dev is install (done for nethogs above)
 RUN apt-get update && apt-get install -q -y \
     apparmor-utils \
+    libcap-dev \
     libgnutls28-dev \
     libmsgpackc2 \
     libmsgpack-dev \
@@ -117,6 +131,9 @@ RUN apt-get update && apt-get install -q -y \
     libjsoncpp-dev \
     libncurses5-dev \
     nettle-dev 
+    # MM TODO: add for cross compile: libgnutls30-dev:$archs, libmsgpackc2:$archs,
+    #          libncurses5-dev:$archs, nettle-dev:$archs, libargon2-0-dev:$archs,
+    #          libjsoncpp-dev:$archs, libcap-dev:$archs
 
     # run liblinks script to link gnutls and msgppack
     # MM TODO: not sure yet how to do a for loop here, may need to be a separate script
@@ -213,6 +230,7 @@ RUN chmod -R +w /home/$RIAPSUSER/riaps_projects
 # sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_launch_files
 
 # Setup RIAPS repository and install script
+
 # Add RIAPS repository
 RUN apt-get update && apt-get install -q -y \
     apt-transport-https \
@@ -221,12 +239,27 @@ RUN add-apt-repository -r "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.e
 RUN add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
 RUN wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | apt-key add -
 # RUN apt-get update
-# MM TODO: update this
+# MM TODO: setup cross_setup() (see vm_build_setup.sh) - reconfiguration of sources.list to specify architecture
+#          sudo dpkg --add-architectured for desired cross archs, install gdb-multiarch,
+#          install crossbuild-essentials-$archs
 # RUN cp /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/riaps_install_vm.sh /home/$RIAPSUSER/.
 # RUN chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_vm.sh
 # RUN -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_vm.sh
 # RUN ./riaps_install_vm.sh
 
+# MM TODO: externals_cmake_build() from vm_build_setup.sh - for key packages (capnproto, liblmdb, libnethogs, libzmq, czmq, zyre, opendht, libsoc), 
+#          probably need to run as a script file
+
+# MM TODO: Pip packages
+# RUN CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==1.0.0' --verbose
+# MM TODO: see vm_python_installs.sh - pyzmq_install, czmq_pybindings_install, zyre_pybindings_install, apparmor_monkeys_install, 
+#          spdlog_python_install, py_lmdb_install, pip3_3rd_party_installs
+
+# MM TODO: graphing_installs, chrome_install, mininet_install, nodered_install
+
+
+
+# Example commands from another project to consider when setting this up (intended to be deleted eventually)
 #EXPOSE 8182
 #USER janusgraph
 
