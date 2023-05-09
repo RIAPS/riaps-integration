@@ -5,13 +5,13 @@
 A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
 1) Download the latest version of Oracle VM VirtualBox from https://www.virtualbox.org/
-3) Visit the RIAPS Downloads page at https://riaps.isis.vanderbilt.edu/rdownloads.html, download the Development Host VM Image and `unxz` it with a tool like 7-zip. This is a Virtual Disk Image (.vdi), the virtual hard drive of your virtual machine. We recommend moving from your Downloads folder to a safer location.
-4) Open VirtualBox and click the 'New' button to begin creating a virtual machine.
-  1) Under "Name and Operating System", name your new VM, select "Linux" from Type and select "Ubuntu 20.04 LTS" from Version
-  2) Under "Hardware", give your VM at least 8192 MB of memory and 4 Processors
-  3) Under "Hard Disk", select "Use an Existing Virtual Hard Disk File". Click the folder + green arrow Icon next to the drop-down to open the Hard Disk Selector. Click the "Add" icon, and navigate to your decompressed VDI file. This should add your VDI to the Hard Disk Selector window under "Not Attached". Click on it then click "Choose" at the bottom of the window. The VM should appear in the list at the left of the VirtualBox Manager window.
+2) Visit the RIAPS Downloads page at https://riaps.isis.vanderbilt.edu/rdownloads.html, download the Development Host VM Image and `unxz` it with a tool like 7-zip. This is a Virtual Disk Image (.vdi), the virtual hard drive of your virtual machine. We recommend moving from your Downloads folder to a safer location.
+3) Open VirtualBox and click the 'New' button to begin creating a virtual machine.
+  - Under "Name and Operating System", name your new VM, select "Linux" from Type and select "Ubuntu 20.04 LTS" from Version
+  - Under "Hardware", give your VM at least 8192 MB of memory and 4 Processors
+  - Under "Hard Disk", select "Use an Existing Virtual Hard Disk File". Click the folder + green arrow Icon next to the drop-down to open the Hard Disk Selector. Click the "Add" icon, and navigate to your decompressed VDI file. This should add your VDI to the Hard Disk Selector window under "Not Attached". Click on it then click "Choose" at the bottom of the window. The VM should appear in the list at the left of the VirtualBox Manager window.
 
-5) Select your VM in the VirtualBox Manager and click the Settings icon.
+4) Select your VM in the VirtualBox Manager and click the Settings icon.
 - Under "General" > "Advanced", select "Bidirectional" for both Shared Clipboard and Drag'n'Drop
 - Under "Network" > "Adapter 2", select "Enable Network Adapter". Under the "Attached to:" list select "Bridged Adapter". In "Name" should appear a list of your host computer's network interfaces. Select the interface that connects you to your local router, to which you have also connected any RIAPS nodes (e.g. BeagleBone Black). This will likely be an Ethernet interface. If you are using a USB to Ethernet adapter, have the adapter plugged in before starting this process. 
 
