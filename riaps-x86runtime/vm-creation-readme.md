@@ -60,8 +60,9 @@ The last line provides feedback that the quota is setup.
     a) Indicate desired Ubuntu setup, example below
 
     ```
+    LINUX_DISTRO="ubuntu"
     CURRENT_PACKAGE_REPO="focal"
-    UBUNTU_VERSION_INSTALL="20.04"
+    LINUX_VERSION_INSTALL="20.04"
     ```
 
     b) Indicate VM Host information, example below
@@ -204,6 +205,8 @@ sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-24) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
+24) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
+
+25) Compress the VM disk (.vmdk) using xz, create a sha256sum txt file and post in the appropriate place.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***

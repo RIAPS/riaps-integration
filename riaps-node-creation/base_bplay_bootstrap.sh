@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# This script configures the packages included on the Beaglebone Black image
+# This script configures the packages included on the BeaglePlay image
 #   Note: the rt kernel option is commented out and untested for latest images
 
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
@@ -62,7 +62,8 @@ splash_screen_update() {
 }
 
 #install other required packages
-armhf_pyinstall(){
+## MM TODO: find out what package replaces this for the BeaglePlay
+bb_pyinstall(){
     pip3 install 'Adafruit_BBIO==1.2.0' --verbose
     echo ">>>>> installed armhf specific python packages"
 }
@@ -115,7 +116,7 @@ apparmor_monkeys_install
 spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
-armhf_pyinstall
+bb_pyinstall
 prctl_install
 remove_pkgs_used_to_build
 riaps_prereq

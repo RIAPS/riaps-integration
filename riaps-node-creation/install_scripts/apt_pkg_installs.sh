@@ -29,7 +29,7 @@ zyre_czmq_prereq_install() {
 # Removing for Ubuntu 18.04, in case it exists in the original image.
 security_pkg_install() {
     sudo apt-get install apparmor-utils -y
-    if [ $UBUNTU_VERSION_INSTALL = "18.04" ]; then
+    if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
     fi
     echo ">>>>> security packages setup"

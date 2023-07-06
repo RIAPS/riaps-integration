@@ -138,7 +138,7 @@ externals_cmake_build(){
 
 # Configure gcc setup when multiple versions available
 config_gcc() {
-    if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+    if [ $LINUX_VERSION_INSTALL = "18.04"]; then
         sudo apt-get install gcc-7 g++-7 -y
 
         # Setup GCC-7 as default in all architectures
@@ -151,21 +151,21 @@ config_gcc() {
         sudo update-alternatives --set g++ /usr/bin/g++-7
         gcc --version
         g++ --version
-    elif [ $UBUNTU_VERSION_INSTALL = "20.04" ]; then
+    elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
         sudo apt-get install gcc-9 g++-9 -y
     fi
 
     # Cross compile architectures
     for c_arch in ${ARCHS_CROSS[@]}; do
-        if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+        if [ $LINUX_VERSION_INSTALL = "18.04"]; then
             sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
-        elif [ $UBUNTU_VERSION_INSTALL = "20.04" ]; then
+        elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
             sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
         fi
     done
 
     for c_arch_tool in ${CROSS_TOOLCHAIN_LOC[@]}; do
-        if [ $UBUNTU_VERSION_INSTALL = "18.04"]; then
+        if [ $LINUX_VERSION_INSTALL = "18.04"]; then
             sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-7 7
             sudo update-alternatives --install /usr/bin/$c_arch_tool-gcc gcc /usr/bin/$c_arch_tool-gcc-9 9
             sudo update-alternatives --install /usr/bin/$c_arch_tool-g++ g++ /usr/bin/$c_arch_tool-g++-7 7

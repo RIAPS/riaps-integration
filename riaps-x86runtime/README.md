@@ -1,6 +1,10 @@
 # RIAPS Host Environment Setup Instructions
 
-## Importing the RIAPS Virtual Machine
+## Initial System Setup 
+
+The first three steps are required to establish a host environment that can communicate with the system of remote nodes.  The fourth step is encouraged to create a setup that is secured to a specific RIAPS Virtual Machine with unique security keys.
+
+### <a name="connect-remotes">1) Importing the RIAPS Virtual Machine</a>
 
 A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
@@ -41,7 +45,7 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
     - Under Shared Folders, select a folder to share on the host and make it "Auto-mount" and "Make Permanent".  You will be able to reach this folder from within the VM by ```sudo cp afilename /media/sf_sharedFolder```
   * Restart the VM
 
-## <a name="config-network">Configuring Environment for Local Network Setup</a>
+### <a name="config-network">2) Configuring Environment for Local Network Setup</a>
 
 Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
@@ -74,7 +78,78 @@ nic_name = enp0s8
 sudo systemctl restart riaps-rpyc-registry.service
 ```
 
-## <a name="secure-comm">Securing Communication Between the VM and Remote RIAPS Nodes</a>
+### <a name="connect-remotes">3) Connect the VM to the Remote Nodes</a>
+
+To communicate with the remote nodes using tools like `riaps_fab`, the VM must be able to automatically log into each node using a ssh security key.  The remote nodes are not configured with security keys, so the connection needs to be established between the VM and the remote nodes.
+
+The remote nodes to connect can be identified in two different ways: 
+1) using the RIAPS host definition file (/etc/riaps/riaps-hosts.conf) or
+2) provide the list of nodes when running the connection script using the `-H <comma separated list of hostnames>`.  This option is good when adding new nodes to the setup.
+
+> Note: It is helpful to setup the `/etc/riaps/riaps-hosts.conf` file since it is utilized in the next step when securing the system communications.
+
+The available remotes nodes and the associated hostnames can be determine by looking at the router interface to see the client names or `ssh` into each node to find the prompt name which indicates the <username>@<hostname>.  The hostnames used for should include the addition of `.local` or can be an IP Address of the nodes. See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions and the `/etc/riaps/riaps-hosts.conf` file.
+
+The connection script (`connect_remote_nodes.sh`) will connect to each remote node specified to update the security keys. For each node, the user will be requested to add this host to the known hosts file by saying "Yes" and type in the node password (default is `riaps`) to complete the transfer of the VM key. An example successful exchange is below.  If this command is repeated as connection issues are addressed, the hostname will already be in the known host file, so the request to add a host question will not appear. If previous runs succeeded in connecting with some of the nodes, then those nodes will no longer need a password to connect and will transfer the VM key automatically.
+
+```
+$ ./connect_remote_nodes.sh -H riaps-f452.local,riaps-fd98.local
+Remote Nodes Provided
+Controller hostname: riaps-VirtualBox.local
+Controller IPs: <IP addresses> 
+>>>>> Setting up remote node: riaps-f452.local (you must enter a password for each remote node) <<<<<
+The authenticity of host 'riaps-f452.local (<IP Address>)' can't be established.
+ECDSA key fingerprint is SHA256:<hash>.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'riaps-f452.local,<IP Address>' (ECDSA) to the list of known hosts.
+Ubuntu 20.04.6 LTS
+
+rcn-ee.net Ubuntu 20.04.5 Console Image 2023-06-30
+Support: http://elinux.org/BeagleBoardUbuntu
+default username:password is [riaps:riaps]
+
+riaps@riaps-f452.local's password: 
+id_rsa.pub                                                                 100%  576   128.7KB/s   00:00 
+>>>>> Connection between riaps-f452.local and controller has succeeded <<<<<   
+>>>>> Setting up remote node: riaps-fd98.local (you must enter a password for each remote node) <<<<<
+The authenticity of host 'riaps-fd98.local (<IP Address>)' can't be established.
+ECDSA key fingerprint is SHA256:<hash>.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'riaps-fd98.local,<IP Address>' (ECDSA) to the list of known hosts.
+Ubuntu 20.04.6 LTS
+
+rcn-ee.net Ubuntu 20.04.5 Console Image 2023-06-30
+Support: http://elinux.org/BeagleBoardUbuntu
+default username:password is [riaps:riaps]
+
+riaps@riaps-fd98.local's password: 
+id_rsa.pub                                                                 100%  576   142.2KB/s   00:00    
+>>>>> Connection between riaps-fd98.local and controller has succeeded <<<<<   
+```
+
+Once all the keys are setup successfully, a system check will be performed to make sure communication exists between all the remote hosts.  A successful output is:
+
+```
+=== fab -f /usr/local/lib/python3.8/dist-packages/riaps/fabfile/ sys.check     
+[riaps-f452.local] Executing task 'sys.check'
+[riaps-fd98.local] Executing task 'sys.check'
+[riaps-VirtualBox.local] Executing task 'sys.check'
+[riaps-VirtualBox.local] hostname && uname -a
+riaps-VirtualBox
+Linux riaps-VirtualBox 5.15.0-76-generic #83~20.04.1-Ubuntu SMP Wed Jun 21 20:23:31 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+[riaps-f452.local] hostname && uname -a
+riaps-f452
+Linux riaps-f452 5.10.168-ti-r63 #1focal SMP PREEMPT Wed Jun 28 03:27:34 UTC 2023 armv7l armv7l armv7l GNU/Linux
+[riaps-fd98.local] hostname && uname -a
+riaps-fd98
+Linux riaps-fd98 5.10.168-ti-r63 #1focal SMP PREEMPT Wed Jun 28 03:27:34 UTC 2023 armv7l armv7l armv7l GNU/Linux
+
+Done.
+>>>>> If a response exists from all remote nodes, then remote node are now successfully communicating <<<<<
+
+```
+
+### <a name="secure-comm">4) Securing Communication Between the VM and Remote RIAPS Nodes</a>
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 
@@ -90,7 +165,7 @@ To remove RIAPS Hosts from a system, it is suggested that you remove the desired
 
 >Note:  If a RIAPS host is moved to a new system that does not have access to the host's current ssh key pair or certificates, then it is best to reflash the host image with the released download image and either rekey the new system (if it is a fresh download) or add the host to the new system using the ```-A``` option.  
 
-# RIAPS Platform Update Process
+## RIAPS Platform Update Process
 
 If you want to only update the RIAPS platform, run the update script
 
@@ -111,7 +186,7 @@ If you want to only update the RIAPS platform, run the update script
   remote nodes (riaps-xxxx, instead of bbb-xxxx) and 3) re-secure the newly update remote notes to the VM
   using the "Securing Communication between the VM and Remote RIAPS Nodes".
 
-## Suggestions for Transferring Eclipse Workspaces to a new VM
+### Suggestions for Transferring Eclipse Workspaces to a new VM
 
 There are several ways to transfer your project work between VM.  Perhaps the easiest is to keep your
 code in a code repository (such as SVN or GIT) and then create a new workspace from the retrieval of

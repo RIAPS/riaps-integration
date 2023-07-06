@@ -42,7 +42,8 @@ setup_ssh_keys() {
 create_riaps_version_file () {
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.riaps
     sudo echo "RIAPS Version: $RIAPS_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
-    sudo echo "Ubuntu Version: $UBUNTU_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Version: $LINUX_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Package: $CURRENT_PACKAGE_REPO" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo echo "Application Developer Username: $RIAPSUSER" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.riaps/riapsversion.txt

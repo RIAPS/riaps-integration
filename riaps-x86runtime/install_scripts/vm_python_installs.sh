@@ -96,15 +96,15 @@ spdlog_python_install() {
 }
 
 # Install other required packages
+# Ubuntu 20.04 comes with PyYAML==5.3.1 and psutil==5.5.1
+# MM TODO: consider adding 'requests==2.31.0' - seeing conflict with urllib3 version requirements between this and influxdb-client,
+#          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 pip3_3rd_party_installs(){
     pip3 install 'pydevd==2.8.0' 'redis==4.3.4' 'hiredis==2.0.0' 'netifaces==0.11.0' --verbose
     pip3 install 'bcrypt==3.2.2' 'paramiko==2.11.0' 'cryptography==3.3.2' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
     pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
     pip3 install 'rpyc==5.2.3' 'parse==1.19.0' 'butter==0.13.1' --verbose
-    # Use a newer version than distribution installed
-    pip3 install --ignore-installed 'PyYAML==6.0' --verbose
-    pip3 install --ignore-installed 'psutil==5.9.2' --verbose
 
     # VM Only packages
     pip3 install 'textX==3.0.0' 'pydot==1.4.2' 'gitpython==3.1.27' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose

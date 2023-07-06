@@ -1,16 +1,16 @@
 # Setting up the Remote RIAPS Node Images
 
-1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_[verion].tar.gz) from
-   https://riaps.isis.vanderbilt.edu/downloads/. Choose the latest date folder.
+1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_[version].zip) from
+   https://riaps.isis.vanderbilt.edu/rdownloads.html. Choose the latest date folder.
 
   Available architectures are:
   - armhf for Beaglebone Black boards
-  - arm64 for both Raspberry Pi 4 and NVIDIA Jetson Nano boards
+  - arm64 for both Raspberry Pi 4 boards
 
-2) Copy the image to a SD Card using a host machine and an SD Card reader.  
+1) Copy the image to a SD Card using a host machine and an SD Card reader.  
    A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
-3) Put the SD Card into the RIAPS node machine and boot it up.  
+2) Put the SD Card into the RIAPS node machine and boot it up.  
 
 >Note:  newer BBBs should be set to boot to the SD card automatically, when present.
 

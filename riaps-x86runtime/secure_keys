@@ -22,6 +22,17 @@ import argparse
 import site
 import subprocess
 
+pycom_privateKey = 'id_rsa.key'
+pycom_publicKey = 'id_rsa.pub'
+pycom_cert = 'x509.pem'
+pycom_zmqCert = 'riaps-sys.cert'
+pycom_keys_dir = '/etc/riaps'
+pycom_ln_dir = '/local/bin/riaps/keys'
+
+vm_privateKey = 'id_rsa'
+vm_publicKey = pycom_publicKey
+vm_keys_dir = '/home/riaps/.ssh'
+
 
 def bash(cmd):
     t = shlex.split(cmd)
@@ -30,75 +41,78 @@ def bash(cmd):
     return result
 
 def openKeyPerms():
-    #temporarily open private key and certs, so that they can be moved to new RIAPS nodes
-    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
-        bash('sudo chmod 444 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
-        bash('sudo chmod 444 /home/riaps/.ssh/x509.pem')
+    #temporarily open private key and certs on VM, so that they can be moved to new RIAPS nodes
+    #note: private key name of 'id_rsa' used on VM, instead of id_rsa.key to allow automatic inclusion in ssh setup
+    #      riaps-pycom uses 
+    if os.path.isfile(f'{vm_keys_dir}/{vm_privateKey}'):
+        bash(f'sudo chmod 444 {vm_keys_dir}/{vm_privateKey}')
+    if os.path.isfile(f'{vm_keys_dir}/{pycom_cert}'):
+        bash(f'sudo chmod 444 {vm_keys_dir}/{pycom_cert}')
 
 def closeKeyPerms():
     #return tighter restrictions to private key and certs
-    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
-        bash('sudo chmod 400 /home/riaps/.ssh/id_rsa.key')
-    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
-        bash('sudo chmod 400 /home/riaps/.ssh/x509.pem')
+    if os.path.isfile(f'{vm_keys_dir}/{vm_privateKey}'):
+        bash(f'sudo chmod 400 {vm_keys_dir}/{vm_privateKey}')
+    if os.path.isfile(f'{vm_keys_dir}/{pycom_cert}'):
+        bash(f'sudo chmod 400 {vm_keys_dir}/{pycom_cert}')
 
 def rekey_VM():
     #save old keys and certs
-    if os.path.isfile('/home/riaps/.ssh/id_rsa.pub'):
-        bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub')
-        os.rename('/home/riaps/.ssh/id_rsa.pub', '/home/riaps/.ssh/id_rsa.pub.old')
+    if os.path.isfile(f'{vm_keys_dir}/{vm_publicKey}'):
+        bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}')
+        os.rename(f'{vm_keys_dir}/{vm_publicKey}', f'{vm_keys_dir}/{vm_publicKey}.old')
 
-    if os.path.isfile('/home/riaps/.ssh/id_rsa.key'):
-        os.rename('/home/riaps/.ssh/id_rsa.key', '/home/riaps/.ssh/id_rsa.key.old')
+    if os.path.isfile(f'{vm_keys_dir}/{vm_privateKey}'):
+        os.rename(f'{vm_keys_dir}/{vm_privateKey}', f'{vm_keys_dir}/{vm_privateKey}.old')
 
-    if os.path.isfile('/home/riaps/.ssh/riaps-sys.cert'):
-        os.rename('/home/riaps/.ssh/riaps-sys.cert', '/home/riaps/.ssh/riaps-sys.cert.old')
+    if os.path.isfile(f'{vm_keys_dir}/{pycom_zmqCert}'):
+        os.rename(f'{vm_keys_dir}/{pycom_zmqCert}', f'{vm_keys_dir}/{pycom_zmqCert}.old')
 
-    if os.path.isfile('/home/riaps/.ssh/x509.pem'):
-        os.rename('/home/riaps/.ssh/x509.pem', '/home/riaps/.ssh/x509.pem.old')
+    if os.path.isfile(f'{vm_keys_dir}/{pycom_cert}'):
+        os.rename(f'{vm_keys_dir}/{pycom_cert}', f'{vm_keys_dir}/{pycom_cert}.old')
 
     #generate new keys and certs
-    bash('riaps_gen_cert -o /home/riaps/.ssh')
-    bash('chmod 400 /home/riaps/.ssh/id_rsa.key')
+    bash(f'riaps_gen_cert -o {vm_keys_dir}')
+    bash(f'mv {vm_keys_dir}/{pycom_privateKey} {vm_keys_dir}/{vm_privateKey}')
+    bash(f'chmod 400 {vm_keys_dir}/{vm_privateKey}')
 
     #never used key
-    bash('rm /home/riaps/.ssh/riaps.key')
+    bash(f'rm {vm_keys_dir}/riaps.key')
 
     #add private key to ssh agent for immediate use
-    bash('ssh-add /home/riaps/.ssh/id_rsa.key')
+    bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}')
 
     #generate public key from private key, riaps_gen_cert creates a PEM/OpenSSH formated public key
     #  which does not work well with ssh-add
-    subprocess.run('ssh-keygen -y -f /home/riaps/.ssh/id_rsa.key > /home/riaps/.ssh/id_rsa.pub',shell=True)
+    subprocess.run(f'ssh-keygen -y -f {vm_keys_dir}/{vm_privateKey} > {vm_keys_dir}/{vm_publicKey}',shell=True)
 
     #add public key to authorized keys (to allow deploy to work on VM)
-    subprocess.run('cat /home/riaps/.ssh/id_rsa.pub >> /home/riaps/.ssh/authorized_keys',shell=True)
+    subprocess.run(f'cat {vm_keys_dir}/{vm_publicKey} >> {vm_keys_dir}/authorized_keys',shell=True)
 
     #copy keys and certs to riaps/keys location
     c = [
-        'sudo cp /home/riaps/.ssh/id_rsa.key /etc/riaps/.',
-        'sudo chown root:riaps /etc/riaps/id_rsa.key',
-        'sudo chmod 440 /etc/riaps/id_rsa.key',
-        'sudo rm -f /usr/local/riaps/keys/id_rsa.key',
-        'sudo ln -s /etc/riaps/id_rsa.key /usr/local/riaps/keys/id_rsa.key',
-        'sudo cp /home/riaps/.ssh/id_rsa.pub /etc/riaps/.',
-        'sudo chown root:riaps /etc/riaps/id_rsa.pub',
-        'sudo chmod 440 /etc/riaps/id_rsa.pub',
-        'sudo rm -f /usr/local/riaps/keys/id_rsa.pub',
-        'sudo ln -s /etc/riaps/id_rsa.pub /usr/local/riaps/keys/id_rsa.pub',
-        'sudo cp /home/riaps/.ssh/riaps-sys.cert /etc/riaps/.',
-        'sudo chown root:riaps /etc/riaps/riaps-sys.cert',
-        'sudo chmod 444 /etc/riaps/riaps-sys.cert',
-        'sudo chmod 444 /home/riaps/.ssh/riaps-sys.cert',
-        'sudo rm -f /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo ln -s /etc/riaps/riaps-sys.cert /usr/local/riaps/keys/riaps-sys.cert',
-        'sudo cp /home/riaps/.ssh/x509.pem /etc/riaps/.',
-        'sudo chown root:riaps /etc/riaps/x509.pem',
-        'sudo chmod 440 /etc/riaps/x509.pem',
-        'sudo chmod 440 /home/riaps/.ssh/x509.pem',
-        'sudo rm -f /usr/local/riaps/keys/x509.pem',
-        'sudo ln -s /etc/riaps/x509.pem /usr/local/riaps/keys/x509.pem',
+        f'sudo cp {vm_keys_dir}/{vm_privateKey} {pycom_keys_dir}/{pycom_privateKey}',
+        f'sudo chown root:riaps {pycom_keys_dir}/{pycom_privateKey}',
+        f'sudo chmod 440 {pycom_keys_dir}/{pycom_privateKey}',
+        f'sudo rm -f {pycom_ln_dir}/{pycom_privateKey}',
+        f'sudo ln -s {pycom_keys_dir}/{pycom_privateKey} {pycom_ln_dir}/{pycom_privateKey}',
+        f'sudo cp {vm_keys_dir}/{vm_publicKey} {pycom_keys_dir}/{pycom_publicKey}',
+        f'sudo chown root:riaps {pycom_keys_dir}/{pycom_publicKey}',
+        f'sudo chmod 440 {pycom_keys_dir}/{pycom_publicKey}',
+        f'sudo rm -f {pycom_ln_dir}/{pycom_publicKey}',
+        f'sudo ln -s {pycom_keys_dir}/{pycom_publicKey} {pycom_ln_dir}/{pycom_publicKey}',
+        f'sudo cp {vm_keys_dir}/{pycom_zmqCert} {pycom_keys_dir}/{pycom_zmqCert}',
+        f'sudo chown root:riaps {pycom_keys_dir}/{pycom_zmqCert}',
+        f'sudo chmod 444 {pycom_keys_dir}/{pycom_zmqCert}',
+        f'sudo chmod 444 {vm_keys_dir}/{pycom_zmqCert}',
+        f'sudo rm -f {pycom_ln_dir}/{pycom_zmqCert}',
+        f'sudo ln -s {pycom_keys_dir}/{pycom_zmqCert} {pycom_ln_dir}/{pycom_zmqCert}',
+        f'sudo cp {vm_keys_dir}/{pycom_cert} {pycom_keys_dir}/{pycom_cert}',
+        f'sudo chown root:riaps {pycom_keys_dir}/{pycom_cert}',
+        f'sudo chmod 440 {pycom_keys_dir}/{pycom_cert}',
+        f'sudo chmod 440 {vm_keys_dir}/{pycom_cert}',
+        f'sudo rm -f {pycom_ln_dir}/{pycom_cert}',
+        f'sudo ln -s {pycom_keys_dir}/{pycom_cert} {pycom_ln_dir}/{pycom_cert}',
     ]
     for cmd in c:
         bash(cmd)
@@ -161,11 +175,11 @@ if __name__ == '__main__':
         # Rekey remote hosts
         print("Rekeying hostnames: {}".format(args.hosts))
         cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
-        bash('ssh-add /home/riaps/.ssh/id_rsa.key.old')
+        bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}.old')
         openKeyPerms()
         bash(cmd)
         closeKeyPerms()
-        bash('ssh-add -d /home/riaps/.ssh/id_rsa.pub.old')
+        bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
         print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')

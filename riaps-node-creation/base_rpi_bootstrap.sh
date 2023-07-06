@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# This script configures the packages included on the Raspberry Pi 4 image
+#   Note: the rt kernel option is commented out and untested for latest images
+
 # Packages already in base 18.04.4 image that are utilized by RIAPS Components:
 # git, libpcap0.8, nettle6, libncurses5, curl, libuuid1, liblz4-1, libgnutls30
 # vim, htop, software-properties-common
@@ -58,7 +61,7 @@ check_os_version
 setup_peripherals
 user_func
 add_spi_func
-setup_ssh_keys
+# setup_ssh_keys  - removed, must put dev vm keys on bbb during initial setup
 rdate_install
 rm_snap_pkg
 tmux_install
