@@ -27,7 +27,7 @@ pycom_publicKey = 'id_rsa.pub'
 pycom_cert = 'x509.pem'
 pycom_zmqCert = 'riaps-sys.cert'
 pycom_keys_dir = '/etc/riaps'
-pycom_ln_dir = '/local/bin/riaps/keys'
+pycom_ln_dir = '/usr/local/riaps/keys'
 
 vm_privateKey = 'id_rsa'
 vm_publicKey = pycom_publicKey
@@ -73,7 +73,7 @@ def rekey_VM():
 
     #generate new keys and certs
     bash(f'riaps_gen_cert -o {vm_keys_dir}')
-    bash(f'mv {vm_keys_dir}/{pycom_privateKey} {vm_keys_dir}/{vm_privateKey}')
+    bash(f'cp {vm_keys_dir}/{pycom_privateKey} {vm_keys_dir}/{vm_privateKey}')
     bash(f'chmod 400 {vm_keys_dir}/{vm_privateKey}')
 
     #never used key
@@ -181,5 +181,8 @@ if __name__ == '__main__':
         closeKeyPerms()
         bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
         print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
+        
+        # Remove id_rsa.key (a copy of id_rsa) from VM no longer needed
+        bash(f'rm {vm_keys_dir}/{pycom_privateKey}')
     else:
         print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
