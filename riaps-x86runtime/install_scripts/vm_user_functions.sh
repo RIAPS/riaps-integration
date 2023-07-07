@@ -37,11 +37,16 @@ setup_ssh_keys () {
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.ssh/authorized_keys
     sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa
 
+    # Transfer remote node connection script
+    sudo cp connect_remote_nodes.sh /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes.sh
+    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes.sh
+
     # Transfer RIAPS rekeying script
     sudo cp secure_keys /home/$RIAPSUSER/.
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/secure_keys
     sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/secure_keys
-    echo ">>>>> Added user key to authorized keys for $RIAPSUSER. Use riaps_initial keys for initial communication with the remote RIAPS nodes"
+    echo ">>>>> Added user key to authorized keys for $RIAPSUSER. Use connect_remote_nodes.sh for initial communication with the remote RIAPS nodes"
 }
 
 # Simple example project setup to allow users to quickly test the VM setup

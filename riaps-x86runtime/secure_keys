@@ -72,6 +72,7 @@ def rekey_VM():
         os.rename(f'{vm_keys_dir}/{pycom_cert}', f'{vm_keys_dir}/{pycom_cert}.old')
 
     #generate new keys and certs
+    #privateKey name is id_rsa for VM and id_rsa.key for riaps-pycom, so keep id_rsa.key until remote nodes are updated
     bash(f'riaps_gen_cert -o {vm_keys_dir}')
     bash(f'cp {vm_keys_dir}/{pycom_privateKey} {vm_keys_dir}/{vm_privateKey}')
     bash(f'chmod 400 {vm_keys_dir}/{vm_privateKey}')
