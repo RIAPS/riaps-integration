@@ -66,7 +66,6 @@ check_os_version
 setup_peripherals
 user_func
 # add_spi_func - spi not setup the same way on Nano as BBB or RPi, so not setting this up at this time
-# setup_ssh_keys - removed, must put dev vm keys on bbb during initial setup
 rdate_install
 htop_install
 rm_snap_pkg

@@ -77,7 +77,6 @@ wget_install
 setup_peripherals
 user_func
 add_spi_func
-#setup_ssh_keys - removed, must put dev vm keys on bbb during initial setup
 rdate_install
 vim_func
 tmux_install

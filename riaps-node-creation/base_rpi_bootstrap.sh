@@ -61,7 +61,6 @@ check_os_version
 setup_peripherals
 user_func
 add_spi_func
-# setup_ssh_keys  - removed, must put dev vm keys on bbb during initial setup
 rdate_install
 rm_snap_pkg
 tmux_install
