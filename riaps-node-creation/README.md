@@ -33,8 +33,6 @@ Password:  riaps
 
 The device hostname will be "riaps-xxxx", where xxxx is the first four digits of the board MAC address (so it will be unique per device).
 
->Note: Beaglebone blacks nodes used a hostname of "bbb-xxxx" in version v1.1.17 and earlier.
-
 
 # Expanding File System Partition On A microSD
 

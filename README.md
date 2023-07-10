@@ -1,6 +1,6 @@
 # Welcome to the RIAPS Integration Repository
 
-This repository describes how a RIAPS application developer should setup a RIAPS environment from preloaded disk images: there is one for a development (virtual) machine, and another one for the target nodes. For the former we use a 64-bit x86_64/amd64 system. For the latter, there are several single board computing devices that work with RIAPS (i.e. 32-bit Beaglebone Black 'armhf' system, 64-bit Raspberry Pi 4 'arm64' system and NVIDIA Jetson Nano 'arm64 system'. For advanced programming users wanting to setup a custom environment, there is also information about how these preloaded images were created.
+This repository describes how a RIAPS application developer should setup a RIAPS environment from preloaded disk images: there is one for a development (virtual) machine, and another one for the target nodes. For the former we use a 64-bit x86_64/amd64 system. For the latter, there are several single board computing devices that work with RIAPS (i.e. 32-bit Beaglebone Black 'armhf' system, and 64-bit Raspberry Pi 4 'arm64' system. For advanced programming users wanting to setup a custom environment, there is also information about how these preloaded images were created.
 
 ---------------------------
 ## Application Developer Setup Instructions
