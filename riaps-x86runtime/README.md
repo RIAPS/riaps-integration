@@ -11,25 +11,27 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
 1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_[version].vdi.xz) and unxz it.  Choose the latest release Development Host VM image on https://riaps.isis.vanderbilt.edu/rdownloads.html.  This is an Virtual Machine Disk (.vdi) that can be attached to VirtualBox VM tool.
 
   This virtual machine (riaps-devbox.vdi) was configured with the following settings:
-  - Disk Size:  100 GB dynamically allocated
+  - Type: Linux
+  - Version: Xubuntu (64-bit)
   - Base Memory:  8192 MB
   - Processor(s):  4
+  - Disk Size:  100 GB dynamically allocated
   - Video Memory:  16 MB
   - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
   - USB Ports:  USB 2.0 (EHCI) Controller
 
 > ***Note: Guest Additions tools were not included and will need to be setup by the user.***
 
-2) Setup a new Linux VM with Ubuntu (64-bit).  Either use the same setup as indicated above, or adjust to match your system's capabilities.  Minimum suggested base memory size is 6144 MB.
+1) Setup a new Linux VM with Xubuntu (64-bit).  Either use the same setup as indicated above, or adjust to match your system's capabilities.  Minimum suggested base memory size is 6144 MB.
 
-3) Once the VM is created, open the settings add the downloaded Virtual Machine Disk (.vdi) as a "Storage" device (under SATA).  Delete the drive (SATA) created when setting up the new VM.  
+2) When setting up the Hard Drive, choose the "Use an Existing Virtual Hard Disk File" option.  Add the downloaded .vdi file. 
 
-4) Setup the network settings to have Adapter 1 = "NAT" and Adapter 2 = "Bridged Adapter" pointing to the local network where the RIAPS nodes are attached.
+3) Setup the network settings to have Adapter 1 = "NAT" and Adapter 2 = "Bridged Adapter" pointing to the local network where the RIAPS nodes are attached.
 
-5) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
+4) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
     - Hint: After first entering the initial password (`riaps`), the login window might prompt "Change Password". Enter `riaps` again to confirm this and see the first "Enter New Password" prompt. Enter your new password, and it will ask you to confirm. Entering your new password at "Change Password" will result in an incorrect attempt.
 
-6) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
+5) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
 
   * Under Devices Menu, select **Insert Guest Additions CD image...**
   * Open the file manager to determine where the image was mounted.
@@ -222,3 +224,13 @@ workspace.  Here are some tips for doing this:
 5) 'Select the archive file' option and find the transferred file.
 
 6) This should have the workspace back in place in the new VM.
+
+## VirtualBox Host VM Setup Debug Tips
+
+### Error While Adding Downloaded .vdi File as Disk
+
+If a VirtualBox Error of "Failed to open the disk image file <disk location>" occurs and indicates in the details that it "cannot register the hard disk <disk location>(<UUID>) because a hard disk <another disk location> with (<UUID>) already exists", the UUID for the new disk needs to be reset.  This can be done by running the following command in a powershell.
+
+```
+C:\Program Files\Oracle\VirtualBox> ./VBoxManage.exe internalcommands sethduuid "<disk location/name>.vdi"
+```
