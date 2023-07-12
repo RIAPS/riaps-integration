@@ -198,22 +198,24 @@ save ""
 
 22) Install mininet, see mininet_install function in [vm_utils_install.sh](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/install_scripts/vm_utils_install.sh).  Due to an issue with the mininet installation script, the cloning of openflow needs to change from "git://..." to "https://...".
  
-23) Reset the password to the default and cause reset of password on next login.
+23) Reset the `/etc/riaps/riaps-hosts.conf` file to have an empty list of nodes since testing might have added nodes to the list.  Leave the control definition as "riaps-VirtualBox.local"
+
+24) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-24) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
+25) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
 
-25) Reset the UUID of the VM disk (.vdi) to make it unique for this release. From a windows powershell, run the VBoxManage.exe command below.
+26) Reset the UUID of the VM disk (.vdi) to make it unique for this release. From a windows powershell, run the VBoxManage.exe command below.
 
 ```
 $ C:\Program Files\Oracle\VirtualBox> ./VBoxManage.exe internalcommands sethduuid "<location of vdi disk to release>"
 UUID changed to: 4ec9c8af-6b39-44b9-a03f-c9b1c943cf8c
 ```    
 
-26) Compress the VM disk (.vdi) using xz, create a sha256sum txt file and post in the appropriate place.
+27) Compress the VM disk (.vdi) using xz, create a sha256sum txt file and post in the appropriate place.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
