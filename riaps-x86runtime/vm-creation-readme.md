@@ -13,6 +13,7 @@ Kernel:  5.15.0-69-generic
 2) Create a virtual machines configured with the following settings:
   - Disk Size:  100 GB dynamically allocated
   - Hard Disk File Type:  VDI (Virtual Machine Disk)
+  - Hard Disk File Type:  VDI (Virtual Machine Disk)
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
