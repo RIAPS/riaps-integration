@@ -104,7 +104,8 @@ if [ -f "$hostfilename" ]; then
       sudo sed -i '/^nodes =/c\'"$new_node_line" $hostfilename
     fi
     if [[ $connects_succeeded = "true" ]]; then
-      riaps_fab sys.check -H $remote_nodes
+      #riaps_fab sys.check -H $remote_nodes
+      riaps_fab sys.check
       echo ">>>>> If a response exists from all remote nodes, then remote nodes are now successfully communicating <<<<<" 
     else
       echo ">>>>> Check if the remote nodes with failed connections are running and network connected <<<<<"
@@ -114,6 +115,6 @@ if [ -f "$hostfilename" ]; then
 
 # Missing /etc/riaps/riaps-hosts.conf file
 else
-  echo ">>>>> RIAPS is not install (riaps-pycom-dev), please install this package before establishing connections with remote nodes <<<<<"
+  echo ">>>>> RIAPS is not installed (riaps-pycom-dev), please install this package before establishing connections with remote nodes <<<<<"
   exit 1
 fi
