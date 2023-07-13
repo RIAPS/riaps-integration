@@ -43,7 +43,7 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
   * Eject the Guest Additions CD when complete. (optional)
   * Restart the VM
 
-## <a name="create-network"> Create network between VM and RIAPS nodes</a>
+## <a name="create-network"> 2) Create network between VM and RIAPS nodes</a>
 RIAPS currently supports two different Local Area Network (LAN) configurations: VM sharing router with RIAPS nodes, and VM acting as router for RIAPS nodes. 
 
 ### VM sharing router with RIAPS nodes
@@ -61,7 +61,7 @@ In this configuration, the host machine is connected to the internet on some int
 You can now connected a simple, unmanaged network switch to your VM's bridged adapter with an ethernet cable, and any RIAPS nodes to the other ports on the switch. Windows will assign IP addresses from the 192.168.137.0/24 range to your RIAPS nodes and VM.
 
 
-## <a name="config-network">2) Configuring Environment for Local Network Setup</a>
+## <a name="config-network">3) Configuring Environment for Local Network Setup</a>
 
 Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
@@ -94,7 +94,7 @@ nic_name = enp0s8
 sudo systemctl restart riaps-rpyc-registry.service
 ```
 
-### <a name="connect-remotes">3) Connect the VM to the Remote Nodes</a>
+### <a name="connect-remotes">4) Connect the VM to the Remote Nodes</a>
 
 To communicate with the remote nodes using tools like `riaps_fab`, the VM must be able to automatically log into each node using a ssh security key.  The remote nodes are not configured with security keys, so the connection needs to be established between the VM and the remote nodes.
 
@@ -171,7 +171,7 @@ Done.
 
 ```
 
-### <a name="install-riaps-nodes">4) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
+### <a name="install-riaps-nodes">5) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
 
 The downloaded images for the remote nodes do not include the RIAPS packages.  Once the VM can successfully communication with all the remote nodes, `riaps_fab` can be used to install all the RIAPS packages.  There are two methods for installing the packages: using apt-get (to get the latest releases) or directly installing the .deb packages (used during development of the RIAPS platform).
 
@@ -184,7 +184,7 @@ If the remote nodes do not have internet access or a development package (not ye
   
 > Note: Depending on the number of remote nodes, the installation could take several minutes.  The script will indicate "Done" when the `riaps_fab` script has completed.  A `logs` folder will contain the results of the installation for each remote node and each package installed.  These can be referenced to debug any issues during the installation process.
 
-### <a name="secure-comm">5) Securing Communication Between the VM and Remote RIAPS Nodes</a>
+### <a name="secure-comm">6) Securing Communication Between the VM and Remote RIAPS Nodes</a>
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 
