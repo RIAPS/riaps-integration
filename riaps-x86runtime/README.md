@@ -22,16 +22,16 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
 
 > ***Note: Guest Additions tools were not included and will need to be setup by the user.***
 
-1) Setup a new Linux VM with Xubuntu (64-bit).  Either use the same setup as indicated above, or adjust to match your system's capabilities.  Minimum suggested base memory size is 6144 MB.
+2) Setup a new Linux VM with Xubuntu (64-bit).  Either use the same setup as indicated above, or adjust to match your system's capabilities.  Minimum suggested base memory size is 6144 MB.
 
-2) When setting up the Hard Drive, choose the "Use an Existing Virtual Hard Disk File" option.  Add the downloaded .vdi file. 
+3) When setting up the Hard Drive, choose the "Use an Existing Virtual Hard Disk File" option.  Add the downloaded .vdi file. 
 
-3) Setup the network settings to have Adapter 1 = "NAT" and Adapter 2 = "Bridged Adapter" pointing to the local network where the RIAPS nodes are attached.
+4) Setup the network settings to have Adapter 1 = "NAT" and Adapter 2 = "Bridged Adapter" pointing to the local network where the RIAPS nodes are attached.
 
-4) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
+5) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
     - Hint: After first entering the initial password (`riaps`), the login window might prompt "Change Password". Enter `riaps` again to confirm this and see the first "Enter New Password" prompt. Enter your new password, and it will ask you to confirm. Entering your new password at "Change Password" will result in an incorrect attempt.
 
-5) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
+6) For VirtualBox tools, install the Guest Additions CD image and install them on the VM.  This will allow the use of device drivers (such as USB ports and network adapters), shared clipboard, drag'n'drop, and shared folders.
 
   * At the top of your VM window, under Devices, select **Insert Guest Additions CD image...**
   * Double-click the CD added to the desktop to open the CD location.
@@ -43,13 +43,13 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
   * Eject the Guest Additions CD when complete. (optional)
   * Restart the VM
 
-## <a name="create-network"> 2) Create network between VM and RIAPS nodes</a>
+### <a name="create-network"> 2) Create Network Between VM and RIAPS Nodes</a>
 RIAPS currently supports two different Local Area Network (LAN) configurations: VM sharing router with RIAPS nodes, and VM acting as router for RIAPS nodes. 
 
-### VM sharing router with RIAPS nodes
+#### A) VM sharing router with RIAPS nodes
 In this configuration the VM is connected to an internet router and shares the router's internet connection with the RIAPS nodes. Connect the VM's bridged internet adapter to the router's client ethernet ports to put the VM in the same LAN as the RIAPS nodes.
 
-### VM acting as router for RIAPS nodes
+#### B) VM acting as router for RIAPS nodes
 **For Windows host machines only**  
 In this configuration, the host machine is connected to the internet on some interface other than the bridged adapter. The host machine's internet connection can then be shared with RIAPS nodes that are connected directly to the VM using an unmanaged network switch. This is useful for situations where a router is not available.
 
@@ -61,7 +61,7 @@ In this configuration, the host machine is connected to the internet on some int
 You can now connected a simple, unmanaged network switch to your VM's bridged adapter with an ethernet cable, and any RIAPS nodes to the other ports on the switch. Windows will assign IP addresses from the 192.168.137.0/24 range to your RIAPS nodes and VM.
 
 
-## <a name="config-network">3) Configuring Environment for Local Network Setup</a>
+### <a name="config-network">3) Configuring Environment for Local Network Setup</a>
 
 Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
@@ -77,7 +77,7 @@ ifconfig
 sudo nano /etc/riaps/riaps.conf
 ```   
 
-1) Make sure the NIC name matchs the desired ethernet interface name from 'ifconfig'
+3) Make sure the NIC name matchs the desired ethernet interface name from 'ifconfig'
 
 ```
 # NIC name
@@ -243,7 +243,7 @@ workspace.  Here are some tips for doing this:
 
 ### Error While Adding Downloaded .vdi File as Disk
 
-If a VirtualBox Error of "Failed to open the disk image file <disk location>" occurs and indicates in the details that it "cannot register the hard disk <disk location>(<UUID>) because a hard disk <another disk location> with (<UUID>) already exists", the UUID for the new disk needs to be reset.  This can be done by running the following command in a powershell.
+If a VirtualBox Error of `Failed to open the disk image file <disk location>` occurs and indicates in the details that it "cannot register the hard disk <disk location>(<UUID>) because a hard disk <another disk location> with (<UUID>) already exists", the UUID for the new disk needs to be reset.  This can be done by running the following command in a powershell.
 
 ```
 C:\Program Files\Oracle\VirtualBox> ./VBoxManage.exe internalcommands sethduuid "<disk location/name>.vdi"
