@@ -13,7 +13,7 @@ A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host en
 
 4) Select your VM in the VirtualBox Manager and click the Settings icon.
 - Under "General" > "Advanced", select "Bidirectional" for both Shared Clipboard and Drag'n'Drop
-- Under "Network" > "Adapter 2", select "Enable Network Adapter". Under the "Attached to:" list select "Bridged Adapter". In "Name" should appear a list of your host computer's network interfaces. **Select the interface with a local connection to any RIAPS nodes (e.g. BeagleBone Black)** ~~Select the interface that connects you to your local router, to which you have also connected any RIAPS nodes (e.g. BeagleBone Black). This will likely be an Ethernet interface. If you are using a USB to Ethernet adapter, have the adapter plugged in before starting this process.~~
+- Under "Network" > "Adapter 2", select "Enable Network Adapter". Under the "Attached to:" list select "Bridged Adapter". In "Name" should appear a list of your host computer's network interfaces. Select the interface with a local connection to your RIAPS nodes (e.g. BeagleBone Black)
 
 5) Start up the VM and login as **RIAPS App Developer**.  The initial password is **riaps**.  You will be asked to change the password on this first login.  
     - Hint: After first entering the initial password (`riaps`), the login window might prompt "Changing Password for riaps". If so, enter `riaps` again. Only then will it offer the first "Enter New Password" prompt. Enter your new password, and it will ask you to confirm. Entering your new password at "Changing password for riaps" will result in an incorrect attempt.
@@ -37,23 +37,18 @@ RIAPS currently supports two different Local Area Network (LAN) configurations: 
 In this configuration the VM is connected to an internet router and shares the router's internet connection with the RIAPS nodes. Connect the VM's bridged internet adapter to the router's client ethernet ports to put the VM in the same LAN as the RIAPS nodes.
 
 ### VM acting as router for RIAPS nodes
-**Instructions for Windows host machines only**
-In this configuration, the host machine is connected to the internet on some interface other than the bridged adapter. The host machine's internet connection can then be shared with RIAPS nodes that are connected directly to the VM using an unmanaged network switch. This is useful for situations where a router is not available, or no internet connection is available whatsoever.
+**For Windows host machines only**  
+In this configuration, the host machine is connected to the internet on some interface other than the bridged adapter. The host machine's internet connection can then be shared with RIAPS nodes that are connected directly to the VM using an unmanaged network switch. This is useful for situations where a router is not available.
 
-1. In Windows on the host machine, open the "Network Connections" settings window. Find the interface your VM is bridged to, and the interface of your internet connection.
-2. Right click on you internet connection's interface, select "Properties".
+1. In Windows on the host machine, search "View network connections" from the Start menu and open the suggested window. Locate the interface your VM is bridged to, and the interface of your internet connection.
+2. Right click on your internet connection's interface, select "Properties".
 3. In that interface's "Properties" window, select the "Sharing" tab.
 4. Click "Allow other network users to connect through this computer's Internet connection", and in the "Home networking connection" drop-down, select the interface of your VM's bridged adapter.
 
 You can now connected a simple, unmanaged network switch to your VM's bridged adapter with an ethernet cable, and any RIAPS nodes to the other ports on the switch. Windows will assign IP addresses from the 192.168.137.0/24 range to your RIAPS nodes and VM.
 
 
-
-
-
-
-
-## <a name="config-network">~~Configuring Environment for Local Network Setup~~ Maybe unnecessary?</a>
+## <a name="config-network">Configuring Environment for Local Network Setup</a>
 
 Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
 
@@ -78,7 +73,7 @@ sudo nano /etc/riaps/riaps.conf
 nic_name = enp0s8
 ```
 
-> ***Note:  ~~This is necessary on the first installation.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required~~. This may be out of date?***
+> ***Note:  This is necessary on the first installation.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required.***
 
 4)  After changing the NIC name, restart the rpyc running in the background.
 
@@ -90,7 +85,7 @@ sudo systemctl restart riaps-rpyc-registry.service
 
 The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
 
->***IMPORTANT:  Before running this script make sure ALL the remote RIAPS hosts are reachable by using a system check command: ```riaps_fab sys.check```.  If you are working only on the VM, do not use this script.  Make sure the VM hostname is listed as the control in the /etc/riaps/riaps-hosts.conf file so that it can be excluded when updating the remote keys. The VM is automatically be updated with this `secure_keys` script. If a node is not available when running this script, you can use the `-A` option to add the remote node. ***
+> ***IMPORTANT:  Before running this script make sure ALL the remote RIAPS hosts are reachable by using a system check command: ```riaps_fab sys.check```.  If you are working only on the VM, do not use this script.  Make sure the VM hostname is listed as the control in the /etc/riaps/riaps-hosts.conf file so that it can be excluded when updating the remote keys. The VM is automatically be updated with this `secure_keys` script. If a node is not available when running this script, you can use the `-A` option to add the remote node. ***
 
 Run this scripts using ```./secure_keys```, optionally add a ```-H <comma separated list of hostnames>``` or ```-f <absolute path to hostfile>```.  See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions.
 
