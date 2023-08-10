@@ -37,10 +37,6 @@ if [ -f "$hostfilename" ]; then
       # Remove unnecessary characters and split into elements
       line=$(echo "$line" | sed 's/nodes = //g')    # Remove 'nodes = '
       line=$(echo "$line" | sed 's/[][" ]//g')      # Remove '[', ']', and '"'
-
-
-      line="${line//nodes = /}"           # Remove 'nodes = '
-      line="${line//[\[\]\"]/}"           # Remove '[', ']', and '"'
       IFS=',' read -ra node_array <<< "$line"  # Split into array elements
     fi
   done < $hostfilename
