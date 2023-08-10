@@ -198,25 +198,42 @@ save ""
     ```
 
 22) Install mininet, see mininet_install function in [vm_utils_install.sh](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/install_scripts/vm_utils_install.sh).  Due to an issue with the mininet installation script, the cloning of openflow needs to change from "git://..." to "https://...".
- 
-23) Reset the `/etc/riaps/riaps-hosts.conf` file to have an empty list of nodes since testing might have added nodes to the list.  Leave the control definition as "riaps-VirtualBox.local"
 
-24) Reset the password to the default and cause reset of password on next login.
+>***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
+
+
+## Things to do when preparing to release a new VM
+
+1) To shrink the disk
+    1)  Make sure zerofree is installed (apt)
+    2)  Reboot the VM and repeatedly press the "Esc" key while it boots to access the Grub menu  
+    3)  Select "*Advanced options for Ubuntu" and press Enter
+    4)  Select the "(recovery mode)" option for the kernel used (i.e. highest number near top of the list) and press Enter
+    5)  Select "root" in the recovery menu to boot to a root shell prompt
+    6)  Press "Enter" afterwards when "Press Enter for maintenance" appears on your screen to get a command line prompt
+    7)  Use "df" to locate the "/" disk device (/dev/sda5)
+    8)  Use the following command to run zerofree: `systemctl stop stystemd-journald.socket && systemctl stop systemd-journald.service && sudo swapoff -a && mount -n -o remount,ro -t ext4 /dev/sd5 / && zerofree -v /dev/sda5`
+    9)  When done, type "Halt" to shutdown the machine
+    10) From a terminal window on the host machine use VBoxManage to compress the .vdi image
+        a)  VBoxManage.exe list hdds    (this is to find the disk location)
+        b)  VBoxManage.exe modifymedium disk "<disk location> --compact
+
+2) Reset the `/etc/riaps/riaps-hosts.conf` file to have an empty list of nodes since testing might have added nodes to the list.  Leave the control definition as "riaps-VirtualBox.local"
+
+3) Reset the password to the default and cause reset of password on next login.
 
 ```
 sudo passwd riaps
 sudo chage -d 0 riaps
 ```
 
-25) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
+4) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
 
-26) Reset the UUID of the VM disk (.vdi) to make it unique for this release. From a windows powershell, run the VBoxManage.exe command below.
+5) Reset the UUID of the VM disk (.vdi) to make it unique for this release. From a windows powershell, run the VBoxManage.exe command below.
 
 ```
 $ C:\Program Files\Oracle\VirtualBox> ./VBoxManage.exe internalcommands sethduuid "<location of vdi disk to release>"
 UUID changed to: 4ec9c8af-6b39-44b9-a03f-c9b1c943cf8c
 ```    
 
-27) Compress the VM disk (.vdi) using xz, create a sha256sum txt file and post in the appropriate place.
-
->***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
+6) Compress the VM disk (.vdi) using xz, create a sha256sum txt file and post in the appropriate place.
