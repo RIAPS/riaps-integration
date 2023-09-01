@@ -100,76 +100,85 @@ To communicate with the remote nodes using tools like `riaps_fab`, the VM must b
 
 The remote nodes to connect can be identified in two different ways: 
 1) using the RIAPS host definition file (/etc/riaps/riaps-hosts.conf) or
-2) provide the list of nodes when running the connection script using the `-H <comma separated list of hostnames>`.  This option is good when adding new nodes to the setup.
+2) provide the list of nodes when running the connection script using the `-H <comma or space separated list of hostnames>`.  This option is good when adding new nodes to the setup.
 
 > Note: It is helpful to setup the `/etc/riaps/riaps-hosts.conf` file since it is utilized in the next step when securing the system communications.
 
-The available remotes nodes and the associated hostnames can be determine by looking at the router interface to see the client names or `ssh` into each node to find the prompt name which indicates the `<username>@<hostname>``.  The hostnames used should include an addition of `.local` (i.e. riaps-xxxx.local) or can be an IP Address of the nodes. See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions and the `/etc/riaps/riaps-hosts.conf` file.
+The available remotes nodes and the associated hostnames can be determine by looking at the router interface to see the client names or `ssh` into each node to find the prompt name which indicates the `<username>@<hostname>`.  The hostnames used should include an addition of `.local` (i.e. riaps-xxxx.local) or can be an IP Address of the nodes. See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions and the `/etc/riaps/riaps-hosts.conf` file.
 
-The connection script (`connect_remote_nodes.sh`) will connect to each remote node specified and will update the remote node security keys to match the VM setup. For each node, the user will be requested to add this host to the known hosts file by saying "Yes" and type in the node password (default is `riaps`) to complete the transfer of the VM key. An example successful exchange is below using the `/etc/riaps/riaps-hosts.conf` file to define the remote nodes.  If this command is repeated as connection issues are addressed, the hostname will already be in the known host file, therefore the request to add a host question will not appear. If previous runs succeeded in connecting with some of the nodes, then those nodes will no longer need a password to connect and will transfer the VM key automatically.
-
-```
-$ ./connect_remote_nodes.sh
->>>>> Using /etc/riaps/riaps-hosts.conf file to determine remote nodes <<<<<
-Controller hostname: riaps-VirtualBox.local
-Controller IPs: <IP addresses> 
->>>>> Setting up remote node: riaps-f452.local (you must enter a password for each remote node) <<<<<
-The authenticity of host 'riaps-f452.local (<IP Address>)' can't be established.
-ECDSA key fingerprint is SHA256:<hash>.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added 'riaps-f452.local,<IP Address>' (ECDSA) to the list of known hosts.
-Ubuntu 20.04.6 LTS
-
-rcn-ee.net Ubuntu 20.04.5 Console Image 2023-06-30
-Support: http://elinux.org/BeagleBoardUbuntu
-default username:password is [riaps:riaps]
-
-riaps@riaps-f452.local's password: 
-id_rsa.pub                                                                 100%  576   128.7KB/s   00:00 
->>>>> Connection between riaps-f452.local and controller has succeeded <<<<<   
->>>>> Setting up remote node: riaps-fd98.local (you must enter a password for each remote node) <<<<<
-The authenticity of host 'riaps-fd98.local (<IP Address>)' can't be established.
-ECDSA key fingerprint is SHA256:<hash>.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added 'riaps-fd98.local,<IP Address>' (ECDSA) to the list of known hosts.
-Ubuntu 20.04.6 LTS
-
-rcn-ee.net Ubuntu 20.04.5 Console Image 2023-06-30
-Support: http://elinux.org/BeagleBoardUbuntu
-default username:password is [riaps:riaps]
-
-riaps@riaps-fd98.local's password: 
-id_rsa.pub                                                                 100%  576   142.2KB/s   00:00    
->>>>> Connection between riaps-fd98.local and controller has succeeded <<<<<   
-```
-
-To use the `-H <hostnames>` option, here is an example command:
+The connection script (`connect_remote_nodes`) will connect to each remote node specified and will update the remote node security keys to match the VM setup. An example successful exchange is below using the `/etc/riaps/riaps-hosts.conf` file to define the remote nodes.  
 
 ```
-$ ./connect_remote_nodes.sh -H riaps-f452.local,riaps-fd98.local
-``````
-
-Once all the keys are setup successfully, a system check will be performed to make sure communication exists between all the remote hosts.  A successful output is:
-
-```
+./connect_remote_nodes
+Nodes to connect: ['riaps-f898.local', 'riaps-f852.local']
+>>>>> Connection between riaps-f898.local and controller has succeeded <<<<<
+>>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
+=== riaps_fab sys.check
 === fab -f /usr/local/lib/python3.8/dist-packages/riaps/fabfile/ sys.check     
-[riaps-f452.local] Executing task 'sys.check'
-[riaps-fd98.local] Executing task 'sys.check'
+[riaps-f852.local] Executing task 'sys.check'
+[riaps-f898.local] Executing task 'sys.check'
 [riaps-VirtualBox.local] Executing task 'sys.check'
 [riaps-VirtualBox.local] hostname && uname -a
 riaps-VirtualBox
-Linux riaps-VirtualBox 5.15.0-76-generic #83~20.04.1-Ubuntu SMP Wed Jun 21 20:23:31 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-[riaps-f452.local] hostname && uname -a
-riaps-f452
-Linux riaps-f452 5.10.168-ti-r63 #1focal SMP PREEMPT Wed Jun 28 03:27:34 UTC 2023 armv7l armv7l armv7l GNU/Linux
-[riaps-fd98.local] hostname && uname -a
-riaps-fd98
-Linux riaps-fd98 5.10.168-ti-r63 #1focal SMP PREEMPT Wed Jun 28 03:27:34 UTC 2023 armv7l armv7l armv7l GNU/Linux
+Linux riaps-VirtualBox 5.15.0-69-generic #76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+[riaps-f852.local] hostname && uname -a
+riaps-f852
+Linux riaps-f852 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
+[riaps-f898.local] hostname && uname -a
+riaps-f898
+Linux riaps-f898 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
 
 Done.
->>>>> If a response exists from all remote nodes, then remote node are now successfully communicating <<<<<
+>>>>> If a response exists from all remote nodes, then the remote nodes are now successfully communicating <<<<<
+```
+
+To use the `-H <hostnames>` option, here is an example command.  Use of `""` around the host names are optional and the list can be separated by either a space or a comma.
 
 ```
+$ ./connect_remote_nodes -H "riaps-f852.local" "riaps-f898.local"
+``````
+
+Once all the keys are setup successfully, a system check will be performed to make sure communication exists between all the remote hosts and the `/etc/riaps/riaps-hosts.conf` file is updated with the listed nodes.  If all the connections are not successful, then the `riaps-hosts.conf` file is not updated, even with the successful connections.  Here is a successful output is:
+
+```
+Nodes to connect: ['riaps-f852.local', 'riaps-f898.local']
+>>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
+>>>>> Connection between riaps-f898.local and controller has succeeded <<<<<
+=== sudo mv /home/riaps/riaps-hosts.conf /etc/riaps/riaps-hosts.conf
+=== sudo chown root:root /etc/riaps/riaps-hosts.conf
+=== sudo chmod 644 /etc/riaps/riaps-hosts.conf
+=== riaps_fab sys.check
+=== fab -f /usr/local/lib/python3.8/dist-packages/riaps/fabfile/ sys.check     
+[riaps-f852.local] Executing task 'sys.check'
+[riaps-f898.local] Executing task 'sys.check'
+[riaps-VirtualBox.local] Executing task 'sys.check'
+[riaps-VirtualBox.local] hostname && uname -a
+riaps-VirtualBox
+Linux riaps-VirtualBox 5.15.0-69-generic #76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+[riaps-f852.local] hostname && uname -a
+riaps-f852
+Linux riaps-f852 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
+[riaps-f898.local] hostname && uname -a
+riaps-f898
+Linux riaps-f898 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
+
+Done.
+>>>>> If a response exists from all remote nodes, then the remote nodes are now successfully communicating <<<<<
+```
+
+Here is an example of an unsuccessful connections, where the `192.168.1.109` node is not available:
+```
+./connect_remote_nodes
+Nodes to connect: ['riaps-f852.local', '192.168.1.109']
+>>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
+>>>>> Connection failed between 192.168.1.109 and controller <<<<<
+An error occurred: [Errno None] Unable to connect to port 22 on 192.168.1.109
+>>>>> Check provided hostnames (or IP addresses) <<<<<
+>>>>> Also check that nodes which failed connections are running and network connected <<<<<
+>>>>> No nodes were added to the /etc/riaps/riaps-hosts.conf file <<<<<
+>>>>> Remote node connection failed <<<<<
+```
+
 
 ### <a name="install-riaps-nodes">5) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
 
