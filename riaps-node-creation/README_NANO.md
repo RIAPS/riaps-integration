@@ -1,3 +1,5 @@
+# NOTE: THIS DEVICE IS NO LONGER SUPPORTED
+
 # Create NVIDIA Jetson Nano Base Image (4GB)
 
 These are instructions on how the NVIDIA Jetson Nano base image was created.  

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+# NOTE: THIS IS A WORK IN PROGRESS - it has not yet been tested or completed
+
 # This script configures the packages included on the BeaglePlay image
 #   Note: the rt kernel option is commented out and untested for latest images
 

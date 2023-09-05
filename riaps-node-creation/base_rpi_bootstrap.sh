@@ -8,7 +8,7 @@ set -e
 # git, libpcap0.8, nettle6, libncurses5, curl, libuuid1, liblz4-1, libgnutls30
 # vim, htop, software-properties-common
 #
-# Packages already in base 20.04.4 image that are utilized by RIAPS Components:
+# Packages already in base 20.04.5 image that are utilized by RIAPS Components:
 # git, libpcap0.8, nettle7, libncurses6, curl, libuuid1, liblz4-1, libgnutls30,
 # libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2)
 # vim, htop, software-properties-common, python3-setuptools
@@ -24,14 +24,6 @@ source_scripts() {
 
     source "$PWD/node_creation_rpi.conf"
     echo ">>>>> sourced install scripts"
-}
-
-# Still working out the details to install this kernel on base system, not used at this time
-# Install RT Kernel
-# https://lemariva.com/blog/2019/09/raspberry-pi-4b-preempt-rt-kernel-419y-performance-test
-rt_kernel_install() {
-    sudo apt update
-    echo "installed RT Kernel"
 }
 
 quota_install() {
@@ -57,7 +49,6 @@ source_scripts
 
 # Start of script actions
 check_os_version
-#rt_kernel_install
 setup_peripherals
 user_func
 add_spi_func

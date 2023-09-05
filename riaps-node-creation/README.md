@@ -14,12 +14,6 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
   - Kernel: 5.4.0-xxxx-raspi
   - Ubuntu: 20.04.5 LTS
 
-* NVIDIA Jetson Nano (not yet available)
-  - [Platform Information](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit)
-  - [Instructions for building a Jetson Nano RIAPS Image](README_NANO.md)
-  - Kernel: 4.9.xxx-tegra
-  - Ubuntu: 20.04.3 LTS
-
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
 
 # Usage of Remote RIAPS Node Image

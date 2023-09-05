@@ -1,3 +1,5 @@
+# NOTE: THIS DEVICE IS NO LONGER SUPPORTED
+
 #!/usr/bin/env bash
 set -e
 

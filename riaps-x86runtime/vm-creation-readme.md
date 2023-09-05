@@ -85,7 +85,7 @@ The last line provides feedback that the quota is setup.
     d) Indicate desired RIAPS version
 
     ```
-    RIAPS_VERSION="v1.1.20"
+    RIAPS_VERSION="v1.1.22"
     ```
 
 12) Run the bootstrap script and send information provided to an installation log file.
@@ -204,7 +204,18 @@ save ""
 
 ## Things to do when preparing to release a new VM
 
-1) To shrink the disk
+1) Reset the `/etc/riaps/riaps-hosts.conf` file to have an empty list of nodes since testing might have added nodes to the list.  Leave the control definition as "riaps-VirtualBox.local"
+
+2) Reset the password to the default and cause reset of password on next login.
+
+```
+sudo passwd riaps
+sudo chage -d 0 riaps
+```
+
+3) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
+
+4) To shrink the disk
     1)  Make sure zerofree is installed (apt)
     2)  Reboot the VM and repeatedly press the "Esc" key while it boots to access the Grub menu  
     3)  Select "*Advanced options for Ubuntu" and press Enter
@@ -217,17 +228,6 @@ save ""
     10) From a terminal window on the host machine use VBoxManage to compress the .vdi image
         a)  VBoxManage.exe list hdds    (this is to find the disk location)
         b)  VBoxManage.exe modifymedium disk "<disk location> --compact
-
-2) Reset the `/etc/riaps/riaps-hosts.conf` file to have an empty list of nodes since testing might have added nodes to the list.  Leave the control definition as "riaps-VirtualBox.local"
-
-3) Reset the password to the default and cause reset of password on next login.
-
-```
-sudo passwd riaps
-sudo chage -d 0 riaps
-```
-
-4) Clear history in shells (`history -c && history -w`) and browsers (Firefox and Chrome)
 
 5) Reset the UUID of the VM disk (.vdi) to make it unique for this release. From a windows powershell, run the VBoxManage.exe command below.
 
