@@ -35,7 +35,7 @@
 
 See step 5 in the previous section to update all remote nodes at once using the appropriate `riaps_fab` command.  These instructions are for users that want to update the remote nodes manually.
 
-1) Download the [RIAPS update script](./riaps_install_nodes.sh) to the remote RIAPS node. 
+1) Download the [RIAPS update script](riaps_install_node.sh) to the remote RIAPS node. 
 
 2) Stop the riaps_deplo service by running the kill script.
 
