@@ -114,7 +114,7 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 17) Add preloaded eclipse and sample applications in the default workspace.
 
-    a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/downloads/.  Look for the latest version release of riaps_eclipse.tar.gz.
+    a) Pull the latest preloaded eclipse from https://riaps.isis.vanderbilt.edu/rdownloads.html.  Look for the latest version release of riaps_eclipse.tar.gz.
 
     b) Untar into the /home/riaps directory.
 
