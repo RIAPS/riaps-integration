@@ -6,7 +6,7 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
   - [Platform Information](http://beagleboard.org/black)
   - [Instructions for building a BBB RIAPS Image](README_BBB.md)
   - Kernel: v5.10.xx-ti-rt-rxx
-  - Ubuntu: 20.04.5 LTS
+  - Ubuntu: 20.04.6 LTS
 
 * Raspberry Pi 4
   - [Platform Information](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)

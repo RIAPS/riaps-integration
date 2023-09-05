@@ -15,7 +15,7 @@
 >Note:  newer BBBs should be set to boot to the SD card automatically, when present.
 
 3) The downloaded image is not configured with security keys, so the connection needs to be established between the VM and the remote nodes. 
-   Use the [Connect the VM to the Remote Nodes](../riaps-x86runtime/README.md#connect-remotes) instructions to establish these connections. 
+   Use the [Connect the VM to the Remote Nodes](../riaps-x86runtime/README.md#connect-the-vm-to-the-remote-nodes) instructions to establish these connections. 
    
 4) Downloaded nodes can be logged in using `ssh` until the communication is secured. You can ssh into the nodes using the following:
 
@@ -35,7 +35,7 @@
 
 See step 5 in the previous section to update all remote nodes at once using the appropriate `riaps_fab` command.  These instructions are for users that want to update the remote nodes manually.
 
-1) Download the [RIAPS update script](riaps_install_nodes.sh) to the remote RIAPS node. 
+1) Download the [RIAPS update script](../riaps_install_nodes.sh) to the remote RIAPS node. 
 
 2) Stop the riaps_deplo service by running the kill script.
 
