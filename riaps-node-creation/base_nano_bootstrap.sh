@@ -1,7 +1,11 @@
+# NOTE: THIS DEVICE IS NO LONGER SUPPORTED
+
 #!/usr/bin/env bash
 set -e
 
+# This script configures the packages included on the Jetson Nano image
 # Note:  for 1.1.20 release, the Nano image had not yet been created nor code updated
+
 # Packages already in base 18.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, libzmq5, liblz4-1, cmake
 # libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
@@ -64,7 +68,6 @@ check_os_version
 setup_peripherals
 user_func
 # add_spi_func - spi not setup the same way on Nano as BBB or RPi, so not setting this up at this time
-setup_ssh_keys
 rdate_install
 htop_install
 rm_snap_pkg

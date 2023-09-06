@@ -15,6 +15,8 @@ user_func() {
         sudo usermod -aG pwm $RIAPSUSER
         sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/riaps_apps
         cp etc/sudoers.d/riaps /etc/sudoers.d/riaps
+        sudo mkdir -p /home/$RIAPSUSER/.ssh
+        sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh
         echo ">>>>> created user accounts"
     fi
 }
@@ -28,21 +30,12 @@ add_spi_func() {
     sudo chmod g+rw /dev/spidev0.1
 }
 
-# This function requires that riaps_initial.pub from https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-creation/riaps_initial_keys/id_rsa.pub
-# be placed on the remote node as this script is run
-setup_ssh_keys() {
-    sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.ssh
-    sudo -H -u $RIAPSUSER cat riaps_initial_keys/riaps_initial.pub >> /home/$RIAPSUSER/.ssh/authorized_keys
-    chmod 600 /home/$RIAPSUSER/.ssh/authorized_keys
-    chown -R $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh
-    echo ">>>>> Added unsecured public key to authorized keys for $RIAPSUSER"
-}
-
 # Create a file that tracks the version installed on the RIAPS node, will help in debugging efforts
 create_riaps_version_file () {
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.riaps
     sudo echo "RIAPS Version: $RIAPS_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
-    sudo echo "Ubuntu Version: $UBUNTU_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Version: $LINUX_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Package: $CURRENT_PACKAGE_REPO" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo echo "Application Developer Username: $RIAPSUSER" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.riaps/riapsversion.txt

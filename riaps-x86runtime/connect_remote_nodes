@@ -1,0 +1,227 @@
+#!/usr/bin/python3
+'''
+Connect development machine with remote nodes to allow initial communication (i.e. riaps_fab)
+
+Created on August 31, 2023
+
+Arguments:
+    - ``fabcmd``:    fabric command desired
+
+    optional arguments:
+    - ``-H | --hosts hostnames``:  list of hostnames or IP addresses (comma separated)
+
+If specific hostnames are not given, the command will be called for all hosts
+listed in /usr/local/riaps/etc/riaps_hosts.conf
+
+@author: riaps
+'''
+
+import argparse
+import toml
+import socket   
+import os
+import shlex
+import argparse
+import subprocess
+import paramiko
+import netifaces
+
+# Constant Values
+hosts_file = "/etc/riaps/riaps-hosts.conf"
+mod_hosts_file = "~/riaps-hosts.conf"
+remote_user = "riaps"
+remote_passwd = "riaps"
+key_file = "~/.ssh/id_rsa.pub"
+dest_filename = "/home/riaps/.ssh/authorized_keys"
+
+def bash(cmd):
+    print("=== "+cmd)
+    subprocess.run(shlex.split(cmd))
+
+def getNetworkInterfaces():
+    ipAddressList = []
+    ifNames = netifaces.interfaces()
+    for ifName in ifNames:
+        ifInfo = netifaces.ifaddresses(ifName)
+        if netifaces.AF_INET in ifInfo:
+            ifAddrs = ifInfo[netifaces.AF_INET]
+            ifAddr = ifAddrs[0]['addr']
+            ipAddressList.append(ifAddr)
+    return ipAddressList
+
+def catch(func, *args, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except Exception:
+        raise Exception("%r" % args)
+    
+def isIPaddress(addr):
+    try:
+        socket.inet_aton(addr)
+        return True
+    except socket.error:
+        return False
+
+def fetch_node_names(validate=False):
+    if not os.path.isfile(hosts_file):
+        print('Hosts configuration file doesn\'t exist: %s' % hosts_file)
+        return None
+    try:
+        config = toml.load(hosts_file)
+    except Exception as e:
+        print(' Hosts configuration file %s has a problem: %s.' % (hosts_file, str(e)))
+        return None
+
+    spec = config.get('RIAPS',None)
+
+    if spec is None:
+        print('Hosts configuration file %s is missing [RIAPS] section.' % (hosts_file))
+        return None
+
+    # control is optional
+    control = spec.get('control', None)
+
+    if control and type(control) != str:
+        print("String is expected: %r" % control)
+        return None
+
+    if control in {'localhost', '127.0.0.1'}:
+        print("Control hostname or IP address is expected: %r " % control)
+        return None
+    else:
+        control = socket.gethostname() if control is None else control
+
+    control_ = control if control.endswith('.local') or isIPaddress(control) else control + '.local'
+
+    if validate:
+        # Validate control host name
+        try:
+            _control = catch(socket.gethostbyname,control_)
+        except Exception as e:
+            print('Control host name %s cannot be resolved.' % str(e))
+
+    # nodes are required
+    nodes = spec.get('nodes', None)
+    if nodes is None:
+        print("No nodes specified in %s." % (hosts_file))
+        return None
+
+    if type(nodes) == str: nodes = [nodes]
+
+    if validate:
+        # Validate target host names
+        for node in nodes:
+            try:
+                _nodes = catch(socket.gethostbyname,node)
+            except Exception as e:
+                print('Host name %s cannot be resolved.' % str(e))
+
+    nodes = [node if node != control else control_ for node in nodes]
+
+    nodeS,controlS = set(nodes), set([control_])
+
+    roledefs = {"nodes" : nodes,                            # Nodes that run apps
+                "control" : [control_],                     # Control host
+                "remote" : list(nodeS.difference(controlS)),# Only the remote nodes
+                "all" : list(nodeS.union(controlS))         # All nodes
+                }
+    return roledefs["remote"], roledefs["control"], config
+
+def add_nodes_to_config(node_list, config, control_host):
+    nodes = config['RIAPS']['nodes']
+    
+    for node in node_list:
+        if (node not in nodes):
+            nodes.append(node)           
+    
+    config['RIAPS']['nodes'] = nodes
+    
+    # Write in a user location
+    mod_hosts_filename = os.path.expanduser(mod_hosts_file)
+    with open(mod_hosts_filename, 'w') as f:
+        toml.dump(config, f)
+
+    # Move to the system location on controller only
+    bash(f"sudo mv {mod_hosts_filename} {hosts_file}")
+    # Reset the file permissions/owner
+    bash(f"sudo chown root:root {hosts_file}")
+    bash(f"sudo chmod 644 {hosts_file}")
+
+
+def transfer_pub_key(node):
+    connected = False
+    key_filename = os.path.expanduser(key_file)
+
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(node, username=remote_user, password=remote_passwd)
+        scp = ssh.open_sftp()
+        scp.put(key_filename, dest_filename)
+
+        connected = True
+        print(f">>>>> Connection between {node} and controller has succeeded <<<<<")
+
+        scp.close()
+        ssh.close()
+        
+    except Exception as e:
+        print(f">>>>> Connection failed between {node} and controller <<<<<")
+        print(f"An error occurred: {str(e)}")
+        
+    return connected
+
+
+def run(args=None):
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-H", "--hosts", default="", type=str, nargs='+', help="list of hosts, space or comma separated")
+
+    args = parser.parse_args(args)
+
+    # Pull information from existing /etc/riaps/riaps-hosts.conf file
+    node_list, controller, config_contents = fetch_node_names()
+        
+    # Provided hostname list
+    if args.hosts:
+        # list provided in the command
+        node_list = args.hosts
+        node_list = [node.strip(',') for node in node_list]
+
+    # Make sure the controller is not in this list
+    # Check controller IP address also
+    ctrl_ips = getNetworkInterfaces()
+    controller.extend(ctrl_ips)
+    #print(f"DEBUG: Controller = {controller}")
+
+    connect_node_list = [i for i in node_list if i not in controller]
+    print(f"Nodes to connect: {connect_node_list}")
+    connected_count = 0
+    
+    for node in connect_node_list:
+        connect_status = transfer_pub_key(node)
+        if connect_status:
+            connected_count += 1
+
+    if connected_count == len(connect_node_list):
+        # if provided a list of hostname, add them to the riaps-hosts.conf file is they are not already there
+        if args.hosts:
+            add_nodes_to_config(connect_node_list, config_contents, controller)
+
+        # Check if riaps_fab system check works for all nodes
+        bash("riaps_fab sys.check")
+        print(">>>>> If a response exists from all remote nodes, then the remote nodes are now successfully communicating <<<<<")
+    else:
+        if args.hosts:
+            print(">>>>> Check provided hostnames (or IP addresses) <<<<<")
+            print(">>>>> Also check that nodes which failed connections are running and network connected <<<<<")
+            print(">>>>> No nodes were added to the /etc/riaps/riaps-hosts.conf file <<<<<")
+        else:
+            print(">>>>> Check /etc/riaps/riaps-hosts.conf file for correct hostnames (or IP addresses) <<<<<")
+            print(">>>>> Also check nodes that failed connections are running and network connected <<<<<")
+
+        print(">>>>> Remote node connection failed <<<<<")
+
+
+if __name__ == '__main__':
+    run()

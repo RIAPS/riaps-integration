@@ -11,9 +11,8 @@ pipeline {
             wget https://github.com/gruntwork-io/fetch/releases/download/v0.1.1/fetch_linux_amd64
             chmod +x fetch_linux_amd64
             source version.sh
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-amd64.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-armhf.deb" .
-            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-arm64.deb" .
+            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom" .
+            ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-pycom" --tag=$pycomversion --release-asset="riaps-pycom-dev" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-amd64.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-armhf.deb" .
             ./fetch_linux_amd64 --repo="https://github.com/RIAPS/riaps-timesync" --tag=$timesyncversion --release-asset="riaps-timesync-arm64.deb" .
@@ -26,7 +25,7 @@ pipeline {
         sh '''#!/bin/bash
           source version.sh
           mkdir riaps-release
-          cp riaps-pycom-amd64.deb riaps-pycom-armhf.deb riaps-pycom-arm64.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
+          cp riaps-pycom.deb riaps-pycom-dev.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
           echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
           echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
           tar cvzf riaps-release.tar.gz riaps-release

@@ -1,6 +1,6 @@
 # Welcome to the RIAPS Integration Repository
 
-This repository describes how a RIAPS application developer should setup a RIAPS environment from preloaded disk images: there is one for a development (virtual) machine, and another one for the target nodes. For the former we use a 64-bit x86_64/amd64 system. For the latter, there are several single board computing devices that work with RIAPS (i.e. 32-bit Beaglebone Black 'armhf' system, 64-bit Raspberry Pi 4 'arm64' system and NVIDIA Jetson Nano 'arm64 system'. For advanced programming users wanting to setup a custom environment, there is also information about how these preloaded images were created.
+This repository describes how a RIAPS application developer should setup a RIAPS environment from preloaded disk images: there is one for a development (virtual) machine, and another one for the target nodes. For the former we use a 64-bit x86_64/amd64 system. For the latter, there are several single board computing devices that work with RIAPS (i.e. 32-bit Beaglebone Black 'armhf' system, and 64-bit Raspberry Pi 4 'arm64' system). For advanced programming users wanting to setup a custom environment, there is also information about how these preloaded images were created.
 
 ---------------------------
 ## Application Developer Setup Instructions
@@ -13,7 +13,7 @@ The RIAPS development host environment is based on a virtual machine setup using
 
 ### 2) RIAPS Target Node Setup Instructions
 
-The main RIAPS target node environment used for this project has been [TI Beaglebone Black](http://beagleboard.org/black).  Additional node environments are available starting with release 1.1.19 (Raspberry Pi 4 and NVIDIA Jetson Nano). Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
+The main RIAPS target node environments used for this project has been [TI Beaglebone Black](http://beagleboard.org/black) and [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) . Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
 
 ### 3) Testing the RIAPS Platform Environment
 

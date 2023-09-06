@@ -1,86 +1,63 @@
 # Setting up the Remote RIAPS Node Images
 
-1) Download the latest RIAPS Node image from
-   https://riaps.isis.vanderbilt.edu/rdownloads.html . Choose the latest date folder.
+1) Download the latest RIAPS Node image (i.e. for bbb: riaps_bbb_4GB_[version].zip) from
+   https://riaps.isis.vanderbilt.edu/rdownloads.html. Choose the latest released image.
 
-  Available architectures are:
-  - armhf for Beaglebone Black boards
-  - arm64 for both Raspberry Pi 4 and NVIDIA Jetson Nano boards
+   Available architectures are:
+   - armhf for Beaglebone Black boards
+   - arm64 for both Raspberry Pi 4 boards
 
-2) Copy the image to a SD Card using a host machine and an SD Card reader.  
+1) Copy the image to a SD Card using a host machine and an SD Card reader.  
    A good open source tool for transferring the image to a SD Card is https://etcher.io/.
 
-3) Put the SD Card into the RIAPS node machine and boot it up.  
+2) Put the SD Card into the RIAPS node machine and boot it up.  
 
 >Note:  newer BBBs should be set to boot to the SD card automatically, when present.
 
-4) Log into the "riaps" account on the RIAPS node.
-
- You can ssh into the nodes using the following:
+3) The downloaded image is not configured with security keys, so the connection needs to be established between the VM and the remote nodes. 
+   Use the [Connect the VM to the Remote Nodes](../riaps-x86runtime/README.md#connect-the-vm-to-the-remote-nodes) instructions to establish these connections. 
+   
+4) Downloaded nodes can be logged in using `ssh` until the communication is secured. You can ssh into the nodes using the following:
 
     Username:  riaps
     Password:  riaps
 
-```
-ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
-```
->  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the node
+   ```
+   ssh -i /home/riaps/.ssh/id_rsa.key riaps@XXX.XXX.XXX.XXX
+   ```
+   >  where **xxx&#46;xxx&#46;xxx&#46;xxx** is the IP address of the node
 
-5) Starting with v1.1.17, the RIAPS Node images do not have RIAPS pre-installed.  So,
-   install the RIAPS platform using
+5) The RIAPS Node images do not have RIAPS pre-installed.  Use the [Installing RIAPS Packages on the Remote RIAPS Nodes](../riaps-x86runtime/README.md#install-riaps-nodes) instructions.
 
-```
-./riaps_install_node.sh 2>&1 | tee install-riaps-node.log
-```
+6) Reboot the RIAPS nodes
 
-> Note: The RIAPS remote nodes must have access to internet to use this method to install RIAPS packages.
-  Deb packages can be retrieve from the network on an attached machine and then `scp` can be used to transfer
-  the files to the remote nodes. The packages can then be installed using ```sudo dpkg -i <package name>```.  
-  To retrieve the packages, pull the appropriate architecture and latest version from
-  https://github.com/RIAPS/riaps-pycom/releases and https://github.com/RIAPS/riaps-timesync/releases.
+# Update RIAPS Platform Packages on Existing BBBs Manually
 
-6) Optional Step:  If desired, secure communication between the Host Environment
-   and the remote RIAPS nodes by following the [Securing Communication Between the VM and Remote RIAPS Nodes](../riaps-x86runtime/README.md#secure-comm)
-   instructions.  Once this process completes, the host environment will automatically
-   login to the RIAPS nodes when using ssh by utilizing your ssh keys.  Note that
-   password access to the remote RIAPS nodes will be disabled after running this process.  
+See step 5 in the previous section to update all remote nodes at once using the appropriate `riaps_fab` command.  These instructions are for users that want to update the remote nodes manually.
 
-> Note:  First time users should skip this step on first setup of their system.  
-  The RIAPS example programs will work with the initial security configuration.
-
-7) Reboot the RIAPS nodes
-
-# Update RIAPS Platform Packages on Existing BBBs
-
-1) Download the [RIAPS update script](riaps_install_nodes.sh) to the remote RIAPS node.
+1) Download the [RIAPS update script](riaps_install_node.sh) to the remote RIAPS node. 
 
 2) Stop the riaps_deplo service by running the kill script.
 
-```
-sudo systemctl stop riaps-deplo.service
-```
+   ```
+   sudo systemctl stop riaps-deplo.service
+   ```
 
 3) Run the update script.
 
-```
-./riaps_install_node.sh <arch> 2>&1 | tee install-riaps-node.log
-where <arch> is the architecture of the RIAPS node board (i.e. armhf or arm64)
-```
+   ```
+   ./riaps_install_node.sh 2>&1 | tee install-riaps-node.log
+   ```
 
 > Note: The user configuration files (riaps.conf and riaps-log.conf) are preserved
   when a new version of riaps-pycom is installed.  If you want to reset to the
   basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and
   reinstall riaps-pycom.  
-
-> Note for v1.1.16 users:  The platform move from RIAPS v1.1.15 or RIAPS v1.1.16 are
-  breaking builds, it is best to create new images from the downloads page.
-
-> Note for v1.1.17 users: it is best to update to new images from the downloads page.
-
+  
 
 # Helpful Hints
 
-1. If you try 'scp' or 'ssh' and receive the following message, remove the '~/.ssh/known_host'
+1. If you try `scp` or `ssh` and receive the following message, remove the `~/.ssh/known_host`
    file and try again.
 
 ```

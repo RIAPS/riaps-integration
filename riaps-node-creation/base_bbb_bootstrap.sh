@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# This script configures the packages included on the Beaglebone Black image
+#   Note: the rt kernel option is commented out and untested for latest images
+
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
 # GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
 # pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
@@ -37,6 +40,7 @@ quota_install() {
 }
 
 splash_screen_update() {
+    build_date=$(date -Idate)
     echo "################################################################################" > motd
     echo "# Acknowledgment:  The information, data or work presented herein was funded   #" >> motd
     echo "# in part by the Advanced Research Projects Agency - Energy (ARPA-E), U.S.     #" >> motd
@@ -46,9 +50,9 @@ splash_screen_update() {
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
     # Issue.net
-    echo "Ubuntu 20.04.4 LTS" > issue.net
+    echo "$LINUX_DISTRO $LINUX_VERSION_INSTALL LTS" > issue.net
     echo "" >> issue.net
-    echo "rcn-ee.net console Ubuntu Image 2022-10-04">> issue.net
+    echo "rcn-ee.net console $LINUX_DISTRO Image $build_date">> issue.net
     echo "">> issue.net
     echo "Support/FAQ: http://elinux.org/BeagleBoardUbuntu">> issue.net
     echo "">> issue.net
@@ -73,7 +77,6 @@ wget_install
 setup_peripherals
 user_func
 add_spi_func
-setup_ssh_keys
 rdate_install
 vim_func
 tmux_install

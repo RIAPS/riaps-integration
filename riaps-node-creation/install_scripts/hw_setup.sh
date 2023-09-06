@@ -20,9 +20,10 @@ check_os_version() {
     VALID_SETUP=0
     NODE_OS_VERSION="$(lsb_release -sr | cut -d ' ' -f 1)"
     echo ">>>>> Node OS: $NODE_OS_VERSION"
-    echo ">>>>> Requested OS: $UBUNTU_VERSION_INSTALL"
-    for version in ${UBUNTU_VERSION_OPTS[@]}; do
-        if [ "$version" = "$UBUNTU_VERSION_INSTALL" ] && [ "$version" = "$NODE_OS_VERSION" ]; then
+    echo ">>>>> Requested OS: $LINUX_VERSION_INSTALL"
+    echo ">>>>> Requested Package: $CURRENT_PACKAGE_REPO"
+    for version in ${LINUX_VERSION_OPTS[@]}; do
+        if [ "$version" = "$LINUX_VERSION_INSTALL" ] && [ "$version" = "$NODE_OS_VERSION" ]; then
             VALID_SETUP=1
         fi
     done
@@ -30,7 +31,7 @@ check_os_version() {
     if [ $VALID_SETUP == 1 ]; then
         echo ">>>>> System setup is valid, installation will begin."
     else
-        echo ">>>>> System setup is invalid, choose Ubuntu version that is available (${UBUNTU_VERSION_OPTS[*]})."
+        echo ">>>>> System setup is invalid, choose Ubuntu version that is available (${LINUX_VERSION_OPTS[*]})."
         exit
     fi
 }

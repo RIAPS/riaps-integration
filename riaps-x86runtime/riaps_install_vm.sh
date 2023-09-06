@@ -13,5 +13,5 @@ sudo pip3 install --upgrade pip
 
 # install RIAPS packages
 sudo apt-get update
-sudo apt-get install riaps-pycom-$HOST_ARCH riaps-timesync-$HOST_ARCH -y
+sudo apt-get install riaps-pycom-dev riaps-timesync-$HOST_ARCH -y
 echo "installed RIAPS platform"

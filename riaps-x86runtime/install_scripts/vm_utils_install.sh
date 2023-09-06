@@ -107,7 +107,7 @@ nodered_install() {
     cd FlashMQ/
     ./build.sh
     cd FlashMQBuildRelease/
-    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.debs
+    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.deb
 
     # install MQTT
     sudo pip3 install paho-MQTT

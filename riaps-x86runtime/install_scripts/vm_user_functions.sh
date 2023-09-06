@@ -22,35 +22,31 @@ setup_ssh_keys () {
     then
         echo ">>>>> Found user ssh keys.  Will use them"
     else
-        echo ">>>>> Did not find public_key=<name>.pub private_key=<name>.key. Generating it now."
+        echo ">>>>> Did not find public_key=<name>.pub private_key=<name>. Generating it now."
         mkdir -p /home/$INSTALL_USER/.ssh
         ssh-keygen -N "" -q -f $PRIVATE_KEY
     fi
 
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.ssh
     sudo cp $PUBLIC_KEY /home/$RIAPSUSER/.ssh/id_rsa.pub
-    sudo cp $PRIVATE_KEY /home/$RIAPSUSER/.ssh/id_rsa.key
+    sudo cp $PRIVATE_KEY /home/$RIAPSUSER/.ssh/id_rsa
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh/id_rsa.pub
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh/id_rsa.key
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh/id_rsa
     sudo -H -u $RIAPSUSER cat /home/$RIAPSUSER/.ssh/id_rsa.pub >> /home/$RIAPSUSER/.ssh/authorized_keys
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.ssh/authorized_keys
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.ssh/authorized_keys
-    sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa.key
-    echo "# RIAPS:  Add SSH keys to ssh agent on login" >> /home/$RIAPSUSER/.bashrc
-    echo "ssh-add /home/$RIAPSUSER/.ssh/id_rsa.key" >> /home/$RIAPSUSER/.bashrc
+    sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa
 
-    # Setup RIAPS ssh keys for use with VM
-    sudo cp -r riaps_initial_keys /home/$RIAPSUSER/.
-    sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_initial_keys
-    sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/riaps_initial_keys/riaps_initial.key
-    #sudo -H -u $RIAPSUSER
-    echo "ssh-add /home/$RIAPSUSER/riaps_initial_keys/riaps_initial.key" >> /home/$RIAPSUSER/.bashrc
+    # Transfer remote node connection script
+    sudo cp connect_remote_nodes.sh /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes.sh
+    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes.sh
 
     # Transfer RIAPS rekeying script
     sudo cp secure_keys /home/$RIAPSUSER/.
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/secure_keys
     sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/secure_keys
-    echo ">>>>> Added user key to authorized keys for $RIAPSUSER. Use riaps_initial keys for initial communication with the remote RIAPS nodes"
+    echo ">>>>> Added user key to authorized keys for $RIAPSUSER. Use connect_remote_nodes.sh for initial communication with the remote RIAPS nodes"
 }
 
 # Simple example project setup to allow users to quickly test the VM setup
@@ -65,7 +61,8 @@ add_set_tests () {
 create_riaps_version_file () {
     sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/.riaps
     sudo echo "RIAPS Version: $RIAPS_VERSION" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
-    sudo echo "Ubuntu Version: $UBUNTU_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Version: $LINUX_VERSION_INSTALL" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
+    sudo echo "$LINUX_DISTRO Package: $CURRENT_PACKAGE_REPO" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo echo "Application Developer Username: $RIAPSUSER" >> /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/.riaps/riapsversion.txt
     sudo -H -u $RIAPSUSER chmod 600 /home/$RIAPSUSER/.riaps/riapsversion.txt
