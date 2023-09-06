@@ -223,7 +223,7 @@ sudo chage -d 0 riaps
     5)  Select "root" in the recovery menu to boot to a root shell prompt
     6)  Press "Enter" afterwards when "Press Enter for maintenance" appears on your screen to get a command line prompt
     7)  Use "df" to locate the "/" disk device (/dev/sda5)
-    8)  Use the following command to run zerofree: `systemctl stop stystemd-journald.socket && systemctl stop systemd-journald.service && sudo swapoff -a && mount -n -o remount,ro -t ext4 /dev/sd5 / && zerofree -v /dev/sda5`
+    8)  Use the following command to run zerofree: `systemctl stop systemd-journald.socket && systemctl stop systemd-journald.service && systemctl stop systemd-journald-dev-log.socket && sudo swapoff -a && mount -n -o remount,ro -t ext4 /dev/sda5 / && zerofree -v /dev/sda5`
     9)  When done, type "Halt" to shutdown the machine
     10) From a terminal window on the host machine use VBoxManage to compress the .vdi image
         a)  VBoxManage.exe list hdds    (this is to find the disk location)
