@@ -236,6 +236,7 @@ sudo chage -d 0 riaps
 ```
 $ C:\Program Files\Oracle\VirtualBox> VBoxManage.exe internalcommands sethduuid "<location of vdi disk to release>"
 UUID changed to: 4ec9c8af-6b39-44b9-a03f-c9b1c943cf8c
-```    
+```
+>Note: Once the disk UUID changes, Oracle VM Virtual Manager can not find the disk.  The .vdi disk must be removed from the VM instance (using settings under the Storage section), remove the old disk information from the `Virtual Media Manager` (found under `File` --> `Tools`) - make sure to keep the file, then add the disk again to the VM instance as a new SATA hard disk using the `Add` button.  
 
 6) Compress the VM disk (.vdi) using xz, create a sha256sum txt file and post in the appropriate place.
