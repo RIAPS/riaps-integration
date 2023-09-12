@@ -20,20 +20,21 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
-# Install libraries for czmq and zyre
-# Assumes libzmq5 is already installed
+# Install libraries for czmq and zyre, add directory for zmq compiled with draft APIs
+# Use compiled is already installed
 # For 20.04, pkg-config is already installed
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq3-dev -y
+    #sudo apt-get install libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install libzmq3-dev:$c_arch -y
+        #sudo apt-get install libzmq3-dev:$c_arch -y
         sudo apt-get install libsystemd-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
         sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
-    echo ">>>>> installed CZMQ and Zyre prerequisites"
+
+    echo ">>>>> installed libzmq, CZMQ and Zyre prerequisites"
 }
 
 # Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex

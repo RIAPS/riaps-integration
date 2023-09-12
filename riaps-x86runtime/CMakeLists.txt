@@ -24,6 +24,9 @@ else()
 endif()
 set(CMAKE_INSTALL_PREFIX ${prefix})
 
+#Put compiled version of libzmq in /opt/riaps folder to keep it isolated from the distribution install
+set(riaps_prefix /opt/riaps)
+
 #Set the platform
 if (${arch} STREQUAL "armhf")
  set(TOOLCHAIN_PREFIX /usr/bin/arm-linux-gnueabihf)
@@ -333,9 +336,35 @@ elseif(${arch} STREQUAL "arm64")
                       install_dev)
 endif()
 
-# Compiling armhf and arm64 versions of libzmq so that cross compiling of zyre works (need --enable-libunwind=no flag)
 # libzmq
-if(${arch} STREQUAL "armhf")
+# On "amd64", compiling local version of libzmq to get the draft APIs, 
+# which are not available in the distribution install version
+# Compiling armhf and arm64 versions of libzmq so that cross compiling 
+# of zyre works (need --enable-libunwind=no flag)
+if(${arch} STREQUAL "amd64")
+ externalproject_add(libzmq-${arch}
+                     DEPENDS
+                     GIT_REPOSITORY
+                     "https://github.com/zeromq/libzmq.git"
+                     GIT_TAG
+                     "v4.3.2"
+                     SOURCE_DIR
+                     "/tmp/3rdparty/libzmq-${arch}"
+                     BUILD_IN_SOURCE
+                      1
+                     UPDATE_COMMAND
+                     "./autogen.sh"
+                     CONFIGURE_COMMAND
+                     ./configure
+                     --prefix=${riaps_prefix}
+                     --enable-drafts
+                     BUILD_COMMAND
+                     make
+                     ${MAKE_JOB_FLAGS}
+                     INSTALL_COMMAND
+                     sudo make
+                     install)
+elseif(${arch} STREQUAL "armhf")
  externalproject_add(libzmq-${arch}
                      DEPENDS
                      GIT_REPOSITORY
@@ -356,6 +385,7 @@ if(${arch} STREQUAL "armhf")
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      --enable-libunwind=no
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -383,6 +413,7 @@ elseif(${arch} STREQUAL "arm64")
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      --enable-libunwind=no
+                     --enable-drafts
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -409,7 +440,6 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     --enable-drafts
                      --with-uuid=no
                      --with-libsystemd=no
                      --with-liblz4=no
@@ -417,6 +447,9 @@ if(${arch} STREQUAL "amd64")
                      --enable-zsp=no
                      --enable-test_randof=no
                      --enable-czmq_selftest=no
+                     libzmq_LIBS="-L${riaps_prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I${riaps_prefix}/include
+                     --prefix=${riaps_prefix}
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -453,6 +486,8 @@ elseif(${arch} STREQUAL "armhf")
                      --enable-zsp=no
                      --enable-test_randof=no
                      --enable-czmq_selftest=no
+                     libzmq_LIBS="-L${prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -489,6 +524,8 @@ elseif(${arch} STREQUAL "arm64")
                      --enable-zsp=no
                      --enable-test_randof=no
                      --enable-czmq_selftest=no
+                     libzmq_LIBS="-L${prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -514,7 +551,11 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     --enable-drafts
+                     libzmq_LIBS="-L${riaps_prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I{riaps_prefix}/include
+                     czmq_LIBS="-L${riaps_prefix}/lib -lczmq"
+                     czmq_CFLAGS=-I${riaps_prefix}/include
+                     --prefix=${riaps_prefix}
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -544,6 +585,10 @@ elseif(${arch} STREQUAL "armhf")
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
                      --enable-drafts
+                     libzmq_LIBS="-L${prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I${prefix}/include
+                     czmq_LIBS="-L${prefix}/lib -lczmq"
+                     czmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -573,6 +618,10 @@ elseif(${arch} STREQUAL "arm64")
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
                      --enable-drafts
+                     libzmq_LIBS="-L${prefix}/lib -lzmq"
+                     libzmq_CFLAGS=-I${prefix}/include
+                     czmq_LIBS="-L${prefix}/lib -lczmq"
+                     czmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
