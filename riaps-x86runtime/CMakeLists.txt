@@ -428,6 +428,7 @@ endif()
 if(${arch} STREQUAL "amd64")
  externalproject_add(czmq-${arch}
                      DEPENDS
+                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
