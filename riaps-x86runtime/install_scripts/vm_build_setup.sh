@@ -179,3 +179,10 @@ config_gcc() {
 
     echo "configured gcc/g++"
 }
+
+configure_library_path() {
+    sudo touch /etc/ld.so.conf.d/riaps.conf
+    sudo echo "# Add RIAPS Library for ZeroMQ specific builds" >> /etc/ld.so.conf.d/riaps.conf
+    sudo echo "$RIAPS_PREFIX/lib" >> /etc/ld.so.conf.d/riaps.conf
+    sudo ldconfig
+}

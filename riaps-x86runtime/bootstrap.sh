@@ -57,10 +57,8 @@ opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
 externals_cmake_install
+configure_library_path
 pycapnp_install
-pyzmq_install
-czmq_pybindings_install
-zyre_pybindings_install
 apparmor_monkeys_install
 redis_install
 spdlog_python_install
@@ -69,6 +67,10 @@ pip3_3rd_party_installs
 graphviz_install
 #mininet_install - this step is done manually due to issue in mininet install script (see function for more information)
 prctl_install
+# place zmq python installs at the end due to caching of newer cythons
+pyzmq_install
+czmq_pybindings_install
+zyre_pybindings_install
 graphing_installs
 chrome_install
 #nodered_install - these two steps is done manually, the steps taken are documented in vm_utils_install.sh nodered_install()
