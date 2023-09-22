@@ -31,7 +31,7 @@ pyzmq_install(){
     git clone https://github.com/zeromq/pyzmq.git $TMP/pyzmq
     cd $TMP/pyzmq
     git checkout v23.2.1
-    sudo pip3 install . --verbose
+    ZMQ_DRAFT_API=1 ZMQ_PREFIX=$RIAPS_PREFIX sudo -E pip install . -v --no-binary pyzmq --pre pyzmq --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed pyzmq"
@@ -44,7 +44,7 @@ czmq_pybindings_install(){
     git clone https://github.com/zeromq/czmq.git $TMP/czmq_pybindings
     cd $TMP/czmq_pybindings/bindings/python
     git checkout v4.2.1
-    sudo pip3 install . --verbose
+    ZMQ_PREFIX=$RIAPS_PREFIX sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed CZMQ pybindings"
@@ -57,7 +57,7 @@ zyre_pybindings_install(){
     git clone https://github.com/zeromq/zyre.git $TMP/zyre_pybindings
     cd $TMP/zyre_pybindings/bindings/python
     git checkout v2.0.1
-    sudo pip3 install . --verbose
+    ZMQ_PREFIX=$RIAPS_PREFIX sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed Zyre pybindings"

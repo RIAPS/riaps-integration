@@ -98,3 +98,7 @@ add_eclipse_projects() {
     sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_launch_files
     echo ">>>>> Added example RIAPS projects for eclipse use"
 }
+
+set_UTC_timezone() {
+    sudo timedatectl set-timezone UTC
+}

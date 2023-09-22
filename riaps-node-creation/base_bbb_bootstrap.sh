@@ -71,6 +71,7 @@ armhf_pyinstall(){
 source_scripts
 
 # Start of script actions
+RIAPS_PREFIX="/opt/riaps" # for location of compiled zmq libraries
 check_os_version
 wget_install
 #rt_kernel_install - comment out for now, using an RT setup kernel
@@ -107,15 +108,16 @@ capnproto_prereqs_install
 gpio_install
 build_external_libraries
 pycapnp_install
-pyzmq_install
-czmq_pybindings_install
-zyre_pybindings_install
 apparmor_monkeys_install
 spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
 armhf_pyinstall
 prctl_install
+# move zmq python installs to last due to cython being updated to 3.0.2 for the pyzmq build
+pyzmq_install
+czmq_pybindings_install
+zyre_pybindings_install
 remove_pkgs_used_to_build
 riaps_prereq
 create_riaps_version_file
