@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
+# Packages already in base 20.04 & 22.04 image that are utilized by RIAPS Components:
+# libpcap0.8, software-properties-common, libnss-mdns, libcurl4, libcurl3-gnutls, 
+# libncurses6,  libgnutls30, libgmp10, snapd
+#
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
-# GCC 9, G++ 9, libpcap0.8, libnettle7, software-properties-common, libnss-mdns
-# Python 3.8, libcurl4, libcurl3-gnutls, libncurses6, libzmq5, libgnutls30, firefox,
-# libhogweed5, libgmp10, openssl (1.1.1f-1ubuntu2.5), snapd
+# GCC 9, G++ 9, libnettle7, Python 3.8, libzmq5 (4.3.2), firefox (installed with apt),
+# libhogweed5, openssl (1.1.1f-1ubuntu2.5)
+#
+# Packages already in base 22.04 image that are utilized by RIAPS Components:
+# GCC 11, G++ 11, libnettle8, Python 3.10, libzmq5 (4.3.4), firefox (installed with snap),
+# libhogweed6, openssl (3.0.2-0ubuntu1.10)
 #
 # Installed prior to this script: GIT, quota
 #

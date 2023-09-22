@@ -6,8 +6,23 @@ cross_setup() {
     sudo apt-get install apt-transport-https -y
 
     echo ">>>>> add host architecture"
-
     # Qualify the architectures for existing repositories
+    add_host_arch_apt_repos
+
+    echo ">>>>> add cross compile architectures"
+    add_cross_compile_archs
+
+    sudo cat /etc/apt/sources.list
+    echo ">>>>> updated sources.list for multiarch"
+
+    sudo apt-get update
+    echo ">>>>> packages update complete for multiarch"
+    sudo apt-get install gdb-multiarch build-essential -y
+    add_cross_compile_buildtools
+    echo ">>>>> setup multi-arch capabilities complete"
+}
+
+add_host_arch_apt_repos() {
     sudo add-apt-repository -r "deb http://us.archive.ubuntu.com/ubuntu/ $CURRENT_PACKAGE_REPO main restricted" || true
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] http://us.archive.ubuntu.com/ubuntu/ $CURRENT_PACKAGE_REPO main restricted"
 
@@ -37,19 +52,8 @@ cross_setup() {
 
     sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse" || true
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse"
-
-    echo ">>>>> add cross compile architectures"
-    add_cross_compile_archs
-
-    sudo cat /etc/apt/sources.list
-    echo ">>>>> updated sources.list for multiarch"
-
-    sudo apt-get update
-    echo ">>>>> packages update complete for multiarch"
-    sudo apt-get install gdb-multiarch build-essential -y
-    add_cross_compile_buildtools
-    echo ">>>>> setup multi-arch capabilities complete"
 }
+
 
 # Add cross compile architectures to the VM setup
 add_cross_compile_archs(){
@@ -96,7 +100,11 @@ cmake_func() {
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
-    sudo apt-get install python3.8-venv -y
+    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        sudo apt-get install python3.10-venv -y
+    else
+        sudo apt-get install python3.8-venv -y
+    fi
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libpython3-dev:$c_arch -y
     done
@@ -121,7 +129,7 @@ externals_cmake_install(){
     PREVIOUS_PWD=$PWD
 
     # Host architecture
-    externals_cmake_build $HOST_ARCH
+    externals_cmake_build $HOST_ARCH $LINUX_VERSION_INSTALL
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
 }
@@ -130,7 +138,7 @@ externals_cmake_install(){
 externals_cmake_build(){
     mkdir -p /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
     cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
-    cmake -Darch=$1 ..
+    cmake -Darch=$1 -Dubuntu_rel=$2 ..
     make
     cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC
     rm -rf /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
@@ -153,6 +161,8 @@ config_gcc() {
         g++ --version
     elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
         sudo apt-get install gcc-9 g++-9 -y
+    elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        sudo apt-get install gcc-10 g++-10 -y
     fi
 
     # Cross compile architectures
@@ -161,6 +171,8 @@ config_gcc() {
             sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
         elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
             sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
+        elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+            sudo apt-get install gcc-10:$c_arch g++-10:$c_arch -y
         fi
     done
 

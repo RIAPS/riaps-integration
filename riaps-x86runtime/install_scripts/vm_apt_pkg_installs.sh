@@ -10,7 +10,7 @@ boost_install() {
 }
 
 # Install nethogs pre-requisites
-# Assumes libncurses6  is already installed
+# Assumes libncurses6  is already installed, libncurses5-dev required by nethogs for building
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
@@ -22,13 +22,11 @@ nethogs_prereq_install() {
 
 # Install libraries for czmq and zyre, add directory for zmq compiled with draft APIs
 # Use compiled is already installed
-# For 20.04, pkg-config is already installed
+# For 20.04 & 22.04, pkg-config is already installed
 zyre_czmq_prereq_install() {
-    #sudo apt-get install libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
-        #sudo apt-get install libzmq3-dev:$c_arch -y
         sudo apt-get install libsystemd-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
         sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
@@ -39,7 +37,7 @@ zyre_czmq_prereq_install() {
 
 # Need to remove python3-crypto and python3-keyrings.alt due to pycryptodomex
 #     install in Ubuntu 18.04
-# For Ubuntu 20.04, python3-cryto and python3-keyrings.alt are not installed
+# For Ubuntu 20.04 & 22.04, python3-cryto and python3-keyrings.alt are not installed
 security_prereq_install() {
     sudo apt-get install apparmor-utils -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
@@ -108,8 +106,8 @@ gpio_install() {
 # Setup RIAPS repository and install script
 riaps_prereq() {
     # Add RIAPS repository
-    sudo add-apt-repository -r "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
-    sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
+    sudo touch /etc/apt/sources.list.d/riaps.list
+    sudo echo "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" >> /etc/apt/sources.list.d/riaps.list
     wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
     sudo apt-get update
     sudo cp /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/riaps_install_vm.sh /home/$RIAPSUSER/.

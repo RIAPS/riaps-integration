@@ -16,11 +16,10 @@ nethogs_prereq_install() {
 # libuuid1 & liblz4-1 are already installed on some architectures, but are needed for these package.
 # Therefore, they are installed here to make sure they are available.
 zyre_czmq_prereq_install() {
-    sudo apt-get install libzmq5 libzmq3-dev -y
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libuuid1 liblz4-1 -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
-    echo ">>>>> installed CZMQ and Zyre prerequisites"
+    echo ">>>>> installed libzmq, CZMQ and Zyre prerequisites"
 }
 
 # Install security packages that take a long time compiling
