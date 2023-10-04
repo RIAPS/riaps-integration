@@ -42,6 +42,7 @@ mkdir -p /tmp/3rdparty
 user_func
 set_riaps_sudoer
 setup_ssh_keys
+#snap used exclusively in 22.04 for chrome installation in the distro, so not removing
 if [ $LINUX_VERSION_INSTALL = "20.04" ]; then
  rm_snap_pkg
 fi
@@ -71,7 +72,7 @@ configure_library_path
 pycapnp_install
 apparmor_monkeys_install
 redis_install
-spdlog_python_install
+#spdlog_python_install - tcp server was merged back to forked repo
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install
@@ -87,6 +88,6 @@ chrome_install
 #node_red_shortcut
 rm -rf /tmp/3rdparty
 add_set_tests
-riaps_prereq
+#riaps_prereq - DEV: currently working with a non-apt release, no repo to add yet
 create_riaps_version_file
 set_UTC_timezone # in case VM created with a different timezone, helpful for .pem cert creation in secure_keys script

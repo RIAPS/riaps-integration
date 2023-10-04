@@ -63,7 +63,7 @@ if((${arch} STREQUAL "amd64") AND (NOT (${ubuntu_rel} STREQUAL "22.04")))
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"
                     GIT_TAG
-                    "v0.8.0"
+                    "v0.8.1"
                     SOURCE_DIR
                     "/tmp/3rdparty/capnproto-${arch}"
                     BUILD_IN_SOURCE
@@ -95,7 +95,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.8.0"
+                      "v0.8.1"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -131,7 +131,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.8.0"
+                      "v0.8.1"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -169,7 +169,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.29"
+                      "LMDB_0.9.31"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -196,7 +196,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.29"
+                      "LMDB_0.9.31"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -230,7 +230,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/LMDB/lmdb.git"
                       GIT_TAG
-                      "LMDB_0.9.29"
+                      "LMDB_0.9.31"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -269,7 +269,7 @@ if(${arch} STREQUAL "amd64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.6"
+                      "v0.8.7"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -292,7 +292,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.6"
+                      "v0.8.7"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -321,7 +321,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.6"
+                      "v0.8.7"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -357,7 +357,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/libzmq.git"
                      GIT_TAG
-                     "v4.3.2"
+                     "v4.3.4"
                      SOURCE_DIR
                      "/tmp/3rdparty/libzmq-${arch}"
                      BUILD_IN_SOURCE
@@ -380,7 +380,7 @@ elseif(${arch} STREQUAL "armhf")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/libzmq.git"
                      GIT_TAG
-                     "v4.3.2"
+                     "v4.3.4"
                      SOURCE_DIR
                      "/tmp/3rdparty/libzmq-${arch}"
                      BUILD_IN_SOURCE
@@ -408,7 +408,7 @@ elseif(${arch} STREQUAL "arm64")
                      GIT_REPOSITORY
                      "https://github.com/zeromq/libzmq.git"
                      GIT_TAG
-                     "v4.3.2"
+                     "v4.3.4"
                      SOURCE_DIR
                      "/tmp/3rdparty/libzmq-${arch}"
                      BUILD_IN_SOURCE
@@ -648,7 +648,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "v2.4.10"
+                     "v3.0.0"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE

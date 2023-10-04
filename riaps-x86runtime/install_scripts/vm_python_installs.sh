@@ -48,11 +48,11 @@ zyre_pybindings_install(){
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install(){
     sudo pip3 install pkgconfig
-    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-        sudo pip3 install 'pycapnp==1.0.0' --verbose
-    else
-        CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib sudo pip3 install 'pycapnp==1.0.0' --verbose
-    fi
+    #if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+    #    sudo pip3 install 'pycapnp==1.0.0' --verbose
+    #else
+    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib sudo pip3 install 'pycapnp==1.3.0' --verbose
+    #fi
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -102,18 +102,19 @@ spdlog_python_install() {
 
 # Install other required packages
 # Ubuntu 20.04 comes with PyYAML==5.3.1 and psutil==5.5.1
-# Ubuntu 22.04 comes with PyYAML==5.4.1 and psutil==5.9.0
+# Ubuntu 22.04 comes with netinterfaces==0.11.0, cryptography==3.4.8, PyYAML==5.4.1 and psutil==5.9.0
 # MM TODO: consider adding 'requests==2.31.0' - seeing conflict with urllib3 version requirements between this and influxdb-client,
 #          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.8.0' 'redis==4.3.4' 'hiredis==2.0.0' 'netifaces==0.11.0' --verbose
-    pip3 install 'bcrypt==3.2.2' 'paramiko==2.11.0' 'cryptography==3.3.2' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
-    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.2' 'pyserial==3.5' --verbose
-    pip3 install 'pybind11==2.10.0' 'toml==0.10.2' 'pycryptodomex==3.15.0' --verbose
-    pip3 install 'rpyc==5.2.3' 'parse==1.19.0' 'butter==0.13.1' --verbose
+    pip3 install 'pydevd==2.9.6' 'redis==4.6.0' 'hiredis==2.2.3' 'netifaces==0.11.0' --verbose
+    pip3 install 'bcrypt==4.0.1' 'paramiko==3.3.1' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
+    pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
+    pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
+    pip3 install 'spdlog-python==2.0.6' --verbose
 
     # VM Only packages
-    pip3 install 'textX==3.0.0' 'pydot==1.4.2' 'gitpython==3.1.27' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose
-    pip3 install 'libtmux==0.15.7' 'graphviz==0.20.1' 'python-magic==0.4.27' 'influxdb-client==1.32.0' --verbose
+    pip3 install 'textX==3.1.1' 'pydot==1.4.2' 'gitpython==3.1.37' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose
+    pip3 install 'libtmux==0.23.2' 'graphviz==0.20.1' 'python-magic==0.4.27' 'influxdb-client==1.37.0' --verbose
     echo ">>>>> installed pip3 packages"
 }

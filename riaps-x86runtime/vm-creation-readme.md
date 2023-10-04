@@ -17,12 +17,15 @@ Kernel:  6.2.0-31-generic
   - Base Memory:  8192 MB
   - Processor(s):  4
   - Video Memory:  16 MB
-  - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet)
-  - USB Ports:  USB 1.1 (OHCI) Controller  
+  - Network:  Adapter 1 - NAT, Adapter 2 - Bridged Adapter (to local ethernet); this step
+  - USB Ports:  USB 1.1 (OHCI) Controller 
+  - Check "Skip Unattended Installation", otherwise user will not be configured as sudoer when complete 
 
 > ***Note: Guest Additions tools should not be included to allow the exported appliance to be compatible with both VirtualBox and VMware tools.  The importing user will be instructed to setup this feature.***
 
 > ***Note: Must manually setup the second adapter setting.  This is important for `nic_name` configuration after RIAPS packages are installed.***
+
+> Note: Using VirtualBox v7.0
 
 3) Setup the Setting --> Network to have `Adapter` to have `Bridged Adapter` and configure with connection used to reach the router connected to the remote RIAPS nodes.
 
@@ -35,9 +38,9 @@ Kernel:  6.2.0-31-generic
 riapsadmin  ALL=(ALL) NOPASSWD: ALL
 ```
 
-7) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
+1) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
 
-8) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
+2) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
 
 ```
 # / was on /dev/sda1 during installation
