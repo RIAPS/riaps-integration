@@ -79,7 +79,7 @@ opendht_prereqs_install() {
 
     # run liblinks script to link gnutls and msgppack
     PREVIOUS_PWD=$PWD
-    chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
+    sudo chmod +x /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
     for arch_tool in ${CROSS_TOOLCHAIN_LOC[@]}; do
         cd /usr/lib/$arch_tool
         sudo /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/liblinks.sh
@@ -88,8 +88,11 @@ opendht_prereqs_install() {
     echo ">>>>> installed opendht prerequisites"
 }
 
-# Install capnproto prerequisites
-capnproto_prereqs_install() {
+# Install capnproto for 22.04 (use CMakeLists.txt for earlier platforms) and multiarch prerequisites
+capnproto_install() {
+    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        sudo apt-get install capnproto -y
+    fi
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libssl-dev:$c_arch -y
     done
@@ -101,6 +104,7 @@ gpio_install() {
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libgpiod-dev:$c_arch -y
     done
+    echo ">>>>> installed gpio"
 }
 
 # Setup RIAPS repository and install script

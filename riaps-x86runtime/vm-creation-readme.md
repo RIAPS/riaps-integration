@@ -4,10 +4,10 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/20.04/release/
-version 20.04.6 was used for the download image
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/22.04/release/
+version 22.04.3 was used for the download image
 
-Kernel:  5.15.0-69-generic 
+Kernel:  6.2.0-31-generic 
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -29,10 +29,15 @@ Kernel:  5.15.0-69-generic
 4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-20.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
 5) Create a `riapsadmin` user with password of `riapsadmin` and set computer name to `riaps-VirtualBox`.
+   
+6) Add `riapsadmin` user to the sudoers list by creating a new file `/etc/sudoers.d/riapsadmin` with the following contents.  The file permissions should be `0440` and owned by `root:root`.
+```
+riapsadmin  ALL=(ALL) NOPASSWD: ALL
+```
 
-6) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
+7) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
 
-7) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
+8) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
 
 ```
 # / was on /dev/sda1 during installation
@@ -62,8 +67,8 @@ The last line provides feedback that the quota is setup.
 
     ```
     LINUX_DISTRO="ubuntu"
-    CURRENT_PACKAGE_REPO="focal"
-    LINUX_VERSION_INSTALL="20.04"
+    CURRENT_PACKAGE_REPO="jammy"
+    LINUX_VERSION_INSTALL="22.04"
     ```
 
     b) Indicate VM Host information, example below

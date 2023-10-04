@@ -41,7 +41,7 @@ if ((${arch} STREQUAL "armhf") OR (${arch} STREQUAL "arm64"))
 
  if (${ubuntu_rel} STREQUAL "20.04")
   set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++-9)
- elseif(${ubuntu_rel} STEQUAL "22.04")
+ elseif(${ubuntu_rel} STREQUAL "22.04")
   set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++-10)
  endif()
 
@@ -49,7 +49,7 @@ else()
  if (${ubuntu_rel} STREQUAL "20.04")
   set(CMAKE_C_COMPILER gcc-9)
   set(CMAKE_CXX_COMPILER g++-9)
- elseif(${ubuntu_rel} STEQUAL "22.04")
+ elseif(${ubuntu_rel} STREQUAL "22.04")
   set(CMAKE_C_COMPILER gcc-11)
   set(CMAKE_CXX_COMPILER g++-11)
  endif()
@@ -57,9 +57,8 @@ endif()
 
 set (CMAKE_C_FLAGS "-std=c99")
 
-#Capnproto
-
-if(${arch} STREQUAL "amd64")
+#Capnproto - using apt-get to install on 22.04 for amd64, here for earlier versions
+if((${arch} STREQUAL "amd64") AND (NOT (${ubuntu_rel} STREQUAL "22.04")))
  externalproject_add(capnproto-${arch}
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"

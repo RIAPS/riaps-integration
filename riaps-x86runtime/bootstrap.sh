@@ -42,7 +42,9 @@ mkdir -p /tmp/3rdparty
 user_func
 set_riaps_sudoer
 setup_ssh_keys
-rm_snap_pkg
+if [ $LINUX_VERSION_INSTALL = "20.04" ]; then
+ rm_snap_pkg
+fi
 watchdog_timers
 cross_setup
 java_func
@@ -62,7 +64,7 @@ gnutls_install
 msgpack_install
 security_prereq_install
 opendht_prereqs_install
-capnproto_prereqs_install
+capnproto_install
 gpio_install
 externals_cmake_install
 configure_library_path

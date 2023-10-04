@@ -38,9 +38,9 @@ setup_ssh_keys () {
     sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa
 
     # Transfer remote node connection script
-    sudo cp connect_remote_nodes.sh /home/$RIAPSUSER/.
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes.sh
-    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes.sh
+    sudo cp connect_remote_nodes /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes
+    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes
 
     # Transfer RIAPS rekeying script
     sudo cp secure_keys /home/$RIAPSUSER/.

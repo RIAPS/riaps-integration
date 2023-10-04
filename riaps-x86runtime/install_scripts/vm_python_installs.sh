@@ -47,7 +47,12 @@ zyre_pybindings_install(){
 
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install(){
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==1.0.0' --verbose
+    sudo pip3 install pkgconfig
+    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        sudo pip3 install 'pycapnp==1.0.0' --verbose
+    else
+        CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib sudo pip3 install 'pycapnp==1.0.0' --verbose
+    fi
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -97,6 +102,7 @@ spdlog_python_install() {
 
 # Install other required packages
 # Ubuntu 20.04 comes with PyYAML==5.3.1 and psutil==5.5.1
+# Ubuntu 22.04 comes with PyYAML==5.4.1 and psutil==5.9.0
 # MM TODO: consider adding 'requests==2.31.0' - seeing conflict with urllib3 version requirements between this and influxdb-client,
 #          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 pip3_3rd_party_installs(){
