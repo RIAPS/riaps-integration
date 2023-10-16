@@ -31,7 +31,7 @@ build_capnproto() {
     TMP=`mktemp -d`
     git clone https://github.com/capnproto/capnproto $TMP/capnproto
     cd $TMP/capnproto
-    git checkout v0.8.0
+    git checkout v0.8.1
     start=`date +%s`
     autoreconf -i c++
     cd c++ && ./configure --enable-shared
@@ -52,7 +52,7 @@ build_lmdb() {
     TMP=`mktemp -d`
     git clone https://github.com/LMDB/lmdb.git $TMP/lmdb
     cd $TMP/lmdb
-    git checkout LMDB_0.9.29
+    git checkout LMDB_0.9.31
     start=`date +%s`
     make -j2 -C ./libraries/liblmdb
     sudo make -C ./libraries/liblmdb install
@@ -88,7 +88,7 @@ build_libzmq() {
     TMP=`mktemp -d`
     git clone https://github.com/zeromq/libzmq.git $TMP/libzmq
     cd $TMP/libzmq
-    git checkout v4.3.2
+    git checkout v4.3.4
     start=`date +%s`
     ./autogen.sh
     ./configure --prefix=$RIAPS_PREFIX --enable-drafts
@@ -148,7 +148,7 @@ build_opendht() {
     TMP=`mktemp -d`
     git clone https://github.com/savoirfairelinux/opendht.git $TMP/opendht
     cd $TMP/opendht
-    git checkout v2.4.10
+    git checkout v3.0.0
     start=`date +%s`
     ./autogen.sh
     ./configure 

@@ -2,7 +2,7 @@
 set -e
 
 boost_install() {
-    sudo apt-get install libboost-all-dev -y
+    sudo apt-get install libboost-dev -y
     echo ">>>>> installed boost"
 }
 
@@ -80,7 +80,7 @@ gpio_install() {
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
-    sudo apt-get remove libboost-all-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
+    sudo apt-get remove libboost-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
     sudo apt-get remove libreadline-dev libsystemd-dev -y
     sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y

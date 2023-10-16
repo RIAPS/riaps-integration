@@ -3,6 +3,7 @@ set -e
 
 
 # Setup User Account
+# Note: the home directory needs to be accessible to temporary application users, so change permissions to 755
 user_func () {
     if ! id -u $RIAPSUSER > /dev/null 2>&1; then
         echo ">>>>> The user does not exist; setting user account up now"
@@ -10,6 +11,7 @@ user_func () {
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSUSER
         sudo chage -d 0 $RIAPSUSER
         sudo usermod -aG sudo $RIAPSUSER
+        sudo chmod 755 /home/$RIAPSUSER
         sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/riaps_apps
         echo ">>>>> created user accounts"
     fi

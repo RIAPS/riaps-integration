@@ -57,8 +57,8 @@ endif()
 
 set (CMAKE_C_FLAGS "-std=c99")
 
-#Capnproto - using apt-get to install on 22.04 for amd64, here for earlier versions
-if((${arch} STREQUAL "amd64") AND (NOT (${ubuntu_rel} STREQUAL "22.04")))
+#Capnproto
+if(${arch} STREQUAL "amd64")
  externalproject_add(capnproto-${arch}
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"
@@ -262,14 +262,13 @@ elseif(${arch} STREQUAL "arm64")
 endif()
 
 # libnethogs
-
 if(${arch} STREQUAL "amd64")
   externalproject_add(libnethogs-${arch}
                       # DEPENDS libpcap-${arch}
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.7"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -292,7 +291,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.7"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND
@@ -321,7 +320,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/raboof/nethogs"
                       GIT_TAG
-                      "v0.8.7"
+                      "v0.8.6"
                       BUILD_IN_SOURCE
                       1
                       CONFIGURE_COMMAND

@@ -42,7 +42,7 @@ mkdir -p /tmp/3rdparty
 user_func
 set_riaps_sudoer
 setup_ssh_keys
-#snap used exclusively in 22.04 for chrome installation in the distro, so not removing
+#snap used exclusively in 22.04 for firefox installation in the distro, so not removing
 if [ $LINUX_VERSION_INSTALL = "20.04" ]; then
  rm_snap_pkg
 fi
@@ -65,7 +65,7 @@ gnutls_install
 msgpack_install
 security_prereq_install
 opendht_prereqs_install
-capnproto_install
+capnproto_prereq_install
 gpio_install
 externals_cmake_install
 configure_library_path

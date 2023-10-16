@@ -96,7 +96,7 @@ gpio_install
 build_external_libraries
 pycapnp_install
 apparmor_monkeys_install
-spdlog_python_install
+#spdlog_python_install
 #butter_install - this may no longer be needed (MM - 092022)
 #rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install

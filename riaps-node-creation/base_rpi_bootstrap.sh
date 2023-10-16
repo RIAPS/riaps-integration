@@ -80,7 +80,7 @@ gpio_install
 build_external_libraries
 pycapnp_install
 apparmor_monkeys_install
-spdlog_python_install
+#spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
 prctl_install

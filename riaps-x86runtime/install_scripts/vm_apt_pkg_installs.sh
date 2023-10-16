@@ -9,7 +9,7 @@ boost_install() {
     echo ">>>>> installed boost"
 }
 
-# Install nethogs pre-requisites
+# Install nethogs pre-requisites and build with the cmake file
 # Assumes libncurses6  is already installed, libncurses5-dev required by nethogs for building
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
@@ -26,10 +26,12 @@ nethogs_prereq_install() {
 zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
+    # MM TODO: ran into an issue with armhf version of libcurl4-gnutls-dev, conflicts with host version (install fails)
+    #          Currently not cross compiling the external libraries, so for now this is not an issue
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libsystemd-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
-        sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
+        #sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
 
     echo ">>>>> installed libzmq, CZMQ and Zyre prerequisites"
@@ -89,7 +91,8 @@ opendht_prereqs_install() {
 }
 
 # Install capnproto for 22.04 (use CMakeLists.txt for earlier platforms) and multiarch prerequisites
-capnproto_install() {
+# MM TODO: trying new version of pycapnp which is bundled with 0.8.1 libcapnp (so external building it)
+capnproto_prereq_install() {
     #if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
     #    sudo apt-get install capnproto -y
     #fi
@@ -118,6 +121,7 @@ riaps_prereq() {
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_vm.sh
     sudo -H -u $RIAPSUSER chmod 711 /home/$RIAPSUSER/riaps_install_vm.sh
     ./riaps_install_vm.sh
+    sudo apt autoremove
     echo ">>>>> riaps prerequisites installed"
 }
 
