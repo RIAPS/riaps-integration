@@ -66,7 +66,17 @@ zyre_pybindings_install(){
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install() {
     sudo pip3 install pkgconfig --verbose
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib pip3 install 'pycapnp==1.2.2' --verbose
+    PREVIOUS_PWD=$PWD
+    TMP=`mktemp -d`
+    git clone https://github.com/capnproto/pycapnp.git $TMP/pycapnp
+    cd $TMP/pycapnp
+    git checkout v1.2.2
+    # Force this release to use Cython installed (0.29.36), otherwise it tries Cython 3.0.4 and fails
+    #    Note: newer versions pf pycapnp add this restriction 
+    sed -i 's/cython/cython<3/g' pyproject.toml
+    sudo pip3 install . -C force-system-libcapnp=True --verbose
+    cd $PREVIOUS_PWD
+    sudo rm -rf $TMP
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -97,12 +107,20 @@ py_lmdb_install() {
 
 # Install other required packages
 # base install should already have PyYAML==5.3.1
+# Utilizing distribution installed
+#     For 20.04: pyyaml = 5.3.1, psutil = 5.5.1 
+#     For 22.04: pyyaml = 5.4.1, cryptography = 3.4.8, netifaces = 0.11.0
 pip3_3rd_party_installs(){
     pip3 install 'pydevd==2.9.6' 'redis==4.6.0' 'hiredis==2.2.3' 'netifaces==0.11.0' --verbose
-    pip3 install 'bcrypt==4.0.1' 'paramiko==3.3.1' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
-    pip3 install 'fabric3==1.14.post1' 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
+    pip3 install 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
     pip3 install 'gpiod==1.5.4', 'spdlog==2.0.6' --verbose
+    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        pip3 install 'psutil==5.9.0' --verbose
+    fi
+    pip3 install 'paramiko==3.3.1' 'cryptography==3.4.8' --verbose
+    pip3 install 'fabric3==1.14.post1' --verbose
     echo ">>>>> installed pip3 packages"
 }

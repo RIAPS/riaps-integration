@@ -26,10 +26,13 @@ zyre_czmq_prereq_install() {
 # python3-crypto and python3-keyrings.alt conflict with pycryptodomex.
 # These packages are not included in Ubuntu 20.04.
 # Removing for Ubuntu 18.04, in case it exists in the original image.
+# For Ubuntu 22.04, paramiko needs bcrypt which needs rustc and cargo to install
 security_pkg_install() {
     sudo apt-get install apparmor-utils -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
+    elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        sudo apt-get install rustc cargo -y
     fi
     echo ">>>>> security packages setup"
 }
@@ -81,8 +84,8 @@ gpio_install() {
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
-    sudo apt-get remove libreadline-dev libsystemd-dev -y
-    sudo apt-get remove libzmq3-dev libmsgpack-dev nettle-dev -y
+    sudo apt-get remove libsystemd-dev -y
+    sudo apt-get remove nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
     sudo apt-get remove libargon2-0-dev libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
     sudo apt autoremove -y
