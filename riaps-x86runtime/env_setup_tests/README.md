@@ -73,10 +73,10 @@ INFO:14:30:23,055:[5299]:TempMonitor:(PID 5299)-starting TempMonitor, Tue Aug 21
 [2018-08-21 14:30:25.158] [rdiscovery] [info] Get() returns tempupdate@192.168.1.104:38881 to
 /WeatherMonitor/WeatherReceiver/
 INFO:14:30:29,778:[5293]:TempSensor:on_clock(): Temperature - 66, PID 5293, Tue Aug 21 14:30:29 2018
-INFO:14:30:29,784:[5299]:TempMonitor:on_tempupdate(): Temperature:66, PID Tue Aug 21 14:30:29 2018,
+INFO:14:30:29,784:[5299]:TempMonitor:on_tempupdate(): Temperature:66, PID 5293, Tue Aug 21 14:30:29 2018,
 Timestamp:Tue Aug 21 14:30:29 2018
 INFO:14:30:34,793:[5293]:TempSensor:on_clock(): Temperature - 67, PID 5293, Tue Aug 21 14:30:34 2018
-INFO:14:30:34,794:[5299]:TempMonitor:on_tempupdate(): Temperature:67, PID Tue Aug 21 14:30:34 2018,
+INFO:14:30:34,794:[5299]:TempMonitor:on_tempupdate(): Temperature:67, PID 5293, Tue Aug 21 14:30:34 2018,
 Timestamp:Tue Aug 21 14:30:34 2018
 ```
 
