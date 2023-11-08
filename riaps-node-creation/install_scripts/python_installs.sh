@@ -121,6 +121,6 @@ pip3_3rd_party_installs(){
         pip3 install 'psutil==5.9.0' --verbose
     fi
     pip3 install 'paramiko==3.3.1' 'cryptography==3.4.8' --verbose
-    pip3 install 'fabric3==1.14.post1' --verbose
+    pip3 install 'fabric2==3.2.2' --verbose
     echo ">>>>> installed pip3 packages"
 }

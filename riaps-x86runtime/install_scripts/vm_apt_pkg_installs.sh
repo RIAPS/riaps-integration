@@ -90,16 +90,11 @@ opendht_prereqs_install() {
     echo ">>>>> installed opendht prerequisites"
 }
 
-# Install capnproto for 22.04 (use CMakeLists.txt for earlier platforms) and multiarch prerequisites
-# MM TODO: trying new version of pycapnp which is bundled with 0.8.1 libcapnp (so external building it)
 capnproto_prereq_install() {
-    #if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-    #    sudo apt-get install capnproto -y
-    #fi
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libssl-dev:$c_arch -y
     done
-    echo ">>>>> installed capnproto prerequisites"
+    echo ">>>>> installed capnproto prerequisites"s
 }
 
 gpio_install() {
