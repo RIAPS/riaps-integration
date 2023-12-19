@@ -5,8 +5,8 @@ set -e
 #   Note: the rt kernel option is commented out and untested for latest images
 
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
+# GCC 11, G++ 11, GIT, pkg-config, python3-dev, python3-setuptools
+# pps-tools, libpcap0.8, libnettle8, libgnutls30, libncurses6, libuuid1
 #
 # python3-crypto python3-keyrings.alt does not exist, a desired state
 

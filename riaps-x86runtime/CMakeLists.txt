@@ -647,7 +647,7 @@ if(${arch} STREQUAL "amd64")
                      GIT_REPOSITORY
                      "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG
-                     "v3.0.0"
+                     "v3.1.6"
                      SOURCE_DIR
                      "/tmp/3rdparty/opendht-${arch}"
                      BUILD_IN_SOURCE
@@ -671,7 +671,7 @@ if(${arch} STREQUAL "amd64")
 #                     GIT_REPOSITORY
 #                     "https://github.com/savoirfairelinux/opendht.git"
 #                     GIT_TAG
-#                    "v2.4.10"
+#                    "v3.1.6"
 #                     SOURCE_DIR
 #                     "/tmp/3rdparty/opendht-${arch}"
 #                     BUILD_IN_SOURCE
@@ -705,7 +705,7 @@ if(${arch} STREQUAL "amd64")
 #                     GIT_REPOSITORY
 #                     "https://github.com/savoirfairelinux/opendht.git"
 #                     GIT_TAG
-#                    "v2.4.10"
+#                    "v3.1.6"
 #                     SOURCE_DIR
 #                    "/tmp/3rdparty/opendht-${arch}"
 #                     BUILD_IN_SOURCE

@@ -148,7 +148,7 @@ build_opendht() {
     TMP=`mktemp -d`
     git clone https://github.com/savoirfairelinux/opendht.git $TMP/opendht
     cd $TMP/opendht
-    git checkout v3.0.0
+    git checkout v3.1.6
     start=`date +%s`
     ./autogen.sh
     ./configure 
