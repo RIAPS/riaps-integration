@@ -94,7 +94,7 @@ capnproto_prereq_install() {
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libssl-dev:$c_arch -y
     done
-    echo ">>>>> installed capnproto prerequisites"s
+    echo ">>>>> installed capnproto prerequisites"
 }
 
 gpio_install() {
