@@ -85,7 +85,7 @@ The last line provides feedback that the quota is setup.
     d) Indicate desired RIAPS version
 
     ```
-    RIAPS_VERSION="v1.1.22"
+    RIAPS_VERSION="v1.1.23"
     ```
 
 12) Run the bootstrap script and send information provided to an installation log file.
@@ -223,7 +223,7 @@ sudo chage -d 0 riaps
     5)  Select `root` in the recovery menu to boot to a root shell prompt
     6)  Press `Enter` afterwards when `Press Enter for maintenance` appears on your screen to get a command line prompt
     7)  Use `df` to locate the "/" disk device (/dev/sda5)
-    8)  Use the following command to run zerofree: `systemctl stop systemd-journald.socket && systemctl stop systemd-journald.service && systemctl stop systemd-journald-dev-log.socket && sudo swapoff -a && mount -n -o remount,ro -t ext4 /dev/sda5 / && zerofree -v /dev/sda5`
+    8)  Use the following command to run zerofree: `systemctl stop systemd-journald.socket && systemctl stop systemd-journald.service && systemctl stop systemd-journald-dev-log.socket && systemctl stop systemd-journald-audit.socket && sudo swapoff -a && mount -n -o remount,ro -t ext4 /dev/sda5 / && zerofree -v /dev/sda5`
     9)  When done, type `halt` and shutdown the machine
     10) From a terminal window on the host machine use VBoxManage to compress the .vdi image
         
