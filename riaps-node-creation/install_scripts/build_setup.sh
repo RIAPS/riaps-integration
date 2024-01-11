@@ -19,11 +19,6 @@ python_install() {
     echo ">>>>> installed python3"
 }
 
-cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@3.0.5' --verbose
-    echo ">>>>> installed cython"
-}
-
 curl_func() {
     sudo apt install curl -y
     echo ">>>>> installed curl"

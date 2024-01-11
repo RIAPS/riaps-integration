@@ -32,7 +32,7 @@ externalproject_add(capnproto
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.8.0"
+                      "v1.0.1.1"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto"
                       BUILD_IN_SOURCE
@@ -83,6 +83,28 @@ externalproject_add(liblmdb
                       ./libraries/liblmdb
                       install)
 
+# libfmt - dependency for opendht
+externalproject_add(libfmt
+                      GIT_REPOSITORY
+                      "https://github.com/fmtlib/fmt.git"
+                      GIT_TAG
+                      "10.1.1"
+                      BUILD_IN_SOURCE
+                      1
+                      CONFIGURE_COMMAND
+                      ""
+                      SOURCE_DIR
+                      "/tmp/3rdparty/libfmt-${arch}"
+                      CMAKE_ARGS
+                      -DBUILD_SHARED_LIBS=TRUE 
+                      BUILD_COMMAND
+                      make
+                      ${MAKE_JOB_FLAGS}
+                      INSTALL_COMMAND
+                      sudo make
+                      ${MAKE_JOB_FLAGS}
+                      install)
+
 
 # libnethogs
 externalproject_add(libnethogs
@@ -121,14 +143,7 @@ externalproject_add(czmq
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     --enable-drafts
-                     --with-uuid=no
-                     --with-libsystemd=no
-                     --with-liblz4=no
-                     --enable-zmakecert=no
-                     --enable-zsp=no
-                     --enable-test_randof=no
-                     --enable-czmq_selftest=no
+                     --enable-drafts=yes
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -153,7 +168,7 @@ externalproject_add(zyre
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     --enable-drafts
+                     --enable-drafts=yes
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}

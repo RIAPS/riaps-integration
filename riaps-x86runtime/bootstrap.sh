@@ -36,7 +36,6 @@ source_scripts() {
 source_scripts
 
 # Start of install script actions
-RIAPS_PREFIX="/opt/riaps" # for location of compiled zmq libraries
 check_os_version
 mkdir -p /tmp/3rdparty
 user_func
@@ -53,7 +52,6 @@ cmake_func
 utils_install
 timesync_requirements
 python_install
-cython_install
 curl_func
 boost_install
 #eclipse_func - this step is done manually at this time
@@ -67,12 +65,12 @@ security_prereq_install
 opendht_prereqs_install
 capnproto_prereq_install
 gpio_install
+zmq_draft_apt_install
 externals_cmake_install
 configure_library_path
 pycapnp_install
 apparmor_monkeys_install
 redis_install
-#spdlog_python_install - tcp server was merged back to forked repo
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install

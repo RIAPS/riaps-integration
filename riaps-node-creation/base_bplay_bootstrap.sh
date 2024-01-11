@@ -74,7 +74,6 @@ bb_pyinstall(){
 source_scripts
 
 # Start of script actions
-RIAPS_PREFIX="/opt/riaps" # for location of compiled zmq libraries
 check_os_version
 wget_install
 #rt_kernel_install - comment out for now, using an RT setup kernel
@@ -98,10 +97,10 @@ setup_hostname
 setup_network
 iptables_install
 python_install
-cython_install
 curl_func
 boost_install
 nethogs_prereq_install
+zmq_draft_apt_install
 zyre_czmq_prereq_install
 gnutls_install
 msgpack_install

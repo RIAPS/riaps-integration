@@ -112,12 +112,6 @@ python_install() {
     echo ">>>>> installed python3"
 }
 
-# Assumes that Cython3 is not on the base release (18.04.3 does not have it)
-cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@3.0.5' --verbose
-    echo ">>>>> installed cython"
-}
-
 curl_func() {
     sudo apt-get install curl -y
     echo ">>>>> installed curl"

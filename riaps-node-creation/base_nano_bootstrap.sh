@@ -64,7 +64,6 @@ setup_network_nano() {
 source_scripts
 
 # Start of script actions
-RIAPS_PREFIX="/opt/riaps" # for location of compiled zmq libraries
 check_os_version
 setup_peripherals
 user_func
@@ -82,10 +81,10 @@ splash_screen_update
 setup_hostname
 #setup_network_nano
 python_install
-cython_install
 curl_func
 boost_install
 nethogs_prereq_install
+zmq_draft_apt_install
 zyre_czmq_prereq_install
 gnutls_install
 msgpack_install

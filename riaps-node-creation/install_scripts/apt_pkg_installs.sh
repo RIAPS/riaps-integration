@@ -13,11 +13,20 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
+# Set apt sources list grab the released packages with draft APIs
+zmq_draft_apt_install() {
+    echo "deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
+    wget https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/Release.key -O- | sudo apt-key add
+    sudo apt-get update
+    sudo apt-get install libzmq3-dev
+}
+
 # libuuid1 & liblz4-1 are already installed on some architectures, but are needed for these package.
 # Therefore, they are installed here to make sure they are available.
 zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev -y
     sudo apt-get install libuuid1 liblz4-1 -y
+    sudo apt-get install uuid-dev liblz4-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     echo ">>>>> installed libzmq, CZMQ and Zyre prerequisites"
 }
@@ -54,7 +63,7 @@ msgpack_install(){
 #    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
-    sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get install libhttp-parser-dev libjsoncpp-dev libssl-dev -y
 
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
     if [ $NODE_ARCH = "armhf" ]; then
@@ -84,10 +93,10 @@ gpio_install() {
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
-    sudo apt-get remove libsystemd-dev -y
+    sudo apt-get remove libsystemd-dev uuid-dev liblz4-dev -y
     sudo apt-get remove nettle-dev -y
     sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
-    sudo apt-get remove libargon2-0-dev libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get remove libargon2-0-dev libhttp-parser-dev libjsoncpp-dev -y
     sudo apt autoremove -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }

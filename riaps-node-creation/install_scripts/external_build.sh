@@ -6,8 +6,8 @@ set -e
 build_external_libraries() {
     build_capnproto
     build_lmdb
+    build_fmt
     build_nethogs
-    build_libzmq
     build_czmq
     build_zyre
     build_opendht
@@ -31,7 +31,7 @@ build_capnproto() {
     TMP=`mktemp -d`
     git clone https://github.com/capnproto/capnproto $TMP/capnproto
     cd $TMP/capnproto
-    git checkout v0.8.1
+    git checkout v1.0.1.1
     start=`date +%s`
     autoreconf -i c++
     cd c++ && ./configure --enable-shared
@@ -64,6 +64,26 @@ build_lmdb() {
     echo ">>>>> Execution time was $(($diff/60)) minutes and $(($diff%60)) seconds."
 }
 
+# LIBFMT
+build_fmt() {
+    PREVIOUS_PWD=$PWD
+    TMP=`mktemp -d`
+    git clone https://github.com/fmtlib/fmt.git $TMP/fmt
+    cd $TMP/fmt
+    git checkout 10.1.1
+    start=`date +%s`
+    cmake -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local ..
+    make -j2
+    sudo make install
+    end=`date +%s`
+    cd $PREVIOUS_PWD
+    sudo rm -rf $TMP
+    echo ">>>>> built fmt library"
+    diff=`expr $end - $start`
+    echo ">>>>> Execution time was $(($diff/60)) minutes and $(($diff%60)) seconds."
+}
+
+
 # libnethogs
 build_nethogs() {
     PREVIOUS_PWD=$PWD
@@ -82,26 +102,6 @@ build_nethogs() {
     echo ">>>>> Execution time was $(($diff/60)) minutes and $(($diff%60)) seconds."
 }
 
-# libzmq with Draft APIs
-build_libzmq() {
-    PREVIOUS_PWD=$PWD
-    TMP=`mktemp -d`
-    git clone https://github.com/zeromq/libzmq.git $TMP/libzmq
-    cd $TMP/libzmq
-    git checkout v4.3.4
-    start=`date +%s`
-    ./autogen.sh
-    ./configure --prefix=$RIAPS_PREFIX --enable-drafts
-    make -j2
-    sudo make install
-    end=`date +%s`
-    cd $PREVIOUS_PWD
-    sudo rm -rf $TMP
-    echo ">>>>> built libzmq library"
-    diff=`expr $end - $start`
-    echo ">>>>> Execution time was $(($diff/60)) minutes and $(($diff%60)) seconds."
-}
-
 # High-level C binding for ØMQ
 build_czmq() {
     PREVIOUS_PWD=$PWD
@@ -111,7 +111,7 @@ build_czmq() {
     git checkout v4.2.1
     start=`date +%s`
     ./autogen.sh
-    ./configure --with-uuid=no --with-libsystemd=no --with-liblz4=no --enable-zmakecert=no --enable-zsp=no --enable-test_randof=no --enable-czmq_selftest=no --prefix=$RIAPS_PREFIX libzmq_LIBS="-L$RIAPS_PREFIX/lib -lzmq" libzmq_CFLAGS=-I$RIAPS_PREFIX/include
+    ./configure --enable-drafts=yes
     make -j2
     sudo make install
     end=`date +%s`
@@ -131,7 +131,7 @@ build_zyre() {
     git checkout v2.0.1
     start=`date +%s`
     ./autogen.sh
-    ./configure --prefix=$RIAPS_PREFIX libzmq_LIBS="-L$RIAPS_PREFIX/lib -lzmq" libzmq_CFLAGS=-I$RIAPS_PREFIX/include czmq_LIBS="-L$RIAPS_PREFIX/lib -lczmq" czmq_CFLAGS=-I$RIAPS_PREFIX/include
+    ./configure --enable-drafts=yes
     make -j2
     sudo make install
     end=`date +%s`
@@ -151,7 +151,7 @@ build_opendht() {
     git checkout v3.1.6
     start=`date +%s`
     ./autogen.sh
-    ./configure 
+    ./configure --prefix=/usr/local
     make -j2
     sudo make install
     end=`date +%s`

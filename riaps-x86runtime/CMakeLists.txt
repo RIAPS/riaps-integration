@@ -63,7 +63,7 @@ if(${arch} STREQUAL "amd64")
                     GIT_REPOSITORY
                     "https://github.com/capnproto/capnproto"
                     GIT_TAG
-                    "v0.8.1"
+                    "v1.0.1.1"
                     SOURCE_DIR
                     "/tmp/3rdparty/capnproto-${arch}"
                     BUILD_IN_SOURCE
@@ -95,7 +95,7 @@ elseif(${arch} STREQUAL "armhf")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.8.1"
+                      "v1.0.1.1"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -131,7 +131,7 @@ elseif(${arch} STREQUAL "arm64")
                       GIT_REPOSITORY
                       "https://github.com/capnproto/capnproto"
                       GIT_TAG
-                      "v0.8.1"
+                      "v1.0.1.1"
                       SOURCE_DIR
                       "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE
@@ -261,6 +261,95 @@ elseif(${arch} STREQUAL "arm64")
                       install)
 endif()
 
+# libfmt - dependency for opendht
+
+if(${arch} STREQUAL "amd64")
+  externalproject_add(libfmt-${arch}
+                      GIT_REPOSITORY
+                      "https://github.com/fmtlib/fmt.git"
+                      GIT_TAG
+                      "10.1.1"
+                      BUILD_IN_SOURCE
+                      1
+                      CONFIGURE_COMMAND
+                      ""
+                      SOURCE_DIR
+                      "/tmp/3rdparty/libfmt-${arch}"
+                      CMAKE_ARGS
+                      -DBUILD_SHARED_LIBS=TRUE 
+                      BUILD_COMMAND
+                      make
+                      ${MAKE_JOB_FLAGS}
+                      INSTALL_COMMAND
+                      sudo make
+                      ${MAKE_JOB_FLAGS}
+                      install)
+elseif(${arch} STREQUAL "armhf")
+  externalproject_add(libfmt-${arch}
+                      GIT_REPOSITORY
+                      "https://github.com/fmtlib/fmt.git"
+                      GIT_TAG
+                      "10.1.1"
+                      BUILD_IN_SOURCE
+                      1
+                      CONFIGURE_COMMAND
+                      ""
+                      SOURCE_DIR
+                      "/tmp/3rdparty/libfmt-${arch}"
+                      CMAKE_ARGS
+                      -DBUILD_SHARED_LIBS=TRUE 
+                      BUILD_COMMAND
+                      make
+                      ${MAKE_JOB_FLAGS}
+                      -e
+                      prefix=${prefix}
+                      CPP=/usr/bin/arm-linux-gnueabihf-g++
+                      CC=/usr/bin/arm-linux-gnueabihf-gcc
+                      CXX=/usr/bin/arm-linux-gnueabihf-g++
+                      ld=arm-linux-gnueabihf-ld
+                      INSTALL_COMMAND
+                      sudo make
+                      ${MAKE_JOB_FLAGS}
+                      -e
+                      prefix=${prefix}
+                      bindir=${prefix}/bin
+                      libdir=${prefix}/lib
+                      includedir=${prefix}/include
+                      install)
+elseif(${arch} STREQUAL "arm64")
+  externalproject_add(libfmt-${arch}
+                      GIT_REPOSITORY
+                      "https://github.com/fmtlib/fmt.git"
+                      GIT_TAG
+                      "10.1.1"
+                      BUILD_IN_SOURCE
+                      1
+                      CONFIGURE_COMMAND
+                      ""
+                      SOURCE_DIR
+                      "/tmp/3rdparty/libfmt-${arch}"
+                      CMAKE_ARGS
+                      -DBUILD_SHARED_LIBS=TRUE 
+                      BUILD_COMMAND
+                      make
+                      ${MAKE_JOB_FLAGS}
+                      -e
+                      prefix=${prefix}
+                      CPP=/usr/bin/aarch64-linux-gnu-g++
+                      CC=/usr/bin/aarch64-linux-gnu-gcc
+                      CXX=/usr/bin/aarch64-linux-gnu-g++
+                      ld=aarch64-linux-gnu-ld
+                      INSTALL_COMMAND
+                      sudo make
+                      ${MAKE_JOB_FLAGS}
+                      -e
+                      prefix=${prefix}
+                      bindir=${prefix}/bin
+                      libdir=${prefix}/lib
+                      includedir=${prefix}/include
+                      install)
+endif()
+
 # libnethogs
 if(${arch} STREQUAL "amd64")
   externalproject_add(libnethogs-${arch}
@@ -345,95 +434,8 @@ elseif(${arch} STREQUAL "arm64")
                       install_dev)
 endif()
 
-# libzmq
-# On "amd64", compiling local version of libzmq to get the draft APIs, 
-# which are not available in the distribution install version
-# Compiling armhf and arm64 versions of libzmq so that cross compiling 
-# of zyre works (need --enable-libunwind=no flag)
-if(${arch} STREQUAL "amd64")
- externalproject_add(libzmq-${arch}
-                     DEPENDS
-                     GIT_REPOSITORY
-                     "https://github.com/zeromq/libzmq.git"
-                     GIT_TAG
-                     "v4.3.4"
-                     SOURCE_DIR
-                     "/tmp/3rdparty/libzmq-${arch}"
-                     BUILD_IN_SOURCE
-                      1
-                     UPDATE_COMMAND
-                     "./autogen.sh"
-                     CONFIGURE_COMMAND
-                     ./configure
-                     --prefix=${riaps_prefix}
-                     --enable-drafts
-                     BUILD_COMMAND
-                     make
-                     ${MAKE_JOB_FLAGS}
-                     INSTALL_COMMAND
-                     sudo make
-                     install)
-elseif(${arch} STREQUAL "armhf")
- externalproject_add(libzmq-${arch}
-                     DEPENDS
-                     GIT_REPOSITORY
-                     "https://github.com/zeromq/libzmq.git"
-                     GIT_TAG
-                     "v4.3.4"
-                     SOURCE_DIR
-                     "/tmp/3rdparty/libzmq-${arch}"
-                     BUILD_IN_SOURCE
-                      1
-                     UPDATE_COMMAND
-                     "./autogen.sh"
-                     CONFIGURE_COMMAND
-                     ./configure
-                     --host=arm-linux-gnueabihf
-                     --target=arm-linux-gnueabihf
-                     CC=/usr/bin/arm-linux-gnueabihf-gcc
-                     CXX=/usr/bin/arm-linux-gnueabihf-g++
-                     --prefix=${prefix}
-                     --enable-libunwind=no
-                     --enable-drafts
-                     BUILD_COMMAND
-                     make
-                     ${MAKE_JOB_FLAGS}
-                     INSTALL_COMMAND
-                     sudo make
-                     install)
-elseif(${arch} STREQUAL "arm64")
- externalproject_add(libzmq-${arch}
-                     DEPENDS
-                     GIT_REPOSITORY
-                     "https://github.com/zeromq/libzmq.git"
-                     GIT_TAG
-                     "v4.3.4"
-                     SOURCE_DIR
-                     "/tmp/3rdparty/libzmq-${arch}"
-                     BUILD_IN_SOURCE
-                      1
-                     UPDATE_COMMAND
-                     "./autogen.sh"
-                     CONFIGURE_COMMAND
-                     ./configure
-                     --host=aarch64-linux-gnu
-                     --target=aarch64-linux-gnu
-                     CC=/usr/bin/aarch64-linux-gnu-gcc
-                     CXX=/usr/bin/aarch64-linux-gnu-g++
-                     --prefix=${prefix}
-                     --enable-libunwind=no
-                     --enable-drafts
-                     BUILD_COMMAND
-                     make
-                     ${MAKE_JOB_FLAGS}
-                     INSTALL_COMMAND
-                     sudo make
-                     install)
-endif()
-
 
 # High-level C binding for ØMQ
-
 if(${arch} STREQUAL "amd64")
  externalproject_add(czmq-${arch}
                      DEPENDS
@@ -450,16 +452,7 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     --with-uuid=no
-                     --with-libsystemd=no
-                     --with-liblz4=no
-                     --enable-zmakecert=no
-                     --enable-zsp=no
-                     --enable-test_randof=no
-                     --enable-czmq_selftest=no
-                     libzmq_LIBS="-L${riaps_prefix}/lib -lzmq"
-                     libzmq_CFLAGS=-I${riaps_prefix}/include
-                     --prefix=${riaps_prefix}
+                     --enable-drafts=yes
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -487,15 +480,7 @@ elseif(${arch} STREQUAL "armhf")
                      CC=/usr/bin/arm-linux-gnueabihf-gcc
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
-                     --enable-drafts
-                     --with-libzmq=no
-                     --with-uuid=no
-                     --with-libsystemd=no
-                     --with-liblz4=no
-                     --enable-zmakecert=no
-                     --enable-zsp=no
-                     --enable-test_randof=no
-                     --enable-czmq_selftest=no
+                     --enable-drafts=yes
                      libzmq_LIBS="-L${prefix}/lib -lzmq"
                      libzmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
@@ -525,15 +510,7 @@ elseif(${arch} STREQUAL "arm64")
                      CC=/usr/bin/aarch64-linux-gnu-gcc
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
-                     --enable-drafts
-                     --with-libzmq=no
-                     --with-uuid=no
-                     --with-libsystemd=no
-                     --with-liblz4=no
-                     --enable-zmakecert=no
-                     --enable-zsp=no
-                     --enable-test_randof=no
-                     --enable-czmq_selftest=no
+                     --enable-drafts=yes
                      libzmq_LIBS="-L${prefix}/lib -lzmq"
                      libzmq_CFLAGS=-I${prefix}/include
                      BUILD_COMMAND
@@ -561,11 +538,7 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
-                     libzmq_LIBS="-L${riaps_prefix}/lib -lzmq"
-                     libzmq_CFLAGS=-I{riaps_prefix}/include
-                     czmq_LIBS="-L${riaps_prefix}/lib -lczmq"
-                     czmq_CFLAGS=-I${riaps_prefix}/include
-                     --prefix=${riaps_prefix}
+                     --enable-drafts=yes
                      BUILD_COMMAND
                      make
                      ${MAKE_JOB_FLAGS}
@@ -594,7 +567,7 @@ elseif(${arch} STREQUAL "armhf")
                      CXX=/usr/bin/arm-linux-gnueabihf-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/arm-linux-gnueabihf/lib/pkgconfig
-                     --enable-drafts
+                     --enable-drafts=yes
                      libzmq_LIBS="-L${prefix}/lib -lzmq"
                      libzmq_CFLAGS=-I${prefix}/include
                      czmq_LIBS="-L${prefix}/lib -lczmq"
@@ -627,7 +600,7 @@ elseif(${arch} STREQUAL "arm64")
                      CXX=/usr/bin/aarch64-linux-gnu-g++
                      --prefix=${prefix}
                      PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/lib/pkgconfig
-                     --enable-drafts
+                     --enable-drafts=yes
                      libzmq_LIBS="-L${prefix}/lib -lzmq"
                      libzmq_CFLAGS=-I${prefix}/include
                      czmq_LIBS="-L${prefix}/lib -lczmq"
@@ -656,6 +629,7 @@ if(${arch} STREQUAL "amd64")
                      "./autogen.sh"
                      CONFIGURE_COMMAND
                      ./configure
+                     --prefix=${prefix}
                      #PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
                      #LDFLAGS=-L/usr/lib/x86_64-linux-gnu
                      BUILD_COMMAND

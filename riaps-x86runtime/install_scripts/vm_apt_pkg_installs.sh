@@ -20,16 +20,24 @@ nethogs_prereq_install() {
     echo ">>>>> installed nethogs prerequisites"
 }
 
+# Set apt sources list grab the released packages with draft APIs
+zmq_draft_apt_install() {
+    echo "deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
+    wget https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/Release.key -O- | sudo apt-key add
+    sudo apt-get update
+    sudo apt-get install libzmq3-dev
+}
+
 # Install libraries for czmq and zyre, add directory for zmq compiled with draft APIs
 # Use compiled is already installed
 # For 20.04 & 22.04, pkg-config is already installed
 zyre_czmq_prereq_install() {
-    sudo apt-get install libsystemd-dev -y
+    sudo apt-get install libsystemd-dev uuid-dev liblz4-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
     # MM TODO: ran into an issue with armhf version of libcurl4-gnutls-dev, conflicts with host version (install fails)
     #          Currently not cross compiling the external libraries, so for now this is not an issue
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install libsystemd-dev:$c_arch -y
+        sudo apt-get install libsystemd-dev:$c_arch uuid-dev:$c_arch liblz4-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
         #sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
@@ -70,9 +78,10 @@ msgpack_install(){
 # Install opendht prerequisites
 # Assumes libncurses5-dev is install (done for nethogs above)
 opendht_prereqs_install() {
-    sudo apt-get install libncurses5-dev -y
+    sudo apt-get install libncurses5-dev libreadline-dev -y
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
-    sudo apt-get install libfmt-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get install libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get libssl-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
         sudo apt-get install nettle-dev:$c_arch libargon2-0-dev:$c_arch -y
@@ -129,15 +138,11 @@ rm_snap_pkg() {
 
 # Install redis
 redis_install () {
-    if [ ! -f "/usr/local/bin/redis-server" ]; then
-        wget http://download.redis.io/releases/redis-7.0.13.tar.gz
-        tar xzf redis-7.0.13.tar.gz
-        make -C redis-7.0.13 BUILD_TLS=yes
-        sudo make -C redis-7.0.13 install
-        sudo mkdir -p /etc/redis
-        sudo cp redis-7.0.13/redis.conf /etc/redis/.
-        rm -rf redis-7.0.13
-        rm -rf redis-7.0.13.tar.gz
+    if [ ! -f "/usr/bin/redis-server" ]; then
+        curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+        sudo apt-get update
+        sudo apt-get install redis
         echo ">>>>> installed redis"
     else
         echo ">>>>> redis already installed. skipping"

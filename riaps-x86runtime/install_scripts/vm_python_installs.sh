@@ -18,8 +18,8 @@ pyzmq_install(){
     cd /tmp/3rdparty
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
-    git checkout v23.2.1
-    ZMQ_DRAFT_API=1 ZMQ_PREFIX=$RIAPS_PREFIX sudo -E pip install . -v --no-binary pyzmq --pre pyzmq --verbose
+    git checkout v25.1.2
+    ZMQ_DRAFT_API=1 sudo -E pip install -v --no-binary pyzmq --pre pyzmq
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
     echo ">>>>> installed pyzmq"
@@ -30,7 +30,7 @@ pyzmq_install(){
 czmq_pybindings_install(){
     PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty/czmq-$HOST_ARCH/bindings/python
-    ZMQ_PREFIX=$RIAPS_PREFIX sudo pip3 install . --verbose
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     echo ">>>>> installed CZMQ pybindings"
 }
@@ -40,19 +40,22 @@ czmq_pybindings_install(){
 zyre_pybindings_install(){
     PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty/zyre-$HOST_ARCH/bindings/python
-    ZMQ_PREFIX=$RIAPS_PREFIX sudo pip3 install . --verbose
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     echo ">>>>> installed Zyre pybindings"
 }
 
 # Link pycapnp with installed library. Must be run after capnproto install.
 pycapnp_install(){
-    sudo pip3 install pkgconfig
-    #if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-    #    sudo pip3 install 'pycapnp==1.0.0' --verbose
-    #else
-    CFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib sudo pip3 install 'pycapnp==1.2.2' --verbose
-    #fi
+    sudo pip3 install pkgconfig --verbose
+    PREVIOUS_PWD=$PWD
+    cd /tmp/3rdparty
+    git clone https://github.com/capnproto/pycapnp.git
+    cd /tmp/3rdparty/pycapnp
+    git checkout v2.0.0b2
+    sudo pip3 install . --verbose
+    cd $PREVIOUS_PWD
+    rm -rf /tmp/3rdparty/pycapnp
     echo ">>>>> linked pycapnp with capnproto"
 }
 
@@ -76,15 +79,20 @@ prctl_install(){
 }
 
 # Installing py-lmdb
+# Install dependencies: libffi-dev (already as part of timesync requirements), python-dev build-essential
+# Should be called after cross_setup and timesync_requirements functions
 py_lmdb_install() {
+    export LMDB_FORCE_SYSTEM=1
+    export LMDB_INCLUDEDIR=/usr/local/include
+    export LMDB_LIBDIR=/usr/local/lib
     PREVIOUS_PWD=$PWD
     cd /tmp/3rdparty
-    git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/py_lmdb
-    cd /tmp/3rdparty/py_lmdb
-    git checkout py-lmdb_1.3.0
-    sudo python3 setup.py install
+    git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/lmdb
+    cd /tmp/3rdparty/lmdb
+    git checkout py-lmdb_1.4.1
+    sudo -E pip3 install . --verbose 
     cd $PREVIOUS_PWD
-    rm -rf /tmp/3rdparty/py_lmdb
+    sudo rm -rf /tmp/3rdparty/lmdb
     echo ">>>>> installed lmdb"
 }
 
@@ -107,12 +115,14 @@ spdlog_python_install() {
 # MM TODO: consider adding 'requests==2.31.0' - seeing conflict with urllib3 version requirements between this and influxdb-client,
 #          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 pip3_3rd_party_installs(){
-    pip3 install 'pydevd==2.9.6' 'redis==4.6.0' 'hiredis==2.2.3' 'netifaces==0.11.0' --verbose
-    pip3 install 'bcrypt==4.0.1' 'paramiko==3.3.1' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'Cython==3.0.7' --verbose
+    pip3 install 'redis==5.0.1' 'hiredis==2.3.2' --verbose
+    pip3 install 'pydevd==2.9.6' 'netifaces2==0.0.19' --verbose
+    pip3 install 'bcrypt==4.0.1' 'paramiko==3.4.0' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
     pip3 install 'fabric2==3.2.2' 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
-    pip3 install 'gpiod==1.5.4', 'spdlog==2.0.6' --verbose
+    pip3 install 'gpiod==1.5.4', 'spdlog==2.0.6' --verbose 
 
     # VM Only packages
     pip3 install 'textX==3.1.1' 'pydot==1.4.2' 'gitpython==3.1.37' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose
