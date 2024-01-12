@@ -18,7 +18,8 @@ zmq_draft_apt_install() {
     echo "deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
     wget https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_22.04/Release.key -O- | sudo apt-key add
     sudo apt-get update
-    sudo apt-get install libzmq3-dev
+    sudo apt-get install libzmq3-dev -y
+    echo ">>>>> installed libzmq with draft APIs"
 }
 
 # libuuid1 & liblz4-1 are already installed on some architectures, but are needed for these package.

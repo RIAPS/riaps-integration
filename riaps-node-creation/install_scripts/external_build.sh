@@ -71,6 +71,8 @@ build_fmt() {
     git clone https://github.com/fmtlib/fmt.git $TMP/fmt
     cd $TMP/fmt
     git checkout 10.1.1
+    mkdir $TMP/fmt/build
+    cd build
     start=`date +%s`
     cmake -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local ..
     make -j2
