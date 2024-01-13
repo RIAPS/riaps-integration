@@ -122,7 +122,7 @@ pip3_3rd_party_installs(){
     pip3 install 'fabric2==3.2.2' 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
-    pip3 install 'gpiod==1.5.4', 'spdlog==2.0.6' --verbose 
+    pip3 install 'gpiod==1.5.4' 'spdlog==2.0.6' --verbose 
 
     # VM Only packages
     pip3 install 'textX==3.1.1' 'pydot==1.4.2' 'gitpython==3.1.37' 'pymultigen==0.2.0' 'Jinja2==3.1.2' --verbose

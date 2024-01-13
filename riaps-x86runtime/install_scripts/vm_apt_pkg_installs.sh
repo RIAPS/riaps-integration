@@ -82,7 +82,7 @@ opendht_prereqs_install() {
     sudo apt-get install libncurses5-dev libreadline-dev -y
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
     sudo apt-get install libhttp-parser-dev libjsoncpp-dev -y
-    sudo apt-get libssl-dev -y
+    sudo apt-get install libssl-dev -y
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libncurses5-dev:$c_arch -y
         sudo apt-get install nettle-dev:$c_arch libargon2-0-dev:$c_arch -y
@@ -143,7 +143,7 @@ redis_install () {
         curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
         sudo apt-get update
-        sudo apt-get install redis
+        sudo apt-get install redis -y
         echo ">>>>> installed redis"
     else
         echo ">>>>> redis already installed. skipping"

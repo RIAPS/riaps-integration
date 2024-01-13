@@ -24,16 +24,3 @@ curl_func() {
     echo ">>>>> installed curl"
 }
 
-# install external packages using cmake
-# libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
-externals_cmake_install(){
-    PREVIOUS_PWD=$PWD
-    mkdir -p /tmp/3rdparty/build
-    cp CMakeLists.txt /tmp/3rdparty/.
-    cd /tmp/3rdparty/build
-    cmake -Darch=${NODE_ARCH} ..
-    make
-    cd $PREVIOUS_PWD
-    sudo rm -rf /tmp/3rdparty/
-    echo ">>>>> cmake install complete"
-}

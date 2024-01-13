@@ -25,9 +25,6 @@ else()
 endif()
 set(CMAKE_INSTALL_PREFIX ${prefix})
 
-#Put compiled version of libzmq in /opt/riaps folder to keep it isolated from the distribution install
-set(riaps_prefix /opt/riaps)
-
 #Set the platform
 if ((${arch} STREQUAL "armhf") OR (${arch} STREQUAL "arm64"))
  if (${arch} STREQUAL "armhf")
@@ -262,7 +259,8 @@ elseif(${arch} STREQUAL "arm64")
 endif()
 
 # libfmt - dependency for opendht
-
+# MM TODO: build does not work - need to figure out how to handle the 
+#          "mkdir build, cd build" commands here
 if(${arch} STREQUAL "amd64")
   externalproject_add(libfmt-${arch}
                       GIT_REPOSITORY
@@ -275,8 +273,11 @@ if(${arch} STREQUAL "amd64")
                       ""
                       SOURCE_DIR
                       "/tmp/3rdparty/libfmt-${arch}"
+                      BUILD_DIR
+                      "/tmp/3rdparty/libfmt-${arch}/build"
                       CMAKE_ARGS
                       -DBUILD_SHARED_LIBS=TRUE 
+                      -
                       BUILD_COMMAND
                       make
                       ${MAKE_JOB_FLAGS}
@@ -439,7 +440,6 @@ endif()
 if(${arch} STREQUAL "amd64")
  externalproject_add(czmq-${arch}
                      DEPENDS
-                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
@@ -462,7 +462,6 @@ if(${arch} STREQUAL "amd64")
 elseif(${arch} STREQUAL "armhf")
  externalproject_add(czmq-${arch}
                      DEPENDS
-                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
@@ -492,7 +491,6 @@ elseif(${arch} STREQUAL "armhf")
 elseif(${arch} STREQUAL "arm64")
  externalproject_add(czmq-${arch}
                      DEPENDS
-                     libzmq-${arch}
                      GIT_REPOSITORY
                      "https://github.com/zeromq/czmq.git"
                      GIT_TAG
