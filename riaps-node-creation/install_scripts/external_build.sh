@@ -14,15 +14,8 @@ build_external_libraries() {
     if [ "$NODE_ARCH" = "armhf" ]; then
         build_libsoc
     fi
-    configure_library_path
-    echo ">>>>> built all external libraries"
-}
-
-configure_library_path() {
-    sudo touch /etc/ld.so.conf.d/riaps.conf
-    sudo echo "# Add RIAPS Library for ZeroMQ specific builds" >> /etc/ld.so.conf.d/riaps.conf
-    sudo echo "$RIAPS_PREFIX/lib" >> /etc/ld.so.conf.d/riaps.conf
     sudo ldconfig
+    echo ">>>>> built all external libraries"
 }
 
 #Capnproto

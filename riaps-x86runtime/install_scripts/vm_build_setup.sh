@@ -124,6 +124,7 @@ externals_cmake_install(){
 
     # Host architecture
     externals_cmake_build $HOST_ARCH $LINUX_VERSION_INSTALL
+    sudo ldconfig
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
 }
@@ -184,12 +185,4 @@ config_gcc() {
     done
 
     echo ">>>>> configured gcc/g++"
-}
-
-configure_library_path() {
-    sudo touch /etc/ld.so.conf.d/riaps.conf
-    sudo echo "# Add RIAPS Library for ZeroMQ specific builds" >> /etc/ld.so.conf.d/riaps.conf
-    sudo echo "$RIAPS_PREFIX/lib" >> /etc/ld.so.conf.d/riaps.conf
-    sudo ldconfig
-    echo ">>>>> configure library path complete"
 }

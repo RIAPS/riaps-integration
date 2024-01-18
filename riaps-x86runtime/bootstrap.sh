@@ -67,7 +67,6 @@ capnproto_prereq_install
 gpio_install
 zmq_draft_apt_install
 externals_cmake_install
-configure_library_path
 pycapnp_install
 apparmor_monkeys_install
 redis_install
