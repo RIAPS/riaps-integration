@@ -110,8 +110,9 @@ py_lmdb_install() {
 # Utilizing distribution installed
 #     For 20.04: pyyaml = 5.3.1, psutil = 5.5.1 
 #     For 22.04: pyyaml = 5.4.1, cryptography = 3.4.8, netifaces = 0.11.0
+# Since python installs needing Cython typically calls for the latest version, do not specify a version for this package
 pip3_3rd_party_installs(){
-    pip3 install 'Cython==3.0.7' --verbose
+    pip3 install Cython --verbose
     pip3 install 'redis==5.0.1' 'hiredis==2.3.2' --verbose
     pip3 install 'pydevd==2.9.6' 'netifaces2==0.0.19' --verbose
     pip3 install 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose

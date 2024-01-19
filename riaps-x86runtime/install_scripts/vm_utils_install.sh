@@ -50,7 +50,7 @@ EOT
 eclipse_func() {
     if [ ! -d "/home/$RIAPSUSER/eclipse" ]
     then
-       wget http://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R2/eclipse-inst-linux64.tar.gz
+       wget https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2023-12/R/eclipse-cpp-2023-12-R-linux-gtk-x86_64.tar.gz
        tar -xzvf eclipse-inst-linux64.tar.gz
        sudo mv eclipse /home/$RIAPSUSER/.
        sudo chown -R $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/eclipse

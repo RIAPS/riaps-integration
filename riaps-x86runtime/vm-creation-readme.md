@@ -180,7 +180,7 @@ save ""
     APT::Periodic::Unattended-Upgrade "0";
     ```
 
-20) Add example applications for use in Eclipse.  Typically load DistributedEstimator, DistributedEstimatorGPIO and WeatherMonitor.  This files are in a private repo, but any RIAPS application can be used as examples.
+20) Add example applications for use in Eclipse from riaps-tutorials (https://github.com/RIAPS/riaps-tutorials.git)
 
 21) Add Node-Red start script icon to Desktop.  
     a) Download the Node-Red icon from https://nodered.org/about/resources/media/node-red-icon.png
