@@ -27,7 +27,7 @@ class TempSensor(Component):
         self.temperature = self.temperature + 1
         msg = str(self.temperature)
         msg = (now,str(self.pid),msg)
-        self.logger.info("on_clock(): Temperature - %s, PID %s, %s" % (str(msg[1]),str(self.pid),str(now)))
+        self.logger.info("on_clock(): Temperature - %s, PID %s, %s" % (str(msg[2]),str(self.pid),str(now)))
         self.ready.send_pyobj(msg)
 # riaps:keep_clock:end
 
