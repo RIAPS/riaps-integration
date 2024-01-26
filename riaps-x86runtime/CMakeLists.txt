@@ -122,6 +122,7 @@ if(${arch} STREQUAL "amd64")
   externalproject_add(libfmt-${arch}
                       GIT_REPOSITORY "https://github.com/fmtlib/fmt.git"
                       GIT_TAG "10.1.1"
+                      SOURCE_DIR "/tmp/3rdparty/libfmt-${arch}"
                       CONFIGURE_COMMAND cmake -B build -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local
                       BUILD_IN_SOURCE 1
                       BUILD_COMMAND cd build && make
@@ -131,6 +132,7 @@ elseif(${arch} STREQUAL "armhf")
   externalproject_add(libfmt-${arch}
                       GIT_REPOSITORY "https://github.com/fmtlib/fmt.git"
                       GIT_TAG "10.1.1"
+                      SOURCE_DIR "/tmp/3rdparty/libfmt-${arch}"
                       CONFIGURE_COMMAND cmake -B build -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=${prefix}
                       BUILD_IN_SOURCE 1
                       BUILD_COMMAND cd build && make ${MAKE_JOB_FLAGS} -e PREFIX=${prefix} 
@@ -142,6 +144,7 @@ elseif(${arch} STREQUAL "arm64")
   externalproject_add(libfmt-${arch}
                       GIT_REPOSITORY "https://github.com/fmtlib/fmt.git"
                       GIT_TAG "10.1.1"
+                      SOURCE_DIR "/tmp/3rdparty/libfmt-${arch}"
                       CONFIGURE_COMMAND cmake -B build -DBUILD_SHARED_LIBS=TRUE -DCMAKE_INSTALL_PREFIX=${prefix}
                       BUILD_IN_SOURCE 1
                       BUILD_COMMAND cd build && make ${MAKE_JOB_FLAGS} -e PREFIX=${prefix} 
