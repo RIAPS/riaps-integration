@@ -123,7 +123,7 @@ externals_cmake_install(){
     PREVIOUS_PWD=$PWD
 
     # Host architecture
-    externals_cmake_build $HOST_ARCH $LINUX_VERSION_INSTALL
+    externals_cmake_build $HOST_ARCH
     sudo ldconfig
     cd $PREVIOUS_PWD
     echo ">>>>> cmake install complete"
@@ -133,7 +133,7 @@ externals_cmake_install(){
 externals_cmake_build(){
     mkdir -p /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
     cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
-    cmake -Darch=$1 -Dubuntu_rel=$2 ..
+    cmake -Darch=$1 ..
     make
     cd /home/$INSTALL_USER$INSTALL_SCRIPT_LOC
     rm -rf /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/build-$1
@@ -157,7 +157,7 @@ config_gcc() {
     elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
         sudo apt-get install gcc-9 g++-9 -y
     elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-        sudo apt-get install gcc-10 g++-10 -y
+        sudo apt-get install gcc-10 g++-11 -y
     fi
 
     # Cross compile architectures
@@ -167,7 +167,7 @@ config_gcc() {
         elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
             sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
         elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-            sudo apt-get install gcc-10:$c_arch g++-10:$c_arch -y
+            sudo apt-get install gcc-11:$c_arch g++-11:$c_arch -y
         fi
     done
 
