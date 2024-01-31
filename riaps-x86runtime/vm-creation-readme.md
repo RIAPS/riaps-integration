@@ -50,9 +50,9 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 
 9) Cgroups is set to v2 by default in XUbuntu 22.04, move the boot to use v1.  
 
-  a) Edit `/etc/default/grub` to add `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=0"`
+   a) Edit `/etc/default/grub` to add `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=0"`
   
-  b) Apply the grub change with ```sudo update-grub```
+   b) Apply the grub change with ```sudo update-grub```
     
 10)  Restart the VM to allow the above `fstab`  and `grub` changes to take effect.
 
