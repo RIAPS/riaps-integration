@@ -38,9 +38,9 @@ Kernel:  6.2.0-31-generic
 riapsadmin  ALL=(ALL) NOPASSWD: ALL
 ```
 
-1) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
+7) Configure Software & Updates to turn off automatic check for updates and new version notification. Install requested updates to packages.
 
-2) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
+8) Additions for the quota functionality utilized in RIAPS must be added manually to insure no corruption occurs to the file system.  Edit the /etc/fstab files and add the `usrquota,grpquota` to `/`, as shown here:
 
 ```
 # / was on /dev/sda1 during installation
@@ -48,10 +48,15 @@ UUID=871b6f90-d211-4de9-a0cb-f6ecdfe7c51f /               ext4    errors=remount
 /swapfile                                 none            swap    sw              0       0
 ```
 
-8) Restart the VM to allow the above `fstab` changes to take effect.
+9) Cgroups is set to v2 by default in XUbuntu 22.04, move the boot to use v1.  
 
+  a) Edit `/etc/default/grub` to add `GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=0"`
+  
+  b) Apply the grub change with ```sudo update-grub```
+    
+10)  Restart the VM to allow the above `fstab`  and `grub` changes to take effect.
 
-9) To setup the usrquota and grpquota files, run the following. Restart the VM login as riapsadmin.
+11)  To setup the usrquota and grpquota files, run the following. Restart the VM login as riapsadmin.
 
 ```
 sudo apt-get install quota -y
@@ -62,9 +67,9 @@ sudo quotaon -pa
 
 The last line provides feedback that the quota is setup.
 
-10) Install `git` and clone `https://github.com/RIAPS/riaps-integration.git`
+12) Install `git` and clone `https://github.com/RIAPS/riaps-integration.git`
 
-11) Navigate to the riaps-integration/riaps-x86runtime directory and edit the `vm_creation.conf` file to reflect the setup desired.  This file allows configuration of Ubuntu version, the cross compile architectures (for RIAPS nodes), version number of RIAPS to install and ssh key pair.
+13) Navigate to the riaps-integration/riaps-x86runtime directory and edit the `vm_creation.conf` file to reflect the setup desired.  This file allows configuration of Ubuntu version, the cross compile architectures (for RIAPS nodes), version number of RIAPS to install and ssh key pair.
 
     a) Indicate desired Ubuntu setup, example below
 
@@ -96,7 +101,7 @@ The last line provides feedback that the quota is setup.
     RIAPS_VERSION="v1.1.23"
     ```
 
-12) Run the bootstrap script and send information provided to an installation log file.
+14) Run the bootstrap script and send information provided to an installation log file.
 
 ```
 sudo ./bootstrap.sh 2>&1 | tee install-vm.log
@@ -108,19 +113,19 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
 > Note:  Files used to setup the eclipse projects are located in a private repository now.  This step (add_eclipse_projects within bootstrap.sh) can be skipped.
 
-13) If everything installed correctly, remove riaps-integration repository from /home/riapsadmin/. Keep in mind that you will lose the install logs when removing this information.
+15) If everything installed correctly, remove riaps-integration repository from /home/riapsadmin/. Keep in mind that you will lose the install logs when removing this information.
 
-14) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
+16) Shutdown and then log in as "RIAPS App Developer".  The password change will be requested, but this will be reset at the end so that the user will be asked on their first login.
 
-15) Remove the riapsadmin user account (deluser command).
+17) Remove the riapsadmin user account (deluser command).
 
-16) Install the RIAPS packages
+18) Install the RIAPS packages
 
 ```./riaps_install_vm.sh 2>&1 | tee install-riaps-vm.log```
 
   Note:  Remember to setup the correct `nic_name` in the /etc/riaps/riaps.etc file for the VM.  The default is setup for the BBB images.  See [Configuring Environment for Local Network Setup](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/README.md#configuring-environment-for-local-network-setup).
 
-17) Add preloaded eclipse and sample applications in the default workspace.
+19) Add preloaded eclipse and sample applications in the default workspace.
 
     a) Pull the latest preloaded eclipse from `https://riaps.isis.vanderbilt.edu/rdownloads.html`.  Look for the latest version release of `riaps_eclipse.tar.gz`.
 
@@ -148,7 +153,7 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
     > Note:  See riaps_eclipse_information.md to learn more about how the preloaded eclipse image is created.
 
-18) Turn off Snapshotting for the `Redis` tools
+20) Turn off Snapshotting for the `Redis` tools
 
     Edit /etc/redis/redis.conf file to uncomment the `save ""` lines
 
@@ -168,7 +173,7 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 save ""
 ```
 
-19) Turn off apt tool automatic updating
+21) Turn off apt tool automatic updating
     a) Edit `/etc/apt/apt.conf.d/20auto-upgrades` to set `Unattended-Upgrade` to "0"
     b) Edit `/etc/apt/apt.conf.d/10periodic` to set `Unattended-Upgrade` to "0"
 
@@ -180,9 +185,9 @@ save ""
     APT::Periodic::Unattended-Upgrade "0";
     ```
 
-20) Add example applications for use in Eclipse from riaps-tutorials (https://github.com/RIAPS/riaps-tutorials.git)
+22) Add example applications for use in Eclipse from riaps-tutorials (https://github.com/RIAPS/riaps-tutorials.git)
 
-21) Add Node-Red start script icon to Desktop.  
+23) Add Node-Red start script icon to Desktop.  
     a) Download the Node-Red icon from https://nodered.org/about/resources/media/node-red-icon.png
     b) Place icon image in /home/riaps folder
     c) Create a file on the Desktop call `node-red.desktop`, code is as follows:
@@ -205,7 +210,7 @@ save ""
     GenericName=MQTT and Node-Red Startup Script
     ```
 
-22) Install mininet, see mininet_install function in [vm_utils_install.sh](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/install_scripts/vm_utils_install.sh).  Due to an issue with the mininet installation script, the cloning of openflow needs to change from `git://...` to `https://...`.
+24) Install mininet, see mininet_install function in [vm_utils_install.sh](https://github.com/RIAPS/riaps-integration/blob/master/riaps-x86runtime/install_scripts/vm_utils_install.sh).  Due to an issue with the mininet installation script, the cloning of openflow needs to change from `git://...` to `https://...`.
 
 >***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
 
