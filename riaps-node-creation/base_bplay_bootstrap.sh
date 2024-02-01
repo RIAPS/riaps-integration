@@ -108,6 +108,7 @@ security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
+cython_install
 build_external_libraries
 pycapnp_install
 apparmor_monkeys_install

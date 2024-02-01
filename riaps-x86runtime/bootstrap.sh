@@ -66,6 +66,8 @@ opendht_prereqs_install
 capnproto_prereq_install
 gpio_install
 zmq_draft_apt_install
+# Note: cython needed by opendht build
+cython_install
 externals_cmake_install
 pycapnp_install
 apparmor_monkeys_install

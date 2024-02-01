@@ -109,6 +109,11 @@ spdlog_python_install() {
     echo ">>>>> installed spdlog"
 }
 
+cython_install() {
+    pip3 install Cython --verbose
+    echo ">>>>> installed cython"
+}
+
 # Install other required packages
 # Ubuntu 20.04 comes with PyYAML==5.3.1 and psutil==5.5.1
 # Ubuntu 22.04 comes with netinterfaces==0.11.0, cryptography==3.4.8, PyYAML==5.4.1 and psutil==5.9.0
@@ -116,7 +121,6 @@ spdlog_python_install() {
 #          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 # Since python installs needing Cython typically calls for the latest version, do not specify a version for this package
 pip3_3rd_party_installs(){
-    pip3 install Cython --verbose
     pip3 install 'redis==5.0.1' 'hiredis==2.3.2' --verbose
     pip3 install 'pydevd==2.9.6' 'netifaces2==0.0.19' --verbose
     pip3 install 'bcrypt==4.0.1' 'paramiko==3.4.0' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose

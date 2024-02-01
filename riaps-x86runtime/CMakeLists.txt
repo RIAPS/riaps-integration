@@ -38,7 +38,7 @@ set (CMAKE_C_FLAGS "-std=c99")
 
 #Capnproto
 if(${arch} STREQUAL "amd64")
- externalproject_add(capnproto-${arch}
+  externalproject_add(capnproto-${arch}
                     GIT_REPOSITORY "https://github.com/capnproto/capnproto"
                     GIT_TAG "v1.0.1.1"
                     SOURCE_DIR "/tmp/3rdparty/capnproto-${arch}"
@@ -49,7 +49,7 @@ if(${arch} STREQUAL "amd64")
                     INSTALL_COMMAND sudo make -C c++ install
                   )
 elseif(${arch} STREQUAL "armhf")
- externalproject_add(capnproto-${arch}
+  externalproject_add(capnproto-${arch}
                       #DEPENDS capnproto-amd64
                       GIT_REPOSITORY "https://github.com/capnproto/capnproto"
                       GIT_TAG "v1.0.1.1"
@@ -62,7 +62,7 @@ elseif(${arch} STREQUAL "armhf")
                       INSTALL_COMMAND sudo make -C c++ install
                     )
 elseif(${arch} STREQUAL "arm64")
- externalproject_add(capnproto-${arch}
+  externalproject_add(capnproto-${arch}
                       #DEPENDS capnproto-amd64
                       GIT_REPOSITORY "https://github.com/capnproto/capnproto"
                       GIT_TAG "v1.0.1.1"
@@ -195,7 +195,7 @@ endif()
 
 # High-level C binding for ØMQ
 if(${arch} STREQUAL "amd64")
- externalproject_add(czmq-${arch}
+  externalproject_add(czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/czmq.git"
                      GIT_TAG "v4.2.1"
                      SOURCE_DIR "/tmp/3rdparty/czmq-${arch}"
@@ -206,7 +206,7 @@ if(${arch} STREQUAL "amd64")
                      INSTALL_COMMAND sudo make install
                     )
 elseif(${arch} STREQUAL "armhf")
- externalproject_add(czmq-${arch}
+  externalproject_add(czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/czmq.git"
                      GIT_TAG "v4.2.1"
                      SOURCE_DIR "/tmp/3rdparty/czmq-${arch}"
@@ -220,7 +220,7 @@ elseif(${arch} STREQUAL "armhf")
                      INSTALL_COMMAND sudo make install
                     )
 elseif(${arch} STREQUAL "arm64")
- externalproject_add(czmq-${arch}
+  externalproject_add(czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/czmq.git"
                      GIT_TAG "v4.2.1"
                      SOURCE_DIR "/tmp/3rdparty/czmq-${arch}"
@@ -237,7 +237,7 @@ endif()
 
 # Zyre
 if(${arch} STREQUAL "amd64")
- externalproject_add(zyre-${arch}
+  externalproject_add(zyre-${arch}
                      DEPENDS czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/zyre.git"
                      GIT_TAG "v2.0.1"
@@ -249,7 +249,7 @@ if(${arch} STREQUAL "amd64")
                      INSTALL_COMMAND sudo make install
                     )
 elseif(${arch} STREQUAL "armhf")
- externalproject_add(zyre-${arch}
+  externalproject_add(zyre-${arch}
                      DEPENDS czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/zyre.git"
                      GIT_TAG "v2.0.1"
@@ -265,7 +265,7 @@ elseif(${arch} STREQUAL "armhf")
                      INSTALL_COMMAND sudo make install
                     )
 elseif(${arch} STREQUAL "arm64")
- externalproject_add(zyre-${arch}
+  externalproject_add(zyre-${arch}
                      DEPENDS czmq-${arch}
                      GIT_REPOSITORY "https://github.com/zeromq/zyre.git"
                      GIT_TAG "v2.0.1"
@@ -284,7 +284,7 @@ endif()
 
 # OpenDHT
 if(${arch} STREQUAL "amd64")
- externalproject_add(opendht-${arch}
+  externalproject_add(opendht-${arch}
                      DEPENDS libfmt-${arch}
                      GIT_REPOSITORY "https://github.com/savoirfairelinux/opendht.git"
                      GIT_TAG "v3.1.6"
@@ -297,7 +297,7 @@ if(${arch} STREQUAL "amd64")
                     )
 # MM TODO: working out a cross compile issue, this is not really needed at this time
 #elseif(${arch} STREQUAL "armhf")
-# externalproject_add(opendht-${arch}
+#  externalproject_add(opendht-${arch}
 #                     DEPENDS libfmt-${arch}
 #                     GIT_REPOSITORY "https://github.com/savoirfairelinux/opendht.git"
 #                     GIT_TAG "v3.1.6"
@@ -315,7 +315,7 @@ if(${arch} STREQUAL "amd64")
 #                     INSTALL_COMMAND sudo make install
 #                    )
 #elseif(${arch} STREQUAL "arm64")
-# externalproject_add(opendht-${arch}
+#  externalproject_add(opendht-${arch}
 #                     DEPENDS libfmt-${arch}
 #                     GIT_REPOSITORY "https://github.com/savoirfairelinux/opendht.git"
 #                     GIT_TAG "v3.1.6"
@@ -338,7 +338,7 @@ endif()
 #libsoc
 
 if(${arch} STREQUAL "amd64")
- externalproject_add(libsoc-${arch}
+  externalproject_add(libsoc-${arch}
                     GIT_REPOSITORY "https://github.com/jackmitch/libsoc.git"
                     GIT_TAG "379f909690ea776cb6592bf246cce819b9da0ebd"
                     SOURCE_DIR "/tmp/3rdparty/libsoc-${arch}"
@@ -347,19 +347,19 @@ if(${arch} STREQUAL "amd64")
                     CONFIGURE_COMMAND ./configure --enable-shared
                     BUILD_COMMAND make ${MAKE_JOB_FLAGS}
                     INSTALL_COMMAND sudo make install
-#                  )
-elseif(${arch} STREQUAL "armhf")
- externalproject_add(libsoc-${arch}
-                      GIT_REPOSITORY "https://github.com/jackmitch/libsoc.git"
-                      GIT_TAG "379f909690ea776cb6592bf246cce819b9da0ebd"
-                      SOURCE_DIR "/tmp/3rdparty/libsoc-${arch}"
-                      BUILD_IN_SOURCE 1
-                      UPDATE_COMMAND autoreconf -i
-                      CONFIGURE_COMMAND ./configure --prefix=${prefix} 
-                      --host=arm-linux-gnueabihf --enable-board=beaglebone_black
-                      BUILD_COMMAND make ${MAKE_JOB_FLAGS}
-                      INSTALL_COMMAND sudo make install
                     )
+elseif(${arch} STREQUAL "armhf")
+  externalproject_add(libsoc-${arch}
+                    GIT_REPOSITORY "https://github.com/jackmitch/libsoc.git"
+                    GIT_TAG "379f909690ea776cb6592bf246cce819b9da0ebd"
+                    SOURCE_DIR "/tmp/3rdparty/libsoc-${arch}"
+                    BUILD_IN_SOURCE 1
+                    UPDATE_COMMAND autoreconf -i
+                    CONFIGURE_COMMAND ./configure --prefix=${prefix} 
+                    --host=arm-linux-gnueabihf --enable-board=beaglebone_black
+                    BUILD_COMMAND make ${MAKE_JOB_FLAGS}
+                    INSTALL_COMMAND sudo make install
+                   )
 # No RaspberryPi 4 board yet in libsoc
 #elseif(${arch} STREQUAL "arm64")
 endif()
