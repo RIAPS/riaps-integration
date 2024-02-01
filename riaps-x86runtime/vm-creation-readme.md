@@ -98,7 +98,7 @@ The last line provides feedback that the quota is setup.
     d) Indicate desired RIAPS version
 
     ```
-    RIAPS_VERSION="v1.1.23"
+    RIAPS_VERSION="v2.0.0"
     ```
 
 14) Run the bootstrap script and send information provided to an installation log file.
