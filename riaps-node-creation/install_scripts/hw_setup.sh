@@ -50,6 +50,7 @@ timesync_requirements() {
 random_num_gen_install() {
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo ">>>>> installed random number generator"
 }
 
 # cpufrequtils is already installed on some architectures, but is needed to set this performance.

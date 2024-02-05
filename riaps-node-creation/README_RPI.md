@@ -4,11 +4,9 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 
-1) Download a complete pre-configured image (Ubuntu 20.04.5, RPi 4, 64 bit) onto the SD Card from https://cdimage.ubuntu.com/releases/20.04/release/. Choose the latest server version available (ubuntu-20.04.5-preinstalled-server-arm64+rasp.img.xz).  
+1) Download a complete pre-configured image (Ubuntu 22.04.3, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest server version available (ubuntu-22.04.3-preinstalled-server-arm64+rasp.img.xz).  
 
-2) Unpack image and change into the directory (unxz file, then tar xf)
-
-3) Install image on SD card, can use [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) and install the "custom" .img file that was downloaded (in order to utilize the 64 bit version).
+2) Install image on SD card, can use [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) and install the "custom" .img file that was downloaded (in order to utilize the 64 bit version).
 
 > Note: 4GB SD Card is too small, please consider a larger size card.
 
@@ -18,7 +16,7 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.4.0-1069-raspi
+Kernel:    5.15.0-1034-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.

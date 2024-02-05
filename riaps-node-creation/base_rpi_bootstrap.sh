@@ -58,7 +58,7 @@ tmux_install
 cmake_func
 timesync_requirements
 random_num_gen_install
-freqgov_off
+#freqgov_off - ondemand.service does not exist
 watchdog_timers
 quota_install
 splash_screen_update

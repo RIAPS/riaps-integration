@@ -18,6 +18,7 @@ zmq_draft_apt_install() {
     wget -O- https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /usr/share/keyrings/zeromq-archive-keyring.gpg >/dev/null
     sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
     sudo apt-get update
+    sudo apt-get install libzmq5 -y
     sudo apt-get install libzmq3-dev -y
     echo ">>>>> installed libzmq with draft APIs"
 }
@@ -84,11 +85,13 @@ capnproto_prereqs_install() {
 }
 
 iptables_install() {
-    sudo apt-get install iptables
+    sudo apt-get install iptables -y
+    echo ">>>>> installed iptables"
 }
 
 gpio_install() {
     sudo apt-get install gpiod libgpiod-dev libiio-utils -y
+    echo ">>>>> installed gpio"
 }
 
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
