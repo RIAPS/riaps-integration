@@ -49,9 +49,9 @@ cd riaps-node-creation
        sudo /sbin/dphys-swapfile swapon
        ```
 
-5) Reboot the RPi and still sign in as 'ubuntu'
+5)  Reboot the RPi and still sign in as 'ubuntu'
 
-6) Move to 'root' user
+6)  Move to 'root' user
 
 ```
 sudo su
@@ -105,9 +105,11 @@ exit
 
 15) Enable 'cgroups' for cpu and memory resource management, along with apparmor for security:
 
-    a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04, modify '/boot/firmware/cmdline.txt'
+    a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04/22.04, modify '/boot/firmware/cmdline.txt'
 
     b) Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 security=apparmor" to the end of the command line.
+
+    c) For 22.04 add 'systemd.unified_cgroup_hierarchy=0' to the command line to default to cgroups v1
 
     c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
 
