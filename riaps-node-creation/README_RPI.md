@@ -115,14 +115,14 @@ exit
 
 16) Optional: Add SPI capability (which can be used for CAN communication)
 
-    Edit the `/boot/firmware/usercfg.txt` file to add the following:
+    Edit `/boot/firmware/usercfg.txt` for Ubuntu 20.04 or less, but edit `/boot/firmware/config.txt` for Ubuntu 22.04 to add the following:
 
 ```
     dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
     dtoverlay=spi-bcm2835-overlay
 ```
 
-17) Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+1)  Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
 
 ```
 APT::Periodic::Update-Package-Lists "1";
