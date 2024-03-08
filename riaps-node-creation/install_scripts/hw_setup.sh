@@ -87,9 +87,9 @@ setup_hostname() {
 }
 
 setup_peripherals() {
-    getent group gpio ||groupadd gpio
-    getent group dialout ||groupadd dialout
-    getent group pwm ||groupadd pwm
+    getent group gpio || sudo groupadd gpio
+    getent group dialout || sudo groupadd dialout
+    getent group pwm || sudo groupadd pwm
 
     echo ">>>>> setup peripherals - gpio, uart, and pwm"
 }

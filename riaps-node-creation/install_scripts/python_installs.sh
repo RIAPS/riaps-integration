@@ -94,6 +94,9 @@ prctl_install() {
 # Install dependencies: libffi-dev (already as part of timesync requirements), python-dev build-essential
 # Should be called after cross_setup and timesync_requirements functions
 py_lmdb_install() {
+    export LMDB_FORCE_SYSTEM=1
+    export LMDB_INCLUDEDIR=/usr/local/include
+    export LMDB_LIBDIR=/usr/local/lib
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
     git clone https://github.com/jnwatson/py-lmdb.git $TMP/python-lmdb
@@ -124,9 +127,14 @@ pip3_3rd_party_installs(){
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
     pip3 install 'gpiod==1.5.4' 'spdlog==2.0.6' --verbose
-    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+
+    if [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
         pip3 install 'psutil==5.9.0' --verbose
     fi
+    if [ $LINUX_VERSION_INSTALL = "12" ]; then
+        pip3 install 'pyyaml==5.4.1' 'cryptography == 3.4.8' --verbose
+    fi
+
     pip3 install 'paramiko==3.4.0' 'cryptography==3.4.8' --verbose
     pip3 install 'fabric2==3.2.2' --verbose
     echo ">>>>> installed pip3 packages"

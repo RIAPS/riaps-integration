@@ -3,10 +3,10 @@ set -e
 
 cmake_func() {
     sudo apt-get update
-    sudo apt-get install cmake -y
+    sudo apt-get install cmake pkg-config -y
     sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
-    sudo apt-get install libreadline-dev -y
+    sudo apt-get install libreadline-dev bison -y
     echo ">>>>> installed cmake"
 }
 
@@ -15,6 +15,7 @@ cmake_func() {
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
+    sudo apt-get install python3-pkgconfig -y
     sudo pip3 install --upgrade pip
     echo ">>>>> installed python3"
 }

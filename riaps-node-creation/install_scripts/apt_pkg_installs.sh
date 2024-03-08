@@ -8,15 +8,20 @@ boost_install() {
 
 # install nethogs pre-requisites
 nethogs_prereq_install() {
-    sudo apt-get install libpcap-dev -y
+    sudo apt-get install libpcap0.8 libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
     echo ">>>>> installed nethogs prerequisites"
 }
 
 # Set apt sources list grab the released packages with draft APIs
 zmq_draft_apt_install() {
-    wget -O- https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /usr/share/keyrings/zeromq-archive-keyring.gpg >/dev/null
-    sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
+    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+        wget -O- https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /usr/share/keyrings/zeromq-archive-keyring.gpg >/dev/null
+        sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
+    elif [ $LINUX_VERSION_INSTALL = "12" ]; then
+        wget -O- https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/Debian_12/Release.key | gpg --dearmor | sudo tee /usr/share/keyrings/zeromq-archive-keyring.gpg >/dev/null
+        sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/Debian_12/ ./" >> /etc/apt/sources.list.d/zeromq.list
+    fi
     sudo apt-get update
     sudo apt-get install libzmq5 -y
     sudo apt-get install libzmq3-dev -y
@@ -42,7 +47,7 @@ security_pkg_install() {
     sudo apt-get install apparmor-utils -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
-    elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+    elif [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
         sudo apt-get install rustc cargo -y
     fi
     echo ">>>>> security packages setup"
@@ -64,7 +69,7 @@ msgpack_install(){
 #install opendht prerequisites - expect libncurses-dev libmsgpack-dev libgnutls28-dev libasio-dev installed
 #    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
-    sudo apt-get install nettle-dev libasio-dev libargon2-0-dev -y
+    sudo apt-get install nettle-dev libasio-dev libargon2-0-dev libreadline-dev -y
     sudo apt-get install libhttp-parser-dev libjsoncpp-dev libssl-dev -y
 
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
@@ -97,11 +102,13 @@ gpio_install() {
 # To regain disk space on the BBB, remove packages that were installed as part of the build process (i.e. -dev)
 remove_pkgs_used_to_build(){
     sudo apt-get remove libboost-dev libcap-dev libffi-dev libgnutls28-dev libncurses5-dev libncurses-dev -y
-    sudo apt-get remove libsystemd-dev uuid-dev liblz4-dev -y
-    sudo apt-get remove nettle-dev -y
-    sudo apt-get remove libcurl4-gnutls-dev libasio-dev -y
+    sudo apt-get remove libsystemd-dev libmsgpack-dev libpcap-dev -y
+    sudo apt-get remove uuid-dev liblz4-dev -y
+    sudo apt-get remove nettle-dev libcurl4-gnutls-dev libasio-dev -y
     sudo apt-get remove libargon2-0-dev libhttp-parser-dev libjsoncpp-dev -y
+    sudo apt-get remove libzmq3-dev bison -y
     sudo apt autoremove -y
+    sudo pip3 uninstall cython -y
     echo ">>>>> removed packages used in building process, no longer needed"
 }
 
