@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# NOTE: This script does not run automatically yet, but is currently used a guideline on
+#       steps taken to create an AM64x image
+ 
 # This script configures the packages included on the TI AM64x image
 
 # Packages already in base Debian Bookworm image that are utilized by RIAPS Components:
@@ -8,8 +11,6 @@ set -e
 #
 # Note: no G++ 11, GIT, python3-smbus, 
 # pps-tools, libpcap0.8, libncurses6 (has libncursesw6),
-
-# Things to make sure to add: can-utils, cargo
 
 # Source scripts needed for this bootstrap build
 source_scripts() {
@@ -57,16 +58,16 @@ source_scripts
 # Start of script actions
 #check_os_version
 wget_install
+git_install
 #setup_peripherals
 user_func
 #add_spi_func
 rdate_install
-vim_func
 tmux_install
 htop_install
-nano_install
 cmake_func
 timesync_requirements
+can_install
 #random_num_gen_install
 #freqgov_off
 watchdog_timers
@@ -87,14 +88,13 @@ security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
+setup_venv
 cython_install
 build_external_libraries
 pycapnp_install
 apparmor_monkeys_install
-#spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
-armhf_pyinstall
 prctl_install
 # move zmq python installs to last due to cython being updated to 3.0.2 for the pyzmq build
 pyzmq_install

@@ -21,10 +21,12 @@ Kernel:    v6.1.xx-rtxx-k3-rt
 ## Installation of RIAPS Base Configuration on Pre-configured AM64x
 
 1) With the SD Card installed in the AM64x, log in using ssh with user account being 'root'
+   
+2) Update the locales using `dpkg-reconfigure locales` and selecting `en_US:en UTF-8` option.
 
-2) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the AM64x.
+3) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the AM64x.
 
-3) On the AM64x, unpack the creation files and move into the folder
+4) On the AM64x, unpack the creation files and move into the folder
 
 ```
 tar -xzvf riaps-node-creation.tar.gz
