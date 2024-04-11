@@ -119,8 +119,8 @@ gpio_install() {
 riaps_prereq() {
     # Add RIAPS repository
     sudo touch /etc/apt/sources.list.d/riaps.list
-    sudo echo "deb [arch=$HOST_ARCH] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" >> /etc/apt/sources.list.d/riaps.list
-    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
+    wget -O- https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | gpg --dearmor | sudo tee /usr/share/keyrings/riaps-archive-keyring.gpg >/dev/null
+    sudo echo "deb [arch=$HOST_ARCH signed-by=/usr/share/keyrings/riaps-archive-keyring.gpg] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" >> /etc/apt/sources.list.d/riaps.list
     sudo apt-get update
     sudo cp /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/riaps_install_vm.sh /home/$RIAPSUSER/.
     sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/riaps_install_vm.sh

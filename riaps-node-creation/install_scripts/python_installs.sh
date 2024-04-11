@@ -141,13 +141,10 @@ pip3_3rd_party_installs(){
 }
 
 # Debian 12 requires non-debian managed pip packages to be installed in a virtual environment
+
 setup_venv() {
-    python3 -m venv .venv
-    echo "#!/usr/bin/env bash" > start_riaps.sh
-    echo "" >> start_riaps.sh
-    echo "source .venv/bin/activate" >> start_riaps.sh
-    sudo chown riaps:riaps start_riaps.sh
-    sudo chmod +x start_riaps.sh
-    ./start_riaps
-    echo ">>>>> riaps aptrepo setup"
+    sudo apt-get install python3.11-venv
+    python3 -m venv riapsenv --system-site-packages
+    source riapsenv/bin/activate
+    echo ">>>>> riaps python virtual environment setup"
 }

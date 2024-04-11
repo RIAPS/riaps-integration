@@ -78,11 +78,11 @@ watchdog_timers() {
 }
 
 setup_hostname() {
-    cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
+    sudo cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
     sudo chmod +x /usr/bin/set_unique_hostname
-    cp etc/systemd/system/sethostname.service /etc/systemd/system/sethostname.service
-    systemctl enable sethostname.service
-    systemctl start sethostname.service
+    sudo cp etc/systemd/system/sethostname.service /etc/systemd/system/sethostname.service
+    sudo systemctl enable sethostname.service
+    sudo systemctl start sethostname.service
     echo ">>>>> setup hostname"
 }
 

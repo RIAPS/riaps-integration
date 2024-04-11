@@ -139,6 +139,7 @@ build_zyre() {
 }
 
 # OpenDHT
+# Note: when building in a virtual environment, do the python install separately
 build_opendht() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`

@@ -106,12 +106,13 @@ nodered_install() {
     # install FlashMQ
     git clone https://github.com/halfgaar/FlashMQ.git
     cd FlashMQ/
+    git checkout v1.8.4
     ./build.sh
     cd FlashMQBuildRelease/
-    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.deb
+    sudo dpkg -i *.deb
 
     # install MQTT
-    sudo pip3 install paho-MQTT
+    sudo pip3 install 'paho-MQTT==1.6.1'
 
     # install nodejs version (latest)
     # Note: this installation did not go smoothly, this step might be best taken manually

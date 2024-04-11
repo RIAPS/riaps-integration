@@ -117,11 +117,8 @@ riaps_prereq() {
     sudo apt-get install software-properties-common apt-transport-https -y
 
     # Add RIAPS repository
-    echo ">>>>> get riaps public key"
-    wget -qO - https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | sudo apt-key add -
-    echo ">>>>> add repo to sources"
-    sudo add-apt-repository -r "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" || true
-    sudo add-apt-repository -n "deb [arch=${NODE_ARCH}] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main"
+    wget -O- https://riaps.isis.vanderbilt.edu/keys/riapspublic.key | gpg --dearmor | sudo tee /usr/share/keyrings/riaps-archive-keyring.gpg >/dev/null
+    sudo echo "deb [arch=$NODE_ARCH signed-by=/usr/share/keyrings/riaps-archive-keyring.gpg] https://riaps.isis.vanderbilt.edu/aptrepo/ $CURRENT_PACKAGE_REPO main" >> /etc/apt/sources.list.d/riaps.list
     sudo apt-get update
     echo ">>>>> riaps aptrepo setup"
 }
