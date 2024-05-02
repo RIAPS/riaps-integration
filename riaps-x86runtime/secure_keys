@@ -122,68 +122,54 @@ def rekey_VM():
 
 
 if __name__ == '__main__':
+    try:
+        import riaps.consts
+    except ImportError as e:
+        print("ERROR: Couldn't import riaps. Is riaps-pycom installed?")
+        exit(-1)
+
+    #TODO: Switch path args to those imported from riaps.consts
+    #TODO: Test/verify passing hostfile
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("-H", "--hosts", default="", help="list of hostnames, comma separated, for a complete reconfiguration")    # List of hostnames to used instead of system configured file
-    parser.add_argument("-R", "--roles", default="", help="list of roles, comma separated")
-    parser.add_argument("-f", dest='hostsFile', help="absolute path to riaps-hosts.conf")
-    parser.add_argument("-A", dest='addtlHosts', help="list of hostnames, comma separated, to add to a current configuration")
-    parser.add_argument("-i", dest='privateKeyPath', help="absolute path to pre-established RIAPS private key")
-    parser.add_argument("-v", "--validate", action='store_const', const=True, help="validate host names")
+    parser.add_argument('action',choices=['reset','add']) #TODO: Add "remove" option + logic
+    hostgroup = parser.add_mutually_exclusive_group()
+    hostgroup.add_argument("-H", action='append', dest='hosts', metavar="HOST", help="host to reconfigure (repeatable)")    # List of hostnames to used instead of system configured files
+    hostgroup.add_argument("-f", dest='hostFile', help="absolute path to riaps-hosts.conf")
+    parser.add_argument("-i", dest='privateKeyPath', help="absolute path to RIAPS private key")
     parser.add_argument("-p", "--passwd", action='store_true', help="keep password for remote nodes")
     args = parser.parse_args()
 
-    fcmd = "fab"
-    fflag = "-f"
-    fpaths = [p + "/riaps/" for p in site.getsitepackages()] + [os.getenv('RIAPSHOME')]
-    rekeyVM = True
-    if args.hosts:
-        fhosts = ("--hosts=" + args.hosts)
-    elif args.addtlHosts:
-        fhosts = ("--hosts=" + args.addtlHosts)
-        # Do not rekey VM if just adding additional hosts
-        rekeyVM = False
-    else:
-        fhosts = ""
-    froles = ("--roles=" + args.roles) if args.roles else ""
-    fhostsFile = ("--set hostsFile=" + args.hostsFile) if args.hostsFile else ""
-    fident = "-i "+ args.privateKeyPath \
+    hosts = ' '.join([f"-H {h}" for h in args.hosts]) if args.hosts else ""
+    rekeyVM = (args.action == 'reset')
+
+    hostFile = ("--hostfile " + args.hostFile) if args.hostFile else ""
+    ident = "-i "+ args.privateKeyPath \
                         if args.privateKeyPath and os.path.isfile(args.privateKeyPath) else ""
+    keep_password = '--keep-password' if args.passwd else ""
 
-    fvalidate = "--set validate" if args.validate else ""
-    fsyscheck = "sys.check"
-    fupdate = "riaps.updateNodeKey:%s" % args.passwd
+    # Make sure RIAPS nodes are available first
+    print("Validating host availability: {}".format(args.hosts))
+    cmd = str.join(' ',("riaps_fab",hosts,hostFile,ident,"sys.check"))
+    p = bash(cmd)
+    if p.returncode != 0:
+        print("Unable to find hosts, aborting update process now ...")
+        sys.exit(-1)
 
-    fpath = None
-    for p in fpaths:
-        if p is None: continue
-        fp = os.path.join(p,"fabfile","")
-        if os.path.isdir(fp):
-            fpath = fp; break
+    if rekeyVM:
+        print("Rekeying VM")
+        rekey_VM()
 
-    if fpath is not None:
-        # Make sure RIAPS nodes are available first
-        print("Validating host availability: {}".format(args.hosts))
-        cmd = str.join(' ',(fcmd, fflag, fpath, fsyscheck, fhostsFile, fhosts, froles, fvalidate, fident))
-        p = bash(cmd)
-        if p.returncode != 0:
-            print("Unable to find hosts, aborting update process now ...")
-            sys.exit(-1)
-
-        if rekeyVM:
-            print("Rekeying VM")
-            rekey_VM()
-
-        # Rekey remote hosts
-        print("Rekeying hostnames: {}".format(args.hosts))
-        cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
-        bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}.old')
-        openKeyPerms()
-        bash(cmd)
-        closeKeyPerms()
-        bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
-        print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
-        
-        # Remove id_rsa.key (a copy of id_rsa) from VM no longer needed
-        bash(f'rm {vm_keys_dir}/{pycom_privateKey}')
-    else:
-        print('RIAPS Fabfile is not installed, please update the riaps-pycom installation.')
+    # Rekey remote hosts
+    print("Rekeying hostnames: {}".format(args.hosts))
+    # cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
+    cmd = str.join(' ',("riaps_fab",ident,hosts,hostFile,"riaps.updateNodeKey",keep_password))
+    bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}.old')
+    openKeyPerms()
+    bash(cmd)
+    closeKeyPerms()
+    bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
+    print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
+    
+    # Remove id_rsa.key (a copy of id_rsa) from VM no longer needed
+    bash(f'rm {vm_keys_dir}/{pycom_privateKey}')
