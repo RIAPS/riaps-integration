@@ -121,6 +121,32 @@ def rekey_VM():
     print("rekeyed development machine with newly generated keys and certificates.")
 
 
+
+_help_hosts = "Hostname or IP address of node to secure (repeatable)"
+_help_hostfile = "absolute path to riaps-hosts.conf"
+_help_identity = "absolute path to RIAPS private key"
+_help_password = "keep password for remote nodes"
+
+_script_description = '''Generate new crypo keys and/or write keys to remote nodes
+'''
+
+_script_epilog = f'''=============================================
+To generate new keys & write to remote nodes:
+    ./secure_keys reset TARGETS OPTIONS
+
+To write existing keys to remote nodes:
+    ./secure_keys add TARGETS OPTIONS
+
+    Where:
+        TARGETS := -H HOST [-H HOST...]       | {_help_hosts}
+                    or                        |
+                   -f HOSTFILE                | {_help_hostfile}
+                                              |
+        OPTIONS := -i <path_to_private_key>   | {_help_identity}
+                   -p, --passwd               | {_help_password}
+'''
+
+
 if __name__ == '__main__':
     try:
         import riaps.consts
@@ -129,15 +155,18 @@ if __name__ == '__main__':
         exit(-1)
 
     #TODO: Switch path args to those imported from riaps.consts
-    #TODO: Test/verify passing hostfile
+    #TODO: Test/verify passing hostfil
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(usage="./secure_keys [-h] (reset | add) [[-H HOST ...] | -f HOSTFILE] [-i PRIVATEKEYPATH] [-p | --passwd]",
+                                     description=_script_description,
+                                     epilog=_script_epilog,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('action',choices=['reset','add']) #TODO: Add "remove" option + logic
     hostgroup = parser.add_mutually_exclusive_group()
-    hostgroup.add_argument("-H", action='append', dest='hosts', metavar="HOST", help="host to reconfigure (repeatable)")    # List of hostnames to used instead of system configured files
-    hostgroup.add_argument("-f", dest='hostFile', help="absolute path to riaps-hosts.conf")
-    parser.add_argument("-i", dest='privateKeyPath', help="absolute path to RIAPS private key")
-    parser.add_argument("-p", "--passwd", action='store_true', help="keep password for remote nodes")
+    hostgroup.add_argument("-H", dest='hosts', metavar="HOST", action='append', help=_help_hosts)    # List of hostnames to used instead of system configured files
+    hostgroup.add_argument("-f", dest='hostfile', help=_help_hostfile)
+    parser.add_argument("-i", dest='privateKeyPath', help=_help_identity)
+    parser.add_argument("-p", "--passwd", action='store_true', help=_help_password)
     args = parser.parse_args()
 
     hosts = ' '.join([f"-H {h}" for h in args.hosts]) if args.hosts else ""
@@ -172,4 +201,5 @@ if __name__ == '__main__':
     print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
     
     # Remove id_rsa.key (a copy of id_rsa) from VM no longer needed
-    bash(f'rm {vm_keys_dir}/{pycom_privateKey}')
+    if rekeyVM:
+        bash(f'rm {vm_keys_dir}/{pycom_privateKey}')
