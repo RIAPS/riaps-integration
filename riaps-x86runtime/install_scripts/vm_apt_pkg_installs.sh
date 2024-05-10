@@ -25,7 +25,7 @@ zmq_draft_apt_install() {
     wget -O- https://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /usr/share/keyrings/zeromq-archive-keyring.gpg >/dev/null
     sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
     sudo apt-get update
-    sudo apt-get install libzmq3-dev -y
+    sudo apt-get install libzmq5 libzmq3-dev -y
     echo ">>>>> installed libzmq with draft APIs"
 }
 
@@ -155,3 +155,4 @@ graphviz_install() {
     sudo apt-get install graphviz xdot -y
     echo ">>>>> installed graphviz"
 }
+
