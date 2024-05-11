@@ -5,8 +5,8 @@ set -e
 #   Note: the rt kernel option is commented out and untested for latest images
 
 # Packages already in base 20.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, pkg-config, python3-dev, python3-setuptools
-# pps-tools, libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
+# GCC 11, G++ 11, GIT, pkg-config, python3-dev, python3-setuptools
+# pps-tools, libpcap0.8, libnettle8, libgnutls30, libncurses6, libuuid1
 #
 # python3-crypto python3-keyrings.alt does not exist, a desired state
 
@@ -94,10 +94,10 @@ setup_hostname
 setup_network
 iptables_install
 python_install
-cython_install
 curl_func
 boost_install
 nethogs_prereq_install
+zmq_draft_apt_install
 zyre_czmq_prereq_install
 gnutls_install
 msgpack_install
@@ -105,17 +105,19 @@ security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
+cython_install
 build_external_libraries
 pycapnp_install
-pyzmq_install
-czmq_pybindings_install
-zyre_pybindings_install
 apparmor_monkeys_install
-spdlog_python_install
+#spdlog_python_install
 py_lmdb_install
 pip3_3rd_party_installs
 armhf_pyinstall
 prctl_install
+# move zmq python installs to last due to cython being updated to 3.0.2 for the pyzmq build
+pyzmq_install
+czmq_pybindings_install
+zyre_pybindings_install
 remove_pkgs_used_to_build
 riaps_prereq
 create_riaps_version_file

@@ -1,2 +1,3 @@
-export pycomversion="1.1.23"
-export timesyncversion="1.1.23"
+export distro="jammy"
+export pycomversion="2.0.0rc6"
+export timesyncversion="2.0.0rc1"

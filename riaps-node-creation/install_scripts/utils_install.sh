@@ -40,3 +40,13 @@ tmux_install() {
     sudo apt-get install tmux -y
     echo ">>>>> installed tmux"
 }
+
+git_install() {
+    sudo apt-get install git -y
+    echo ">>>>> installed git"
+}
+
+can_install() {
+    sudo apt-get install can-utils -y
+    echo ">>>>> installed can-utils"
+}

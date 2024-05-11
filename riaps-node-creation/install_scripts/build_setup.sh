@@ -3,25 +3,22 @@ set -e
 
 cmake_func() {
     sudo apt-get update
-    sudo apt-get install cmake -y
+    sudo apt-get install cmake pkg-config -y
     sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
-    sudo apt-get install libreadline-dev -y
+    sudo apt-get install libreadline-dev bison -y
     echo ">>>>> installed cmake"
 }
 
 # Python3-dev and python3-setuptools are already in the base image of some architectures,
 # but is needed for RIAPS setup/installation. Therefore, it is installed here to make sure it is available.
+# Note: use of pip at system level gives an error (externally-managed-environment) in Debian Bookworm
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
+    sudo apt-get install python3-pkgconfig -y
     sudo pip3 install --upgrade pip
     echo ">>>>> installed python3"
-}
-
-cython_install() {
-    sudo pip3 install 'git+https://github.com/cython/cython.git@0.29.32' --verbose
-    echo ">>>>> installed cython"
 }
 
 curl_func() {
@@ -29,16 +26,3 @@ curl_func() {
     echo ">>>>> installed curl"
 }
 
-# install external packages using cmake
-# libraries installed: capnproto, lmdb, libnethogs, CZMQ, Zyre, opendht, libsoc
-externals_cmake_install(){
-    PREVIOUS_PWD=$PWD
-    mkdir -p /tmp/3rdparty/build
-    cp CMakeLists.txt /tmp/3rdparty/.
-    cd /tmp/3rdparty/build
-    cmake -Darch=${NODE_ARCH} ..
-    make
-    cd $PREVIOUS_PWD
-    sudo rm -rf /tmp/3rdparty/
-    echo ">>>>> cmake install complete"
-}

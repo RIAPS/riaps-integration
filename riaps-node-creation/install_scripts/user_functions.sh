@@ -6,6 +6,7 @@ user_func() {
         echo ">>>>> The user does not exist; setting user account up now"
         sudo useradd -m -c "RIAPS App Developer" $RIAPSUSER -s /bin/bash -d /home/$RIAPSUSER
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSUSER
+        sudo chmod 0755 /home/$RIAPSUSER
         getent group gpio || sudo groupadd gpio
         getent group dialout || sudo groupadd dialout
         getent group pwm || sudo groupadd pwm

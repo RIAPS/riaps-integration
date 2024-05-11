@@ -50,7 +50,7 @@ EOT
 eclipse_func() {
     if [ ! -d "/home/$RIAPSUSER/eclipse" ]
     then
-       wget http://www.eclipse.org/downloads/download.php?file=/oomph/epp/oxygen/R2/eclipse-inst-linux64.tar.gz
+       wget https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2023-12/R/eclipse-cpp-2023-12-R-linux-gtk-x86_64.tar.gz
        tar -xzvf eclipse-inst-linux64.tar.gz
        sudo mv eclipse /home/$RIAPSUSER/.
        sudo chown -R $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/eclipse
@@ -67,16 +67,17 @@ eclipse_plugin_dep_install() {
     echo ">>>>> installed eclipse dependencies"
 }
 
+# influxdata-archive_compat.key GPG fingerprint:
+#     9D53 9D90 D332 8DC7 D6C8 D3B9 D8FF 8E1F 7DF8 B07E
 graphing_installs() {
-    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
-    sudo add-apt-repository -n "deb [arch=$HOST_ARCH] https://packages.grafana.com/oss/deb stable main"
+    sudo mkdir -p /etc/apt/keyrings/
+    wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
     sudo apt-get update
-    sudo apt-get install grafana
+    sudo apt-get install grafana -y
     # decided not to start the service automatically, it can be started using:  sudo /bin/systemctl start grafana-server
     echo ">>>>> installed grafana"
 
-# influxdata-archive_compat.key GPG fingerprint:
-#     9D53 9D90 D332 8DC7 D6C8 D3B9 D8FF 8E1F 7DF8 B07E
     wget -q https://repos.influxdata.com/influxdata-archive_compat.key
     echo '393e8779c89ac8d958f81f942f9ad7fb82a25e133faddaf92e15b16e6ac9ce4c influxdata-archive_compat.key' | sha256sum -c && cat influxdata-archive_compat.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg > /dev/null
     echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
@@ -105,12 +106,13 @@ nodered_install() {
     # install FlashMQ
     git clone https://github.com/halfgaar/FlashMQ.git
     cd FlashMQ/
+    git checkout v1.8.4
     ./build.sh
     cd FlashMQBuildRelease/
-    sudo dpkg -i flashmq_0.11.3-1659374095+focal_amd64.deb
+    sudo dpkg -i *.deb
 
     # install MQTT
-    sudo pip3 install paho-MQTT
+    sudo pip3 install 'paho-MQTT==1.6.1'
 
     # install nodejs version (latest)
     # Note: this installation did not go smoothly, this step might be best taken manually

@@ -4,11 +4,9 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 
 ## Start with Ubuntu Pre-configured Image from Ubuntu
 
-1) Download a complete pre-configured image (Ubuntu 20.04.5, RPi 4, 64 bit) onto the SD Card from https://cdimage.ubuntu.com/releases/20.04/release/. Choose the latest server version available (ubuntu-20.04.5-preinstalled-server-arm64+rasp.img.xz).  
+1) Download a complete pre-configured image (Ubuntu 22.04.3, RPi 4, 64 bit) onto the SD Card from https://ubuntu.com/download/raspberry-pi. Choose the latest server version available (ubuntu-22.04.3-preinstalled-server-arm64+rasp.img.xz).  
 
-2) Unpack image and change into the directory (unxz file, then tar xf)
-
-3) Install image on SD card, can use [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) and install the "custom" .img file that was downloaded (in order to utilize the 64 bit version).
+2) Install image on SD card, can use [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) and install the "custom" .img file that was downloaded (in order to utilize the 64 bit version).
 
 > Note: 4GB SD Card is too small, please consider a larger size card.
 
@@ -18,7 +16,7 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.4.0-1069-raspi
+Kernel:    5.15.0-1034-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
@@ -51,9 +49,9 @@ cd riaps-node-creation
        sudo /sbin/dphys-swapfile swapon
        ```
 
-5) Reboot the RPi and still sign in as 'ubuntu'
+5)  Reboot the RPi and still sign in as 'ubuntu'
 
-6) Move to 'root' user
+6)  Move to 'root' user
 
 ```
 sudo su
@@ -107,22 +105,24 @@ exit
 
 15) Enable 'cgroups' for cpu and memory resource management, along with apparmor for security:
 
-    a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04, modify '/boot/firmware/cmdline.txt'
+    a) For 18.04 modify '/boot/firmware/nobtcmd.txt' or for 20.04/22.04, modify '/boot/firmware/cmdline.txt'
 
     b) Add “cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 security=apparmor" to the end of the command line.
+
+    c) For 22.04 add 'systemd.unified_cgroup_hierarchy=0' to the command line to default to cgroups v1
 
     c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
 
 16) Optional: Add SPI capability (which can be used for CAN communication)
 
-    Edit the `/boot/firmware/usercfg.txt` file to add the following:
+    Edit `/boot/firmware/usercfg.txt` for Ubuntu 20.04 or less, but edit `/boot/firmware/config.txt` for Ubuntu 22.04 to add the following:
 
 ```
     dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
     dtoverlay=spi-bcm2835-overlay
 ```
 
-17) Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+1)  Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
 
 ```
 APT::Periodic::Update-Package-Lists "1";

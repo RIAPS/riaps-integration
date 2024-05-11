@@ -1,18 +1,16 @@
-# NOTE: THIS DEVICE IS NO LONGER SUPPORTED
-
 #!/usr/bin/env bash
 set -e
 
-# This script configures the packages included on the Jetson Nano image
-# Note:  for 1.1.20 release, the Nano image had not yet been created nor code updated
+# NOTE: This script does not run automatically yet, but is currently used a guideline on
+#       steps taken to create an AM64x image
+ 
+# This script configures the packages included on the TI AM64x image
 
-# Packages already in base 18.04 image that are utilized by RIAPS Components:
-# GCC 7, G++ 7, GIT, pkg-config, libzmq5, liblz4-1, cmake
-# libpcap0.8, libnettle6, libgnutls30, libncurses5, libuuid1
+# Packages already in base Debian Bookworm image that are utilized by RIAPS Components:
+# GCC 12, build-essential, libnettle8, libgnutls30,  libuuid1
 #
-# python3-crypto python3-keyrings.alt does exist and needs to be removed
-#
-# Not in base image (but will be installed):  python3-dev, python3-setuptools, pps-tools
+# Note: no G++ 11, GIT, python3-smbus, 
+# pps-tools, libpcap0.8, libncurses6 (has libncursesw6),
 
 # Source scripts needed for this bootstrap build
 source_scripts() {
@@ -23,17 +21,19 @@ source_scripts() {
         source "$PWD/$SCRIPTS/$i"
     done
 
-    source "$PWD/node_creation_nano.conf"
+    source "$PWD/node_creation_am64.conf"
     echo ">>>>> sourced install scripts"
 }
 
+# MM TODO: no fstab file on this image, need to determine how this is done on the device
 quota_install() {
     sudo apt-get install quota -y
-    sed -i "/root/c\/dev/root / ext4 defaults,usrquota,grpquota 0 1" /etc/fstab
+    sed -i "/mmcblk0p1/c\/dev/mmcblk0p1 / ext4 noatime,errors=remount-ro,usrquota,grpquota 0 1" /etc/fstab
     echo ">>>>> setup quotas"
 }
 
 splash_screen_update() {
+    build_date=$(date -Idate)
     echo "################################################################################" > motd
     echo "# Acknowledgment:  The information, data or work presented herein was funded   #" >> motd
     echo "# in part by the Advanced Research Projects Agency - Energy (ARPA-E), U.S.     #" >> motd
@@ -42,44 +42,40 @@ splash_screen_update() {
     echo "# those of the United States Government or any agency thereof.                 #" >> motd
     echo "################################################################################" >> motd
     sudo mv motd /etc/motd
+    # Issue.net
+    echo "$LINUX_DISTRO GNU/Linux $LINUX_VERSION_INSTALL" > issue.net
+    echo "" >> issue.net
+    echo "$LINUX_DISTRO Image $build_date">> issue.net
+    echo "">> issue.net
+    echo "default username:password is [riaps:riaps]">> issue.net
+    sudo mv issue.net /etc/issue.net
     echo ">>>>> setup splash screen"
-}
-
-# Jetson nano (4.9 kernel) /etc/network/interfaces sources the directory /etc/network/interfaces.d/
-setup_network_nano() {
-    sudo apt-get install net-tools -y
-    echo ">>>>> copying network/interfaces-riaps to network/interfaces.d/interfaces-riaps"
-    sudo mkdir -p /etc/network/interfaces.d
-    cp etc/network/interfaces-riaps /etc/network/interfaces.d/interfaces-riaps
-    echo ">>>>> replaced network interfaces"
-
-    echo ">>>>> replacing resolv.conf"
-    touch /etc/resolv.conf
-    cp /etc/resolv.conf /etc/resolv.conf.preriaps
-    cp  etc/resolv-riaps.conf /etc/resolv.conf
-    echo ">>>>> replaced resolv.conf"
 }
 
 
 source_scripts
 
 # Start of script actions
-check_os_version
-setup_peripherals
+#check_os_version
+wget_install
+git_install
+#setup_peripherals
 user_func
-# add_spi_func - spi not setup the same way on Nano as BBB or RPi, so not setting this up at this time
+#add_spi_func
 rdate_install
-htop_install
-rm_snap_pkg
-nano_install
 tmux_install
+htop_install
+cmake_func
 timesync_requirements
-freqgov_off
+can_install
+#random_num_gen_install
+#freqgov_off
 watchdog_timers
-quota_install
+#quota_install - put in later
 splash_screen_update
 setup_hostname
-#setup_network_nano
+#setup_network
+iptables_install
 python_install
 curl_func
 boost_install
@@ -92,13 +88,11 @@ security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
+setup_venv
 cython_install
 build_external_libraries
 pycapnp_install
 apparmor_monkeys_install
-#spdlog_python_install
-#butter_install - this may no longer be needed (MM - 092022)
-#rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 prctl_install

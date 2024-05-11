@@ -24,8 +24,8 @@ class TempMonitor(Component):
         # Receive: timestamp,temperature
         msg = self.tempupdate.recv_pyobj()
         now = time.ctime(int(time.time()))
-        temperatureTime, temperatureValue = msg
-        self.logger.info("on_tempupdate(): Temperature:%s, PID %s, Timestamp:%s" % (temperatureValue,str(now),temperatureTime))
+        temperatureTime, temperaturePID, temperatureValue = msg
+        self.logger.info("on_tempupdate(): Temperature:%s, PID %s, Timestamp:%s" % (temperatureValue,temperaturePID,temperatureTime))
 # riaps:keep_tempupdate:end
 
 # riaps:keep_impl:begin

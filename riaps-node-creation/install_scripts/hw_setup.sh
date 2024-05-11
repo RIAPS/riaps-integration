@@ -50,6 +50,7 @@ timesync_requirements() {
 random_num_gen_install() {
     sudo apt-get install rng-tools -y
     sudo systemctl start rng-tools.service
+    echo ">>>>> installed random number generator"
 }
 
 # cpufrequtils is already installed on some architectures, but is needed to set this performance.
@@ -77,18 +78,18 @@ watchdog_timers() {
 }
 
 setup_hostname() {
-    cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
+    sudo cp usr/bin/set_unique_hostname /usr/bin/set_unique_hostname
     sudo chmod +x /usr/bin/set_unique_hostname
-    cp etc/systemd/system/sethostname.service /etc/systemd/system/sethostname.service
-    systemctl enable sethostname.service
-    systemctl start sethostname.service
+    sudo cp etc/systemd/system/sethostname.service /etc/systemd/system/sethostname.service
+    sudo systemctl enable sethostname.service
+    sudo systemctl start sethostname.service
     echo ">>>>> setup hostname"
 }
 
 setup_peripherals() {
-    getent group gpio ||groupadd gpio
-    getent group dialout ||groupadd dialout
-    getent group pwm ||groupadd pwm
+    getent group gpio || sudo groupadd gpio
+    getent group dialout || sudo groupadd dialout
+    getent group pwm || sudo groupadd pwm
 
     echo ">>>>> setup peripherals - gpio, uart, and pwm"
 }
