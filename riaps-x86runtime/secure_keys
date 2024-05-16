@@ -172,7 +172,7 @@ if __name__ == '__main__':
     hosts = ' '.join([f"-H {h}" for h in args.hosts]) if args.hosts else ""
     rekeyVM = (args.action == 'reset')
 
-    hostFile = ("--hostfile " + args.hostFile) if args.hostFile else ""
+    hostFile = ("--hostfile " + args.hostfile) if args.hostfile else ""
     ident = "-i "+ args.privateKeyPath \
                         if args.privateKeyPath and os.path.isfile(args.privateKeyPath) else ""
     keep_password = '--keep-password' if args.passwd else ""
