@@ -60,41 +60,7 @@ In this configuration, the host machine is connected to the internet on some int
 
 You can now connected a simple, unmanaged network switch to your VM's bridged adapter with an ethernet cable, and any RIAPS nodes to the other ports on the switch. Windows will assign IP addresses from the 192.168.137.0/24 range to your RIAPS nodes and VM.
 
-
-### <a name="config-network">3) Configuring Environment for Local Network Setup</a>
-
-Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
-
-1) Determine the desired ethernet interface
-
-```
-ifconfig
-```   
-
-2) Edit the riaps configuration to enable that interface
-
-```
-sudo nano /etc/riaps/riaps.conf
-```   
-
-3) Make sure the NIC name matchs the desired ethernet interface name from 'ifconfig'
-
-```
-# NIC name
-# Typical VM interface
-#nic_name = eth0
-nic_name = enp0s8
-```
-
-> ***Note:  This is necessary on the first installation.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required.***
-
-4)  After changing the NIC name, restart the rpyc running in the background.
-
-```
-sudo systemctl restart riaps-rpyc-registry.service
-```
-
-### <a name="connect-remotes">4) Connect the VM to the Remote Nodes</a>
+### <a name="connect-remotes">3) Connect the VM to the Remote Nodes</a>
 
 To communicate with the remote nodes using tools like `riaps_fab`, the VM must be able to automatically log into each node using a ssh security key.  The remote nodes are not configured with security keys, so the connection needs to be established between the VM and the remote nodes.
 
@@ -141,7 +107,7 @@ An error occurred: [Errno -2] Name or service not known
 >>>>> Remote node connection failed <<<<<
 ```
 
-### <a name="install-riaps-nodes">5) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
+### <a name="install-riaps-nodes">4) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
 
 The downloaded images for the remote nodes do not include the RIAPS packages.  Once the VM can successfully communication with all the remote nodes, `riaps_fab` can be used to install all the RIAPS packages.  There are two methods for installing the packages: using apt-get (to get the latest releases) or directly installing the .deb packages (used during development of the RIAPS platform).
 
