@@ -217,7 +217,7 @@ def run(args=None):
 
         # Check if riaps_fab system check works for all nodes
         print((">>>>> Checking all connections..."))
-        bash("riaps_fab sys.check")
+        bash("riaps_fab -v sys.check")
         print(">>>>> If the above contains all remote nodes, then the remote nodes are now successfully communicating <<<<<")
     else:
         if args.hosts:
