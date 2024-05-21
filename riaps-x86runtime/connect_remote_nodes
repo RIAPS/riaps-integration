@@ -193,7 +193,7 @@ def run(args=None):
     node_list, controller, config_contents = fetch_node_names()
         
     # Provided hostname list
-    node_list = args.hosts
+    node_list = args.hosts or []
 
     # Make sure the controller is not in this list
     # Check controller IP address also
