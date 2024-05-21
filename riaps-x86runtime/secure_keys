@@ -59,7 +59,7 @@ def closeKeyPerms():
 def rekey_VM():
     #save old keys and certs
     if os.path.isfile(f'{vm_keys_dir}/{vm_publicKey}'):
-        bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}')
+        # bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}')
         os.rename(f'{vm_keys_dir}/{vm_publicKey}', f'{vm_keys_dir}/{vm_publicKey}.old')
 
     if os.path.isfile(f'{vm_keys_dir}/{vm_privateKey}'):
@@ -81,7 +81,7 @@ def rekey_VM():
     bash(f'rm {vm_keys_dir}/riaps.key')
 
     #add private key to ssh agent for immediate use
-    bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}')
+    # bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}')
 
     #generate public key from private key, riaps_gen_cert creates a PEM/OpenSSH formated public key
     #  which does not work well with ssh-add
@@ -188,16 +188,18 @@ if __name__ == '__main__':
     if rekeyVM:
         print("Rekeying VM")
         rekey_VM()
+        if ident == "":
+            ident = f'-i {vm_keys_dir}/{vm_privateKey}.old'
 
     # Rekey remote hosts
     print("Rekeying hostnames: {}".format(args.hosts))
     # cmd = str.join(' ',(fcmd, fflag, fpath, fupdate, fhostsFile, fhosts, froles, fvalidate, fident))
     cmd = str.join(' ',("riaps_fab",ident,hosts,hostFile,"riaps.updateNodeKey",keep_password))
-    bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}.old')
+    # bash(f'ssh-add {vm_keys_dir}/{vm_privateKey}.old')
     openKeyPerms()
     bash(cmd)
     closeKeyPerms()
-    bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
+    # bash(f'ssh-add -d {vm_keys_dir}/{vm_publicKey}.old')
     print("Rekeyed remote RIAPS nodes with development machine keys and certificates.")
     
     # Remove id_rsa.key (a copy of id_rsa) from VM no longer needed
