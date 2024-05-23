@@ -19,7 +19,7 @@ apparmor_monkeys_install() {
     TMP=`mktemp -d`
     git clone https://github.com/RIAPS/apparmor_monkeys.git $TMP/apparmor_monkeys
     cd $TMP/apparmor_monkeys
-    sudo python3 setup.py install
+    sudo pip3 install .
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed apparmor_monkeys"
@@ -31,8 +31,8 @@ pyzmq_install(){
     git clone https://github.com/zeromq/pyzmq.git $TMP/pyzmq
     cd $TMP/pyzmq
     git checkout v25.1.2
-    ZMQ_DRAFT_API=1 sudo -E pip install -v --no-binary pyzmq --pre pyzmq
-   cd $PREVIOUS_PWD
+    ZMQ_DRAFT_API=1 sudo -E pip3 install -v --no-cache-dir .
+    cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed pyzmq"
 }
@@ -85,7 +85,7 @@ prctl_install() {
     git clone https://github.com/RIAPS/python-prctl.git $TMP/python-prctl
     cd $TMP/python-prctl/
     git checkout feature-ambient
-    sudo python3 setup.py install
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf $TMP
     echo ">>>>> installed prctl"
@@ -136,7 +136,7 @@ pip3_3rd_party_installs(){
     fi
 
     pip3 install 'paramiko==3.4.0' 'cryptography==3.4.8' --verbose
-    pip3 install 'fabric2==3.2.2' --verbose
+    pip3 install 'fabric2==3.2.2' 'numpy==1.26.4' --verbose
     echo ">>>>> installed pip3 packages"
 }
 

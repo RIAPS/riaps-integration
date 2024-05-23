@@ -44,7 +44,8 @@ zyre_czmq_prereq_install() {
 # Removing for Ubuntu 18.04, in case it exists in the original image.
 # For Ubuntu 22.04, paramiko needs bcrypt which needs rustc and cargo to install
 security_pkg_install() {
-    sudo apt-get install apparmor-utils -y
+    sudo apt-get install apparmor apparmor-profiles apparmor-profiles-extra apparmor-utils -y
+    sudo apt-get install sudo apt-get install openssl openssh-server -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
     elif [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
@@ -70,7 +71,7 @@ msgpack_install(){
 #    libreadline-dev is installed on BBB and RPi, but not preinstalled on nano
 opendht_prereqs_install() {
     sudo apt-get install nettle-dev libasio-dev libargon2-0-dev libreadline-dev -y
-    sudo apt-get install libhttp-parser-dev libjsoncpp-dev libssl-dev -y
+    sudo apt-get install libhttp-parser-dev libjsoncpp-dev libssl-dev libncurses5-dev -y
 
     # run liblinks script to link gnutls and msgppack for BBB only (fails for RPi)
     if [ $NODE_ARCH = "armhf" ]; then

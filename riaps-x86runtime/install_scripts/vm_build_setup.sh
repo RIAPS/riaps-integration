@@ -86,7 +86,7 @@ add_cross_compile_buildtools(){
 
 # Install tools needed to build external third party tools needed for RIAPS
 cmake_func() {
-    sudo apt-get install cmake -y
+    sudo apt-get install cmake bison -y
     sudo apt-get install byacc flex libtool libtool-bin -y
     sudo apt-get install autoconf autogen -y
     sudo apt-get install libreadline-dev -y
@@ -100,6 +100,7 @@ cmake_func() {
 python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
+    sudo apt-get install python3-pkgconfig -y
     if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
         sudo apt-get install python3.10-venv -y
     else

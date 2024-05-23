@@ -7,7 +7,7 @@ utils_install() {
     sudo apt-get install htop vim tmux -y
     sudo apt-get install openssl openssh-server -y
     sudo apt-get install mininet -y
-    sudo apt-get install net-tools -y
+    sudo apt-get install net-tools ifupdown iptables -y
     sudo apt-get install zerofree -y
     # make sure date is correct
     sudo apt-get install rdate -y

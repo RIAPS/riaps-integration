@@ -336,7 +336,6 @@ endif()
 
 
 #libsoc
-
 if(${arch} STREQUAL "amd64")
   externalproject_add(libsoc-${arch}
                     GIT_REPOSITORY "https://github.com/jackmitch/libsoc.git"
@@ -362,4 +361,18 @@ elseif(${arch} STREQUAL "armhf")
                    )
 # No RaspberryPi 4 board yet in libsoc
 #elseif(${arch} STREQUAL "arm64")
+endif()
+
+# libply - only build for amd64
+if(${arch} STREQUAL "amd64")
+  externalproject_add(libply-${arch}
+                    GIT_REPOSITORY "https://github.com/wkz/ply.git"
+                    GIT_TAG "2.3.0"
+                    SOURCE_DIR "/tmp/3rdparty/libply-${arch}"
+                    BUILD_IN_SOURCE 1
+                    UPDATE_COMMAND "./autogen.sh"
+                    CONFIGURE_COMMAND ./configure
+                    BUILD_COMMAND make ${MAKE_JOB_FLAGS}
+                    INSTALL_COMMAND sudo make install
+                    )
 endif()

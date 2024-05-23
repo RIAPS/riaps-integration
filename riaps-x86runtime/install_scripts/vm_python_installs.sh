@@ -7,7 +7,7 @@ apparmor_monkeys_install(){
     PREVIOUS_PWD=$PWD
     git clone https://github.com/RIAPS/apparmor_monkeys.git /tmp/3rdparty/apparmor_monkeys
     cd /tmp/3rdparty/apparmor_monkeys
-    python3 setup.py install
+    sudo pip3 install .
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/apparmor_monkeys
     echo ">>>>> installed apparmor_monkeys"
@@ -19,7 +19,7 @@ pyzmq_install(){
     git clone https://github.com/zeromq/pyzmq.git
     cd /tmp/3rdparty/pyzmq
     git checkout v25.1.2
-    ZMQ_DRAFT_API=1 sudo -E pip install -v --no-binary pyzmq --pre pyzmq
+    ZMQ_DRAFT_API=1 sudo -E pip3 install  -v --no-cache-dir .
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/pyzmq
     echo ">>>>> installed pyzmq"
@@ -71,7 +71,7 @@ prctl_install(){
     git clone https://github.com/RIAPS/python-prctl.git /tmp/3rdparty/python-prctl
     cd /tmp/3rdparty/python-prctl
     git checkout feature-ambient
-    sudo python3 setup.py install
+    sudo pip3 install . --verbose
     cd $PREVIOUS_PWD
     sudo rm -rf /tmp/3rdparty/python-prctl
 
@@ -123,7 +123,8 @@ cython_install() {
 pip3_3rd_party_installs(){
     pip3 install 'redis==5.0.1' 'hiredis==2.3.2' --verbose
     pip3 install 'pydevd==2.9.6' 'netifaces2==0.0.19' --verbose
-    pip3 install 'bcrypt==4.0.1' 'paramiko==3.4.0' 'cryptography==3.4.8' 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
+    pip3 install 'bcrypt==4.0.1' 'paramiko==3.4.0' 'cryptography==3.4.8' --verbose
+    pip3 install 'cgroups==0.1.0' 'cgroupspy==0.2.2' --verbose
     pip3 install 'fabric2==3.2.2' 'pyroute2==0.7.9' 'pyserial==3.5' --verbose
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose

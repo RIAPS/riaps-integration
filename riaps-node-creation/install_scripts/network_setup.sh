@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-network_install() {
-    sudo apt-get install net-tools -y
-    echo ">>>>> installed utils"
-}
-
 # net-tools is already installed on some architectures.  It is installed here to make sure it is available.
 setup_network() {
-    sudo apt-get install net-tools -y
+    sudo apt-get install net-tools ifupdown -y
     echo ">>>>> replacing network/interfaces with network/interfaces-riaps"
     echo ">>>>> copying old network/interfaces to network/interfaces.preriaps"
     touch /etc/network/interfaces
