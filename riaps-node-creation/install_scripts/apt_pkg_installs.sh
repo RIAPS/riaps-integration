@@ -48,7 +48,7 @@ security_pkg_install() {
     sudo apt-get install openssl openssh-server -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
-    elif [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
+    elif [ $LINUX_VERSION_INSTALL = "22.04" ] || [ $LINUX_VERSION_INSTALL = "12" ]; then
         sudo apt-get install rustc cargo -y
     fi
     echo ">>>>> security packages setup"

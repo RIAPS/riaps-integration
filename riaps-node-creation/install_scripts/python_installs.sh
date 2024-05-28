@@ -128,7 +128,7 @@ pip3_3rd_party_installs(){
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
     pip3 install 'gpiod==1.5.4' 'spdlog==2.0.6' --verbose
 
-    if [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
+    if [ $LINUX_VERSION_INSTALL = "22.04" ] || [ $LINUX_VERSION_INSTALL = "12" ]; then
         pip3 install 'psutil==5.9.0' --verbose
     fi
     if [ $LINUX_VERSION_INSTALL = "12" ]; then
