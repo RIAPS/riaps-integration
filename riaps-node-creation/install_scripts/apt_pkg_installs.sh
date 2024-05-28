@@ -45,7 +45,7 @@ zyre_czmq_prereq_install() {
 # For Ubuntu 22.04, paramiko needs bcrypt which needs rustc and cargo to install
 security_pkg_install() {
     sudo apt-get install apparmor apparmor-profiles apparmor-profiles-extra apparmor-utils -y
-    sudo apt-get install sudo apt-get install openssl openssh-server -y
+    sudo apt-get install openssl openssh-server -y
     if [ $LINUX_VERSION_INSTALL = "18.04" ]; then
         sudo apt-get remove python3-crypto python3-keyrings.alt -y
     elif [ $LINUX_VERSION_INSTALL = "22.04" || $LINUX_VERSION_INSTALL = "12" ]; then
