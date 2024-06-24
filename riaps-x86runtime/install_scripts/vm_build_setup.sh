@@ -158,19 +158,20 @@ config_gcc() {
     elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
         sudo apt-get install gcc-9 g++-9 -y
     elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-        sudo apt-get install gcc-10 g++-11 -y
+        sudo apt-get install gcc-11 g++-11 -y
     fi
 
     # Cross compile architectures
-    for c_arch in ${ARCHS_CROSS[@]}; do
-        if [ $LINUX_VERSION_INSTALL = "18.04"]; then
-            sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
-        elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
-            sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
-        elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
-            sudo apt-get install gcc-11:$c_arch g++-11:$c_arch -y
-        fi
-    done
+    # MM TODO:  This step (in 22.04) removes cross build tools, not sure this is still needed
+    #for c_arch in ${ARCHS_CROSS[@]}; do
+    #    if [ $LINUX_VERSION_INSTALL = "18.04"]; then
+    #        sudo apt-get install gcc-7:$c_arch g++-7:$c_arch -y
+    #    elif [ $LINUX_VERSION_INSTALL = "20.04" ]; then
+    #        sudo apt-get install gcc-9:$c_arch g++-9:$c_arch -y
+    #    elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+    #        sudo apt-get install gcc-11:$c_arch g++-11:$c_arch -y
+    #    fi
+    #done
 
     for c_arch_tool in ${CROSS_TOOLCHAIN_LOC[@]}; do
         if [ $LINUX_VERSION_INSTALL = "18.04"]; then

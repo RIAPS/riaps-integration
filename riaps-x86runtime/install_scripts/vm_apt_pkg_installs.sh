@@ -11,6 +11,7 @@ boost_install() {
 
 # Install nethogs pre-requisites and build with the cmake file
 # Assumes libncurses6  is already installed, libncurses5-dev required by nethogs for building
+# MM TODO:  libncurses6 is install in 22.04 and the dev package is libncurses-dev
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
@@ -26,6 +27,9 @@ zmq_draft_apt_install() {
     sudo echo "deb [signed-by=/usr/share/keyrings/zeromq-archive-keyring.gpg] http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-draft/xUbuntu_22.04/ ./" >> /etc/apt/sources.list.d/zeromq.list
     sudo apt-get update
     sudo apt-get install libzmq5 libzmq3-dev -y
+    for c_arch in ${ARCHS_CROSS[@]}; do
+        sudo apt-get install libzmq5:$c_arch -y
+    done
     echo ">>>>> installed libzmq with draft APIs"
 }
 
@@ -38,8 +42,8 @@ zyre_czmq_prereq_install() {
     # MM TODO: ran into an issue with armhf version of libcurl4-gnutls-dev, conflicts with host version (install fails)
     #          Currently not cross compiling the external libraries, so for now this is not an issue
     for c_arch in ${ARCHS_CROSS[@]}; do
-        sudo apt-get install libsystemd-dev:$c_arch uuid-dev:$c_arch liblz4-dev:$c_arch -y
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
+        sudo apt-get install libsystemd-dev:$c_arch uuid-dev:$c_arch liblz4-dev:$c_arch -y
         #sudo apt-get install libcurl4-gnutls-dev:$c_arch -y
     done
 
