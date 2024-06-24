@@ -127,6 +127,7 @@ pip3_3rd_party_installs(){
     pip3 install 'pybind11==2.11.1' 'toml==0.10.2' 'pycryptodomex==3.19.0' --verbose
     pip3 install 'rpyc==5.3.1' 'parse==1.19.1' 'butter==0.13.1' --verbose
     pip3 install 'gpiod==1.5.4' 'spdlog==2.0.6' --verbose
+    pip3 install 'filelock==3.15.4' --verbose
 
     if [ $LINUX_VERSION_INSTALL = "22.04" ] || [ $LINUX_VERSION_INSTALL = "12" ]; then
         pip3 install 'psutil==5.9.0' --verbose
@@ -136,7 +137,7 @@ pip3_3rd_party_installs(){
     fi
 
     pip3 install 'paramiko==3.4.0' 'cryptography==3.4.8' --verbose
-    pip3 install 'fabric2==3.2.2' 'numpy==1.26.4' --verbose
+    pip3 install 'fabric==3.2.2' 'numpy==1.26.4' --verbose
     echo ">>>>> installed pip3 packages"
 }
 
