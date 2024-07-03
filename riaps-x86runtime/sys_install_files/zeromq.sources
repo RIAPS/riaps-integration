@@ -1,0 +1,6 @@
+Types: deb
+URIs: http://download.opensuse.org/repositories/network:/messaging:/zeromq:/git-draft/xUbuntu_24.04/
+Suites: noble noble-updates noble-backports
+Components: main restricted universe multiverse
+Architectures: amd64
+Signed-By: /usr/share/keyrings/zeromq-archive-keyring.gpg

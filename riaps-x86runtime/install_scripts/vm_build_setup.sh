@@ -17,7 +17,7 @@ cross_setup() {
 
     sudo apt-get update
     echo ">>>>> packages update complete for multiarch"
-    sudo apt-get install gdb-multiarch build-essential -y
+    sudo apt-get install gdb-multiarch build-essential binutils-multiarch -y
     add_cross_compile_buildtools
     echo ">>>>> setup multi-arch capabilities complete"
 }
@@ -52,6 +52,14 @@ add_host_arch_apt_repos() {
 
     sudo add-apt-repository -r "deb http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse" -y
     sudo add-apt-repository -n "deb [arch=$HOST_ARCH] http://security.ubuntu.com/ubuntu $CURRENT_PACKAGE_REPO-security multiverse" -y
+}
+
+add_host_arch_apt_repos_deb822(){
+    # Move preconfigured ubuntu.sources file to system (/etc/apt/sources.list.d/ubuntu.sources)
+    sudo cp /etc/apt/sources.list.d/ubuntu.sources ubuntu.sources.old
+    sudo cp vm_ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
+    sudo systemctl daemon-reload
+    sudo apt-get update
 }
 
 
@@ -101,7 +109,9 @@ python_install() {
     sudo apt-get install python3-dev python3-setuptools -y
     sudo apt-get install python3-pip python-is-python3 -y
     sudo apt-get install python3-pkgconfig -y
-    if [ $LINUX_VERSION_INSTALL = "22.04" ]; then
+    if [ $LINUX_VERSION_INSTALL = "24.04" ]; then
+        sudo apt-get install python3.12-venv -y
+    elif [ $LINUX_VERSION_INSTALL = "22.04" ]; then
         sudo apt-get install python3.10-venv -y
     else
         sudo apt-get install python3.8-venv -y
@@ -109,7 +119,8 @@ python_install() {
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libpython3-dev:$c_arch -y
     done
-    sudo pip3 install --upgrade pip
+    #MM TODO: adding --break-system-packages does not work here, don't upgrade for now
+    #sudo pip3 install --upgrade pip
     echo ">>>>> installed python3"
 }
 

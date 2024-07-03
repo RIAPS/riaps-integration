@@ -7,7 +7,7 @@ apparmor_monkeys_install(){
     PREVIOUS_PWD=$PWD
     git clone https://github.com/RIAPS/apparmor_monkeys.git /tmp/3rdparty/apparmor_monkeys
     cd /tmp/3rdparty/apparmor_monkeys
-    sudo pip3 install .
+    sudo pip3 install --break-system-packages .
     cd $PREVIOUS_PWD
     rm -rf /tmp/3rdparty/apparmor_monkeys
     echo ">>>>> installed apparmor_monkeys"
@@ -90,7 +90,7 @@ py_lmdb_install() {
     git clone https://github.com/jnwatson/py-lmdb.git /tmp/3rdparty/lmdb
     cd /tmp/3rdparty/lmdb
     git checkout py-lmdb_1.4.1
-    sudo -E pip3 install . --verbose 
+    sudo -E pip3 install --break-system-packages . --verbose 
     cd $PREVIOUS_PWD
     sudo rm -rf /tmp/3rdparty/lmdb
     echo ">>>>> installed lmdb"
@@ -110,7 +110,7 @@ spdlog_python_install() {
 }
 
 cython_install() {
-    pip3 install Cython --verbose
+    pip3 install --break-system-packages Cython --verbose
     echo ">>>>> installed cython"
 }
 

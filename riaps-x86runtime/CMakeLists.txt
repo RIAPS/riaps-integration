@@ -40,7 +40,7 @@ set (CMAKE_C_FLAGS "-std=c99")
 if(${arch} STREQUAL "amd64")
   externalproject_add(capnproto-${arch}
                     GIT_REPOSITORY "https://github.com/capnproto/capnproto"
-                    GIT_TAG "v1.0.1.1"
+                    GIT_TAG "v1.0.2"
                     SOURCE_DIR "/tmp/3rdparty/capnproto-${arch}"
                     BUILD_IN_SOURCE 1
                     UPDATE_COMMAND autoreconf -i c++
@@ -52,7 +52,7 @@ elseif(${arch} STREQUAL "armhf")
   externalproject_add(capnproto-${arch}
                       #DEPENDS capnproto-amd64
                       GIT_REPOSITORY "https://github.com/capnproto/capnproto"
-                      GIT_TAG "v1.0.1.1"
+                      GIT_TAG "v1.0.2"
                       SOURCE_DIR "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE 1
                       UPDATE_COMMAND autoreconf -i c++
@@ -65,7 +65,7 @@ elseif(${arch} STREQUAL "arm64")
   externalproject_add(capnproto-${arch}
                       #DEPENDS capnproto-amd64
                       GIT_REPOSITORY "https://github.com/capnproto/capnproto"
-                      GIT_TAG "v1.0.1.1"
+                      GIT_TAG "v1.0.2"
                       SOURCE_DIR "/tmp/3rdparty/capnproto-${arch}"
                       BUILD_IN_SOURCE 1
                       UPDATE_COMMAND autoreconf -i c++

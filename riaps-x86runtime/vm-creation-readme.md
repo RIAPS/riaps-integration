@@ -4,10 +4,10 @@ This is information on how the preloaded RIAPS virtual machine was created.
 
 1) Download the latest version of Xubuntu:
 ```
-http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/22.04/release/
-version 22.04.3 was used for the download image
+http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/24.04/release/
+version 24.04 was used for the download image
 
-Kernel:  6.2.0-31-generic 
+Kernel:  6.8.0-36-generic 
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -75,8 +75,8 @@ The last line provides feedback that the quota is setup.
 
     ```
     LINUX_DISTRO="ubuntu"
-    CURRENT_PACKAGE_REPO="jammy"
-    LINUX_VERSION_INSTALL="22.04"
+    CURRENT_PACKAGE_REPO="noble"
+    LINUX_VERSION_INSTALL="24.04"
     ```
 
     b) Indicate VM Host information, example below

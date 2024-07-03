@@ -71,7 +71,6 @@ cython_install
 externals_cmake_install
 pycapnp_install
 apparmor_monkeys_install
-redis_install
 py_lmdb_install
 pip3_3rd_party_installs
 graphviz_install

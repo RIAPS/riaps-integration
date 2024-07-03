@@ -25,7 +25,7 @@ rm_snap_pkg() {
 
 # Package needed for eclipse
 java_func () {
-    sudo apt-get install openjdk-11-jre-headless -y
+    sudo apt-get install openjdk-21-jre-headless -y
     echo ">>>>> installed java"
 }
 
