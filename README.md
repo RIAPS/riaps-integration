@@ -9,11 +9,11 @@ Power application developers can quickly setup a distributed environment by util
 
 ### 1) RIAPS Development Host Setup Instructions
 
-The RIAPS development host environment is based on a virtual machine setup using Ubuntu 20.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
+The RIAPS development host environment is based on a virtual machine setup using Ubuntu 22.04. Setting up the RIAPS host development environment (Linux VM) can be found in [Host Environment Setup Page](riaps-x86runtime/README.md).
 
 ### 2) RIAPS Target Node Setup Instructions
 
-The main RIAPS target node environments used for this project has been [TI Beaglebone Black](http://beagleboard.org/black) and [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) . Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
+The main RIAPS target node environments used for this project has been [TI Beaglebone Black](http://beagleboard.org/black), [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/) and [TI AM64B starter kit](https://www.ti.com/tool/SK-AM64B). Instructions on how to create a RIAPS Node SD Card Image can be found in [RIAPS Node Runtime Setup Page](riaps-node-runtime/README.md).
 
 ### 3) Testing the RIAPS Platform Environment
 
@@ -27,4 +27,4 @@ The instructions and scripts provided were used to develop the base RIAPS SD Car
 
 ## Developing the Preloaded RIAPS Development Virtual Machine
 
-The instructions and scripts provided were used to develop the preloaded RIAPS virtual machine (.vmdk). This file is used when setting up a RIAPS host environment on a computing device.  The virtual machine includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide quick way for application developers to create RIAPS host environment.  Instructions for creating this virtual machine is located in [Preloaded RIAPS Virtual Machine Creation Page](riaps-x86runtime/vm-creation-readme.md).
+The instructions and scripts provided were used to develop the preloaded RIAPS virtual machine (.vmdk). These files are used when setting up a RIAPS host environment on a computing device.  The virtual machine includes basic third party packages and configures the environment for the RIAPS platform. The intent is to provide quick way for application developers to create RIAPS host environment.  Instructions for creating this virtual machine is located in [Preloaded RIAPS Virtual Machine Creation Page](riaps-x86runtime/vm-creation-readme.md).

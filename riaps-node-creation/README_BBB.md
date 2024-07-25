@@ -11,12 +11,12 @@ This work should be done on a Linux machine or VM. We are starting with a pre-co
 1) Download a complete pre-configured image (Ubuntu 20.04.5) onto the BBB SD Card - http://elinux.org/BeagleBoardUbuntu (Instructions - start with Method 1).  Below is an example of a version used previously, beware that the available versions are updated monthly and only 3 are kept in this location.  Choose the latest version available.
 
 ```
-wget https://rcn-ee.com/rootfs/ubuntu-armhf-focal-minimal/2023-01-09/ubuntu-20.04.5-console-armhf-2023-01-09.tar.xz
+wget https://rcn-ee.com/rootfs/ubuntu-armhf-22.04-console-v5.10-ti/<date>/am335x-ubuntu-22.04.3-console-armhf-<date>-4gb.img.xz
 ```
 
-2) Unpack image and change into the directory (unxz file, then tar xf)
+1) Unpack image and change into the directory (unxz file)
 
-3) Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
+2) Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
 
 ```
 sudo ./setup_sdcard.sh --probe-mmc

@@ -96,19 +96,6 @@ py_lmdb_install() {
     echo ">>>>> installed lmdb"
 }
 
-# Install spdlog python logger
-spdlog_python_install() {
-    PREVIOUS_PWD=$PWD
-    TMP=`mktemp -d`
-    git clone https://github.com/RIAPS/spdlog-python.git $TMP/spdlog-python
-    cd $TMP/spdlog-python
-    git clone -b v1.10.0 --depth 1 https://github.com/gabime/spdlog.git
-    sudo python3 setup.py install
-    cd $PREVIOUS_PWD
-    sudo rm -rf $TMP
-    echo ">>>>> installed spdlog"
-}
-
 cython_install() {
     pip3 install Cython --verbose
     echo ">>>>> installed cython"
@@ -117,8 +104,6 @@ cython_install() {
 # Install other required packages
 # Ubuntu 20.04 comes with PyYAML==5.3.1 and psutil==5.5.1
 # Ubuntu 22.04 comes with netinterfaces==0.11.0, cryptography==3.4.8, PyYAML==5.4.1 and psutil==5.9.0
-# MM TODO: consider adding 'requests==2.31.0' - seeing conflict with urllib3 version requirements between this and influxdb-client,
-#          not sure which packages is asking for request at version 2.22.0 right now (investigate later)
 # Since python installs needing Cython typically calls for the latest version, do not specify a version for this package
 pip3_3rd_party_installs(){
     pip3 install 'redis==5.0.1' 'hiredis==2.3.2' --verbose

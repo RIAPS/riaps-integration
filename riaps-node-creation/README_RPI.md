@@ -16,7 +16,7 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.15.0-1034-raspi
+Kernel:    5.15.0-xxxx-raspi
 ```
 
 You will be asked to create a new password and will need ssh again into the device.
@@ -74,7 +74,7 @@ cd riaps-node-creation
 
 9) Remove install files from /home/ubuntu
 
-10) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+10) Optional: Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 11) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 

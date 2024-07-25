@@ -4,9 +4,9 @@
 
 The first three steps are required to establish a host environment that can communicate with the system of remote nodes.  The fourth step is encouraged to create a setup that is secured to a specific RIAPS Virtual Machine with unique security keys.
 
-### <a name="connect-remotes">1) Importing the RIAPS Virtual Machine</a>
+### <a name="import-vm">1) Importing the RIAPS Virtual Machine</a>
 
-A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
+A virtual machine running Xubuntu 22.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
 1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_[version].vdi.xz) and unxz it.  Choose the latest release Development Host VM image on https://riaps.isis.vanderbilt.edu/rdownloads.html.  This is an Virtual Machine Disk (.vdi) that can be attached to VirtualBox VM tool.
 

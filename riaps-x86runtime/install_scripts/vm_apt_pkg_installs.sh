@@ -11,7 +11,7 @@ boost_install() {
 
 # Install nethogs pre-requisites and build with the cmake file
 # Assumes libncurses6  is already installed, libncurses5-dev required by nethogs for building
-# MM TODO:  libncurses6 is install in 22.04 and the dev package is libncurses-dev
+# Note: libncurses5-dev is transitioning to libncurses-dev in the next release
 nethogs_prereq_install() {
     sudo apt-get install libpcap-dev -y
     sudo apt-get install libncurses5-dev -y
@@ -39,7 +39,7 @@ zmq_draft_apt_install() {
 zyre_czmq_prereq_install() {
     sudo apt-get install libsystemd-dev uuid-dev liblz4-dev -y
     sudo apt-get install pkg-config libcurl4-gnutls-dev -y
-    # MM TODO: ran into an issue with armhf version of libcurl4-gnutls-dev, conflicts with host version (install fails)
+    # Note: ran into an issue with armhf version of libcurl4-gnutls-dev, conflicts with host version (install fails)
     #          Currently not cross compiling the external libraries, so for now this is not an issue
     for c_arch in ${ARCHS_CROSS[@]}; do
         sudo apt-get install libuuid1:$c_arch liblz4-1:$c_arch -y
@@ -132,13 +132,6 @@ riaps_prereq() {
     ./riaps_install_vm.sh
     sudo apt autoremove
     echo ">>>>> riaps prerequisites installed"
-}
-
-# Remove the software deployment and package management system called "Snap"
-rm_snap_pkg() {
-    sudo apt-get remove snapd -y
-    sudo apt-get purge snapd -y
-    echo ">>>>> snap package manager removed"
 }
 
 # Install redis

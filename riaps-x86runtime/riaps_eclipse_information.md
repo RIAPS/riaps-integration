@@ -1,6 +1,6 @@
 # RIAPS Eclipse Setup and Plugins
 
-The RIAPS Virtual Machine is configured with an Eclipse IDE for C/C++ Developers - 2020-06.
+The RIAPS Virtual Machine is configured with an Eclipse IDE for C/C++ Developers - 2024-06.
 
 Configuration used to setup the RIAPS configured tool set is listed below:
 

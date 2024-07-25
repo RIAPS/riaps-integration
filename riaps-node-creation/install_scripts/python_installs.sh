@@ -1,19 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Install spdlog python logger
-spdlog_python_install() {
-    PREVIOUS_PWD=$PWD
-    TMP=`mktemp -d`
-    git clone https://github.com/RIAPS/spdlog-python.git $TMP/spdlog-python
-    cd $TMP/spdlog-python
-    git clone -b v1.10.0 --depth 1 https://github.com/gabime/spdlog.git
-    sudo python3 setup.py install
-    cd $PREVIOUS_PWD
-    sudo rm -rf $TMP
-    echo ">>>>> installed spdlog"
-}
-
 apparmor_monkeys_install() {
     PREVIOUS_PWD=$PWD
     TMP=`mktemp -d`
@@ -142,7 +129,7 @@ pip3_3rd_party_installs(){
 }
 
 # Debian 12 requires non-debian managed pip packages to be installed in a virtual environment
-
+# RIAPS is intentionally `--breaking-system-packages` for pip installs to deal with this change.
 setup_venv() {
     sudo apt-get install python3.11-venv
     python3 -m venv riapsenv --system-site-packages

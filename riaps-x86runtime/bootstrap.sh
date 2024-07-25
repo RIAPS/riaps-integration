@@ -87,6 +87,6 @@ chrome_install
 #node_red_shortcut
 rm -rf /tmp/3rdparty
 add_set_tests
-#riaps_prereq - DEV: currently working with a non-apt release, no repo to add yet
+riaps_prereq
 create_riaps_version_file
 set_UTC_timezone # in case VM created with a different timezone, helpful for .pem cert creation in secure_keys script
