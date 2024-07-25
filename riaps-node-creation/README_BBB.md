@@ -14,9 +14,9 @@ This work should be done on a Linux machine or VM. We are starting with a pre-co
 wget https://rcn-ee.com/rootfs/ubuntu-armhf-22.04-console-v5.10-ti/<date>/am335x-ubuntu-22.04.3-console-armhf-<date>-4gb.img.xz
 ```
 
-1) Unpack image and change into the directory (unxz file)
+2) Unpack image and change into the directory (unxz file)
 
-2) Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
+3) Locate the SD Card on the Linux machine, looking for the appropriate /dev/sdX (i.e. /dev/sdb)
 
 ```
 sudo ./setup_sdcard.sh --probe-mmc
