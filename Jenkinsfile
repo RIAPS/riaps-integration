@@ -25,10 +25,9 @@ pipeline {
         sh '''#!/bin/bash
           source version.sh
           mkdir riaps-release
-          mkdir riaps-release/$distro
-          cp riaps-pycom.deb riaps-pycom-dev.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/$distro/.
-          echo "pycomversion=$pycomversion" >> riaps-release/$distro/manifest.txt
-          echo "timesyncversion=$timesyncversion" >> riaps-release/$distro/manifest.txt
+          cp riaps-pycom.deb riaps-pycom-dev.deb riaps-timesync-amd64.deb riaps-timesync-armhf.deb riaps-timesync-arm64.deb riaps-release/.
+          echo "pycomversion=$pycomversion" >> riaps-release/manifest.txt
+          echo "timesyncversion=$timesyncversion" >> riaps-release/manifest.txt
           tar cvzf riaps-release.tar.gz riaps-release
           cp version.sh riaps-x86runtime/.
           tar cvzf riaps-x86runtime.tar.gz riaps-x86runtime

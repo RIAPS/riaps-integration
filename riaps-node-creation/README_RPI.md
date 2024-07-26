@@ -12,14 +12,12 @@ These are instructions on how the Raspberry Pi (RPi) 4 Base image was created (a
 
 ## Installation of RIAPS Base Configuration on Pre-configured RPi
 
-1) With the SD Card installed in the RPi, log into using ssh with user account being 'ubuntu'.  
+1) With the SD Card installed in the RPi, log into using ssh with user account being 'ubuntu'. You will be asked to create a new password and will need to ssh again into the device.
 ```
 Username:  ubuntu
 Password:  ubuntu
-Kernel:    5.15.0-1034-raspi
+Kernel:    5.15.0-xxxx-raspi
 ```
-
-You will be asked to create a new password and will need ssh again into the device.
 
 2) Download and compress the [riaps-node-creation folder](https://github.com/RIAPS/riaps-integration/tree/master/riaps-node-creation) and transfer it to the RPi.
 
@@ -74,7 +72,7 @@ cd riaps-node-creation
 
 9) Remove install files from /home/ubuntu
 
-10) Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
+10) Optional: Place the [RIAPS Install script](https://github.com/RIAPS/riaps-integration/blob/master/riaps-node-runtime/riaps_install_node.sh) in /home/riaps/ to allow updating of the RIAPS platform by script. Change the owner (sudo chown) to 'riaps:riaps' and mode to add execution (sudo chmod +x).
 
 11) Optional:  Remove the swapfile.  If you want to compile large third party libraries on this platform later, leave the swapfile (it does cost file space).
 
@@ -111,7 +109,7 @@ exit
 
     c) For 22.04 add 'systemd.unified_cgroup_hierarchy=0' to the command line to default to cgroups v1
 
-    c) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
+    d) After rebooting, use "grep mem /proc/cgroups" to show that cgroup memory is enabled (last number will be 1).
 
 16) Optional: Add SPI capability (which can be used for CAN communication)
 
@@ -122,7 +120,7 @@ exit
     dtoverlay=spi-bcm2835-overlay
 ```
 
-1)  Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
+17)  Optional: Turn off unattended package updates by editing /etc/apt/apt.conf.d/20auto-upgrades and set the "Unattended-Upgrade" to "0".
 
 ```
 APT::Periodic::Update-Package-Lists "1";

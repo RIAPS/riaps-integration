@@ -5,9 +5,9 @@ This is information on how the preloaded RIAPS virtual machine was created.
 1) Download the latest version of Xubuntu:
 ```
 http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/22.04/release/
-version 22.04.3 was used for the download image
+version 22.04.4 was used for the download image
 
-Kernel:  6.2.0-31-generic 
+Kernel:  6.5.0-44-generic 
 ```
 
 2) Create a virtual machines configured with the following settings:
@@ -29,7 +29,7 @@ Kernel:  6.2.0-31-generic
 
 3) Setup the Setting --> Network to have `Adapter` to have `Bridged Adapter` and configure with connection used to reach the router connected to the remote RIAPS nodes.
 
-4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-20.04.3-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
+4) On VirtualBox main window, select START and pick your MEDIA SOURCE. In your case, select the xubuntu-22.04.4-desktop-amd64.iso on your desktop.  Install Xubuntu.  After installation, hit return to reboot into the new installation.
 
 5) Create a `riapsadmin` user with password of `riapsadmin` and set computer name to `riaps-VirtualBox`.
    
@@ -145,7 +145,7 @@ sudo ./bootstrap.sh 2>&1 | tee install-vm.log
 
     d) Import riaps_projects using `General` --> `Existing Projects into Workspace`.
 
-    e) Configure Python (using `Advanced Auto-Config`) to utilize Python 3.8.
+    e) Configure Python (using `Advanced Auto-Config`) to utilize Python 3.10.
 
     f) Import riaps_launch_file using `Run/Debug` --> `Launch Configurations` to get riaps_ctrl and riaps_deplo.  Set these launches to display in External Tools Favorite list.  Make sure the "Build before launch" is not checked.
 

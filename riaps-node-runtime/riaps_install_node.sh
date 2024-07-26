@@ -24,7 +24,7 @@ HOST_ARCH="$(dpkg --print-architecture)"
 sudo rdate -n -4 time.nist.gov
 
 # make sure pip is up to date
-sudo pip3 install --upgrade pip
+sudo pip3 install --upgrade pip --break-system-packages
 
 # install RIAPS packages
 sudo apt-get update
