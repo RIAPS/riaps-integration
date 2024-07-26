@@ -22,10 +22,16 @@ import argparse
 import site
 import subprocess
 
-pycom_privateKey = 'id_rsa.key'
-pycom_publicKey = 'id_rsa.pub'
-pycom_cert = 'x509.pem'
-pycom_zmqCert = 'riaps-sys.cert'
+try:
+    from riaps.consts.defs import *
+except ImportError:
+    print("ERROR: riaps-pycom is not installed, or could not be imported. Fix and try again.")
+    exit(1)
+
+pycom_privateKey = const.ctrlPrivateKey
+pycom_publicKey = const.ctrlPublicKey
+pycom_cert = const.ctrlCertificate
+pycom_zmqCert = const.zmqCertificate
 pycom_keys_dir = '/etc/riaps'
 pycom_ln_dir = '/usr/local/riaps/keys'
 
@@ -175,6 +181,7 @@ if __name__ == '__main__':
     hostFile = ("--hostfile " + args.hostfile) if args.hostfile else ""
     ident = "-i "+ args.privateKeyPath \
                         if args.privateKeyPath and os.path.isfile(args.privateKeyPath) else ""
+    
     keep_password = '--keep-password' if args.passwd else ""
 
     # Make sure RIAPS nodes are available first

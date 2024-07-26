@@ -4,12 +4,6 @@ Connect development machine with remote nodes to allow initial communication (i.
 
 Created on August 31, 2023
 
-Arguments:
-    - ``fabcmd``:    fabric command desired
-
-    optional arguments:
-    - ``-H | --hosts hostnames``:  list of hostnames or IP addresses (comma separated)
-
 If specific hostnames are not given, the command will be called for all hosts
 listed in /usr/local/riaps/etc/riaps_hosts.conf
 
@@ -36,7 +30,7 @@ dest_filename = "/home/riaps/.ssh/authorized_keys"
 
 def bash(cmd):
     # print("=== "+cmd)
-    subprocess.run(shlex.split(cmd))
+    return subprocess.run(shlex.split(cmd))
 
 def getNetworkInterfaces():
     ipAddressList = []
@@ -217,8 +211,11 @@ def run(args=None):
 
         # Check if riaps_fab system check works for all nodes
         print((">>>>> Checking all connections..."))
-        bash("riaps_fab -v sys.check")
-        print(">>>>> If the above contains all remote nodes, then the remote nodes are now successfully communicating <<<<<")
+        res = bash("riaps_fab -v sys.check")
+        if res.returncode != 0:
+            print(">>>>> WARNING: Non-zero sys.check result! Look at above results for node status <<<<<")
+            return
+        print(">>>>> Ok <<<<<")
     else:
         if args.hosts:
             print(">>>>> Check provided hostnames (or IP addresses) <<<<<")
