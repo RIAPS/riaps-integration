@@ -4,9 +4,9 @@
 
 The first three steps are required to establish a host environment that can communicate with the system of remote nodes.  The fourth step is encouraged to create a setup that is secured to a specific RIAPS Virtual Machine with unique security keys.
 
-### <a name="connect-remotes">1) Importing the RIAPS Virtual Machine</a>
+### <a name="import-vm">1) Importing the RIAPS Virtual Machine</a>
 
-A virtual machine running Xubuntu 20.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
+A virtual machine running Xubuntu 22.04 is preloaded with a tested RIAPS host environment. It is setup with the RIAPS specific tools, eclipse development with example applications for experimentation, and multi-architecture cross compilation capability (amd64, armhf and aarch64).
 
 1) Download the exported RIAPS virtual machine appliance file (riaps_devbox_[version].vdi.xz) and unxz it.  Choose the latest release Development Host VM image on https://riaps.isis.vanderbilt.edu/rdownloads.html.  This is an Virtual Machine Disk (.vdi) that can be attached to VirtualBox VM tool.
 
@@ -60,127 +60,54 @@ In this configuration, the host machine is connected to the internet on some int
 
 You can now connected a simple, unmanaged network switch to your VM's bridged adapter with an ethernet cable, and any RIAPS nodes to the other ports on the switch. Windows will assign IP addresses from the 192.168.137.0/24 range to your RIAPS nodes and VM.
 
-
-### <a name="config-network">3) Configuring Environment for Local Network Setup</a>
-
-Setup the Network Interface to select the interface connected to the router where remote RIAPS nodes will be attached.  
-
-1) Determine the desired ethernet interface
-
-```
-ifconfig
-```   
-
-2) Edit the riaps configuration to enable that interface
-
-```
-sudo nano /etc/riaps/riaps.conf
-```   
-
-3) Make sure the NIC name matchs the desired ethernet interface name from 'ifconfig'
-
-```
-# NIC name
-# Typical VM interface
-#nic_name = eth0
-nic_name = enp0s8
-```
-
-> ***Note:  This is necessary on the first installation.  If you want to reset to the basic configuration, then delete the /etc/riaps.conf and /etc/riaps-log.conf and reinstall riaps-pycom.  Also, all files are linked such that pycom can still load these files from /usr/local/riaps/etc/, so no change in code is required.***
-
-4)  After changing the NIC name, restart the rpyc running in the background.
-
-```
-sudo systemctl restart riaps-rpyc-registry.service
-```
-
-### <a name="connect-remotes">4) Connect the VM to the Remote Nodes</a>
+### <a name="connect-remotes">3) Connect the VM to the Remote Nodes</a>
 
 To communicate with the remote nodes using tools like `riaps_fab`, the VM must be able to automatically log into each node using a ssh security key.  The remote nodes are not configured with security keys, so the connection needs to be established between the VM and the remote nodes.
 
 The remote nodes to connect can be identified in two different ways: 
 1) using the RIAPS host definition file (/etc/riaps/riaps-hosts.conf) or
-2) provide the list of nodes when running the connection script using the `-H <comma or space separated list of hostnames>`.  This option is good when adding new nodes to the setup.
+2) add a node when running the connection script using the `-H <hostname>` flag for each node. 
 
 > Note: It is helpful to setup the `/etc/riaps/riaps-hosts.conf` file since it is utilized in the next step when securing the system communications.
 
-The available remotes nodes and the associated hostnames can be determine by looking at the router interface to see the client names or `ssh` into each node to find the prompt name which indicates the `<username>@<hostname>`.  The hostnames used should include an addition of `.local` (i.e. riaps-xxxx.local) or can be an IP Address of the nodes. See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions and the `/etc/riaps/riaps-hosts.conf` file.
+The available remotes nodes and the associated hostnames can be determined by looking at the router interface to see the client names or `ssh` into each node to find the prompt name which indicates the `<username>@<hostname>`.  The hostnames used should include an addition of `.local` (i.e. riaps-xxxx.local) or can be an IP Address of the nodes. See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions and the `/etc/riaps/riaps-hosts.conf` file.
 
 The connection script (`connect_remote_nodes`) will connect to each remote node specified and will update the remote node security keys to match the VM setup. An example successful exchange is below using the `/etc/riaps/riaps-hosts.conf` file to define the remote nodes.  
 
 ```
-./connect_remote_nodes
-Nodes to connect: ['riaps-f898.local', 'riaps-f852.local']
->>>>> Connection between riaps-f898.local and controller has succeeded <<<<<
->>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
+./connect_remote_nodes 
+Nodes to connect: ['riaps-bcf6.local', 'riaps-22d9.local']
+>>>>> Connection between riaps-bcf6.local and controller has succeeded <<<<<
+>>>>> Connection between riaps-22d9.local and controller has succeeded <<<<<
 === riaps_fab sys.check
-=== fab -f /usr/local/lib/python3.8/dist-packages/riaps/fabfile/ sys.check     
-[riaps-f852.local] Executing task 'sys.check'
-[riaps-f898.local] Executing task 'sys.check'
-[riaps-VirtualBox.local] Executing task 'sys.check'
-[riaps-VirtualBox.local] hostname && uname -a
-riaps-VirtualBox
-Linux riaps-VirtualBox 5.15.0-69-generic #76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-[riaps-f852.local] hostname && uname -a
-riaps-f852
-Linux riaps-f852 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
-[riaps-f898.local] hostname && uname -a
-riaps-f898
-Linux riaps-f898 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
-
-Done.
+Linux riaps-22d9 5.10.168-ti-rt-r72 #1jammy SMP PREEMPT_RT Sat Sep 30 03:48:01 UTC 2023 armv7l armv7l armv7l GNU/Linux
+Linux riaps-bcf6 5.10.168-ti-rt-r72 #1jammy SMP PREEMPT_RT Sat Sep 30 03:48:01 UTC 2023 armv7l armv7l armv7l GNU/Linux
 >>>>> If a response exists from all remote nodes, then the remote nodes are now successfully communicating <<<<<
 ```
 
-To use the `-H <hostnames>` option, here is an example command.  Use of `""` around the host names are optional and the list can be separated by either a space or a comma.
+To use the `-H <hostname>` option, here is an example command.
 
 ```
-$ ./connect_remote_nodes -H "riaps-f852.local" "riaps-f898.local"
+$ ./connect_remote_nodes -H riaps-bcf6.local -H riaps-22d9.local
 ``````
 
-Once all the keys are setup successfully, a system check will be performed to make sure communication exists between all the remote hosts and the `/etc/riaps/riaps-hosts.conf` file is updated with the listed nodes.  If all the connections are not successful, then the `riaps-hosts.conf` file is not updated, even with the successful connections.  Here is a successful output is:
+Once all the keys are setup successfully, a system check will be performed to make sure communication exists between all the remote hosts and the `/etc/riaps/riaps-hosts.conf` file is updated with the listed nodes.  If all the connections are not successful, then the `riaps-hosts.conf` file is not updated, even with the successful connections. 
 
-```
-Nodes to connect: ['riaps-f852.local', 'riaps-f898.local']
->>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
->>>>> Connection between riaps-f898.local and controller has succeeded <<<<<
-=== sudo mv /home/riaps/riaps-hosts.conf /etc/riaps/riaps-hosts.conf
-=== sudo chown root:root /etc/riaps/riaps-hosts.conf
-=== sudo chmod 644 /etc/riaps/riaps-hosts.conf
-=== riaps_fab sys.check
-=== fab -f /usr/local/lib/python3.8/dist-packages/riaps/fabfile/ sys.check     
-[riaps-f852.local] Executing task 'sys.check'
-[riaps-f898.local] Executing task 'sys.check'
-[riaps-VirtualBox.local] Executing task 'sys.check'
-[riaps-VirtualBox.local] hostname && uname -a
-riaps-VirtualBox
-Linux riaps-VirtualBox 5.15.0-69-generic #76~20.04.1-Ubuntu SMP Mon Mar 20 15:54:19 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-[riaps-f852.local] hostname && uname -a
-riaps-f852
-Linux riaps-f852 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
-[riaps-f898.local] hostname && uname -a
-riaps-f898
-Linux riaps-f898 5.10.168-ti-r69 #1focal SMP PREEMPT Mon Aug 7 17:53:32 UTC 2023 armv7l armv7l armv7l GNU/Linux
-
-Done.
->>>>> If a response exists from all remote nodes, then the remote nodes are now successfully communicating <<<<<
-```
-
-Here is an example of an unsuccessful connections, where the `192.168.1.109` node is not available:
+Here is an example of an unsuccessful connections, where the `riaps-0e8a.local` node is not available:
 ```
 ./connect_remote_nodes
-Nodes to connect: ['riaps-f852.local', '192.168.1.109']
->>>>> Connection between riaps-f852.local and controller has succeeded <<<<<
->>>>> Connection failed between 192.168.1.109 and controller <<<<<
-An error occurred: [Errno None] Unable to connect to port 22 on 192.168.1.109
->>>>> Check provided hostnames (or IP addresses) <<<<<
->>>>> Also check that nodes which failed connections are running and network connected <<<<<
->>>>> No nodes were added to the /etc/riaps/riaps-hosts.conf file <<<<<
+Nodes to connect: ['riaps-f852.local', '192.168.1.109'] 
+Nodes to connect: ['riaps-22d9.local', 'riaps-bcf6.local', 'riaps-0e8a.local']
+>>>>> Connection between riaps-22d9.local and controller has succeeded <<<<<
+>>>>> Connection between riaps-bcf6.local and controller has succeeded <<<<<
+>>>>> Connection failed between riaps-0e8a.local and controller <<<<<
+An error occurred: [Errno -2] Name or service not known
+>>>>> Check /etc/riaps/riaps-hosts.conf file for correct hostnames (or IP addresses) <<<<<
+>>>>> Also check nodes that failed connections are running and network connected <<<<<
 >>>>> Remote node connection failed <<<<<
 ```
 
-
-### <a name="install-riaps-nodes">5) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
+### <a name="install-riaps-nodes">4) Installing RIAPS Packages on the Remote RIAPS Nodes</a>
 
 The downloaded images for the remote nodes do not include the RIAPS packages.  Once the VM can successfully communication with all the remote nodes, `riaps_fab` can be used to install all the RIAPS packages.  There are two methods for installing the packages: using apt-get (to get the latest releases) or directly installing the .deb packages (used during development of the RIAPS platform).
 
@@ -193,24 +120,25 @@ If the remote nodes do not have internet access or a development package (not ye
   
 > Note: Depending on the number of remote nodes, the installation could take several minutes.  The script will indicate "Done" when the `riaps_fab` script has completed.  A `logs` folder will contain the results of the installation for each remote node and each package installed.  These can be referenced to debug any issues during the installation process.
 
-### <a name="secure-comm">6) Securing Communication Between the VM and Remote RIAPS Nodes</a>
+### <a name="secure-comm">5) Securing Communication Between the VM and Remote RIAPS Nodes</a>
 
-The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.
+The ssh keys preloaded on the virtual machine are public, and therefore **NOT SECURE**.  To generate a new set of keys and certificates and write them to your nodes, use the```secure_keys``` script found in the RIAPS home directory.
 
-> ***IMPORTANT:  Before running this script make sure ALL the remote RIAPS hosts are reachable by using a system check command: ```riaps_fab sys.check```.  If you are working only on the VM, do not use this script.  Make sure the VM hostname is listed as the control in the /etc/riaps/riaps-hosts.conf file so that it can be excluded when updating the remote keys. The VM is automatically be updated with this `secure_keys` script. If a node is not available when running this script, you can use the `-A` option to add the remote node. ***
+> ***IMPORTANT:  Before running this script make sure ALL the remote RIAPS hosts are reachable by using a system check command: ```riaps_fab sys.check```.  If you are not working with remote nodes, and only a VM node, you can skip using `secure_keys`.  ***
 
-Run this scripts using ```./secure_keys```, optionally add a ```-H <comma separated list of hostnames>``` or ```-f <absolute path to hostfile>```.  See documentation on using the [fabfile](https://github.com/RIAPS/riaps-pycom/tree/master/src/riaps/fabfile) to learn more about hostname definitions.
+```./secure_keys``` has two commands: `reset` and `add`.
+
+`reset` is used to generate new SSH keys on the VM, then use them to secure your RIAPS nodes. By default, `secure_keys` reads your hostfile (/etc/riaps/riaps-hosts.conf) and secures the nodes listed there. If you are securing a nodes that have been secured previously, you can pass a path to the prior SSH private key with the `-i` flag.
 
 >Suggestion:  Save your SSH keys in a secure spot for use in the future (if needed), preferably in a location outside the virtual machine.
 
-To add additional RIAPS Hosts to a system that has already been rekeyed, use ```-A <comma separated list of hostnames>``` when calling  ```secure_keys```.  This will set the new remote hosts up with the same keys and certificates as the current development system setup.
+`add` only secures new RIAPS nodes with your existing SSH keys. You can pass a hostnames of nodes to add with `-H <hostname>` for each one. This will set the new remote hosts up with the same keys and certificates as the current development system setup.
 
-To remove RIAPS Hosts from a system, it is suggested that you remove the desired hostname from the riaps-hosts.conf file and rekey the system again.  That way the removed host will no longer have a valid set of keys and certificates for the system.  
+By default, `secure_keys` will remove password-based access to your remote nodes. This can be overridden by passing `-p`.
 
->Note:  If a RIAPS host is moved to a new system that does not have access to the host's current ssh key pair or certificates, then it is best to reflash the host image with the released download image and either rekey the new system (if it is a fresh download) or add the host to the new system using the ```-A``` option.  
+To remove RIAPS Hosts from a system, it is suggested that you remove the desired hostname from the riaps-hosts.conf file and rekey the system again. That way the removed host will no longer have a valid set of keys and certificates for the system. 
 
-In addition to updating the security keys of the VM and remote nodes, this script will turn off password access to the remote nodes by default.  If you are using the system for application development and would like to maintain password access to each remote node, run the script as follows: ```./secure_keys -p``` 
-
+>Note:  If a RIAPS host is moved to a new system that does not have access to the host's current ssh key pair or certificates, then it is best to reflash the host image with the released download image and either rekey the new system (if it is a fresh download) or add the host to the new system using the ```add -H <hostname>``` option.  
 
 ## RIAPS Platform Update Process
 

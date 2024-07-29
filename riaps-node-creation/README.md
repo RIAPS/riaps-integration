@@ -11,10 +11,15 @@ RIAPS nodes are typically deployed on single board computer solutions.  This fol
 * Raspberry Pi 4
   - [Platform Information](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
   - [Instructions for building a Raspberry Pi RIAPS Image](README_RPI.md)
-  - Kernel: 5.4.0-xxxx-raspi
+  - Kernel: 5.15.0-xxxx-raspi
   - Ubuntu: 20.04.5 LTS
 
->***Note: The ssh keys on the preloaded virtual machine are **NOT SECURE**.  The ```secure_key``` found in the RIAPS home directory will generate a new set of keys and certificates, then place them on both the VM and indicated remote RIAPS hosts.***
+* TI AM64B Starter Kit
+  - [Platform Information](https://www.ti.com/tool/SK-AM64B)
+  - [Instructions for building an AM64x RIAPS Image](README_AM64.md)
+  - Kernel: 6.1.80-rtxx-k3-rt
+  - Debian: 12 (bookworm)
+
 
 # Usage of Remote RIAPS Node Image
 

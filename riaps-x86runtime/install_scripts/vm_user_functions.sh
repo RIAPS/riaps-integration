@@ -3,6 +3,7 @@ set -e
 
 
 # Setup User Account
+# Note: the home directory needs to be accessible to temporary application users, so change permissions to 755
 user_func () {
     if ! id -u $RIAPSUSER > /dev/null 2>&1; then
         echo ">>>>> The user does not exist; setting user account up now"
@@ -10,6 +11,7 @@ user_func () {
         sudo echo -e "riaps\nriaps" | sudo passwd $RIAPSUSER
         sudo chage -d 0 $RIAPSUSER
         sudo usermod -aG sudo $RIAPSUSER
+        sudo chmod 755 /home/$RIAPSUSER
         sudo -H -u $RIAPSUSER mkdir -p /home/$RIAPSUSER/riaps_apps
         echo ">>>>> created user accounts"
     fi
@@ -38,9 +40,9 @@ setup_ssh_keys () {
     sudo -H -u $RIAPSUSER chmod 400 /home/$RIAPSUSER/.ssh/id_rsa
 
     # Transfer remote node connection script
-    sudo cp connect_remote_nodes.sh /home/$RIAPSUSER/.
-    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes.sh
-    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes.sh
+    sudo cp connect_remote_nodes /home/$RIAPSUSER/.
+    sudo chown $RIAPSUSER:$RIAPSUSER /home/$RIAPSUSER/connect_remote_nodes
+    sudo -H -u $RIAPSUSER chmod 700 /home/$RIAPSUSER/connect_remote_nodes
 
     # Transfer RIAPS rekeying script
     sudo cp secure_keys /home/$RIAPSUSER/.
@@ -97,4 +99,8 @@ add_eclipse_projects() {
     sudo cp -r /home/$INSTALL_USER$INSTALL_SCRIPT_LOC/riaps-pycom/bin/rpyc_registry.launch /home/$RIAPSUSER/riaps_launch_files/.
     sudo chown $RIAPSUSER:$RIAPSUSER -R /home/$RIAPSUSER/riaps_launch_files
     echo ">>>>> Added example RIAPS projects for eclipse use"
+}
+
+set_UTC_timezone() {
+    sudo timedatectl set-timezone UTC
 }

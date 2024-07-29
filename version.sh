@@ -1,2 +1,2 @@
-export pycomversion="1.1.23"
-export timesyncversion="1.1.23"
+export pycomversion="2.0.0"
+export timesyncversion="2.0.0"

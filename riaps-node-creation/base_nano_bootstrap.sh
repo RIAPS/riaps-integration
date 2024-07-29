@@ -81,10 +81,10 @@ splash_screen_update
 setup_hostname
 #setup_network_nano
 python_install
-cython_install
 curl_func
 boost_install
 nethogs_prereq_install
+zmq_draft_apt_install
 zyre_czmq_prereq_install
 gnutls_install
 msgpack_install
@@ -92,18 +92,20 @@ security_pkg_install
 opendht_prereqs_install
 capnproto_prereqs_install
 gpio_install
+cython_install
 build_external_libraries
 pycapnp_install
-pyzmq_install
-czmq_pybindings_install
-zyre_pybindings_install
 apparmor_monkeys_install
-spdlog_python_install
+#spdlog_python_install
 #butter_install - this may no longer be needed (MM - 092022)
 #rpyc_install - this may no longer be needed (MM - 092022)
 py_lmdb_install
 pip3_3rd_party_installs
 prctl_install
+# move zmq python installs to last due to cython being updated to 3.0.2 for the pyzmq build
+pyzmq_install
+czmq_pybindings_install
+zyre_pybindings_install
 remove_pkgs_used_to_build
 riaps_prereq
 create_riaps_version_file
