@@ -7,8 +7,8 @@ Arguments:
     - ``-H | --hosts hostnames``:  list of hostnames (comma separated), VM will be rekeyed
     - ``-R | --roles rolenames``:  list of roles (comma separated)
     - ``-f riaps-hosts.conf``   :  absolute path to a conf file containing desired host_string
-    - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not bet rekeyed
-    - ``-i identity file``      :  absolute path to a private key file used in an extant RIAPS system
+    - ``-A hostnames``          :  list of hostnames (comma separated) to be added, VM will not be rekeyed
+    - ``-i identity file``      :  absolute path to a private key file used in an existing RIAPS system
     - ``-p | --passwd ``        :  keep password enabled on remote nodes
 If specific hostnames are not given, the command will be called for all hosts
 listed in /etc/riaps/riaps_hosts.conf
