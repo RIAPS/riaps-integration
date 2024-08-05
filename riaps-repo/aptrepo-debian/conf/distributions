@@ -3,5 +3,5 @@ Components: main
 Architectures:  amd64 armhf arm64
 Origin: MyOrigin
 Label: Debian
-Description: Repository for packages developed for Resilient Information Architecture for Smart Grid
+Description: Repository for Debian packages developed for Resilient Information Architecture for Smart Grid
 SignWith: xxxx
